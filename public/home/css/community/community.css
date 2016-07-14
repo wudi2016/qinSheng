@@ -1,0 +1,384 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+a{
+    text-decoration:none;
+}
+.background{
+    width:100%;
+    /*height:3000px;*/
+    height:auto;
+    /*background:#F5F5F5; */
+}
+
+.main_img{
+    width:1200px;
+    height:362px;
+    margin: 0 auto;
+}
+
+
+
+/*名师 新闻 模块*/
+.teacher_new{
+    width:1200px;
+    height:1225px;
+    margin: 0 auto;
+    /*background: #eeeeee;*/
+}
+
+
+/*****************************    左部分 名师    *******************************/
+
+.teacher{
+    width:740px;
+    height:1225px;
+    float: left;
+    /*background: pink;*/
+}
+
+.title_more{
+    width:740px;
+    height:45px;
+    position:absolute;
+    top:517px;
+    /*background: #eeeeee;*/
+}
+
+
+.teacher_title{
+    width:90px;
+    height:41px;
+    float: left;
+    border-bottom: 4px solid #209EEA;
+}
+
+.teacher_title span{
+    font-size: 20px;
+    color:rgb(34,34,34);
+    font-family:"微软雅黑";
+}
+.teacher_more{
+    width:60px;
+    height:41px;
+    float: right;
+}
+.teacher_more span{
+    font-size: 20px;
+    color:rgb(28,165,234);
+    font-family:"微软雅黑";
+}
+
+
+/*名师内容列表*/
+.teacher_content{
+    width:740px;
+    height:1210px;
+    /*background: pink;*/
+}
+
+/*名师内容详细*/
+.teacher_content_detail{
+    width:740px;
+    height:230px;
+    border-top: 4px solid #eeeeee;
+}
+
+/*图片*/
+.teacher_content_img{
+    width:300px;
+    height:200px;
+    float: left;
+    margin-top: 15px;
+}
+
+/*文字信息*/
+.teacher_content_font{
+    width:402px;
+    height:200px;
+    float: right;
+    margin-top: 15px;
+    /*background: pink;*/
+}
+
+/*姓名*/
+.content_name{
+    width:402px;
+    height:80px;
+}
+.content_name div{
+    color:rgb(34,34,34);
+    font-size:20px;
+    font-family:"微软雅黑";
+    padding-top: 27px;
+}
+
+/*学校*/
+.content_school{
+    width:402px;
+    height:60px;
+}
+.content_school div{
+    color:rgb(34,34,34);
+    font-size:20px;
+    font-family:"微软雅黑";
+    padding-top: 12px;
+}
+
+/*介绍*/
+.content_introduce{
+    width:402px;
+    height:60px;
+}
+.content_introduce div{
+    color:rgb(153,153,153);
+    font-size:18px;
+    font-family:"微软雅黑";
+    line-height:30px;
+    /*display:block;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;*/
+}
+
+
+/*****************************    右部分 新闻资讯    *******************************/
+
+.new{
+    width:400px;
+    height:1206px;
+    float: right;
+    border-top: 4px solid #eeeeee;
+    /*background: pink;*/
+}
+
+.new_content{
+    width:360px;
+    height:113px;
+    /*background: #ffffff*/
+}
+
+.title_more2{
+    width:400px;
+    height:45px;
+    position:absolute;
+    top:517px;
+}
+
+/*数字图片*/
+.new_content_img{
+    width:55px;
+    height:57px;
+    background:url('../../../home/image/community/shuzi.png') no-repeat;
+    position: relative;
+    top:16px;
+}
+.new_content_img span{
+    position: relative;
+    top:19px;
+    left:26px;
+}
+
+/*文字*/
+.new_content_font{
+    width:310px;
+    height:47px;
+    float: right;
+    margin-left: 60px;
+    margin-top: 9px;
+    color:rgb(34,34,34);
+    font-size:18px;
+    font-family:"微软雅黑";
+    /*background: pink;*/
+    /*	display:block;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;*/
+}
+
+/*图片字体颜色*/
+.new_content_img span{
+    font-size: 22px;
+    color:#ffffff;
+    font-family:"微软雅黑";
+}
+
+
+
+/*最新学员*/
+.newstudent{
+    width:1200px;
+    height:220px;
+    margin: 0 auto;
+    /*background: #eeeeee;*/
+}
+
+/*标题*/
+.newstudent_title{
+    width:1200px;
+    height:41px;
+    border-bottom: 4px solid #eeeeee;
+}
+.newstudent_title div{
+    width:90px;
+    height:41px;
+    font-size: 20px;
+    color:rgb(34,34,34);
+    font-family:"微软雅黑";
+    border-bottom: 4px solid #00A0EA;
+}
+
+/*列表*/
+.newstudent_detail{
+    width:1200px;
+    height:175px;
+    /*background: pink;*/
+}
+
+.newstudent_detail_content{
+    width:1055px;
+    height:120px;
+    float: left;
+    margin-top: 24px;
+    /*margin-left: 42px;*/
+    /*background: #eeeeee;*/
+}
+
+
+.newstudent_left{
+    width:72.5px;
+    height:175px;
+    float: left;
+}
+
+
+.newstudent_right{
+    width:72.5px;
+    height:175px;
+    float: right;
+}
+
+.newstudent_left_img{
+    position:relative;
+    top:60px;
+    cursor: pointer;
+}
+
+.newstudent_right_img{
+    position: relative;
+    top:60px;
+    left:42.5px;
+    cursor: pointer;
+}
+.newstudent_detail_content div:first-child{
+    margin-left:0px;
+}
+
+.newstudent_img_name{
+    width:84px;
+    height:120px;
+    float: left;
+    margin-left: 110px;
+    /*background: green;*/
+}
+
+.newstudent_img{
+    border-radius:50%;
+    overflow:hidden;
+    width:81px;
+    height:81px;
+}
+
+.newstudent_name{
+    width:84px;
+    height:36px;
+    /*background: green;*/
+}
+
+.newstudent_name span{
+    font-size: 18px;
+    margin-left: 16px;
+    position: relative;
+    top:12px;
+    color:rgb(34,34,34);
+    font-family:"微软雅黑";
+}
+
+
+/*****************************    最热视频   *******************************/
+
+/*最热视频*/
+.hotvideo{
+    width:1200px;
+    height:610px;
+    margin: 0 auto;
+}
+
+
+.newstudent_video{
+    width:390px;
+    height:274px;
+    float: left;
+    padding-left: 10px;
+    /*margin-left: 15px;*/
+}
+.big_img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    cursor: pointer;
+}
+
+
+
+/*遮罩层*/
+.zhezhao{
+    width:390px;
+    height:50px;
+    position: relative;
+    top:-50px;
+    background:rgba(0,0,0,0.2);
+}
+
+.zhezhao span{
+    margin-left: 10px;
+    position: relative;
+    top:10px;
+    font-size: 20px;
+    color:#ffffff;
+    font-family:"微软雅黑";
+}
+
+/*弹出层*/
+.tanchuceng{
+    width:390px;
+    height:260px;
+    position: relative;
+    top:-260px;
+    background: rgb(0,0,0);
+    filter:alpha(opacity=70);
+    opacity: 0.7;
+}
+
+.tanchuceng_font{
+    width:300px;
+    height:200px;
+    position: relative;
+    top:40px;
+    left:45px;
+    /*background: #eeeeee;*/
+    font-size: 20px;
+    color:#ffffff;
+    font-family:"微软雅黑";
+    text-indent:2em;
+    letter-spacing: 2px;
+}
+.tanchuceng span{
+    position: relative;
+    top:15px;
+}
+
+.hide{
+    display:none;
+}

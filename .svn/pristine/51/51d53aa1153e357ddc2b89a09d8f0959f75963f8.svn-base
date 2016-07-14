@@ -1,0 +1,166 @@
+.pupUpback{
+    width: 100%;
+    height:100%;
+    position: fixed;
+    top:0px;
+    left:0px;
+    z-index: 9999999;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+}
+.popup{
+    width: 650px;
+    height: 400px;
+    background: #ffffff;
+    position: absolute;
+    left: 50%;
+    top:50%;
+    margin-left: -300px;
+    margin-top: -300px;
+    border-radius: 10px;
+}
+.topbaner{
+    float: left;
+    width: 100%;
+    height:40px;
+    line-height: 40px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+    background: #438EB9;
+    border-radius: 10px 10px 0px 0px;
+    text-align: center;
+}
+.content{
+    float: left;
+    width: 100%;
+    height: 280px;
+    line-height: 280px;
+    font-size: 35px;
+    text-align: center;
+}
+.bottom{
+    float: left;
+    width: 100%;
+    height: 80px;
+    /*background: yellow;*/
+    border-radius: 0px 0px 10px 10px;
+}
+.suer_btn{
+    width: 160px;
+    height: 50px;
+    line-height:50px;
+    color: white;
+    background-color: #438EB9;
+    letter-spacing: 2px;
+    text-align: center;
+    border-radius: 4px;
+    margin-left: 245px;
+    margin-top: 0px;
+    cursor: pointer;
+    font-weight:bold;
+    font-size:20px;
+    border: medium none;
+}
+.contenterror{
+    float: left;
+    width: 100%;
+    height: 280px;
+    text-align: center;
+}
+.errortitle{
+    width: 100%;
+    height: 80px;
+    line-height: 80px;
+    font-size: 35px;
+}
+.errormsg{
+    width: 100%;
+    font-size: 20px;
+}
+#errortext{
+    width: 400px;
+    resize:none;
+}
+
+/*详情弹窗*/
+.detailpupUpback{
+    width: 100%;
+    height:100%;
+    position: fixed;
+    top:0px;
+    left:0px;
+    z-index: 9999999;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+}
+.popup1{
+    width: 650px;
+    /*height: 400px;*/
+    background: #ffffff;
+    position: absolute;
+    left: 50%;
+    top:40%;
+    margin-left: -300px;
+    margin-top: -300px;
+    border-radius: 10px;
+}
+.content1{
+    float: left;
+    width: 100%;
+}
+.form-group{
+    margin-top: 10px;
+}
+.detailtopbaner{
+    float: left;
+    width: 100%;
+    height:40px;
+    line-height: 40px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+    background: #438EB9;
+    border-radius: 10px 10px 0px 0px;
+}
+.detailtitle{
+    float: left;
+    width: 600px;
+    height:40px;
+    line-height: 40px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+    background: #438EB9;
+    border-radius: 10px 0px 0px 0px;
+    text-align: center;
+}
+.deldetail{
+    float: left;
+    width: 50px;
+    height:40px;
+    line-height: 40px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+    background: #438EB9;
+    border-radius: 0px 10px 0px 0px;
+    text-align: center;
+    cursor: pointer;
+    background: url("../image/del.png") no-repeat;
+}
+.form-group input{
+    width: 250px;
+    margin-left: 10px;
+}
+.form-group textarea{
+    width: 250px;
+    margin-left: 10px;
+    resize:none;
+}
+.labtitle{
+    float: left;
+    width: 200px;
+    margin: 0 auto;
+    text-align: right;
+}

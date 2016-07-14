@@ -1,0 +1,74 @@
+@extends('layouts.layoutHome')
+
+@section('title', '上传视频')
+
+@section('css')
+    <link rel="stylesheet" type="text/css" href="{{asset('home/css/lessonComment/commentDetail/uploadComment.css')}}">
+@endsection
+
+@section('content')
+	<div class="uploadComment" style="" ms-controller="uploadController">
+		<div class="crumbs">
+			<a href="">首页</a> >
+			<a href="">名师点评</a> >
+			<a href="">名师主页</a> >
+			<a href="">上传视频</a>
+		</div>
+
+		<div class="uploadComment_content" style="height: 650px;">
+			<div style="clear: both; height: 50px;"></div>
+			
+			<div id="fileDiv" class="fileButton"></div>
+			<input type="text" value="" class="fileButton" id="md5container">
+					
+			<div class="add_video">
+				<div class="add_video_top">
+					<div>添加视频</div>
+					<div ms-slectfile='file'>本地上传</div>
+					<div>请上传不超过1GB大小的视频文件</div>
+				</div>
+				<div class="add_video_tip" style="display: none;" ms-visible="uploadStatus == 1">(支持mp4、fiv、avi、rmvb、wmv、mkv格式上传)</div>
+				<div class="add_video_loading" style="display: none;" ms-visible="uploadStatus == 2">
+					<div class="progress_bar">
+						<div ms-css-width="[--progressBar--]%"></div>
+					</div>
+					<div class="progress_tip">视频上传中，请勿关闭页面...</div>
+					<div class="progress_close" ms-click="endUpload()">取消上传</div>
+				</div>
+				<div class="add_video_success" style="display: none;" ms-visible="uploadStatus == 3" ms-html='uploadTip'></div>
+			</div>
+
+			<div style="clear: both; height: 20px;"></div>
+
+			<div class="works_title">
+				<div class="suit_level_title" style="margin-left: -6px;"><span>*</span>作品名称</div>
+				<input type="text" placeholder="请输入作品名称">
+				<div class="works_title_number">0/20</div>
+			</div>
+
+			<div class="works_des">
+				<div class="suit_level_title" style="width: 78px;">留言说明</div>
+				<textarea placeholder="说出你的困惑，或是希望老师特别点评的地方"></textarea>
+				<div class="works_des_number">0/80</div>
+			</div>
+
+			<div class="content_bottom" style="margin-top: 40px;">
+				<div class="content_bottom_provision">
+					<input type="checkbox">我已阅读并同意<a>作品上传服务条款</a>
+				</div>
+				<div class="content_bottom_button" ms-css-background="submitDisable ? 'silver' : '#1A9FEB'">完成并发布</div>
+			</div>
+		</div> 
+
+		<div class="bottom_tip">温馨提示：支付并上传作品成功后，老师将于10个工作日内完成点评，请耐心等待，如果有问题请联系客服。</div>
+	</div>
+@endsection
+
+@section('js')
+	<script type="text/javascript">
+		require(['lessonComment/directive', 'lessonComment/buyComment/upload'], function (directive, upload) {
+			upload.orderID = {{$orderID}} || null;
+            avalon.scan();
+		});
+	</script>
+@endsection

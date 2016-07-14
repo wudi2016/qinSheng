@@ -1,0 +1,292 @@
+@extends('layouts.layoutHome')
+@section('title', '点评课程')
+
+@section('css')
+    <link rel="stylesheet" type="text/css" href="{{asset('home/css/lessonComment/commentDetail/index.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('home/css/lessonSubject/detail.css') }}">
+@endsection
+
+@section('content')
+	<div class="commentDetail" ms-controller="commentController">
+		<div class="crumbs">
+			<a href="/">首页</a> >
+			<a href="/lessonSubject/list/1">课程</a> >
+            <a href="/lessonSubject/list/2">点评课程</a> >
+			<a>课程详情</a>
+		</div>
+
+		<div class="current_video">
+			<div class="video_block">
+                <div class="videobox" id="mediaplayer" ms-visible="!overtime"></div>
+				<div class="overtime hide" ms-visible="overtime">
+					<div style="clear: both; height: 100px;"></div>
+					<div class="overtime_detail">
+						<img class="palyinfo_detail_img" style="margin-top: 7px;" src="/home/image/lessonComment/commentDetail/download_warning.png">
+						<div class="palyinfo_detail_text">尊敬的用户：</div>
+						<div class="palyinfo_detail_text">试看已结束，请购买观看完整课程。</div>
+					</div>
+                    @if (Auth::check())
+    					<a class="comment_button" style="margin: 30px auto 0; float: none; background: #1588E5; color: white; cursor: pointer; display: block;" ms-click="popUpSwitch('buyLesson')">立即购买</a>
+                    @else
+                        <a href="/index/login" class="overtime_tologin"><img src="{{asset('/home/image/lessonComment/commentDetail/gologin.png')}}" width="100%" height="100%"></a>
+                    @endif
+				</div>
+			</div>
+			<div class="video_bar">
+				<div class="video_bar_title">演奏视频</div>
+				<div class="video_bar_title hide" style="color: red; font-weight: bold;" ms-html="'￥' + teacherInfo.extra"></div>
+                @if (Auth::check())
+                    <div class="video_bar_icon" ms-click="popUpSwitch('feedback')"><img src="{{asset('/home/image/lessonComment/commentDetail/editor.png')}}">反馈</div>
+                    <div class="video_bar_icon hide" ms-visible="!isFollow" ms-click="followCourse()"><img src="{{asset('/home/image/lessonComment/commentDetail/collection.png')}}">收藏</div>
+                    <div class="video_bar_icon hide" ms-visible="isFollow" ms-click="followCourse()"><img src="{{asset('/home/image/lessonComment/commentDetail/collection_active.png')}}">收藏</div>
+                @else
+                    <a href="/index/login" class="video_bar_icon"><img src="{{asset('/home/image/lessonComment/commentDetail/editor.png')}}">反馈</a>
+                    <a href="/index/login" class="video_bar_icon"><img src="{{asset('/home/image/lessonComment/commentDetail/collection.png')}}">收藏</a>
+                @endif
+				<div id="comment_anchor" class="video_bar_icon" ms-click="changeVideo()"><img src="{{asset('/home/image/lessonComment/commentDetail/exchang.png')}}">切换</div>
+			</div>
+		</div>
+
+
+		<div class="switch_video" ms-click="changeVideo()">
+			<img ms-attr-src="videoType ? teacherInfo.coursePic : studentInfo.coursePic" width="100%" height="100%">
+            <div class="playButton">▲</div>
+		</div>
+
+
+		<div class="palyinfo">
+			<div class="title">演奏信息</div>
+			<div class="palyinfo_detail">
+				<div class="palyinfo_detail_img"><img ms-attr-src="studentInfo.pic" width="100%" height="100%"></div>
+				<a ms-attr-href="/lessonComment/student/[--studentInfo.userId--]" class="palyinfo_detail_text" ms-html="studentInfo.username"></a>
+				<div class="palyinfo_detail_time" ms-html="studentInfo.created_at"></div>
+			</div>
+			<div class="palyinfo_detail_title hide" ms-visible="studentInfo.extra" ms-html="'曲目：' + studentInfo.extra"></div>
+			<div class="palyinfo_detail_description hide" ms-class="fold: !descriptionOpen" ms-visible="studentInfo.message" ms-html="'留言：' + studentInfo.message"></div>
+            <div class="open hide" ms-visible="!descriptionOpen" ms-click="descriptionSwitch('descriptionOpen', true)" ms-attr-title="studentInfo.message">展开>>></div>
+			<div class="open hide" ms-visible="descriptionOpen" ms-click="descriptionSwitch('descriptionOpen', false)"><<<收起</div>
+
+			<div style="clear: both;"></div>
+
+			<div class="title">点评名师</div>
+			<div class="palyinfo_detail">
+				<div class="palyinfo_detail_img"><img ms-attr-src="teacherInfo.pic" width="100%" height="100%"></div>
+				<a ms-attr-href="/lessonComment/teacher/[--teacherInfo.teacherId--]" class="palyinfo_detail_text" ms-html="teacherInfo.username"></a>
+				<div class="palyinfo_detail_time" ms-html="teacherInfo.created_at"></div>
+			</div>
+            @if (\Auth::check())
+                 <a ms-attr-href="/lessonComment/buy/[--teacherInfo.teacherId--]" class="palyinfo_button">我也要请老师点评</a>
+            @else 
+			     <a href="/index/login" class="palyinfo_button">我也要请老师点评</a>
+            @endif
+		</div>
+
+
+		<div class="comment">
+			<div class="title" style="border: none; margin-top: 10px; text-indent: 0px;">评论</div>
+
+            @if (Auth::check())
+                 <textarea ms-duplex="replayInfo.name" class="comment_textarea"></textarea>
+                 <div class="comment_button" id="replayButton" ms-on-mouseout="descriptionSwitch('replyWarning', false)" ms-click="submitComment()">发布</div>
+                 <div class="teacherHomepage_detail_content_applyTip" ms-visible="replyWarning">请输入评论内容</div>
+            @else
+			     <div class="comment_textarea comment_textarea_nologin"><a href="/index/login" style="color: #3BA3FE;">请登录后发表评论</a></div>
+			     <div class="comment_button" style="background: none;"></div>
+            @endif
+
+			<div style="clear: both; height: 60px;"></div>
+
+			<div class="comment_list" ms-repeat="commentlist">
+				<div style="display: table-cell;">
+					<img ms-attr-src="el.pic">
+                    <a ms-attr-href="/lessonComment/[--el.type == 2 ? 'teacher' : 'student'--]/[--el.fromUserId--]" class="username" ms-html="el.username"></a>
+					<div class="time" ms-html="el.created_at"></div>
+
+                    <div class="content" ms-if="!el.parentId" ms-html="el.commentContent"></div>
+                    <div class="content" ms-if="el.parentId">
+                        <a style="color: #37A6FF;" ms-attr-href="/lessonComment/[--el.toUserType == 2 ? 'teacher' : 'student'--]/[--el.toUserId--]" ms-html="'@ ' + el.toUserName + '： '"></a>
+                        [--el.commentContent--]
+                    </div>
+
+                    @if (Auth::check())
+                        <a class="bottom" href="#comment_anchor" ms-if="el.fromUserId != {{$mine['id']}}" ms-click="replyComment(el)">回复</a>
+                        <div class="bottom" ms-if="el.fromUserId == {{$mine['id']}}" ms-click="deleteComment($index)">删除</div>
+                        <div class="bottom" ms-class="islike: el.isLike" ms-click="clickLike(el)">点赞( [--el.likeNum || 0--] )</div>
+                    @else
+                        <a class="bottom" href="/index/login">回复</a>
+                        <a class="bottom" href="/index/login">点赞</a>
+                    @endif
+				</div>
+			</div>
+		</div>
+
+
+		<div class="recommend">
+			<div class="title">最新点评推荐</div>
+			<div class="recommend_list" ms-repeat="recommendlist">
+				<a ms-attr-href="/lessonComment/detail/[--el.id--]" class="recommend_title" ms-html="el.courseTitle"></a>
+				<div class="recommend_detail">
+					<div class="recommend_detail_teacher" ms-html="'讲师：' + el.teachername"></div>
+					<div class="recommend_detail_learned"><img src="{{asset('/home/image/lessonComment/commentDetail/study.png')}}">[--el.coursePlayView--]人学过</div>
+				</div>
+				<div class="recommend_price" ms-html="'￥ ' + el.coursePrice"></div>
+			</div>
+            <div style="width: 100%; height: 200px; line-height: 200px; text-align: center; display: none;" ms-visible="recommendlist.size() < 1">暂无数据</div>
+		</div>
+
+
+		<!-- 遮罩层 -->
+        <div class="shadow hide" ms-popup="popUp" value="close"></div>
+
+        <!-- 购买课程弹出层 -->
+        <div class="buy_course hide" style="top: 500px;" ms-popup="popUp" value="buyLesson">
+            <div class="buy_course_top">
+                <span class="left">购买课程</span>
+                <span class="right" ms-click="popUpSwitch(false)"></span>
+            </div>
+            <div class="buy_course_center">
+                <div class="top" ms-html="'课程名称：' + studentInfo.extra"></div>
+                <div class="center">课程价格：<span ms-html="'￥ ' + teacherInfo.extra + ' 元'"></span></div>
+                <div class="bot">
+                    <div>支付方式：</div>
+                    <div class="aliPay"><input type="radio" ms-duplex-number='payType' value='0'/><span></span></div>
+                    <div class="weChat"><input type="radio" ms-duplex-number='payType' value="1"/><span></span></div>
+                </div>
+                <span class="hide" style="color: red; display: block; margin: 5px auto; padding-left: 112px;" ms-visible="payWarning">请选择支付方式</span>
+                <div class="clear"></div>
+                <div class="pay_btn" ms-click="popUpSwitch('buySuccess')">立即支付</div>
+            </div>
+        </div>
+
+        <!-- 支付成功弹出层 -->
+        <div class="pay_success hide" style="top: 500px;" ms-popup="popUp" value="buySuccess">
+            <div class="pay_success_top">
+                <span class="left">支付成功</span>
+                <span class="right" ms-click="popUpSwitch(false)"></span>
+            </div>
+            <div class="pay_success_center">
+                <div class="top"></div>
+                <div class="center">支付成功 !</div>
+                <div class="bot">您可以在个人中心查看订单详情</div>
+                <div class="study_btn" ms-click="popUpSwitch(false)">开始学习</div>
+            </div>
+        </div>
+
+        <!-- 资料下载弹出层 -->
+        <div class="data_download hide" ms-popup="popUp" value="downLoad">
+            <div class="data_download_top">
+                <span class="left">资料下载</span>
+                <span class="right" ms-click="popUpSwitch(false)"></span>
+            </div>
+            <div class="data_download_center">
+                <div class="top">本资料暂无预览，如感兴趣可购买课程后下载。</div>
+                <div class="buy_btn">立即购买</div>
+            </div>
+        </div>
+
+        <!-- 反馈意见弹出层 -->
+        <div class="feedback hide" ms-popup="popUp" value="feedback">
+            <div class="feedback_top">
+                <span class="left">意见反馈</span>
+                <span class="right" ms-click="popUpSwitch(false, 'feedback')"></span>
+            </div>
+            <div class="feedback_center">
+                <div class="top">
+                    <div class="question"><span>1</span><span class="last">选择问题类型：</span><span style="color: red" ms-visible="feedBackWarning.type">请选择问题类型</span></div>
+                    <div class="choose">
+                        <input type="radio" ms-duplex-string="feedBack.type" value="内容无关"/><span>内容无关</span>
+                        <input type="radio" ms-duplex-string="feedBack.type" value="播放不了"/><span>播放不了</span>
+                        <input type="radio" ms-duplex-string="feedBack.type" value="其他问题"/><span>其他问题</span>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <div class="center">
+                    <div class="question"><span>2</span><span class="last">填写问题描述：</span><span style="color: red" ms-visible="feedBackWarning.content">请填写200字数以内问题描述</span></div>
+                    <div class="content">
+                        <textarea placeholder="详细描述一些你遇到的问题或建议" ms-duplex="feedBack.content"></textarea>
+                    </div>
+                </div>
+                <div class="feedback_center_last">
+                    <div class="question"><span>3</span><span class="last">留下联系方式：</span><span style="color: red" ms-visible="feedBackWarning.tel">请填写正确的联系方式</span></div>
+                    <div class="contact_way">
+                        <input type="text" class="method" placeholder="QQ/Email/手机号" ms-duplex="feedBack.tel"/>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <div class="feedback_btn" ms-click="submitFeedback()">提交反馈</div>
+            </div>
+        </div>
+
+		<!-- 反馈成功弹出层 -->
+        <div class="feedback_success hide" ms-popup="popUp" value="feedbackSuccess">
+            <div class="feedback_success_top">
+                <span class="left">反馈成功</span>
+                <span class="right" ms-click="popUpSwitch(false, 'feedback')"></span>
+            </div>
+            <div class="feedback_success_center">
+                <div class="top"></div>
+                <div class="center">感谢您的反馈 !</div>
+                <div class="bot">我们会尽快为您解决问题</div>
+                <div class="keep_feedback" ms-click="popUpSwitch(false, 'feedbackSuccess')">继续反馈</div>
+                <div class="close_feedback" ms-click="popUpSwitch(false, 'feedback')">关闭</div>
+            </div>
+        </div>
+
+        <!-- 删除评论弹出层 -->
+        <div class="delete_comment hide" ms-popup="popUp" value="deleteComment">
+            <div class="top">
+                <span>确认删除该评论？</span>
+            </div>
+            <div class="bot">
+                <span class="quit" ms-click="popUpSwitch(false)">取消</span>
+                <span class="sure" ms-click="popUpSwitch(false, 'delComment')">确定</span>
+            </div>
+        </div>
+
+        <!--  取消收藏弹出层 -->
+        <div class="delete_comment hide" ms-popup="popUp" value="unfollow">
+            <div class="top">
+                <span>确认取消关注？</span>
+            </div>
+            <div class="bot">
+                <span class="quit" ms-click="popUpSwitch(false)">取消</span>
+                <span class="sure" ms-click="popUpSwitch(false, 'unfollow')">确定</span>
+            </div>
+        </div>
+
+		<div style="clear: both; height: 150px;"></div>
+	</div>
+@endsection
+
+@section('js')
+    <script type="text/javascript" src="{{asset('home/jplayer/jwplayer.js')}}"></script>
+	<script type="text/javascript">
+        require(['lessonComment/directive', 'lessonComment/commentDetail/index'], function (directive, comment) {
+            comment.commentID = {{$commentID}} || null;
+            comment.mineID = {{$mine['id']}} || null;
+            comment.mineUsername = '{{$mine["username"]}}' || null;
+            comment.mineType = '{{$mine["type"]}}' || null;
+			comment.minePic = '{{$mine["pic"]}}' || null;
+            comment.bought = Boolean({{$bought}} || null);
+
+            //  获取点评信息
+            comment.getData('/lessonComment/getDetailInfo/'+comment.commentID+'/1', 'teacherInfo');
+            //  查看是否收藏
+            comment.getData('/lessonComment/getFirst', 'isFollow', {table: 'collection', action: 1, data: {courseId: comment.commentID, userId: comment.mineID, type: 1}}, 'POST');
+            //  最新点评推荐
+            comment.getData('/lessonComment/getNewComment', 'recommendlist');
+            //  获取评论
+            comment.getData('/lessonComment/getApplyComment/'+comment.commentID, 'commentlist');
+
+            comment.$watch('replayInfo.name', function(value) {
+                if (value.length < comment.replayInfo.lengths) comment.replayInfo = {};
+            });
+
+            comment.$watch('feedBack.*', function(value, oldValue) {
+                if (value != oldValue) comment.feedBackWarning = {type: false, content: false, tel: false};
+            });
+
+            avalon.scan();
+		});
+	</script>
+@endsection

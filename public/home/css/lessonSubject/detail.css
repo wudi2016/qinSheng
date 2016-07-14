@@ -1,0 +1,1215 @@
+.contain_lessonDetail{
+    width: 100%;
+    background-color: #F5F5F5;
+    margin: 0 auto;
+    min-height: 1800px;
+}
+.contain_lessonDetail_top_breadcrumb{
+    margin: 0 auto;
+    width: 1200px;
+    height: 30px;
+    line-height: 18px;
+    font-size: 14px;
+    color: grey;
+}
+.contain_lessonDetail_top_breadcrumb a{
+    font-size: 14px;
+    color: grey;
+}
+.contain_lessonDetail_top_video{
+    width: 1200px;
+    height: 550px;
+    margin: 0 auto;
+}
+.contain_lessonDetail_top_video_left{
+    width: 800px;
+    height: 515px;
+    float: left;
+}
+
+.contain_lessonDetail_top_video_right{
+    width: 400px;
+    height: 515px;
+    float: right;
+    background-color: #ffffff;
+}
+.contain_lessonDetail_top_video_right_name{
+    width:350px;
+    height: 124px;
+    line-height: 140px;
+    margin-left:50px;
+    font-size: 24px;
+    color: #222222;
+}
+.contain_lessonDetail_top_video_right_price{
+    width: 350px;
+    height: 30px;
+    line-height: 30px;
+    margin-left: 50px;
+    color: #222222;
+    font-size: 24px;
+}
+.contain_lessonDetail_top_video_right_price span{
+    color: #FF0000;
+}
+.contain_lessonDetail_top_video_right_detail{
+    width:350px;
+    height: 31px;
+    margin-left: 50px;
+    margin-top: 60px;
+}
+.contain_lessonDetail_top_video_right_detail span{
+    display: block;
+    float: left;
+    font-size: 18px;
+    line-height: 31px;
+    color: rgb(153,153,153);
+    padding-left: 45px;
+    margin-left: 40px;
+}
+.contain_lessonDetail_top_video_right_detail span:first-child{
+    margin-left: 0px;
+}
+.classes{
+    background: url("/home/image/lessonSubject/detail/classes.png") no-repeat;
+}
+.study{
+    background: url("/home/image/lessonSubject/detail/study.png") no-repeat;
+}
+.contain_lessonDetail_top_video_right_btn{
+    width:350px;
+    height: 50px;
+    margin-left: 50px;
+    margin-top: 125px;
+    font-size: 20px;
+    line-height: 50px;
+    text-align: center;
+}
+.contain_lessonDetail_top_video_right_btn .first{
+    display: block;
+    float: left;
+    width: 150px;
+    height: 50px;
+    background-color: rgb(32,158,234);
+    border-radius: 4px;
+    color: rgb(255,255,255);
+    letter-spacing:1px;
+    cursor: pointer;
+}
+.contain_lessonDetail_top_video_right_btn .first:hover,.contain_lessonDetail_top_video_right_btn .third:hover,.buy_course .buy_course_center .pay_btn:hover,.pay_success .pay_success_center .study_btn:hover{
+    background-color: rgb(44,174,252);
+}
+.contain_lessonDetail_top_video_right_btn .second{
+    display: block;
+    float: left;
+    margin-left: 35px;
+    width: 116px;
+    height: 46px;
+    background-color: rgb(255,255,255);
+    border: 2px solid #209eea;
+    border-radius: 4px;
+    color: rgb(32,158,234);
+    letter-spacing:1px;
+    cursor: pointer;
+}
+.contain_lessonDetail_top_video_right_btn .third{
+    display: none;
+    float: left;
+    width: 150px;
+    height: 50px;
+    background-color: rgb(32,158,234);
+    border-radius: 4px;
+    color: rgb(255,255,255);
+    letter-spacing:1px;
+    cursor: pointer;
+}
+.contain_lessonDetail_top_video_right_collect{
+    width: 350px;
+    height:95px;
+    line-height: 95px;
+    margin-left:50px;
+}
+.contain_lessonDetail_top_video_right_collect div{
+    float: left;
+    font-size: 16px;
+    color: rgb(153,153,153);
+    padding-left: 45px;
+    margin-left: 10px;
+    cursor: pointer;
+    width: 80px;
+}
+.contain_lessonDetail_top_video_right_collect div:first-child{
+    margin-left:0px;
+}
+.collect{
+    background: url("/home/image/lessonSubject/detail/Collection.png") no-repeat left;
+}
+.collect_light{
+    background: url("/home/image/lessonSubject/detail/CollectionLight.png") no-repeat left;
+}
+.response{
+    background: url("/home/image/lessonSubject/detail/advice.png") no-repeat left;
+}
+.contain_lessonDetail_bot{
+    width: 1200px;
+    min-height: 1200px;
+    margin: 0 auto;
+}
+.contain_lessonDetail_bot_left{
+    float: left;
+    width: 800px;
+    min-height: 1096px;
+    background-color: #ffffff;
+}
+.contain_lessonDetail_bot_left_tip{
+    width: 760px;
+    height: 60px;
+    margin: 20px auto;
+    border-bottom: 2px solid #f5f5f5;
+
+}
+.contain_lessonDetail_bot_left_tip .left,
+.contain_lessonDetail_bot_left_tip .center,
+.contain_lessonDetail_bot_left_tip .right{
+    width: 145px;
+    height: 60px;
+    line-height: 60px;
+    float: left;
+    margin-left: 30px;
+    cursor: pointer;
+    text-align: center;
+}
+.contain_lessonDetail_bot_left_tip .left span,
+.contain_lessonDetail_bot_left_tip .center span,
+.contain_lessonDetail_bot_left_tip .right span{
+    font-size:20px;
+}
+.contain_lessonDetail_bot_left_tip .left span:hover,
+.contain_lessonDetail_bot_left_tip .center span:hover,
+.contain_lessonDetail_bot_left_tip .right span:hover{
+    color: rgb(32, 158, 234);
+}
+.active{
+    border-bottom: 2px solid #209eea;
+}
+.light{
+    color: #209eea;
+}
+.contain_lessonDetail_bot_left_desc{
+    width: 94%;
+    height: 210px;
+    margin: 40px auto;
+}
+.contain_lessonDetail_bot_left_desc .top{
+    display: block;
+    margin: 0 auto;
+    width:85%;
+    height: 21px;
+    line-height: 21px;
+    font-size: 20px;
+    color: rgb(34,34,34);
+    background: url("/home/image/lessonSubject/detail/circle.png") no-repeat;
+    padding-left: 20px;
+}
+.contain_lessonDetail_bot_left_desc .content{
+    display: block;
+    margin: 10px 10px 00px 65px;
+    width: 653px;
+    height: 170px;
+    line-height: 30px;
+    font-size:18px;
+    color: rgb(102,102,102);
+    letter-spacing:1.5px;
+    font-weight:normal;
+}
+.contain_lessonDetail_bot_left_list{
+    width: 94%;
+    height: auto;
+    margin: 0 auto;
+}
+.contain_lessonDetail_bot_left_list .top{
+    display: block;
+    margin: 0 auto;
+    width:85%;
+    height: 21px;
+    line-height: 21px;
+    font-size: 20px;
+    color: rgb(34,34,34);
+    background: url("/home/image/lessonSubject/detail/circle.png") no-repeat;
+    padding-left: 20px;
+}
+.contain_lessonDetail_bot_left_info{
+    width: 95%;
+    height: auto;
+    margin: 15px auto;
+}
+.contain_lessonDetail_bot_left_info .title{
+    display: block;
+    width: 628px;
+    height: 53px;
+    line-height: 53px;
+    background-color: #f5f5f5;
+    margin-left: 45px;
+    padding-left: 25px;
+    font-size:18px;
+}
+.contain_lessonDetail_bot_left_info_div div:first-child{
+    border-top: 0px solid red;
+}
+.contain_lessonDetail_bot_left_info .data{
+    width: 600px;
+    height: 48px;
+    border-top: 2px solid #f5f5f5;
+    margin: 0 auto;
+    font-size:18px;
+
+}
+.contain_lessonDetail_bot_left_info .data_content{
+    color: rgb(102,102,102);
+    display: block;
+    background: url("/home/image/lessonSubject/detail/start.png") no-repeat right;
+    width: 580px;
+    height: 18px;
+    line-height: 18px;
+    /*margin-left:20px;*/
+    margin-top: 15px;
+    float: right;
+    cursor: pointer;
+}
+.contain_lessonDetail_bot_left_info .spot{
+    width: 10px;
+    height: 10px;
+    display: block;
+    background-color: #209eea;
+    margin-top: 19px;
+    border-radius: 5px;
+    float: left;
+}
+.contain_lessonDetail_bot_right{
+    float: right;
+    width: 360px;
+    height: 780px;
+}
+.contain_lessonDetail_bot_right_teacher{
+    width: 360px;
+    height: 460px;
+    background-color: #ffffff;
+}
+.contain_lessonDetail_bot_right_teacher .teacher{
+    display: block;
+    width: 320px;
+    height: 35px;
+    line-height: 25px;
+    padding-left: 20px;
+    margin-left: 10px;
+    padding-top: 20px;
+    color: rgb(34,34,34);
+    font-size:20px;
+    border-bottom: 2px solid #f5f5f5;
+}
+.contain_lessonDetail_bot_right_teacher .photo{
+    width: 90px;
+    height: 90px;
+    border-radius: 45px;
+    margin-left: 42px;
+    margin-top:15px;
+    float: left;
+    overflow: hidden;
+}
+.contain_lessonDetail_bot_right_teacher .desc{
+    width: 180px;
+    height: 90px;
+    margin-left: 40px;
+    margin-top:15px;
+    float: right;
+}
+.contain_lessonDetail_bot_right_teacher .desc .name{
+    display: block;
+    width: 150px;
+    height: 45px;
+    line-height: 45px;
+    font-size:20px;
+    color: rgb(34,34,34);
+}
+.contain_lessonDetail_bot_right_teacher .desc .school{
+    display: block;
+    width: 150px;
+    height: 23px;
+    line-height: 23px;
+    font-size: 14px;
+    color: rgb(102,102,102);
+}
+.contain_lessonDetail_bot_right_teacher .content{
+    width: 290px;
+    height: 230px;
+    display: block;
+    font-size: 16px;
+    letter-spacing: 1px;
+    color: rgb(102,102,102);
+    line-height: 30px;
+    text-indent: 2em;
+    margin-left: 40px;
+    margin-top:10px;
+    overflow-y: auto;
+}
+.contain_lessonDetail_bot_right_notice{
+    margin-top: 40px;
+    width: 360px;
+    height: 280px;
+    background-color: #ffffff;
+}
+.contain_lessonDetail_bot_right_notice .tip{
+    display: block;
+    width: 320px;
+    height: 35px;
+    line-height: 25px;
+    padding-left: 20px;
+    margin-left: 10px;
+    padding-top: 20px;
+    color: rgb(34,34,34);
+    font-size:20px;
+    border-bottom: 2px solid #f5f5f5;
+}
+.contain_lessonDetail_bot_right_notice .notice{
+    width: 320px;
+    height: 200px;
+    margin: 10px auto;
+    line-height: 30px;
+    letter-spacing: 1px;
+    text-indent: 2em;
+    display: block;
+    font-size: 16px;
+    color: rgb(102,102,102);
+    text-align: left;
+    overflow-y: auto;
+}
+
+
+.contain_lessonDetail_bot_left_comment{
+    width: 725px;
+    height: 150px;
+    margin: 0 auto;
+
+}
+
+.contain_lessonDetail_bot_left_comment textarea{
+    background-color: rgb(245,245,245);
+    border: 0;
+    width: 725px;
+    height: 142px;
+    resize: vertical;
+    text-indent: 10px;
+    padding-top: 8px;
+    font-size: 18px;
+    position: relative;
+}
+.contain_lessonDetail_bot_left_comment span{
+    background-color: #E8E8E8;
+    width: 120px;
+    height: 40px;
+    border-radius: 3px;
+    line-height: 40px;
+    text-align: center;
+    display: block;
+    font-size: 20px;
+    float: right;
+    margin-top: 20px;
+    color: rgb(0,0,0);
+    cursor: pointer;
+}
+.first_not div:first-child{
+    border: 0;
+}
+.first_not{
+    min-height: 800px;
+}
+.contain_lessonDetail_bot_left_comment_content{
+    width: 735px;
+    height: 150px;
+    margin-left: 30px;
+    border-top: 2px solid #f5f5f5;
+}
+.contain_lessonDetail_bot_left_comment_content .photo{
+    width: 85px;
+    height: 85px;
+    border-radius: 42.5px;
+    overflow: hidden;
+    float: left;
+    margin-top: 10px;
+}
+.contain_lessonDetail_bot_left_comment_content .right{
+    width: 640px;
+    height: 150px;
+    float: right;
+}
+.contain_lessonDetail_bot_left_comment_content .right .top{
+    width: 615px;
+    height: 30px;
+    margin-left:25px;
+    margin-top: 5px;
+}
+.contain_lessonDetail_bot_left_comment_content .right .top span:first-child{
+    font-size: 16px;
+    color: #222222;
+    width: 140px;
+    height: 18px;
+    display: block;
+    float: left;
+}
+.contain_lessonDetail_bot_left_comment_content .right .top .time{
+    font-size:14px;
+    color: rgb(102, 102, 102);
+    text-align: right;
+    float: right;
+    /*margin-right: 20px;*/
+    width: 80px;
+    height: 15px;
+    line-height: 15px;
+    margin-top:5px;
+    display: block;
+}
+.contain_lessonDetail_bot_left_comment_content .right .center{
+    font-size: 14px;
+    color: #222222;
+    width: 595px;
+    height: 60px;
+    margin-top: 20px;
+    margin-left: 25px;
+    letter-spacing:1px;
+    line-height: 25px;
+}
+.contain_lessonDetail_bot_left_comment_content .right .center .touser{
+    display: inline-block;
+    width: 80px;
+    height: 20px;
+    color: #209EEA;
+}
+.contain_lessonDetail_bot_left_comment_content .right .bot{
+    width: 350px;
+    height: 15px;
+    line-height:15px;
+    float: right;
+}
+
+.contain_lessonDetail_bot_left_comment_content .right .bot span{
+    display: block;
+    color: rgb(102,102,102);
+    font-size: 14px;
+    float: right;
+    margin-left: 45px;
+    cursor: pointer;
+    text-align: right;
+}
+.contain_lessonDetail_bot_left_comment_content .right .bot .first{
+    width: 40px;
+}
+.contain_lessonDetail_bot_left_comment_content .right .bot .second{
+    width: 80px;
+}
+.contain_lessonDetail_bot_left_comment_content .right .bot .third{
+    width: 40px;
+}
+.contain_lessonDetail_bot_left_comment_content .right .bot span:hover{
+    color: #209EEA;
+}
+.contain_lessonDetail_bot_left_comment_content .right .bot .no_hover{
+    width: 80px;
+}
+.contain_lessonDetail_bot_left_comment_content .right .bot .no_hover:hover{
+    color: rgb(102,102,102);
+}
+
+
+
+.contain_lessonDetail_bot_left_download{
+    width: 94%;
+    height: auto;
+    margin: 40px auto;
+}
+.contain_lessonDetail_bot_left_download .top{
+    display: block;
+    margin: 0 auto;
+    width:85%;
+    height: 21px;
+    line-height: 21px;
+    font-size: 20px;
+    color: rgb(34,34,34);
+    background: url("/home/image/lessonSubject/detail/circle.png") no-repeat;
+    padding-left: 20px;
+}
+/*==============*/
+.contain_lessonDetail_bot_left_download .contain_lessonDetail_bot_left_info{
+    width: 95%;
+    height: auto;
+    margin: 15px auto;
+}
+.contain_lessonDetail_bot_left_download .contain_lessonDetail_bot_left_info_div div:first-child{
+    border-top: 0px;
+}
+.contain_lessonDetail_bot_left_download .contain_lessonDetail_bot_left_info .data{
+    width: 600px;
+    height: 48px;
+    border-top: 2px solid #f5f5f5;
+    margin: 0 auto;
+    font-size:18px;
+
+}
+.contain_lessonDetail_bot_left_download .contain_lessonDetail_bot_left_info .data_content{
+    color: rgb(102,102,102);
+    display: block;
+    background: url("/home/image/lessonSubject/detail/download.png") no-repeat right;
+    width: 580px;
+    height: 18px;
+    line-height: 18px;
+    /*margin-left:20px;*/
+    margin-top: 15px;
+    float: right;
+    cursor: pointer;
+}
+.contain_lessonDetail_bot_left_download .contain_lessonDetail_bot_left_info .spot{
+    width: 10px;
+    height: 10px;
+    display: block;
+    background-color: #209eea;
+    margin-top: 19px;
+    border-radius: 5px;
+    float: left;
+}
+/*==============*/
+.shadow{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top:0;
+    left: 0;
+    background-color: #252525;
+    opacity: 0.8;
+    filter:alpha(opacity=80);
+}
+/* ==== 购买课程 === */
+.buy_course{
+    width: 650px;
+    height: 400px;
+    background: url("/home/image/lessonSubject/detail/tanchukuang.png") no-repeat;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -325px;
+    margin-top: -290px;
+}
+.buy_course_top{
+    width: 650px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+}
+.buy_course_top span{
+    display: block;
+    color: white;
+    font-size: 20px;
+    font-weight:bold;
+    letter-spacing: 1px;
+}
+.buy_course_top .left{
+    width: 100px;
+    height: 40px;
+    float: left;
+    margin-left:275px;
+}
+.buy_course_top .right{
+    width: 28px;
+    height: 28px;
+    float: right;
+    cursor: pointer;
+    margin-right: 7px;
+    margin-top: 7px;
+}
+.buy_course_center{
+    width: 650px;
+    height: 320px;
+}
+.buy_course_center .top{
+    width: 520px;
+    height: 45px;
+    line-height: 45px;
+    font-size: 18px;
+    color: rgb(34,34,34);
+    font-weight: bold;
+    margin-left: 112px;
+    margin-top: 40px;
+}
+.buy_course_center .center{
+    width: 520px;
+    height: 45px;
+    line-height: 45px;
+    font-size: 18px;
+    font-weight: bold;
+    margin-left: 112px;
+    margin-top: 25px;
+}
+.buy_course_center .bot{
+    width: 520px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 18px;
+    color: rgb(34,34,34);
+    font-weight: bold;
+    margin-left: 112px;
+    margin-top: 25px;
+}
+.buy_course_center .bot .first{
+    width: 400px;
+    float: right;
+    height: 40px;
+    margin-right: 25px;
+}
+.buy_course_center .bot .second{
+    width: 400px;
+    float: right;
+    height: 40px;
+    margin-right: 25px;
+}
+.buy_course_center .center span{
+    color: #FF0000;
+}
+.buy_course_center .bot div{
+    float: left;
+}
+.buy_course_center .bot .aliPay span{
+    display: block;
+    width: 114px;
+    height: 46px;
+    float: right;
+    background: url("/home/image/lessonSubject/detail/zhifubao.png") no-repeat;
+    margin-left:10px;
+}
+.buy_course_center .bot .weChat{
+    margin-left:40px;
+}
+.buy_course_center .bot .weChat span{
+    display: block;
+    width: 129px;
+    height: 35px;
+    float: right;
+    background: url("/home/image/lessonSubject/detail/weixin.png") no-repeat;
+    margin-top:4px;
+    margin-left: 15px;
+}
+.warnPayMethod{
+    display: block;
+    width: 237px;
+    font-size:18px;
+    height: 20px;
+    line-height: 20px;
+    margin: 10px auto;
+    text-align: left;
+    color: red;
+}
+.buy_course_center .pay_btn{
+    width: 160px;
+    height: 50px;
+    line-height:50px;
+    color: white;
+    background-color: #209eea;
+    letter-spacing: 2px;
+    text-align: center;
+    border-radius: 4px;
+    margin-left: 245px;
+    margin-top:20px;
+    cursor: pointer;
+    font-size:18px;
+}
+
+/* ==== 支付成功 === */
+.pay_success{
+    width: 650px;
+    height: 400px;
+    background: url("/home/image/lessonSubject/detail/tanchukuang.png") no-repeat;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -325px;
+    margin-top: -290px;
+}
+.pay_success_top{
+    width: 650px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+}
+.pay_success_top span{
+    display: block;
+    color: white;
+    font-size: 20px;
+    font-weight:bold;
+    letter-spacing: 1px;
+}
+.pay_success_top .left{
+    width: 100px;
+    height: 40px;
+    float: left;
+    margin-left:275px;
+}
+.pay_success_top .right{
+    width: 28px;
+    height: 28px;
+    float: right;
+    cursor: pointer;
+    margin-right: 7px;
+    margin-top: 7px;
+}
+.pay_success_center{
+    width: 650px;
+    height: 360px;
+}
+.pay_success_center .top{
+    width: 120px;
+    height: 120px;
+    background: url("/home/image/lessonSubject/detail/pay.png");
+    margin: 40px auto;
+}
+.pay_success_center .center{
+    width: 120px;
+    height: 45px;
+    line-height: 45px;
+    font-size: 20px;
+    color: rgb(32,158,234);
+    font-weight: bold;
+    margin: -20px auto;
+    text-align: center;
+}
+.pay_success_center .bot{
+    width: 240px;
+    height: 50px;
+    line-height: 45px;
+    font-size: 16px;
+    color: rgb(153,153,153);
+    font-weight: bold;
+    margin: 30px auto;
+    text-align: center;
+}
+.pay_success_center .study_btn{
+    width: 160px;
+    height: 50px;
+    line-height:50px;
+    color: white;
+    background-color: #209eea;
+    letter-spacing: 2px;
+    text-align: center;
+    border-radius: 4px;
+    font-size:18px;
+    cursor: pointer;
+    margin: -25px auto;
+}
+
+/* ==== 资料下载 === */
+.data_download{
+    width: 650px;
+    height: 400px;
+    background: url("/home/image/lessonSubject/detail/tanchukuang.png") no-repeat;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -325px;
+    margin-top: -290px;
+}
+.data_download_top{
+    width: 650px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+}
+.data_download_top span{
+    display: block;
+    color: white;
+    font-size: 20px;
+    font-weight:bold;
+    letter-spacing: 1px;
+}
+.data_download_top .left{
+    width: 100px;
+    height: 40px;
+    float: left;
+    margin-left:275px;
+}
+.data_download_top .right{
+    width: 28px;
+    height: 28px;
+    float: right;
+    cursor: pointer;
+    margin-right: 7px;
+    margin-top: 7px;
+}
+.data_download_center{
+    width: 650px;
+    height: 360px;
+}
+.data_download_center .top{
+    width: 380px;
+    height: 120px;
+    text-align: center;
+    line-height:120px;
+    margin: 80px auto;
+    font-size: 18px;
+    color: rgb(34,34,34);
+}
+.data_download_center .buy_btn{
+    width: 160px;
+    height: 50px;
+    line-height:50px;
+    color: white;
+    background-color: #209eea;
+    letter-spacing: 2px;
+    text-align: center;
+    border-radius: 4px;
+    font-size:18px;
+    cursor: pointer;
+    margin: -25px auto;
+}
+
+/* ==== 意见反馈 === */
+.feedback{
+    width: 650px;
+    height: 500px;
+    background: url("/home/image/lessonSubject/detail/feedback.png") no-repeat;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -325px;
+    margin-top: -260px;
+    z-index: 1;
+}
+.feedback_top{
+    width: 650px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+}
+.feedback_top span{
+    display: block;
+    color: white;
+    font-size: 20px;
+    font-weight:bold;
+    letter-spacing: 1px;
+}
+.feedback_top .left{
+    width: 100px;
+    height: 40px;
+    float: left;
+    margin-left:275px;
+}
+.feedback_top .right{
+    width: 28px;
+    height: 28px;
+    float: right;
+    cursor: pointer;
+    margin-right: 7px;
+    margin-top: 7px;
+}
+.feedback_center{
+    width: 650px;
+    height: 360px;
+    /*font-weight: bold;*/
+}
+.feedback_center .top{
+    width: 520px;
+    height: 80px;
+    font-size: 18px;
+    margin-left: 30px;
+    margin-top: 15px;
+}
+.question{
+    color: rgb(102,102,102);
+    width: 100%;
+    height: 30px;
+}
+.feedback_center .top .question span:first-child{
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
+    border-radius: 13px;
+    color: white;
+    display: block;
+    background-color: #209EEA;
+    text-align: center;
+    float: left;
+}
+.feedback_center .top .question .last{
+    display: block;
+    text-align: center;
+    margin-left: 14px;
+    float: left;
+}
+.feedback_center .top .choose{
+    width: 100%;
+    height: 45px;
+    line-height: 45px;
+    font-size: 18px;
+    color: rgb(34,34,34);
+    margin-top: 5px;
+}
+.feedback_center .top .choose input{
+    margin-top: 17px;
+    line-height:40px;
+    margin-left: 70px;
+    margin-right:20px;
+    float: left;
+}
+.feedback_center .top .choose input:first-child {
+    margin-left: 30px;
+}
+.feedback_center .top .choose span{
+    display: block;
+    /*margin-left: 5px;*/
+    float: left;
+}
+.feedback_center .center{
+    width: 94%;
+    height: 175px;
+    font-size: 18px;
+    margin-left: 30px;
+    margin-top: 10px;
+}
+.feedback_center .center .question span:first-child{
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
+    border-radius: 13px;
+    color: white;
+    display: block;
+    background-color: #209EEA;
+    text-align: center;
+    float: left;
+}
+.feedback_center .center .question .last {
+    margin-left: 14px;
+}
+.feedback_center .center .content{
+    text-align: center;
+}
+.feedback_center .center .content textarea{
+    width: 550px;
+    height: 125px;
+    margin-top:5px;
+    border: 2px solid #ccc;
+    border-radius: 3px;
+    padding-left: 15px;
+    padding-top: 5px;
+    margin-left: 30px;
+    font-size: 18px;
+    resize: none;
+}
+.feedback .feedback_center .feedback_center_last{
+    width: 95%;
+    height: 80px;
+    margin-left: 10px;
+}
+.feedback_center .feedback_center_last .question{
+    margin-left:20px;
+    margin-top: 10px;
+    font-size:18px;
+}
+.feedback_center .feedback_center_last .question .last{
+    margin-left:14px;
+}
+.feedback_center .feedback_center_last .question span:first-child{
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
+    border-radius: 13px;
+    color: white;
+    display: block;
+    background-color: #209EEA;
+    text-align: center;
+    float: left;
+}
+.feedback_center .feedback_center_last .contact_way input{
+    width: 300px;
+    height: 40px;
+    margin-top:5px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding-left: 15px;
+    margin-left: 55px;
+    font-size: 18px;
+}
+.feedback_center .feedback_btn{
+    width: 160px;
+    height: 50px;
+    line-height:50px;
+    color: white;
+    background-color: #209eea;
+    letter-spacing: 2px;
+    text-align: center;
+    border-radius: 4px;
+    margin-left: 245px;
+    margin-top: 18px;
+    cursor: pointer;
+    font-size:20px;
+}
+
+/* ==== 反馈成功 === */
+.feedback_success{
+    width: 650px;
+    height: 500px;
+    background: url("/home/image/lessonSubject/detail/feedback.png") no-repeat;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -325px;
+    margin-top: -260px;
+    z-index: 2;
+}
+.feedback_success_top{
+    width: 650px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+}
+.feedback_success_top span{
+    display: block;
+    color: white;
+    font-size: 20px;
+    font-weight:bold;
+    letter-spacing: 1px;
+}
+.feedback_success_top .left{
+    width: 100px;
+    height: 40px;
+    float: left;
+    margin-left:275px;
+}
+.feedback_success_top .right{
+    width: 28px;
+    height: 28px;
+    float: right;
+    cursor: pointer;
+    margin-right: 7px;
+    margin-top: 7px;
+}
+.feedback_success_center{
+    width: 650px;
+    height: 360px;
+}
+.feedback_success_center .top{
+    width: 120px;
+    height: 120px;
+    background: url("/home/image/lessonSubject/detail/pay.png");
+    margin: 80px auto;
+}
+.feedback_success_center .center{
+    width: 150px;
+    height: 45px;
+    line-height: 45px;
+    font-size: 20px;
+    color: rgb(32,158,234);
+    font-weight: bold;
+    margin: -50px auto;
+    text-align: center;
+}
+.feedback_success_center .bot{
+    width: 240px;
+    height: 50px;
+    line-height: 45px;
+    font-size: 16px;
+    color: rgb(153,153,153);
+    font-weight: bold;
+    margin: 45px auto;
+    text-align: center;
+}
+.feedback_success_center .keep_feedback{
+    width: 160px;
+    height: 50px;
+    line-height:50px;
+    color: white;
+    background-color: rgb(217,217,217);
+    letter-spacing: 2px;
+    text-align: center;
+    border-radius: 4px;
+    font-size:20px;
+    font-weight:bold;
+    cursor: pointer;
+    float: left;
+    margin-top: -15px;
+    margin-left: 127px;
+}
+.feedback_success_center .close_feedback{
+    width: 160px;
+    height: 50px;
+    line-height:50px;
+    color: white;
+    background-color: #209eea;
+    letter-spacing: 2px;
+    text-align: center;
+    border-radius: 4px;
+    font-size:20px;
+    font-weight:bold;
+    cursor: pointer;
+    float: left;
+    margin-top: -15px;
+    margin-left: 88px;
+}
+
+/* ==== 删除评论 === */
+.delete_comment{
+    width: 380px;
+    height: 200px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -190px;
+    margin-top: -100px;
+    background-color: white;
+    border-radius: 10px;
+
+}
+.delete_comment .top{
+    width: 160px;
+    height: 50px;
+    padding-left: 65px;
+    margin: 50px auto;
+    line-height: 50px;
+    font-size: 20px;
+    color: rgb(34,34,34);
+    background: url("/home/image/lessonSubject/detail/warning.png") no-repeat;
+}
+.delete_comment .bot{
+    margin-top: -14px;
+}
+.delete_comment .bot span{
+    display: block;
+    width: 70px;
+    height: 35px;
+    border-radius: 5px;
+    line-height: 35px;
+    text-align: center;
+    font-size: 18px;
+    float: left;
+    color: #f5f5f5;
+    cursor: pointer;
+}
+.delete_comment .bot .quit{
+    margin-left:95px;
+    background-color: rgb(217,217,217);
+}
+.delete_comment .bot .sure{
+    background-color: #209EEA;
+    margin-left:50px;
+}
+
+.teacherHomepage_detail_content_applyTip {
+    width: 180px;
+    height: 45px;
+    position: relative;
+    top: -30px;
+    left: 148px;
+    float: right;
+    z-index: 99999;
+    background-image: url("/home/image/lessonComment/commentDetail/bg.png") no-repeat;
+    line-height: 40px;
+    text-align: center;
+    color: black;
+    font-size: 14px;
+    display: none;
+    cursor: pointer;
+}
