@@ -27,6 +27,7 @@ class lessonSubjectController extends Controller
         $mineUserId = Auth::check() ? Auth::user()->id : '';
         $mineType = Auth::check() ? Auth::user()->type : '';
         $minePic = Auth::check() ? Auth::user()->pic : '';
+        DB::table('course')->where('id',$id)->increment('coursePlayView',1);
         return view('home.lessonSubject.lessonSubjectDetail')
             ->with('mineUsername', $mineUsername)
             ->with('mineUserId',$mineUserId)

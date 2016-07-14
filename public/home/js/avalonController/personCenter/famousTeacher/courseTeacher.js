@@ -9,20 +9,28 @@ define([], function () {
         total: '',
         courseInfo: [],
         getCourseInfo: function (type,flag) {
-            $.ajax({
-                url: '/member/getCourse/' + type + '/' + flag,
-                type: 'GET',
-                dataType: 'json',
-                success: function (response) {
-                    if (response.status) {
-                        courseTeacher.total = response.total;
-                        courseTeacher.courseInfo = response.data;
-                    } else {
-                        courseTeacher.total = response.total;
-                        courseTeacher.courseInfo = [];
-                    }
+            $('#page_course').pagination({
+                dataSource: function (done) {
+                    $.ajax({
+                        url: '/member/getCourse/' + type + '/' + flag,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.status) {
+                                done(response.data);
+                                courseTeacher.total = response.total;
+                            }
+                        },
+                    });
                 },
-                error: function (error) {
+                pageSize: 6,
+                className: "paginationjs-theme-blue",
+                showGoInput: true,
+                showGoButton: true,
+                callback: function (data) {
+                    if (data) {
+                        courseTeacher.courseInfo = data;
+                    }
 
                 }
             })

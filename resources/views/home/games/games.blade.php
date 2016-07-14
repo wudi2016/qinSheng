@@ -35,7 +35,7 @@
         </div>
         <div style="height:50px;"></div>
         <div class="pagecon">
-            <div id="page"></div>
+            <div style="display: inline-block"><div id="page"></div></div>
         </div>
         <div style="height:100px;">
         </div>

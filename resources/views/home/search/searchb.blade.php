@@ -115,7 +115,7 @@
 
                 <div class="clear"></div>
                 <div class="page">
-                    <div id="demob"></div>
+                    <div style="display: inline-block"><div id="demob"></div></div>
                 </div>
 
                 {{--无结果--}}

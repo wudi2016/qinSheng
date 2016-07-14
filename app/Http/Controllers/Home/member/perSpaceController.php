@@ -19,7 +19,7 @@ class perSpaceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($typeID)
+    public function index($typeID,$tab = null)
     {
         //0学生学员   &&   １教师学员
         if (Auth::check()) {
@@ -35,13 +35,13 @@ class perSpaceController extends Controller
             if ($data->cityId) {
                 $data->cityName = DB::table('city')->select('name')->where('code', $data->cityId)->first()->name;
             }
-            return view('home.member.student.teacherStudent', compact('typeID', 'data','mineUsername','mineUserId'));
+            return view('home.member.student.teacherStudent', compact('typeID', 'data','mineUsername','mineUserId','tab'));
         } else {
             return redirect('/');
         }
     }
 
-    public function famousTeacher()
+    public function famousTeacher($tab = null)
     {
         //名师个人中心主页
         if (Auth::check()) {
@@ -65,7 +65,7 @@ class perSpaceController extends Controller
             if ($data->cityId) {
                 $data->cityName = DB::table('city')->select('name')->where('code', $data->cityId)->first()->name;
             }
-            return view('home.member.famousTeacher.famousTeacher',compact('mineUsername','data','mineUserId'));
+            return view('home.member.famousTeacher.famousTeacher',compact('mineUsername','data','mineUserId','tab'));
         } else {
             return redirect('/');
         }
@@ -151,7 +151,7 @@ class perSpaceController extends Controller
         if ($myFocus) {
             return response()->json(['data' => $myFocus, 'total' => count($myFocus), 'type' => true]);
         } else {
-            return response()->json(['data' => '', 'total' => count($myFocus), 'type' => false]);
+            return response()->json(['total' => count($myFocus), 'type' => false]);
         }
     }
 
@@ -167,7 +167,7 @@ class perSpaceController extends Controller
         if ($myFriends) {
             return response()->json(['data' => $myFriends, 'total' => count($myFriends), 'type' => true]);
         } else {
-            return response()->json(['data' => '', 'total' => count($myFriends), 'type' => false]);
+            return response()->json(['total' => count($myFriends), 'type' => false]);
         }
     }
 
@@ -195,7 +195,7 @@ class perSpaceController extends Controller
         if ($info) {
             return response()->json(['status' => true, 'data' => $info, 'total' => count($info)]);
         } else {
-            return response()->json(['status' => false, 'data' => '', 'total' => count($info)]);
+            return response()->json(['status' => false,'total' => count($info)]);
         }
     }
 
@@ -211,7 +211,7 @@ class perSpaceController extends Controller
         if ($info) {
             return response()->json(['status' => true, 'data' => $info, 'total' => count($info)]);
         } else {
-            return response()->json(['status' => false, 'data' => '', 'total' => count($info)]);
+            return response()->json(['status' => false, 'total' => count($info)]);
         }
     }
 
@@ -245,7 +245,7 @@ class perSpaceController extends Controller
             }
             return response()->json(['data' => $course, 'total' => count($info), 'status' => true]);
         } else {
-            return response()->json(['data' => '', 'total' => count($info), 'status' => false]);
+            return response()->json(['total' => count($info), 'status' => false]);
         }
     }
 
@@ -274,13 +274,21 @@ class perSpaceController extends Controller
     public function getNoticeInfo(Request $request)
     {
         $info = DB::table('usermessage')->where('username',$request->username)->where('type','<>',5)->get();
-        return response()->json(['data' => $info, 'status' => true]);
+        if($info){
+            return response()->json(['data' => $info, 'status' => true]);
+        }else{
+            return response()->json(['status' => false]);
+        }
     }
     // 删除通知消息
     public function deleteNotice(Request $request)
     {
         $result = DB::table('usermessage')->delete($request->id);
-        return response()->json(['status' => true]);
+        if($result){
+            return response()->json(['status' => true]);
+        }else{
+            return response()->json(['status' => false]);
+        }
     }
     // 获取评论回复
     public function getCommentInfo(Request $request)
@@ -289,13 +297,21 @@ class perSpaceController extends Controller
         foreach($info as $key => $value){
             $info[$key] -> content = '"'.$value->content.'"';
         }
-        return response()->json(['data' => $info, 'status' => true]);
+        if($info){
+            return response()->json(['data' => $info, 'status' => true]);
+        }else{
+            return response()->json(['status' => false]);
+        }
     }
     // 删除评论消息
     public function deleteComment(Request $request)
     {
         $result = DB::table('usermessage')->delete($request->id);
-        return response()->json(['status' => true]);
+        if($result){
+            return response()->json(['status' => true]);
+        }else{
+            return response()->json(['status' => false]);
+        }
     }
 
     // 上传头像接口

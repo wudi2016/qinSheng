@@ -1,7 +1,9 @@
+.pagecon_parent{
+    text-align:center;
+}
 .pagecon{
-    width: 85%;
-    margin-left: 90px;
-    margin-top: 20px;
+    width:auto;
+    display:inline-block
 }
 .paginationjs {
     line-height: 1.6;

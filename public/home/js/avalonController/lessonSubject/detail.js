@@ -109,7 +109,7 @@ define([], function () {
         // 立即支付 paySuccess
         payMethod:'',warnPayMethod: '',
         payRightNow: function(){
-            if (detail.payMethod.length == '0') {detail.warnPayMethod = '请选择支付类型';return;} else {detail.warnPayMethod = '';}
+            if (detail.payMethod.length == '0') {detail.warnPayMethod = '请选择问题类型';return;} else {detail.warnPayMethod = '';}
             if(detail.payMethod == '1'){
                 detail.popUp = 'paySuccess';
             }else{

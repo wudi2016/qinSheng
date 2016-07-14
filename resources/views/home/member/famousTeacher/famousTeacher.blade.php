@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset('home/css/personCenter/teacherStudent.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('home/css/personCenter/Jcrop.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('home/css/personCenter/uploadify.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('home/css/personCenter/pagination.css')}}">
 @endsection
 
 @section('content')
@@ -110,6 +111,7 @@
                                     <div class="comment_video_time" ms-text=" '发布时间：'+ el.time"></div>
                                 </div>
                             </a>
+
                         </div>
 
                         <div class="comment_repeat_title" ms-text="el.commentTitle"></div>
@@ -149,8 +151,8 @@
                     </div>
 
                     {{--<!--等待点评-->--}}
-                    <div ms-if="el.status == 1 && el.state != 0 && el.state != 1 && el.state != 2 ">
-                        <div class="comment_repeat_img">[--el.time--]
+                    <div ms-if="el.status == 1 && el.state != 0 && el.state != 1 && el.state != 2 && el.low == '' && el.medium == '' && le)">
+                        <div class="comment_repeat_img">
                             <a ms-attr-href="'/lessonComment/wait/'+ el.applyId">
                                 <div class="repeat_img_unchecked">
                                     <div class="comment_video_unchecked" ms-text="'等待点评'"></div>
@@ -164,8 +166,24 @@
                         </div>
                     </div>
 
+
+
                 </div>
                 {{--//点评课程循环结束--}}
+
+                {{--<div class="right_comment_repeat">--}}
+                    {{--<div class="comment_repeat_img">--}}
+                        {{--<div class="repeat_img_unchecked">--}}
+                            {{--<div class="comment_video_unchecked">视频审核未通过</div>--}}
+                            {{--<div class="comment_video_time">发布时间：2016-05-20&nbsp;&nbsp;19:30</div>--}}
+                        {{--</div>--}}
+
+                    {{--</div>--}}
+                    {{--<div class="comment_repeat_title">肖邦第三章</div>--}}
+                    {{--<div class="comment_repeat_unchecked"><span>点评讲师&nbsp;:&nbsp;吴大海</span>--}}
+                        {{--<span>发布者&nbsp;:&nbsp;王小明</span></div>--}}
+                {{--</div>--}}
+
             </div>
         </div>
         <!--======================================================已评点评课程=======================================================-->
@@ -205,27 +223,6 @@
                         <span class="repeat_leader_lastSpan" ms-html="el.fav + ' 人'"></span>
                     </div>
                 </div>
-
-                {{--//点评课程循环结束--}}
-
-                {{--<div class="right_comment_repeat">--}}
-                    {{--<div class="comment_repeat_img">--}}
-                        {{--<div class="repeat_img_unchecked">--}}
-                            {{--<div class="comment_video_unchecked">点评完成</div>--}}
-                            {{--<div class="comment_video_time">发布时间：2016-05-20&nbsp;&nbsp;19:30</div>--}}
-                            {{--<div class="comment_video_commentTime commentTime_blue">点评时间：2016-05-20&nbsp;&nbsp;19:30--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-
-                    {{--</div>--}}
-                    {{--<div class="comment_repeat_title">肖邦第三章</div>--}}
-                    {{--<div class="comment_repeat_unchecked unchecked_diff"><span>点评讲师&nbsp;:&nbsp;吴大海</span>--}}
-                        {{--<span>发布者&nbsp;:&nbsp;王小明</span></div>--}}
-                    {{--<div class="comment_repeat_leader">--}}
-                        {{--<span>1123&nbsp;人</span>--}}
-                        {{--<span>3321&nbsp;人</span>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
             </div>
         </div>
 
@@ -260,6 +257,9 @@
                     <div class="comment_repeat_price" ms-text="'￥ ' + el.coursePrice"></div>
                 </div>
                 {{--//点评课程循环结束--}}
+            </div>
+            <div class="pagecon">
+                <div id="page_course"></div>
             </div>
         </div>
 
@@ -318,6 +318,9 @@
                     </div>
                 </div>
             </div>
+            <div class="pagecon">
+                <div id="page_notice"></div>
+            </div>
         </div>
         <!--======================================================我的收藏=======================================================-->
 
@@ -327,7 +330,7 @@
                 <div class="height50"></div>
                 <div class="center_right_information">收藏课程</div>
                 <div class="center_right_count">
-                    <div class="right_count_left">共<span ms-html="total"></span>个视频</div>
+                    <div class="right_count_left">共<span ms-html="'&nbsp;' + total + '&nbsp;'"></span>个视频</div>
                     <div class="right_count_right">
                         {{--<span ms-click="getCollectionInfo(1);">最新</span>&nbsp;-&nbsp;<span class="count_right_hot" ms-click="getCollectionInfo(2);">热门</span>--}}
                         <div>
@@ -361,6 +364,9 @@
                     <div class="comment_repeat_price" ms-text="'￥ ' + el.coursePrice"></div>
                 </div>
                 {{--//点评课程循环结束--}}
+            </div>
+            <div class="pagecon">
+                <div id="page_collection"></div>
             </div>
         </div>
         <!--======================================================我的粉丝=======================================================-->
@@ -397,8 +403,9 @@
                 {{--</div>--}}
 
             </div>
-
-
+            <div class="pagecon">
+                <div id="page_friend"></div>
+            </div>
         </div>
 
         <!--======================================================我的关注=======================================================-->
@@ -434,8 +441,9 @@
                 {{--</div>--}}
 
             </div>
-
-
+            <div class="pagecon">
+                <div id="page_focus"></div>
+            </div>
         </div>
 
 
@@ -464,13 +472,13 @@
             <div class="clear"></div>
             <div class="height10"></div>
             <div class="center_right_username">
-                <label><span>用户名</span><input type="text" placeholder="请填写用户名" readonly value="{{$data->username}}"></label>
+                <label><span>用户名</span><input class="input" type="text" placeholder="请填写用户名" readonly value="{{$data->username}}"></label>
             </div>
 
             <div class="height40"></div>
             <div class="height5"></div>
             <div class="center_right_username">
-                <label><span>真实姓名</span><input type="text" placeholder="请填写真实姓名" name="realname" value="{{$data->realname}}"></label>
+                <label><span>真实姓名</span><input class="input" type="text" placeholder="请填写真实姓名" name="realname" value="{{$data->realname}}"></label>
             </div>
 
 
@@ -485,7 +493,7 @@
             <div class="height40"></div>
             <div class="height5"></div>
             <div class="center_right_username">
-                <label><span>所在单位</span><input type="text" placeholder="请填写所在单位" name="company" value="{{$data->company}}"></label>
+                <label><span>所在单位</span><input class="input" type="text" placeholder="请填写所在单位" name="company" value="{{$data->company}}"></label>
             </div>
 
 
@@ -509,7 +517,7 @@
             <div class="height40"></div>
             <div class="height5"></div>
             <div class="center_right_username center_right_zhicheng">
-                <label><span>职称</span><input type="text" placeholder="请填写职称" name="professional" value="{{$data->professional}}"></label>
+                <label><span>职称</span><input class="input" type="text" placeholder="请填写职称" name="professional" value="{{$data->professional}}"></label>
             </div>
 
 
@@ -569,20 +577,20 @@
 
             <div class="center_right_changePassword">
                 <div class="right_changePassword_currentPassword">
-                    <label><span>当前密码</span><input type="password" class="unowPsd txtt" placeholder="" value=""><span class="msg msga"></span></label>
+                    <label><span>当前密码</span><input type="password" class="unowPsd txtt input" placeholder="" value=""><span class="msg msga"></span></label>
                 </div>
 
                 <div class="height60"></div>
                 <div class="height20"></div>
                 <div class="right_changePassword_currentPassword">
-                    <label><span>新密码</span><input type="password" name="password" class="unewPsd txtt" placeholder="" value=""><span class="msg msgb"></span></label>
+                    <label><span>新密码</span><input type="password" name="password" class="unewPsd txtt input" placeholder="" value=""><span class="msg msgb"></span></label>
                 </div>
 
 
                 <div class="height60"></div>
                 <div class="height20"></div>
                 <div class="right_changePassword_currentPassword">
-                    <label><span>确认密码</span><input type="password" class="urePsd txtt" placeholder="" value=""><span class="msg msgc"></span></label>
+                    <label><span>确认密码</span><input type="password" class="urePsd txtt input" placeholder="" value=""><span class="msg msgc"></span></label>
                 </div>
             </div>
 
@@ -655,7 +663,7 @@
                     </label>
                     <div class="shoujiMsg Msgcc"></div>
                     <label class="old_phone_label_second">
-                        <input type="text" name="captcha" placeholder="请输入验证码" ms-duplex="newcode">
+                        <input class="input" type="text" name="captcha" placeholder="请输入验证码" ms-duplex="newcode">
                         <span class="getyzmb" ms-click="getCodob()">获取验证码</span>
                     </label>
                     <div class="shoujiMsg Msgdd"></div>
@@ -763,6 +771,7 @@
     <script type="text/javascript" src="{{asset('home/js/personCenter/Jcrop.js')}}"></script>
     <script type="text/javascript" src="{{asset('home/js/personCenter/jquery.uploadify.js')}}"></script>
     <script type="text/javascript" src="{{asset('home/js/personCenter/teacherStudent.js')}}"></script>
+    <script type="text/javascript" src="{{asset('home/js/games/pagination.js')}}"></script>
 @endsection
 
 

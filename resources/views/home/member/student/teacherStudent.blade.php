@@ -214,8 +214,10 @@
                 </div>
                 <!--===================================//我的订单循环结束===================================-->
             </div>
-            <div class="pagecon">
-                <div id="page_orders"></div>
+            <div class="pagecon_parent">
+                <div class="pagecon">
+                    <div id="page_orders"></div>
+                </div>
             </div>
         </div>
 
@@ -246,8 +248,10 @@
                 </div>
                 {{--===============================我的关注循环结束====================================--}}
             </div>
-            <div class="pagecon">
-                <div id="page_focus"></div>
+            <div class="pagecon_parent">
+                <div class="pagecon">
+                    <div id="page_focus"></div>
+                </div>
             </div>
         </div>
 
@@ -278,8 +282,10 @@
                 </div>
                 {{--===============================我的好友循环结束====================================--}}
             </div>
-            <div class="pagecon">
-                <div id="page_friend"></div>
+            <div class="pagecon_parent">
+                <div class="pagecon">
+                    <div id="page_friend"></div>
+                </div>
             </div>
         </div>
 
@@ -323,8 +329,10 @@
                 </div>
                 {{--//通知循环结束--}}
             </div>
-            <div class="pagecon">
-                <div id="page_notice"></div>
+            <div class="pagecon_parent">
+                <div class="pagecon">
+                    <div id="page_notice"></div>
+                </div>
             </div>
         </div>
 
@@ -351,8 +359,10 @@
                 </div>
                 {{--//回复循环结束--}}
             </div>
-            <div class="pagecon">
-                <div id="page_comment"></div>
+            <div class="pagecon_parent">
+                <div class="pagecon">
+                    <div id="page_comment"></div>
+                </div>
             </div>
         </div>
 
@@ -395,8 +405,10 @@
                     <div class="comment_repeat_price" ms-if="el.state == '2'" ms-text="'￥ ' + el.coursePrice"></div>
                 </div>
             </div>
-            <div class="pagecon">
-                <div id="page_course_comment"></div>
+            <div class="pagecon_parent">
+                <div class="pagecon">
+                    <div id="page_course_comment"></div>
+                </div>
             </div>
         </div>
         <!--======================================================专题课程=======================================================-->
@@ -420,15 +432,18 @@
                     <div class="comment_repeat_img">
                         <a ms-attr-href="'/lessonSubject/detail/' + el.id"><img ms-attr-src="el.coursePic" alt="" width="280" height="180" class="img_big" ms-imgBig/></a>
                     </div>
-                    <div class="comment_repeat_title" ms-text="courseInfo.courseTitle"></div>
+                    <div class="comment_repeat_title" ms-text="el.courseTitle"></div>
                     <div class="comment_repeat_period"><span ms-text="el.classHour + '课时'"></span> <span ms-text="el.coursePlayView + '人学过'"></span></div>
                     <div class="comment_repeat_price" ms-text="'￥ ' + el.coursePrice"></div>
                 </div>
                 {{--//专题课程循环结束--}}
             </div>
-            <div class="pagecon">
-                <div id="page_course"></div>
+            <div class="pagecon_parent">
+                <div class="pagecon">
+                    <div id="page_course"></div>
+                </div>
             </div>
+
         </div>
 
         <!--======================================================收藏课程=======================================================-->
@@ -470,8 +485,10 @@
                 </div>
                 {{--//点评课程循环结束--}}
             </div>
-            <div class="pagecon">
-                <div id="page_collection"></div>
+            <div class="pagecon_parent">
+                <div class="pagecon">
+                    <div id="page_collection"></div>
+                </div>
             </div>
         </div>
 
@@ -829,15 +846,23 @@
                 <div class="clear"></div>
                 <div class="bot">
                     <span class="bot_span_select2">退款原因&nbsp;:&nbsp;</span>
-                    <span class="bot_select2_plugin hide">
-                        <select class="js-example-basic-single" ms-click="popUpSwitch('applyRefund')">
-                            <option value="" selected>请选择退款原因</option>
+                    {{--<span class="bot_select2_plugin hide">--}}
+                        {{--<select class="js-example-basic-single" ms-click="popUpSwitch('applyRefund')">--}}
+                            {{--<option value="" selected>请选择退款原因</option>--}}
+                            {{--<option value="">课程购买错误</option>--}}
+                            {{--<option value="">课程内容与描述不符</option>--}}
+                            {{--<option id='option' onclick="change()" value="">其他</option>--}}
+                        {{--</select>--}}
+                    {{--</span>--}}
+                    <span class="bot_span_last bot_span_triangle1">
+                        <select name="" id="" class="hide">
                             <option value="">课程购买错误</option>
                             <option value="">课程内容与描述不符</option>
                             <option id='option' value="">其他</option>
                         </select>
                     </span>
                 </div>
+                <div class="clear"></div>
                 <div class="last hide">
                     <span>其他原因&nbsp;:&nbsp;</span>
                     <textarea name="otherReason" id="otherReason" placeholder="请描述退款原因"></textarea>
@@ -925,6 +950,12 @@
     <script type="text/javascript">
         require(['/personCenter/index'], function (sideBar) {
             sideBar.mineUsername = '{{$mineUsername}}' || null;
+            sideBar.tab = '{{$tab}}' || null;
+            if (sideBar.tab) {
+                sideBar.tabStatus = sideBar.tab;
+                sideBar.changeTab(sideBar.tab);
+            }
+            {{--sideBar.tabStatus = '{{$tab}}' || 'basicInfo';--}}
             avalon.directive('popup', {
                 update: function (value) {
                     var element = this.element;
@@ -956,10 +987,10 @@
                 DaySelector: ".sel_day"
             });
 
-            if ($('.bot_select2_plugin').css('display') == 'none') {
+            if ($('.bot_span_last select').css('display') == 'none') {
                 setTimeout(function () {
-                    $('.bot_select2_plugin').css('display','inline-block');
-                }, 2200);
+                    $('.bot_span_last select').css('display','block');
+                }, 2500);
             };
         });
     </script>

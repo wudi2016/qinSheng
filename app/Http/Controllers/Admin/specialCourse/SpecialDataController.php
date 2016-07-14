@@ -65,6 +65,9 @@ class SpecialDataController extends Controller
             'dataName.required'=>'请输入资料名称',
             'dataName.max'=>'资料名称长度不超过20'
         ]);
+        if(!$request['dataPath']){
+            return redirect()->back()->withInput()->withErrors('请上传课程资料');
+        }
         $data = $request->except('_token');
         $data['created_at'] = Carbon::now();
         $data['updated_at'] = Carbon::now();

@@ -12,24 +12,31 @@ define([], function () {
         total: '',
         collectionInfo : [],
         getCollectionInfo : function(){
-            $.ajax({
-                url : '/member/getCollectionInfo',
-                type : 'GET',
-                dataType : 'json',
-                success : function(response){
-                    if(response.status){
-                        collectionTeacher.realInfo = true;
-                        collectionTeacher.collectionInfo = response.data;
-                        collectionTeacher.total = response.total;
-                    }else{
-                        collectionTeacher.realInfo = false;
-                        collectionTeacher.total = response.total;
-                    }
+            $('#page_collection').pagination({
+                dataSource: function (done) {
+                    $.ajax({
+                        url: '/member/getCollectionInfo',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (response) {
+                            collectionTeacher.total = response.total;
+                            if (response.status) {
+                                done(response.data);
+                            }
+                        },
+                    });
                 },
-                error : function(error){
+                pageSize: 6,
+                className: "paginationjs-theme-blue",
+                showGoInput: true,
+                showGoButton: true,
+                callback: function (data) {
+                    if (data) {
+                        collectionTeacher.collectionInfo = data;
+                    }
 
                 }
-            });
+            })
         },
         deleteCollection : function(collectId,type,courseId,index){
             $.ajax({

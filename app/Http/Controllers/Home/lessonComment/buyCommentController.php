@@ -59,7 +59,21 @@ class buyCommentController extends Controller
     public function upload($orderID)
     {
         PaasUser::apply();
-        DB::table('orders') -> where(['id' => $orderID, 'userId' => \Auth::user() -> id, 'status' => 0]) -> first() || abort(404);
+        DB::table('orders') -> select('id') -> where(['id' => $orderID, 'userId' => \Auth::user() -> id, 'status' => 0]) -> first() || abort(404);
+        return view('home.lessonComment.buyComment.upload') -> with('orderID', $orderID) -> with('mineID', \Auth::user() -> id);
+    }
+
+
+    /**
+     * 审核未通过重新上传视频
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function reUpload($applyID)
+    {
+        PaasUser::apply();
+        $result = DB::table('applycourse') -> select('id', 'courseTitle', 'message') -> where(['id' => $applyID, 'userId' => \Auth::user() -> id, 'state' => 0]) -> first();
+        $result || abort(404);
         return view('home.lessonComment.buyComment.upload') -> with('orderID', $orderID) -> with('mineID', \Auth::user() -> id);
     }
 
@@ -123,6 +137,7 @@ class buyCommentController extends Controller
         $data['teacherId'] = $result -> teacherId;
         $data['created_at'] = Carbon::now();
         $data['updated_at'] = Carbon::now();
+        $data['state'] = 1;
         $data['courseTitle'] = str_replace(' ', '', $data['courseTitle']);
         $data['message'] = str_replace(' ', '', $data['message']);
         $result = DB::table('applycourse') -> insertGetId($data);

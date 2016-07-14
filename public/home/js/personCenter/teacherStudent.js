@@ -5,7 +5,7 @@ $(function(){
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-
+    //
     $(".account_common").click(function(){
         $(this).addClass('blue_common');
         $(this).siblings().removeClass('blue_common');

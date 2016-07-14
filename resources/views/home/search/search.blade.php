@@ -116,7 +116,7 @@
 
                 <div class="clear"></div>
                 <div class="page pageaa hide">
-                    <div id="demo"></div>
+                    <div style="display: inline-block"><div id="demo"></div></div>
                 </div>
 
                 {{--无结果--}}
@@ -154,7 +154,7 @@
 
                 <div class="clear"></div>
                 <div class="page pagebb hide">
-                    <div id="demob"></div>
+                    <div style="display: inline-block"><div id="demob"></div></div>
                 </div>
 
                 {{--无结果--}}

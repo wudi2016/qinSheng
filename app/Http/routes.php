@@ -104,9 +104,9 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
                 ||--------------------------------------------------------------------------------------
                  */
         //学员个人中心主页    0 学生学员&&    1  教师学员
-        Route::get('/student/{personID}', 'perSpaceController@index');
+        Route::get('/student/{personID}/{tab?}', 'perSpaceController@index');
         //	名师个人中心主页  type 为 2
-        Route::get('/famousTeacher', 'perSpaceController@famousTeacher');
+        Route::get('/famousTeacher/{tab?}', 'perSpaceController@famousTeacher');
 
 
         //个人中心我的关注
@@ -336,8 +336,10 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         Route::get('/scan/{commentID}', ['middleware' => 'check', 'uses' => 'buyCommentController@scan']);
         //  支付成功
         Route::get('/buySuccess/{orderID}', ['middleware' => 'check', 'uses' => 'buyCommentController@buySuccess']);
-        //	上传视频
+        //  上传视频
         Route::get('/buy/upload/{orderID}', ['middleware' => 'check', 'uses' => 'buyCommentController@upload']);
+        //	审核未通过重新上传视频
+        Route::get('/reUpload/{applyID}', ['middleware' => 'check', 'uses' => 'buyCommentController@reUpload']);
         //  完成上传
         Route::post('/finishUpload', ['middleware' => 'check', 'uses' => 'buyCommentController@finishUpload']);
         
@@ -345,7 +347,6 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         Route::post('/uploadResource', ['middleware' => 'check', 'uses' => 'buyCommentController@uploadResource']);
         //  pass平台资源转换
         Route::post('/transformation', ['middleware' => 'check', 'uses' => 'buyCommentController@transformation']);
-
     });
 
 

@@ -34,6 +34,7 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
         popUp: false,
         noticeId : null,
         commentId : null,
+
         popUpSwitch: function(value,needId) {
             if(value == 'deleteNotice'){ //获取删除的ID
                 sideBar.noticeId = needId;
@@ -72,7 +73,7 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
             sideBar.popUp = value;
         },
         //选项卡
-        tabStatus:'basicInfo',
+        tabStatus: 'basicInfo',
         changeTab:function(value,type){
             if(value == 'lessonSubject'){
                 if(type == 'teacher'){
