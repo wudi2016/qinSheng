@@ -102,7 +102,7 @@ class orderController extends Controller
     /**
      *修改应退金额
      */
-    public function refundmoney($id){
+    public function editRefundmoney($id){
         $data = DB::table('orders')->where('id',$id)->select('id','orderSn','refundableAmount')->first();
         $data->refundableAmount = $data->refundableAmount /1000;
         return view('admin.order.editRefundmoney',['data'=>$data]);
@@ -129,7 +129,7 @@ class orderController extends Controller
     /**
      *修改已退金额
      */
-    public function retiredmoney($id){
+    public function editRetiredmoney($id){
         $data = DB::table('orders')->where('id',$id)->select('id','orderSn','refundAmount')->first();
         $data->refundAmount = $data->refundAmount /1000;
         return view('admin.order.editRetiredmoney',['data'=>$data]);
@@ -151,6 +151,29 @@ class orderController extends Controller
             return redirect('admin/message')->with(['status'=>'成功','redirect'=>'order/orderList']);
         }else{
             return redirect('admin/message')->with(['status'=>'失败','redirect'=>'order/orderList']);
+        }
+    }
+
+    /**
+     *备注列表
+     */
+    public function remarkList($id){
+        $data = DB::table('remarks as r')
+            ->leftJoin('orders as o','r.orderid','=','o.id')
+            ->select('r.*','o.id as orderid','o.orderSn')
+            ->where('orderid',$id)
+            ->paginate(15);
+        return view('admin.order.remarkList',['data'=>$data]);
+    }
+
+    /**
+     *删除备注
+     */
+    public function delRemark($orderid,$id){
+        if(DB::table('remarks')->where('id',$id)->delete()){
+            return redirect('admin/message')->with(['status'=>'备注删除成功','redirect'=>'order/remarkList/'.$orderid]);
+        }else{
+            return redirect('admin/message')->with(['status'=>'备注删除失败','redirect'=>'order/remarkList/'.$orderid]);
         }
     }
 

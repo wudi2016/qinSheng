@@ -30,7 +30,7 @@ define(['lessonComment/md5'], function(CryptoJS) {
 	/**
      * 获取文件MD5
      *
-     * @paramter file 			文件域对象		例：document.getElementById("id").files[0];
+     * @paramter file 			文件域对象，例：document.getElementById("id").files[0];
      * @paramter callback 		扫描完成回调函数
      * @paramter progresback 	扫描进度回调函数
      */
@@ -47,13 +47,14 @@ define(['lessonComment/md5'], function(CryptoJS) {
 	            }, function (file){
 	                callback(algoInst.instance.finalize());
 	            });
-	        }) ();
+	        })();
 	    }
 	};
 
 
 	/**
      * 获取32位字节码
+     *
      */
 	PrimecloudPaas.prototype.swapendian32 = function (val) {
 	    return (((val & 0xFF) << 24) | ((val & 0xFF00) << 8) | ((val >> 8) & 0xFF00) | ((val >> 24) & 0xFF)) >>> 0;
@@ -62,6 +63,7 @@ define(['lessonComment/md5'], function(CryptoJS) {
 
 	/**
      * 将Buffer转换为数组
+     *
      */
 	PrimecloudPaas.prototype.arrayBufferToWordArray = function(arrayBuffer) {
 	    var fullWords = Math.floor(arrayBuffer.byteLength / 4);
@@ -89,6 +91,7 @@ define(['lessonComment/md5'], function(CryptoJS) {
 
 	/**
      * 读取进度
+     *
      */
 	PrimecloudPaas.prototype.progressiveRead = function (file, work, done) {
 	    var chunkSize = 204800;

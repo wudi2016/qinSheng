@@ -46,6 +46,7 @@ class buyCommentController extends Controller
      */
     public function buySuccess($orderID)
     {
+        DB::table('orders') -> where(['id' => $orderID, 'userId' => \Auth::user() -> id, 'status' => 0]) -> first() || abort(404);
         return view('home.lessonComment.buyComment.buySuccess') -> with('orderID', $orderID);
     }
 
@@ -57,7 +58,9 @@ class buyCommentController extends Controller
      */
     public function upload($orderID)
     {
-        return view('home.lessonComment.buyComment.upload') -> with('orderID', $orderID);
+        PaasUser::apply();
+        DB::table('orders') -> where(['id' => $orderID, 'userId' => \Auth::user() -> id, 'status' => 0]) -> first() || abort(404);
+        return view('home.lessonComment.buyComment.upload') -> with('orderID', $orderID) -> with('mineID', \Auth::user() -> id);
     }
 
 
@@ -74,6 +77,8 @@ class buyCommentController extends Controller
         $request['created_at'] = Carbon::now();
         $request['updated_at'] = Carbon::now();
         $result = DB::table('orders') -> insertGetId($request -> all());
+        if (!$result) return $this -> returnResult(false);
+        DB::table('teacher') -> where('parentId', $request['teacherId']) -> decrement('stock') || $result = !(DB::table('orders') -> where('id', $result) -> delete());
         return $this -> returnResult($result);
     }
 
@@ -85,8 +90,44 @@ class buyCommentController extends Controller
      */
     public function uploadResource(Request $request)
     {
-        if (!PaasUser::apply()) return Response() -> json(["type" => false, 'status' => '407']);
+        if (!PaasUser::apply()) return Response() -> json(["type" => false, 'status' => '401']);
         $recourse = PaasResource::getuploadstatus("/?md5=". $request['md5'] ."&filename=". $request['filename'] ."&directory=". $request['directory']);
         return $this -> returnResult($recourse);
+    }
+
+
+    /**
+     * pass平台资源转换
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function transformation(Request $request)
+    {
+        if (!PaasUser::apply()) return Response() -> json(["type" => false, 'status' => '401']);
+        $recourse = PaasResource::transformation("?fileid=". $request['fileID']);
+        return $this -> returnResult($recourse);
+    }
+
+
+     /**
+     * 完成上传
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function finishUpload(Request $request)
+    {
+        foreach ($request['data'] as $key => $value) $request['data'][$key] && $data[$key] = $request['data'][$key];
+        $result = DB::table('orders') -> select('orderSn', 'teacherId') -> where('id', $request['orderID']) -> first();
+        if(!$result) return $this -> returnResult(false);
+        $data['orderSn'] = $result -> orderSn;
+        $data['teacherId'] = $result -> teacherId;
+        $data['created_at'] = Carbon::now();
+        $data['updated_at'] = Carbon::now();
+        $data['courseTitle'] = str_replace(' ', '', $data['courseTitle']);
+        $data['message'] = str_replace(' ', '', $data['message']);
+        $result = DB::table('applycourse') -> insertGetId($data);
+        if (!$result) return $this -> returnResult(false);
+        DB::table('orders') -> where('id', $request['orderID']) -> update(['status' => 1]) || $result = !(DB::table('applycourse') -> where('id', $result) -> delete());
+        return $this -> returnResult($result);
     }
 }

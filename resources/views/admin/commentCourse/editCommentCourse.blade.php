@@ -112,7 +112,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 留言 </label>
 
                             <div class="col-sm-9">
-                                <textarea name="message"  placeholder="留言" id="container" cols="50" rows="10">{{$data->message}}</textarea>
+                                <textarea name="message"  placeholder="留言" id="container" class="col-xs-10 col-sm-5" cols="50" rows="10" style="resize: none">{{$data->message}}</textarea>
                             <span class="help-inline col-xs-12 col-sm-7">
                                 <label class="middle">
                                     <span class="lbl"></span>
@@ -201,15 +201,6 @@
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.page-content -->
-        <!-- 配置文件 -->
-        <script type="text/javascript" src="{{asset('ueditor/ueditor.config.js')}}"></script>
-        <!-- 编辑器源码文件 -->
-        <script type="text/javascript" src="{{asset('ueditor/ueditor.all.js')}}"></script>
-
-        <!-- 实例化编辑器 -->
-        <script type="text/javascript">
-            var ue = UE.getEditor('container');
-        </script>
     </div><!-- /.main-content -->
 @endsection
 @section('js')

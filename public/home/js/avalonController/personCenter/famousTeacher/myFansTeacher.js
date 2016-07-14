@@ -8,24 +8,30 @@ define([], function () {
         total: '',
         myFansList: [],
         getMyFansInfo: function () {
-            $.ajax({
-                url: '/member/myFriends',
-                type: 'GET',
-                dataType: 'json',
-                success: function (response) {
-                    if (response.type) {
-                        myFansTeacher.realInfo = true;
-                        myFansTeacher.myFansList = response.data;
-                        myFansTeacher.total = response.total;
-                    } else {
-                        myFansTeacher.realInfo = false;
-                        myFansTeacher.total = response.total;
-                    }
+            $('#page_friend').pagination({
+                dataSource: function (done) {
+                    $.ajax({
+                        url: '/member/myFriends',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.type) {
+                                done(response.data);
+                                myFansTeacher.total = response.total;
+                            }
+                        },
+                    });
                 },
-                error: function (error) {
-
+                pageSize: 24,
+                className: "paginationjs-theme-blue",
+                showGoInput: true,
+                showGoButton: true,
+                callback: function (data) {
+                    if (data) {
+                        myFansTeacher.myFansList = data;
+                    }
                 }
-            });
+            })
         },
     })
     return {

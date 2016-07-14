@@ -113,7 +113,7 @@
         var evaluatPic = '';
 
         var addMsg = function(){
-            $('.uploadarea_bar_r_msg').html('资源上传成功!');
+            $('.uploadarea_bar_r_msg').html('课程资料上传成功!');
         }
 
         $('#file_upload').uploadify({

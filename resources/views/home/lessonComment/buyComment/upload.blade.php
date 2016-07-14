@@ -42,21 +42,25 @@
 
 			<div class="works_title">
 				<div class="suit_level_title" style="margin-left: -6px;"><span>*</span>作品名称</div>
-				<input type="text" placeholder="请输入作品名称">
-				<div class="works_title_number">0/20</div>
+				<input type="text" ms-duplex='uploadInfo.courseTitle' placeholder="请输入作品名称">
+				<div class="works_title_number"><span style="color: gray;" ms-html='titleLength'></span>/20</div>
+				<div class='uploadWarning hide' ms-visible='warning.title'>请输入20字以内名称</div>
 			</div>
 
 			<div class="works_des">
 				<div class="suit_level_title" style="width: 78px;">留言说明</div>
-				<textarea placeholder="说出你的困惑，或是希望老师特别点评的地方"></textarea>
-				<div class="works_des_number">0/80</div>
+				<textarea ms-duplex='uploadInfo.message' placeholder="说出你的困惑，或是希望老师特别点评的地方"></textarea>
+				<div class="works_des_number"><span ms-html='messageLength'></span>/80</div>
+				<div class='uploadWarning hide' ms-visible='warning.message' style='margin-left: 55px;'>请输入80字以内留言</div>
 			</div>
 
 			<div class="content_bottom" style="margin-top: 40px;">
 				<div class="content_bottom_provision">
-					<input type="checkbox">我已阅读并同意<a>作品上传服务条款</a>
+					<input type="checkbox" ms-duplex-checked='submitDisable' value='true'>我已阅读并同意<a>作品上传服务条款</a>
 				</div>
-				<div class="content_bottom_button" ms-css-background="submitDisable ? 'silver' : '#1A9FEB'">完成并发布</div>
+				<div class="content_bottom_button" ms-css-cursor='submitDisable ? "pointer" : "not-allowed"' ms-css-background="submitDisable ? '#1A9FEB' : 'silver'" ms-click='submit()'>
+					完成并发布
+				</div>
 			</div>
 		</div> 
 
@@ -68,6 +72,20 @@
 	<script type="text/javascript">
 		require(['lessonComment/directive', 'lessonComment/buyComment/upload'], function (directive, upload) {
 			upload.orderID = {{$orderID}} || null;
+			upload.mineID = {{$mineID}} || null;
+
+			upload.$watch('uploadInfo.courseTitle', function(value, oldValue) {
+                if (value.length > 20) upload.uploadInfo.courseTitle = oldValue;
+                upload.titleLength = upload.uploadInfo.courseTitle.length;
+                upload.warning.title = false;
+            });
+
+            upload.$watch('uploadInfo.message', function(value, oldValue) {
+                if (value.length > 80) upload.uploadInfo.message = oldValue;
+                upload.messageLength = upload.uploadInfo.message.length;
+                upload.warning.message = false;
+            });
+
             avalon.scan();
 		});
 	</script>

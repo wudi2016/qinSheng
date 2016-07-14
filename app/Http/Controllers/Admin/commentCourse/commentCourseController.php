@@ -96,6 +96,10 @@ class commentCourseController extends Controller
      *执行编辑
      */
     public function doEditCommentCourse(Request $request){
+        $validator = $this -> validator($request->all());
+        if ($validator -> fails()){
+            return Redirect()->back()->withInput()->withErrors($validator);
+        }
         $data = $request->except('_token');
         $data['updated_at'] = Carbon::now();
         if($request->hasFile('coursePic')){ //判断文件是否存在
@@ -169,5 +173,25 @@ class commentCourseController extends Controller
         }
         return response()->json($data);
 
+    }
+
+    /**
+     * 表单验证
+     */
+    protected function validator(array $data){
+        $rules = [
+            'courseView' => 'integer',
+            'coursePlayView' => 'integer',
+            'courseFav' => 'integer',
+
+        ];
+
+        $messages = [
+            'courseView.integer' => '浏览数必须是整型',
+            'coursePlayView.integer' => '观看数必须是整型',
+            'courseFav.integer' => '收藏数必须是整型',
+        ];
+
+        return \Validator::make($data, $rules, $messages);
     }
 }

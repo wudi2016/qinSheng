@@ -59,6 +59,12 @@ class SpecialDataController extends Controller
      *执行添加资料
      */
     public function doAddData(Request $request){
+        $this->validate($request,[
+            'dataName'=>'required|max:20'
+        ],[
+            'dataName.required'=>'请输入资料名称',
+            'dataName.max'=>'资料名称长度不超过20'
+        ]);
         $data = $request->except('_token');
         $data['created_at'] = Carbon::now();
         $data['updated_at'] = Carbon::now();
@@ -102,6 +108,12 @@ class SpecialDataController extends Controller
      *执行编辑
      */
     public function doEditData(Request $request){
+        $this->validate($request,[
+            'dataName'=>'required|max:20'
+        ],[
+            'dataName.required'=>'请输入资料名称',
+            'dataName.max'=>'资料名称长度不超过20'
+        ]);
         $data = $request->except('_token','organurl');
         $data['updated_at'] = Carbon::now();
         if($request['dataPath']){

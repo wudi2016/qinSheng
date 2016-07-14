@@ -8,24 +8,30 @@ define([], function () {
         total: '',
         myFocusList: [],
         getMyFocusInfo: function () {
-            $.ajax({
-                url: '/member/myFocus',
-                type: 'GET',
-                dataType: 'json',
-                success: function (response) {
-                    if (response.type) {
-                        myFocusTeacher.realInfo = true;
-                        myFocusTeacher.myFocusList = response.data;
-                        myFocusTeacher.total = response.total;
-                    } else {
-                        myFocusTeacher.realInfo = false;
-                        myFocusTeacher.total = response.total;
-                    }
+            $('#page_focus').pagination({
+                dataSource: function (done) {
+                    $.ajax({
+                        url: '/member/myFocus',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.type) {
+                                done(response.data);
+                                myFocusTeacher.total = response.total;
+                            }
+                        },
+                    });
                 },
-                error: function (error) {
-
+                pageSize: 24,
+                className: "paginationjs-theme-blue",
+                showGoInput: true,
+                showGoButton: true,
+                callback: function (data) {
+                    if (data) {
+                        myFocusTeacher.myFocusList = data;
+                    }
                 }
-            });
+            })
         },
     })
     return {

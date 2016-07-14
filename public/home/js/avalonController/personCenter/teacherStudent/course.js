@@ -9,7 +9,7 @@ define([], function () {
         total: '',
         courseInfo: [],
         getCourseInfo: function (type, flag) {
-            $('#page').pagination({
+            $('#page_course').pagination({
                 dataSource: function (done) {
                     $.ajax({
                         url: '/member/getCourse/' + type + '/' + flag,
@@ -23,7 +23,7 @@ define([], function () {
                         },
                     });
                 },
-                pageSize: 1,
+                pageSize: 6,
                 className: "paginationjs-theme-blue",
                 showGoInput: true,
                 showGoButton: true,

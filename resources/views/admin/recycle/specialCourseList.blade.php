@@ -142,7 +142,7 @@
                                             <td>{{$special->courseStatus ? '锁定' : '激活'}}</td>
 
                                             <td>
-                                                <a class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+                                                <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
                                                     {{--<button class="btn btn-xs btn-success">--}}
                                                     {{--<i class="icon-ok bigger-120"></i>--}}
                                                     {{--</button>--}}

@@ -1,11 +1,7 @@
 .pagecon{
-    width:800px;
-    margin-top:50px;
-    margin-left: 20%;
-    text-align: center;
-}
-#page{
-    margin: 0 auto;
+    width: 85%;
+    margin-left: 90px;
+    margin-top: 20px;
 }
 .paginationjs {
     line-height: 1.6;
@@ -21,7 +17,8 @@
 }
 
 .paginationjs .paginationjs-pages {
-    float: left
+    float: left;
+    margin : 0 auto;
 }
 
 .paginationjs .paginationjs-pages ul {

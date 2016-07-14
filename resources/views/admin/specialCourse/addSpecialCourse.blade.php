@@ -52,7 +52,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 标题 </label>
 
                             <div class="col-sm-9">
-                                <input type="text" name="courseTitle" id="form-field-1" placeholder="标题" class="col-xs-10 col-sm-5" value="" />
+                                <input type="text" name="courseTitle" id="form-field-1" placeholder="标题" class="col-xs-10 col-sm-5" value="{{old('courseTitle')}}" />
                             <span class="help-inline col-xs-12 col-sm-7">
                                 <label class="middle">
                                     <span class="lbl"></span>
@@ -67,7 +67,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 描述 </label>
 
                             <div class="col-sm-9">
-                                <textarea name="courseIntro" placeholder="描述" id="form-field-1" class="col-xs-10 col-sm-5" cols="30" rows="10" style="resize: none"></textarea>
+                                <textarea name="courseIntro" placeholder="描述" id="form-field-1" class="col-xs-10 col-sm-5" cols="30" rows="10" style="resize: none">{{old('courseIntro')}}</textarea>
                                 <span class="help-inline col-xs-12 col-sm-7">
                                     <label class="middle">
                                         <span class="lbl"></span>
@@ -148,7 +148,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 课程公告 </label>
 
                             <div class="col-sm-9">
-                                <textarea name="courseNotice" placeholder="课程公告" id="form-field-1" class="col-xs-10 col-sm-5" cols="30" rows="10" style="resize: none"></textarea>
+                                <textarea name="courseNotice" placeholder="课程公告" id="form-field-1" class="col-xs-10 col-sm-5" cols="30" rows="10" style="resize: none">{{old('courseNotice')}}</textarea>
                                 <span class="help-inline col-xs-12 col-sm-7">
                                 <label class="middle">
                                     <span class="lbl"></span>
@@ -163,7 +163,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 课程价格 </label>
 
                             <div class="col-sm-9">
-                                <input type="text" name="coursePrice" id="form-field-1" placeholder="课程价格" class="col-xs-10 col-sm-5" value="" />
+                                <input type="text" name="coursePrice" id="form-field-1" placeholder="课程价格" class="col-xs-10 col-sm-5" value="{{old('coursePrice')}}" />
                             <span class="help-inline col-xs-12 col-sm-7">
                                 <label class="middle">
                                     <span class="lbl"></span>

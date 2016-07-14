@@ -338,9 +338,13 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         Route::get('/buySuccess/{orderID}', ['middleware' => 'check', 'uses' => 'buyCommentController@buySuccess']);
         //	上传视频
         Route::get('/buy/upload/{orderID}', ['middleware' => 'check', 'uses' => 'buyCommentController@upload']);
+        //  完成上传
+        Route::post('/finishUpload', ['middleware' => 'check', 'uses' => 'buyCommentController@finishUpload']);
         
         //  pass平台上传资源
         Route::post('/uploadResource', ['middleware' => 'check', 'uses' => 'buyCommentController@uploadResource']);
+        //  pass平台资源转换
+        Route::post('/transformation', ['middleware' => 'check', 'uses' => 'buyCommentController@transformation']);
 
     });
 
@@ -651,13 +655,17 @@ Route::group(['prefix' => '/admin', 'namespace' => 'Admin'], function () {
         //添加订单备注
         Route::post('remark','orderController@remark');
         //修改应退金额
-        Route::get('refundmoney/{id}','orderController@refundmoney');
+        Route::get('editRefundmoney/{id}','orderController@editRefundmoney');
         //执行确认应退金额
         Route::post('doRefundmoney','orderController@doRefundmoney');
         //修改已退金额
-        Route::get('retiredmoney/{id}','orderController@retiredmoney');
+        Route::get('editRetiredmoney/{id}','orderController@editRetiredmoney');
         //执行确认已退金额
         Route::post('doRetiredmoney','orderController@doRetiredmoney');
+        //备注列表
+        Route::get('remarkList/{id}','orderController@remarkList');
+        //删除备注
+        Route::get('delRemark/{orderid}/{id}','orderController@delRemark');
 
 
         //退款列表
@@ -866,7 +874,10 @@ Route::group(['prefix'=>'/contentManager','namespace'=>'contentManager'],functio
         Route::get('delcompanyUser/{id}','companyUserController@delcompanyUser');
         //状态
         Route::get('companyStatus','companyUserController@companyStatus');
-
+        //重置密码页面
+        Route::get('resetPassword/{id}','companyUserController@resetPassword');
+        //密码提交修改
+        Route::post('resetsPassword','companyUserController@resetsPassword');
 
     });
 
@@ -923,6 +934,14 @@ Route::group(['prefix'=>'/contentManager','namespace'=>'contentManager'],functio
         Route::get('editRecycleTeacherCourse/{id}','RecycleCourseController@editRecycleTeacherCourse');
         //彻底删除
         Route::get('delRecycleTeacherCourse/{id}','RecycleCourseController@delRecycleTeacherCourse');
+
+
+        //订单列表
+        Route::get('recycleOrderList','RecycleCourseController@recycleOrderList');
+        //还原
+        Route::get('editRecycleOrder/{id}','RecycleCourseController@editRecycleOrder');
+        //彻底删除
+        Route::get('delRecycleOrder/{id}','RecycleCourseController@delRecycleOrder');
     });
 
 

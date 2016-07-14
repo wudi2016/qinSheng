@@ -29,6 +29,12 @@ class SpecialTypeController extends Controller
      *执行添加
      */
     public function doAddSpecialType(Request $request){
+        $this->validate($request,[
+            'typeName'=>'required|max:5'
+        ],[
+            'typeName.required'=>'请输入课程类型',
+            'typeName.max'=>'课程类型长度不超过5'
+        ]);
         $data = $request->except('_token');
         if(DB::table('coursetype')->where('id',$request['id'])->insert($data)){
             return redirect('admin/message')->with(['status'=>'课程类型添加成功','redirect'=>'specialCourse/specialTypeList']);
@@ -49,6 +55,12 @@ class SpecialTypeController extends Controller
      *执行编辑
      */
     public function doEditSpecialType(Request $request){
+        $this->validate($request,[
+            'typeName'=>'required|max:5'
+        ],[
+            'typeName.required'=>'请输入课程类型',
+            'typeName.max'=>'课程类型长度不超过5'
+        ]);
         $data = $request->except('_token');
         if(DB::table('coursetype')->where('id',$request['id'])->update($data)){
             return redirect('admin/message')->with(['status'=>'课程类型编辑成功','redirect'=>'specialCourse/specialTypeList']);

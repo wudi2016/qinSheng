@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use DB;
 use Carbon\Carbon;
+use App\Http\Requests\specialCourse\specialCourseRequest;
 
 class SpecialCourseController extends Controller
 {
@@ -62,7 +63,7 @@ class SpecialCourseController extends Controller
     /**
      *执行添加
      */
-    public function doAddSpecialCourse(Request $request){
+    public function doAddSpecialCourse(specialCourseRequest $request){
         $data = $request->except('_token');
         $data['coursePrice'] = $request['coursePrice'] * 1000;
         $data['courseDiscount'] = $request['courseDiscount'] * 1000;
@@ -82,6 +83,8 @@ class SpecialCourseController extends Controller
             }else{
                 return redirect()->back()->withInput()->withErrors('文件在上传过程中出错');
             }
+        }else{
+            return redirect()->back()->withInput()->withErrors('请上传专题课程封面图');
         }
         if(DB::table('course')->insert($data)){
             return redirect('admin/message')->with(['status'=>'专题课程添加成功','redirect'=>'specialCourse/specialCourseList']);
@@ -115,7 +118,11 @@ class SpecialCourseController extends Controller
     /**
      *执行编辑
      */
-    public function doEditSpecialCourse(Request $request){
+    public function doEditSpecialCourse(specialCourseRequest $request){
+        $validator = $this -> validator($request->all());
+        if ($validator -> fails()){
+            return Redirect()->back()->withInput($request->all())->withErrors($validator);
+        }
         $data = $request->except('_token');
         $data['coursePrice'] = $request['coursePrice'] * 1000;
         $data['courseDiscount'] = $request['courseDiscount'] * 1000;
@@ -193,5 +200,25 @@ class SpecialCourseController extends Controller
         }else{
             return redirect('admin/message')->with(['status'=>'专题课程删除失败','redirect'=>'specialCourse/specialCourseList']);
         }
+    }
+
+    /**
+     * 表单验证
+     */
+    protected function validator(array $data){
+        $rules = [
+            'courseView' => 'integer',
+            'coursePlayView' => 'integer',
+            'courseFav' => 'integer',
+
+        ];
+
+        $messages = [
+            'courseView.integer' => '浏览数必须是整型',
+            'coursePlayView.integer' => '观看数必须是整型',
+            'courseFav.integer' => '收藏数必须是整型',
+        ];
+
+        return \Validator::make($data, $rules, $messages);
     }
 }

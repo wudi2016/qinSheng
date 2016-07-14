@@ -188,4 +188,78 @@ class RecycleCourseController extends Controller
     }
 
 
+
+
+    /**
+     *订单列表
+     */
+    public function recycleOrderList(Request $request){
+        $query = DB::table('orders');
+        if($request['type'] == 1){
+            $query = $query->where('orderSn','like','%'.trim($request['search']).'%');
+        }
+        if($request['type'] == 2){
+            $query = $query->where('orderTitle','like','%'.trim($request['search']).'%');
+        }
+        if($request['type'] == 3){
+            $query = $query->where('userId','like','%'.trim($request['search']).'%');
+        }
+        if($request['type'] == 4){
+            $query = $query->where('userName','like','%'.trim($request['search']).'%');
+        }
+        if($request['type'] == 5){ //上传的起止时间
+            $query = $query->where('payTime','>=',$request['beginTime'])->where('payTime','<=',$request['endTime']);
+        }
+        $data = $query
+            ->where('isDelete',1)
+            ->orderBy('id','desc')
+            ->paginate(15);
+        foreach($data as &$val){
+            $val->orderPrice = $val->orderPrice / 1000;
+            $val->payPrice = $val->payPrice / 1000;
+            $val->refundableAmount = $val->refundableAmount / 1000;
+            $val->refundAmount = $val->refundAmount / 1000;
+        }
+        //导出数据
+        $excel = $query
+            ->select('id','orderSn as 订单号','tradeSn as 交易编号','orderTitle as 订单名称','orderPrice as 订单价格','payPrice as 实付金额','payType as 支付方式(0:支付宝1:微信)','userId as 购买用户ID','userName as 购买用户','teacherId as 邀请人ID','teacherName as 邀请人','orderType as 订单类型(0:购买专题订单1:点评申请订单2:购买点评订单)','courseId as 专题课程ID(订单类型为0或1时为点评课程ID)','refundableAmount as 应退金额','refundAmount as 已退金额','payTime as 付款时间','status as 订单状态(0:已付款1:待点评2:已完成3:退款中4:已退款)')
+            ->where('isDelete',0)
+            ->orderBy('id','desc')
+            ->get();
+        foreach($excel as &$value){
+            $value->订单价格 = $value->订单价格 / 1000;
+            $value->实付金额 = $value->实付金额 / 1000;
+            $value->应退金额 = $value->应退金额 / 1000;
+            $value->已退金额 = $value->已退金额 / 1000;
+        }
+        $excel = json_encode($excel);
+        $data->type = $request['type'];
+//        dd($data);
+        return view('admin.recycle.orderList',['data'=>$data,'excel'=>$excel]);
+    }
+
+    /**
+     *还原订单
+     */
+    public function editRecycleOrder($id){
+        $data = DB::table('orders')->where('id',$id)->update(['isDelete'=>0]);
+        if($data){
+            return redirect('admin/message')->with(['status'=>'订单还原成功','redirect'=>'recycle/recycleOrderList']);
+        }else{
+            return redirect('admin/message')->with(['status'=>'订单还原失败','redirect'=>'recycle/recycleOrderList']);
+        }
+    }
+
+    /**
+     *彻底删除订单
+     */
+    public function delRecycleOrder($id){
+        if(DB::table('orders')->where('id',$id)->delete()){
+            return redirect('admin/message')->with(['status'=>'订单删除成功','redirect'=>'recycle/recycleOrderList']);
+        }else{
+            return redirect('admin/message')->with(['status'=>'订单删除失败','redirect'=>'recycle/recycleOrderList']);
+        }
+    }
+
+
 }

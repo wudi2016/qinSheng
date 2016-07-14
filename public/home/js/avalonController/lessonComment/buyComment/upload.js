@@ -4,9 +4,16 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 		$id: 'uploadController',
 		progressBar: 0,
 		uploadStatus: 1,
-		submitDisable: true,
+		submitDisable: false,
 		uploadTip: '',
-		fileID: '',
+		uploadInfo: {
+			fileID: null,
+			courseTitle: null,
+			message: null
+		},
+		titleLength: 0,
+		messageLength: 0,
+		warning: {title: false, message: false},
 		getData: function(url, model, data, method, callback) {
 			$.ajax({
 				type: method || 'GET',
@@ -21,7 +28,8 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 									upload.progressBar = 100;
 									setTimeout(function() {
 										upload.endUpload('视频上传完成！');
-										upload.fileID = response.data.data.FileID;
+										upload.uploadInfo.fileID = response.data.data.FileID;
+										upload.getData('/lessonComment/transformation', 'transformation', {fileID: upload.uploadInfo.fileID}, 'POST');
 									}, 1000);
 								} else {
 									if (response.data.data.AllowUpload == 1) upload.paas.requestUpload({ url: response.data.data.UUrl, method: "POST", data: {"filedata": upload.file} });
@@ -34,8 +42,26 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 							} else {
 								upload.endUpload('中断上传');
 							}
-						} else {
-							user[model] = response.data;
+						}
+						if (model == 'transformation') {
+							if (response.data.code == 200 && response.data.data.Waiting < 0) {
+								for (var i in response.data.data.FileList) {
+									switch(response.data.data.FileList[i].Level) {
+										case 1:
+											upload.uploadInfo.courseLowPath = response.data.data.FileList[i].FileID;
+											break;
+										case 2:
+											upload.uploadInfo.courseMediumPath = response.data.data.FileList[i].FileID;
+											break;
+										case 3:
+											upload.uploadInfo.courseHighPath = response.data.data.FileList[i].FileID;
+											break;
+									}
+								}
+							}
+						}
+						if (model == 'finishUpload') {
+							location.href = '/member/student/' + upload.mineID;
 						}
 					}
 				},
@@ -72,6 +98,22 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 			upload.progressBar = 0;
 			upload.uploadStatus = 3;
 			upload.uploadTip = tip || '';
+		},
+		submit: function() {
+			if (!upload.submitDisable) return false;
+			if (!upload.uploadInfo.fileID) {
+				upload.uploadStatus = 3
+				upload.uploadTip = '<span style="color: red;">请先上传视频</span>';
+				return false;
+			}
+			for (var i in upload.warning) {
+				if (upload[i+'Length'] < 1) {
+					upload.warning[i] = true;
+					return false;
+				}
+			}
+			upload.uploadInfo.userId = upload.mineID;
+			upload.getData('/lessonComment/finishUpload', 'finishUpload', {data: upload.uploadInfo, orderID: upload.orderID}, 'POST');
 		}
 	});
 

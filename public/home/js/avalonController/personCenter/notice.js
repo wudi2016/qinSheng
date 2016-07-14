@@ -6,37 +6,32 @@ define([], function () {
         $id: 'noticeController',
         noticeInfo: [],
         getNoticeInfo: function (username) {
-            $.ajax({
-                url: '/member/getNoticeInfo',
-                type: 'POST',
-                dataType: 'json',
-                data: {username: username},
-                success: function (response) {
-                    if (response.status) {
-                        notice.noticeInfo = response.data;
-                    } else {
-                        notice.noticeInfo = [];
-                    }
+            $('#page_notice').pagination({
+                dataSource: function (done) {
+                    $.ajax({
+                        url: '/member/getNoticeInfo',
+                        type: 'POST',
+                        dataType: 'json',
+                        data : {username:username},
+                        success: function (response) {
+                            if (response.status) {
+                                done(response.data);
+                            }
+                        },
+                    });
                 },
-                error: function (error) {
+                pageSize: 10,
+                className: "paginationjs-theme-blue",
+                showGoInput: true,
+                showGoButton: true,
+                callback: function (data) {
+                    if (data) {
+                        notice.noticeInfo = data;
+                    }
 
                 }
             })
-        },
-        //deleteNotice: function () {
-        //    $.ajax({
-        //        url : '/member/deleteNotice',
-        //        type : 'POST',
-        //        dataType : 'json',
-        //        data : {id : notice.noticeInfo[notice.noticeIndex].id},
-        //        success: function(response){
-        //            if(response.status){
-        //                notice.noticeInfo.removeAt(notice.noticeIndex);
-        //                //sideBar.popUp = false;
-        //            }
-        //        }
-        //    })
-        //}
+        }
     })
     return {
         notice: notice

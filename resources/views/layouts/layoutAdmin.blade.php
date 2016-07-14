@@ -626,7 +626,7 @@
 								</li>
 
 
-								<li class="activityactivity">
+								<li class="activityaddactivity">
 									<a href="{{url('/admin/activity/addactivity')}}">
 										<i class="icon-double-angle-right"></i>
 										添加赛事
@@ -670,6 +670,14 @@
 								</li>
 
 
+								{{--<li class="contentmanagernews">--}}
+									{{--<a href="{{url('/admin/contentManager/newsList')}}">--}}
+										{{--<i class="icon-double-angle-right"></i>--}}
+										{{--新闻资讯列表--}}
+									{{--</a>--}}
+								{{--</li>--}}
+
+
 
 							</ul>
 						</li>
@@ -704,6 +712,74 @@
 							</ul>
 						</li>
 
+
+
+
+
+						<!--公司后台用户管理-->
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-desktop"></i>
+								<span class="menu-text"> 公司后台用户管理 </span>
+
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+
+								<li class="companyusercompanyuser">
+									<a href="{{url('/admin/companyUser/companyUserList')}}">
+										<i class="icon-double-angle-right"></i>
+										后台用户列表
+									</a>
+								</li>
+
+								<li class="companyuseraddcompanyuser">
+									<a href="{{url('/admin/companyUser/addcompanyUser')}}">
+										<i class="icon-double-angle-right"></i>
+										添加后台用户
+									</a>
+								</li>
+
+							</ul>
+
+						</li>
+
+
+
+
+						<!--部门岗位管理-->
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-desktop"></i>
+								<span class="menu-text"> 部门岗位管理 </span>
+
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+
+								<li class="departmentpostdepartment">
+									<a href="{{url('/admin/departmentPost/departmentList')}}">
+										<i class="icon-double-angle-right"></i>
+										部门列表
+									</a>
+								</li>
+
+								<li class="departmentpostpost">
+									<a href="{{url('/admin/departmentPost/postList')}}">
+										<i class="icon-double-angle-right"></i>
+										岗位列表
+									</a>
+								</li>
+
+							</ul>
+
+						</li>
+
+
+
+
 						<!--回收站-->
 						<li>
 							<a href="#" class="dropdown-toggle">
@@ -732,6 +808,13 @@
 									<a href="{{url('/admin/recycle/recycleTeacherCourseList')}}">
 										<i class="icon-double-angle-right"></i>
 										点评视频
+									</a>
+								</li>
+
+								<li class="recyclerecycleorder">
+									<a href="{{url('/admin/recycle/recycleOrderList')}}">
+										<i class="icon-double-angle-right"></i>
+										订单
 									</a>
 								</li>
 
@@ -877,20 +960,6 @@
 							$('.' + first + route.slice(4)).parent().css('display', 'block');
 							$('.' + first + route.slice(4)).addClass('active');
 
-							if (route == 'resourceadd') {
-								$('.resourceadd').parent().parent().addClass('open');
-								$('.resourceadd').parent().css('display', 'block');
-								$('.resourceadd').addClass('active');
-							} else if (route == 'sectionadd' || route == 'subjectadd' || route == 'editionadd' || route == 'gradeadd' || route == 'chapteradd' || route == 'expandresseladd') {
-								$('.' + route).parent().parent().parent().parent().parent().addClass('open');
-								$('.' + route).parent().parent().parent().parent().addClass('open');
-								$('.' + route).parent().parent().parent().parent().parent().css('display', 'block');
-								$('.' + route).parent().parent().parent().css('display', 'block');
-								$('.' + route).parent().parent().addClass('open');
-								$('.' + route).parent().parent().css('display', 'block');
-								$('.' + route).parent().css('display', 'block');
-								$('.' + route).addClass('active');
-							}
 						} else { // 一个‘/’
 //							alert('aa');
 							$('.' + first + route.slice(0, -4)).parent().parent().addClass('open');
@@ -908,7 +977,7 @@
 				} else if (route.match(/\//g).length == '2') { // 2个‘/’
 					route = route.split('/')[route.split('/').length - 2];
 					if (second == 'specialcourse') {
-						if (route == 'specialchapterlist' || route == 'datalist' || route == 'adddata' || route == 'editdata') {
+						if (route == 'specialchapterlist' || route == 'datalist' || route == 'adddata' || route == 'editdata' || route == 'addspecialchapter') {
 							$('.specialcoursespecialcourse').parent().parent().addClass('open');
 							$('.specialcoursespecialcourse').parent().css('display', 'block');
 							$('.specialcoursespecialcourse').addClass('active');
@@ -936,6 +1005,13 @@
 						$('.usersfamousteacher').parent().parent().addClass('open');
 						$('.usersfamousteacher').parent().css('display', 'block');
 						$('.usersfamousteacher').addClass('active');
+					}else if(route == 'order'){
+						alert(route);
+						if (route == 'remarklist') {
+							$('.orderorder').parent().parent().addClass('open');
+							$('.orderorder').parent().css('display', 'block');
+							$('.orderorder').addClass('active');
+						}
 					} else if (route == 'checkrolepermission' || route == 'addrolepermission') {
 						$('.authrole').parent().parent().addClass('open');
 						$('.authrole').parent().css('display', 'block');

@@ -9,25 +9,30 @@ define([], function () {
         isDelete: 0,
         myOrdersList: [],
         getMyOrdersInfo: function () {
-            $.ajax({
-                url: '/member/myOrders',
-                type: 'POST',
-                data:{},
-                dataType: 'json',
-                success: function (response) {
-                    if (response.type) {
-                        myOrdersStudent.realInfo = true;
-                        myOrdersStudent.myOrdersList = response.data;
-                        //myOrdersStudent.total = response.total;
-                    } else {
-                        myOrdersStudent.realInfo = false;
-                        //myOrdersStudent.total = response.total;
-                    }
+            $('#page_orders').pagination({
+                dataSource: function (done) {
+                    $.ajax({
+                        url: '/member/myOrders',
+                        type: 'POST',
+                        data:{},
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.type) {
+                                done(response.data);
+                            }
+                        },
+                    });
                 },
-                error: function (error) {
-
+                pageSize: 10,
+                className: "paginationjs-theme-blue",
+                showGoInput: true,
+                showGoButton: true,
+                callback: function (data) {
+                    if (data) {
+                        myOrdersStudent.myOrdersList = data;
+                    }
                 }
-            });
+            })
         },
     })
     return {
