@@ -64,7 +64,7 @@
 				</div>
 				<div style="width: 100%; height: 300px; line-height: 300px; text-align: center; display: none;" ms-visible='specialLesson.size() < 1 && !loading'>暂无数据</div>
 				<div class="teacherHomepage_detail_video hide" ms-visible="!loading">
-					<a class="teacherHomepage_detail_video_block" ms-repeat="specialLesson" ms-attr-hrefs="'/asdas/asdasd/asdasd/' + el.id">
+					<a class="teacherHomepage_detail_video_block" ms-repeat="specialLesson" ms-attr-hrefs="'/lessonSubject/detail/' + el.id">
 						<img ms-attr-src="el.coursePic">
 						<div class="title" ms-html="el.courseTitle"></div>
 						<div class="detail">
@@ -91,7 +91,7 @@
 				</div>
 				<div style="width: 100%; height: 300px; line-height: 300px; text-align: center; display: none;" ms-visible='commentLesson.size() < 1 && !loading'>暂无数据</div>
 				<div class="teacherHomepage_detail_video hide" ms-visible="!loading">
-					<a class="teacherHomepage_detail_video_block" ms-repeat="commentLesson" ms-attr-hrefs="'/asdas/asdasd/asdasd/' + el.id">
+					<a class="teacherHomepage_detail_video_block" ms-repeat="commentLesson" ms-attr-href="'/lessonComment/detail/' + el.id">
 						<img ms-attr-src="el.coursePic">
 						<div class="title" ms-html="el.courseTitle"></div>
 						<div class="detail">

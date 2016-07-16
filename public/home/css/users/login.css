@@ -127,6 +127,19 @@ body{
     -webkit-border-radius:5px;
     text-indent:10px;
 }
+
+.cklogo{
+    width:55px;
+    height:34px;
+    float:right;
+    /*background:gray;*/
+}
+.cklogo img{
+    position:relative;
+    top:11px;
+    left:-3px;
+}
+
 .center_con_r_bar_m_l{
     width:150px;
     height:36px;
@@ -154,5 +167,14 @@ body{
     border-radius:5px;
     -moz-border-radius:5px;
     -webkit-border-radius:5px;
+    cursor: pointer;
+}
+.clearInput{
+    width:20px;
+    height:36px;
+    background: url('/home/image/register/del.png') no-repeat 0 10px;
+    position: relative;
+    top:0;
+    left:360px;
     cursor: pointer;
 }

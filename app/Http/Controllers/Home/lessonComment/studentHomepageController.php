@@ -75,6 +75,11 @@ class studentHomepageController extends Controller
                 $result = DB::table($request['table']) -> where($request['data']) -> delete();
                 if ($result) return Response() -> json(["type" => true, "data" => false]);
                 break;
+            case '4':
+                foreach ($request['data'] as $key => $value) $data[$key] = $value;
+                $data['updated_at'] = Carbon::now();
+                $result = DB::table($request['table']) -> where($request['condition']) -> update($data);
+                break;
         }
         return $this -> returnResult($result);
     }

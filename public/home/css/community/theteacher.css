@@ -1,4 +1,4 @@
-.{
+*{
 	margin: 0;
 	padding: 0;
 }
@@ -22,6 +22,8 @@ a{
 .table_loop{
 	width:1200px;
 	height:auto;
+	min-height:255px;
+	/*height:510px;*/
 }
 
 .crumbs{
@@ -158,4 +160,14 @@ a{
 	/*white-space:nowrap;*/
 	/*overflow:hidden;*/
 	/*text-overflow:ellipsis;*/
+}
+
+/*没有名师情况下*/
+.noteacher{
+	width:1200px;
+	height:255px;
+	font-size:24px;
+	color:#B2B2B2;
+	line-height: 200px;
+	text-align: center;
 }

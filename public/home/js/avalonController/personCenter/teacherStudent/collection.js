@@ -19,9 +19,9 @@ define([], function () {
                         type: 'GET',
                         dataType: 'json',
                         success: function (response) {
+                            collection.total = response.total;
                             if (response.status) {
                                 done(response.data);
-                                collection.total = response.total;
                             }
                         },
                     });

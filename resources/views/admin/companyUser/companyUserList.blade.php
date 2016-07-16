@@ -108,8 +108,8 @@
                                         <td>{{$com->realname}}</td>
                                         <td>{{$com->phone}}</td>
                                         <td>{{$com->email}}</td>
-                                        <td>{{$com->departId}}</td>
-                                        <td>{{$com->postId}}</td>
+                                        <td>{{$com->departName}}</td>
+                                        <td>{{$com->postName}}</td>
                                         <td>{{$com->roleId}}</td>
                                         <td>
                                             @if($com->status == 0)

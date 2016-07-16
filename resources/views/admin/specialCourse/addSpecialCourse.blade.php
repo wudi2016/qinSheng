@@ -163,7 +163,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 课程价格 </label>
 
                             <div class="col-sm-9">
-                                <input type="text" name="coursePrice" id="form-field-1" placeholder="课程价格" class="col-xs-10 col-sm-5" value="{{old('coursePrice')}}" />
+                                <input type="text" name="coursePrice" ms-duplex="price" id="form-field-1" placeholder="课程价格" class="col-xs-10 col-sm-5" value="{{old('coursePrice')}}" />
                             <span class="help-inline col-xs-12 col-sm-7">
                                 <label class="middle">
                                     <span class="lbl"></span>
@@ -178,8 +178,6 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 课程类型 </label>
 
                             <div class="col-sm-9">
-                                {{--<input type="text" name="courseType" id="form-field-1" placeholder="课程类型" class="col-xs-10 col-sm-5" value="{{$data->typeName}}" />--}}
-                                {{--<input type="text" name="" id="form-field-1" placeholder="课程类型" class="col-xs-10 col-sm-5" value="{{$data->courseType}}" />--}}
                                 <select id="form-field-2" class="col-xs-10 col-sm-5" name="courseType" ms-change="typeSelect(this.value)">
                                     <option value="0">无促销</option>
                                     @foreach($data['coursetypes'] as $courseTypes)
@@ -201,16 +199,16 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 折扣 </label>
 
                             <div class="col-sm-9">
-                                <select id="form-field-2" class="col-xs-10 col-sm-5" name="courseDiscount"  ms-change="discountSelect(this.value)">
-                                    <option value="1">1折</option>
-                                    <option value="2">2折</option>
-                                    <option value="3">3折</option>
-                                    <option value="4">4折</option>
-                                    <option value="5">5折</option>
-                                    <option value="6">6折</option>
-                                    <option value="7">7折</option>
-                                    <option value="8">8折</option>
+                                <select id="zhekou" class="col-xs-10 col-sm-5" name="courseDiscount"  ms-change="discountSelect(this.value)">
                                     <option value="9">9折</option>
+                                    <option value="8">8折</option>
+                                    <option value="7">7折</option>
+                                    <option value="6">3折</option>
+                                    <option value="5">5折</option>
+                                    <option value="4">4折</option>
+                                    <option value="3">3折</option>
+                                    <option value="2">2折</option>
+                                    <option value="1">1折</option>
                                 </select>
                                 <span class="help-inline col-xs-12 col-sm-7">
                                     <label class="middle">

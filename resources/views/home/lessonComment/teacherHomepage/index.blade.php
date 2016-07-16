@@ -67,10 +67,12 @@
 				<div class="teacherHomepage_detail_content_comment" style="font-size: 18px; color: rgb(102, 102, 102); margin-bottom: 22px;">
 					<img src="{{asset('/home/image/lessonComment/teacherHomepage/point.png')}}">钢琴演奏
 				</div>
-				<a ms-attr-href="[--userInfo.stock > 0 ? '/lessonComment/buy/{{$userID}}' : '#nostock'--]" class="teacherHomepage_detail_content_button" ms-applycomment="userInfo.stock">
-					立即申请
-					<div class="teacherHomepage_detail_content_applyTips">该老师近期没有点评名额</div>
-				</a>
+				@if (\Auth::user() -> id != $userID)
+					<a ms-attr-href="[--userInfo.stock > 0 ? '/lessonComment/buy/{{$userID}}' : '#nostock'--]" class="teacherHomepage_detail_content_button" ms-applycomment="userInfo.stock">
+						立即申请
+						<div class="teacherHomepage_detail_content_applyTips">该老师近期没有点评名额</div>
+					</a>
+				@endif
 				<div style="clear: both; height: 10px;"></div>
 				<div class="claer_line"></div>
 				<div class="teacher_info" ms-html="userInfo.username"></div>
@@ -88,7 +90,7 @@
 				</div>
 				<div style="width: 100%; height: 300px; line-height: 300px; text-align: center; display: none;" ms-visible='specialLesson.size() < 1 && !loading'>暂无数据</div>
 				<div class="teacherHomepage_detail_video hide" ms-visible="!loading">
-					<a class="teacherHomepage_detail_video_block" ms-repeat="specialLesson">
+					<a class="teacherHomepage_detail_video_block" ms-repeat="specialLesson" ms-attr-hrefs="'/lessonSubject/detail/' + el.id">
 						<img ms-attr-src="el.coursePic">
 						<div class="title" ms-html="el.courseTitle"></div>
 						<div class="detail">
@@ -115,7 +117,7 @@
 				</div>
 				<div style="width: 100%; height: 300px; line-height: 300px; text-align: center; display: none;" ms-visible='commentLesson.size() < 1 && !loading'>暂无数据</div>
 				<div class="teacherHomepage_detail_video hide" ms-visible="!loading">
-					<a class="teacherHomepage_detail_video_block" ms-repeat="commentLesson">
+					<a class="teacherHomepage_detail_video_block" ms-repeat="commentLesson" ms-attr-href="'/lessonComment/detail/' + el.id">
 						<img ms-attr-src="el.coursePic">
 						<div class="title" ms-html="el.courseTitle"></div>
 						<div class="detail">

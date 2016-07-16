@@ -161,9 +161,9 @@
                                         <label class="col-sm-3 control-label no-padding-right" for="form-field-1">生日：</label>
 
                                         <div class="col-sm-9">
-                                            <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-2" value="{{$data->birthYear.'年'}}"/>
-                                            <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-1" value="{{$data->birthMonth.'月'}}"/>
-                                            <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-1" value="{{$data->birthDay.'日'}}"/>
+                                            <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-2" value="{{($data->birthYear?:' -- ').'年'}}"/>
+                                            <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-1" value="{{($data->birthMonth?:' -- ').'月'}}"/>
+                                            <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-1" value="{{($data->birthDay?:' -- ').'日'}}"/>
                                         </div>
                                     </div>
 
@@ -179,8 +179,8 @@
                                         <label class="col-sm-3 control-label no-padding-right" for="form-field-1">开始学琴时间：</label>
 
                                         <div class="col-sm-9">
-                                            <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-3" value="{{$data->learnYear.'年'}}"/>
-                                            <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-2" value="{{$data->learnMonth.'月'}}"/>
+                                            <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-3" value="{{($data->learnYear?:' -- ') .'年'}}"/>
+                                            <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-2" value="{{($data->learnMonth?:' -- ').'月'}}"/>
                                         </div>
                                     </div>
 

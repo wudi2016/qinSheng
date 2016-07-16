@@ -39,29 +39,29 @@
                 <div class="account_manger">课程管理</div>
                 <div class="height5"></div>
                 <span class="span_hover"></span>
-                <div class="account_common" ms-click="changeTab('waitComment')">待评点评</div>
+                <div class="account_common" name='waitComment'  ms-click="changeTab('waitComment')">待评点评</div>
                 <span class="span_hover"></span>
-                <div class="account_common" ms-click="changeTab('sureComment')">已评点评</div>
+                <div class="account_common" name='sureComment'  ms-click="changeTab('sureComment')">已评点评</div>
                 <span class="span_hover"></span>
-                <div class="account_common" ms-click="changeTab('lessonSubject','teacher')">专题课程</div>
+                <div class="account_common" name='lessonSubject'  ms-click="changeTab('lessonSubject','teacher')">专题课程</div>
 
                 <!--我的通知-->
                 <div class="height5"></div>
                 <div class="account_manger">我的通知</div>
                 <div class="height5"></div>
                 <span class="span_hover"></span>
-                <div class="account_common" ms-click="changeTab('wholeNotice')">全部通知</div>
+                <div class="account_common" name="wholeNotice" ms-click="changeTab('wholeNotice')">全部通知</div>
 
                 <!--课程管理-->
                 <div class="height5"></div>
                 <div class="account_manger">财产管理</div>
                 <div class="height5"></div>
                 <span class="span_hover"></span>
-                <div class="account_common" ms-click="changeTab('lessonStore','teacher')">我的收藏</div>
+                <div class="account_common" name='lessonStore'  ms-click="changeTab('lessonStore','teacher')">我的收藏</div>
                 <span class="span_hover"></span>
-                <div class="account_common" ms-click="changeTab('myFans')">我的粉丝</div>
+                <div class="account_common" name='myFans'  ms-click="changeTab('myFans')">我的粉丝</div>
                 <span class="span_hover"></span>
-                <div class="account_common" ms-click="changeTab('myFocus')">我的关注</div>
+                <div class="account_common" name='myFocus'  ms-click="changeTab('myFocus')">我的关注</div>
 
 
                 <!--个人设置-->
@@ -69,7 +69,7 @@
                 <div class="account_manger">个人设置</div>
                 <div class="height5"></div>
                 <span class="span_hover"></span>
-                <div class="account_common blue_common" ms-click="changeTab('basicInfo')">基本信息</div>
+                <div class="account_common blue_common" name="basicInfo" ms-click="changeTab('basicInfo')">基本信息</div>
                 <span class="span_hover"></span>
                 <div class="account_common" ms-click="changeTab('changePass')">密码修改</div>
                 <span class="span_hover"></span>
@@ -88,12 +88,12 @@
 
         <!--======================================================待评点评课程=======================================================-->
 
-        <div class="center_right hide" ms-visible="tabStatus === 'waitComment'" ms-controller="waitCommentController">
+        <div class="center_right hide" value="waitComment" ms-visible="tabStatus === 'waitComment'" ms-controller="waitCommentController">
             <div class="center_right_top">
                 <div class="height50"></div>
                 <div class="center_right_information">待评作品</div>
                 <div class="center_right_count">
-                    <div class="right_count_left">共<span ms-text="'&nbsp;' +total +'&nbsp;' "></span>个视频</div>
+                    <div class="right_count_left">共<span ms-text="' ' +total +' ' "></span>个视频</div>
                 </div>
             </div>
 
@@ -103,9 +103,9 @@
                 {{--//点评课程循环开始--}}
                 <div class="right_comment_repeat" ms-repeat="waitCommentList">
                     <!--审核未通过-->
-                    <div ms-if="el.state == 0">
+                    <div ms-if="el.status == 0 && el.applyState ==2  && el.commentState == 0">
                         <div class="comment_repeat_img">
-                            <a ms-attr-href="'/lessonComment/upload/'+ el.commentId">
+                            <a ms-attr-href="'/lessonComment/reUploadComment/'+ el.commentId">
                                 <div class="repeat_img_unchecked">
                                     <div class="comment_video_unchecked" ms-text="'视频审核未通过'"></div>
                                     <div class="comment_video_time" ms-text=" '发布时间：'+ el.time"></div>
@@ -115,13 +115,13 @@
                         </div>
 
                         <div class="comment_repeat_title" ms-text="el.commentTitle"></div>
-                            <div class="comment_repeat_unchecked"><span ms-text="'点评讲师&nbsp;'+':&nbsp;'+ el.teachername"></span>
+                            <div class="comment_repeat_unchecked"><span ms-text="'点评讲师&nbsp;'+':&nbsp;'+ el.teacherName"></span>
                                 <span ms-text="'发布者&nbsp;'+':&nbsp;'+ el.realname"></span>
                             </div>
                     </div>
 
                     <!--视频转码中-->
-                    <div ms-if="el.state == 1 && el.low == '' && el.medium == '' && el.high == ''">
+                    <div ms-if="el.status == 0 && el.commentState == 1 && el.low == '' && el.medium == '' && el.high == ''">
                         <div class="comment_repeat_img">
                             <div class="repeat_img_unchecked">
                                 <div class="comment_video_unchecked" ms-text="'视频转码中'"></div>
@@ -130,13 +130,13 @@
 
                         </div>
                         <div class="comment_repeat_title" ms-text="el.commentTitle"></div>
-                        <div class="comment_repeat_unchecked"><span ms-text="'点评讲师&nbsp;'+':&nbsp;'+ el.teachername"></span>
+                        <div class="comment_repeat_unchecked"><span ms-text="'点评讲师&nbsp;'+':&nbsp;'+ el.teacherName"></span>
                             <span ms-text="'发布者&nbsp;'+':&nbsp;'+ el.realname"></span>
                         </div>
                     </div>
 
                     <!--审核中-->
-                    <div ms-if="el.state == 1 && el.low != '' && el.medium != '' && el.high != ''">
+                    <div ms-if="el.status == 0 && el.commentState == 1 && el.low != '' && el.medium != '' && el.high != ''">
                         <div class="comment_repeat_img">
                             <div class="repeat_img_unchecked">
                                 <div class="comment_video_unchecked" ms-text="'视频审核中'"></div>
@@ -145,13 +145,13 @@
 
                         </div>
                         <div class="comment_repeat_title" ms-text="el.commentTitle"></div>
-                        <div class="comment_repeat_unchecked"><span ms-text="'点评讲师&nbsp;'+':&nbsp;'+ el.teachername"></span>
+                        <div class="comment_repeat_unchecked"><span ms-text="'点评讲师&nbsp;'+':&nbsp;'+ el.teacherName"></span>
                             <span ms-text="'发布者&nbsp;'+':&nbsp;'+ el.realname"></span>
                         </div>
                     </div>
 
                     {{--<!--等待点评-->--}}
-                    <div ms-if="el.status == 1 && el.state != 0 && el.state != 1 && el.state != 2 && el.low == '' && el.medium == '' && le)">
+                    <div ms-if="el.status == 1 && el.applyState == 2 && el.commentState != 0 && el.commentState != 1 && el.commentState != 2">
                         <div class="comment_repeat_img">
                             <a ms-attr-href="'/lessonComment/wait/'+ el.applyId">
                                 <div class="repeat_img_unchecked">
@@ -161,13 +161,10 @@
                             </a>
                         </div>
                         <div class="comment_repeat_title" ms-text="el.commentTitle"></div>
-                        <div class="comment_repeat_unchecked"><span ms-text="'点评讲师&nbsp;'+':&nbsp;'+ el.teachername"></span>
+                        <div class="comment_repeat_unchecked"><span ms-text="'点评讲师&nbsp;'+':&nbsp;'+ el.teacherName"></span>
                             <span ms-text="'发布者&nbsp;'+':&nbsp;'+ el.realname"></span>
                         </div>
                     </div>
-
-
-
                 </div>
                 {{--//点评课程循环结束--}}
 
@@ -185,15 +182,21 @@
                 {{--</div>--}}
 
             </div>
+            <!--分页-->
+            <div class="pagecon_parent">
+                <div class="pagecon">
+                    <div id="page_waitComment"></div>
+                </div>
+            </div>
         </div>
         <!--======================================================已评点评课程=======================================================-->
 
-        <div class="center_right hide" name="selectName" ms-visible="tabStatus === 'sureComment'" ms-controller="completeCommentController">
+        <div class="center_right hide" value="sureComment" ms-visible="tabStatus === 'sureComment'" ms-controller="completeCommentController">
             <div class="center_right_top">
                 <div class="height50"></div>
                 <div class="center_right_information">已评课程</div>
                 <div class="center_right_count">
-                    <div class="right_count_left">共<span ms-html="'&nbsp;' + total + '&nbsp;'"></span>个视频</div>
+                    <div class="right_count_left">共<span ms-html="' ' + total + ' '"></span>个视频</div>
                     <div class="right_count_right"><span ms-click="getCompleteCommentInfo('new');">最新</span>&nbsp;-&nbsp;<span ms-click="getCompleteCommentInfo('hot');" class="count_right_hot">热门</span>
                     </div>
                 </div>
@@ -224,11 +227,17 @@
                     </div>
                 </div>
             </div>
+            <!--分页-->
+            <div class="pagecon_parent">
+                <div class="pagecon">
+                    <div id="page_sureComment"></div>
+                </div>
+            </div>
         </div>
 
         <!--======================================================专题课程=======================================================-->
 
-        <div class="center_right hide" name="selectName" ms-visible="tabStatus === 'lessonSubject'"
+        <div class="center_right hide" value="lessonSubject" ms-visible="tabStatus === 'lessonSubject'"
              ms-controller="courseTeacherController">
             <div class="center_right_top">
                 <div class="height50"></div>
@@ -258,15 +267,17 @@
                 </div>
                 {{--//点评课程循环结束--}}
             </div>
-            <div class="pagecon">
-                <div id="page_course"></div>
+            <div class="pagecon_parent">
+                <div class="pagecon">
+                    <div id="page_course"></div>
+                </div>
             </div>
         </div>
 
 
         <!--======================================================全部通知=======================================================-->
 
-        <div class="center_right hide" name="selectName" ms-visible="tabStatus === 'wholeNotice'" ms-controller="noticeController">
+        <div class="center_right hide" value="wholeNotice" ms-visible="tabStatus === 'wholeNotice'" ms-controller="noticeController">
             <div class="center_right_top">
                 <div class="height50"></div>
                 <div class="center_right_information">全部通知</div>
@@ -318,13 +329,15 @@
                     </div>
                 </div>
             </div>
-            <div class="pagecon">
-                <div id="page_notice"></div>
+            <div class="pagecon_parent">
+                <div class="pagecon">
+                    <div id="page_notice"></div>
+                </div>
             </div>
         </div>
         <!--======================================================我的收藏=======================================================-->
 
-        <div class="center_right hide" name="selectName" ms-visible="tabStatus === 'lessonStore'"
+        <div class="center_right hide" value="lessonStore" ms-visible="tabStatus === 'lessonStore'"
              ms-controller="collectionTeacherController">
             <div class="center_right_top">
                 <div class="height50"></div>
@@ -365,13 +378,16 @@
                 </div>
                 {{--//点评课程循环结束--}}
             </div>
-            <div class="pagecon">
-                <div id="page_collection"></div>
+            <div class="pagecon_parent">
+                <div class="pagecon">
+                    <div id="page_collection"></div>
+                </div>
             </div>
+
         </div>
         <!--======================================================我的粉丝=======================================================-->
 
-        <div class="center_right hide" name="selectName" ms-visible="tabStatus === 'myFans'"
+        <div class="center_right hide" value="myFans" ms-visible="tabStatus === 'myFans'"
              ms-controller="myFansTeacher">
             <div class="center_right_top">
                 <div class="height50"></div>
@@ -396,21 +412,18 @@
                     </a>
                 </div>
                 {{--===============================我的粉丝循环结束====================================--}}
-
-                {{--<div class="right_focus_repeat">--}}
-                {{--<img src="{{asset('home/image/layout/default.png')}}" alt="">--}}
-                {{--<div class="focus_repeat_name">小美</div>--}}
-                {{--</div>--}}
-
             </div>
-            <div class="pagecon">
-                <div id="page_friend"></div>
+            <div class="pagecon_parent">
+                <div class="pagecon">
+                    <div id="page_friend"></div>
+                </div>
             </div>
+
         </div>
 
         <!--======================================================我的关注=======================================================-->
 
-        <div class="center_right hide" name="selectName" ms-visible="tabStatus === 'myFocus'"
+        <div class="center_right hide" value="myFocus" ms-visible="tabStatus === 'myFocus'"
              ms-controller="myFocusTeacher">
             <div class="center_right_top">
                 <div class="height50"></div>
@@ -435,15 +448,13 @@
                     </a>
                 </div>
                 {{--===============================我的关注循环结束====================================--}}
-                {{--<div class="right_focus_repeat">--}}
-                {{--<img src="{{asset('home/image/personCenter/head.png')}}" alt="">--}}
-                {{--<div class="focus_repeat_name">丹尼尔</div>--}}
-                {{--</div>--}}
+            </div>
+            <div class="pagecon_parent">
+                <div class="pagecon">
+                    <div id="page_focus"></div>
+                </div>
+            </div>
 
-            </div>
-            <div class="pagecon">
-                <div id="page_focus"></div>
-            </div>
         </div>
 
 
@@ -749,6 +760,12 @@
     <script type="text/javascript">
         require(['/personCenter/index.js'], function (sideBar) {
             sideBar.mineUsername = '{{$mineUsername}}' || null;
+            sideBar.tab = '{{$tab}}' || 'basicInfo';
+            {{--sideBar.type = '{{$typeID}}' || null;--}}
+            if(sideBar.tab){
+                sideBar.tabStatus = sideBar.tab;
+                sideBar.changeTab(sideBar.tab);
+            }
             avalon.directive('popup', {
                 update: function (value) {
                     var element = this.element;
@@ -757,11 +774,10 @@
                         avalon(element).css('display', 'none');
                         return;
                     }
-                    ;
+
                     if (value == popUpType || popUpType == 'close') {
                         avalon(element).css('display', 'block');
                     }
-                    ;
                 }
             });
 

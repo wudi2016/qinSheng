@@ -58,7 +58,7 @@
 				<div class="content_bottom_provision">
 					<input type="checkbox" ms-duplex-checked='submitDisable' value='true'>我已阅读并同意<a>作品上传服务条款</a>
 				</div>
-				<div class="content_bottom_button" ms-css-cursor='submitDisable ? "pointer" : "not-allowed"' ms-css-background="submitDisable ? '#1A9FEB' : 'silver'" ms-click='submit()'>
+				<div class="content_bottom_button" ms-css-cursor='submitDisable ? "pointer" : "not-allowed"' ms-css-background="submitDisable ? '#1A9FEB' : 'silver'" ms-click='submit(false)'>
 					完成并发布
 				</div>
 			</div>
@@ -71,7 +71,9 @@
 @section('js')
 	<script type="text/javascript">
 		require(['lessonComment/directive', 'lessonComment/buyComment/upload'], function (directive, upload) {
-			upload.orderID = {{$orderID}} || null;
+			upload.orderID = {{$info -> id}} || null;
+			upload.uploadInfo.orderSn = '{{$info -> orderSn}}' || null;
+			upload.uploadInfo.teacherId = '{{$info -> teacherId}}' || null;
 			upload.mineID = {{$mineID}} || null;
 
 			upload.$watch('uploadInfo.courseTitle', function(value, oldValue) {

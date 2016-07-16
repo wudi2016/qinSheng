@@ -4,6 +4,7 @@
 
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{asset('home/css/lessonSubject/list.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{asset('home/css/personCenter/pagination.css')}}">
 @endsection
 
 @section('content')
@@ -39,17 +40,13 @@
                         </div>
                     </div>
                 </a>
-                <!-- loading -->
-                {{--<div class="spinner " ms-visible="loading">--}}
-                    {{--<div class="rect1"></div>--}}
-                    {{--<div class="rect2"></div>--}}
-                    {{--<div class="rect3"></div>--}}
-                    {{--<div class="rect4"></div>--}}
-                    {{--<div class="rect5"></div>--}}
-                {{--</div>--}}
-                <!-- loading -->
             </div>
-
+            <div class="clear hr_10" ms-visible="changeOption == 'subject'"></div>
+            <div class="pagecon_parent" ms-visible="changeOption == 'subject'">
+                <div class="pagecon">
+                    <div id="page_subject"></div>
+                </div>
+            </div>
             <!-- 点评课程 -->
             <div class="contain_lesson_center_data_comment hide" ms-visible="changeOption == 'comment'">
                 <div class="contain_lesson_center_data_info" ms-repeat="commentInfo">
@@ -64,52 +61,24 @@
                         </div>
                     </a>
                 </div>
-                {{--<div class="spinner " ms-visible="loading">--}}
-                    {{--<div class="rect1"></div>--}}
-                    {{--<div class="rect2"></div>--}}
-                    {{--<div class="rect3"></div>--}}
-                    {{--<div class="rect4"></div>--}}
-                    {{--<div class="rect5"></div>--}}
-                {{--</div>--}}
             </div>
-            <div class="clear"></div>
-            <!-- loading -->
-
-            <!-- loading -->
-            <!-- page -->
-            <div style="width: 100%;height: 60px;"></div>
-            <div class="teacherHomepage_page" ms-visible="changeOption == 'subject'">
-                <div class="prev" ms-visible="page.subject != 1" ms-click="skip('subject', false)"><</div>
-                <div class="next" ms-repeat="subjectCountNumber" ms-html="el" ms-page="page.subject" ms-class="active: el == page.subject" ms-click="skip('subject', el)"></div>
-                <div class="next" ms-visible="page.subject <= (subjectCount - 4) && subjectCount >= 9">...</div>
-                <div class="next" ms-html="subjectCount" ms-visible="subjectCount >= 9 && page.subject < (subjectCount - 3)"></div>
-                <div class="next" ms-visible="page.subject != subjectCount && subjectCount != 1" ms-click="skip('subject', true)">></div>
-                <input type="text" ms-visible="subjectCount > 1" ms-duplex-number='jump'>
-                <button ms-visible="subjectCount > 1" ms-click="jumping('subject')">跳转</button>
+            <div class="clear hr_10" ms-visible="changeOption == 'comment'"></div>
+            <div class="pagecon_parent" ms-visible="changeOption == 'comment'">
+                <div class="pagecon">
+                    <div id="page_comment"></div>
+                </div>
             </div>
-            <div class="teacherHomepage_page" ms-visible="changeOption == 'comment'">
-                <div class="prev" ms-visible="page.comment != 1" ms-click="skip('comment', false)"><</div>
-                <div class="next" ms-repeat="commentCountNumber" ms-html="el" ms-page="page.comment" ms-class="active: el == page.comment" ms-click="skip('comment', el)"></div>
-                <div class="next" ms-visible="page.comment <= (commentCount - 4) && commentCount >= 9">...</div>
-                <div class="next" ms-html="commentCount" ms-visible="commentCount >= 9 && page.comment < (commentCount - 3)"></div>
-                <div class="next" ms-visible="page.comment != commentCount && commentCount != 1" ms-click="skip('comment', true)">></div>
-                <input type="text" ms-visible="commentCount > 1" ms-duplex-number='jump'>
-                <button ms-visible="commentCount > 1" ms-click="jumping('comment')">跳转</button>
-            </div>
-            <!-- page -->
-
-            <div class="clear hr_4"></div>
+            <div class="clear hr_10"></div>
         </div>
     </div>
 @endsection
 
 @section('js')
+    <script type="text/javascript" src="{{asset('home/js/games/pagination.js')}}"></script>
     <script>
-        require(['/lessonSubject/list','lessonComment/directive'], function (list,directive) {
-            list.getData('/lessonSubject/getList/1','subjectInfo',{page: list.page.subject},'POST');
-            list.getData('/lessonSubject/getCommentList/1','commentInfo',{page: list.page.comment},'POST');
-            list.getData('/lessonSubject/getCount', 'subjectCount', {type:0}, 'POST');
-            list.getData('/lessonSubject/getCount', 'commentCount', {type:1}, 'POST');
+        require(['/lessonSubject/list'], function (list) {
+            list.getSubjectInfo(1);
+            list.getCommentInfo(1);
             avalon.scan();
         });
     </script>

@@ -235,10 +235,9 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
 
         // =============== return data ================
         // 专题课程列表页 规则排序 数据接口
-        Route::post('/getList/{type}', 'lessonSubjectController@getList');
-        Route::post('/getCount', 'lessonSubjectController@getCount');
+        Route::get('/getList/{type}', 'lessonSubjectController@getList');
         // 点评课程列表页 规则排序 数据接口
-        Route::post('/getCommentList/{type}', 'lessonSubjectController@getCommentList');
+        Route::get('/getCommentList/{type}', 'lessonSubjectController@getCommentList');
         // 专题课程详细页 数据接口
         Route::get('/getDetail/{id}', 'lessonSubjectController@getDetail');
         // 讲师信息 数据接口
@@ -319,8 +318,12 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
 
         //	待点评详情
         Route::get('/wait/{commentID}', ['middleware' => 'check', 'uses' => 'commentDetailController@wait']);
-        //	上传点评视频
-        Route::get('/upload/{commentID}', 'commentDetailController@uploadComment');
+        //  上传点评视频
+        Route::get('/upload/{orderSn}', ['middleware' => 'check', 'uses' => 'commentDetailController@uploadComment']);
+        //  审核未通过重新上传视频
+        Route::get('/reUploadComment/{commentID}', ['middleware' => 'check', 'uses' => 'commentDetailController@reUploadComment']);
+        //  完成点评视频上传
+        Route::post('/finishComment', ['middleware' => 'check', 'uses' => 'commentDetailController@finishComment']);
 
 
         /*
@@ -879,6 +882,8 @@ Route::group(['prefix'=>'/contentManager','namespace'=>'contentManager'],functio
         Route::get('resetPassword/{id}','companyUserController@resetPassword');
         //密码提交修改
         Route::post('resetsPassword','companyUserController@resetsPassword');
+        //ajax部门取岗位接口
+        Route::get('departPost','companyUserController@departPost');
 
     });
 
@@ -893,13 +898,35 @@ Route::group(['prefix'=>'/contentManager','namespace'=>'contentManager'],functio
 
         //部门列表
         Route::get('departmentList','departmentController@departmentList');
+        //添加
+        Route::get('adddepartment','departmentController@adddepartment');
+        //添加方法
+        Route::post('addsdepartment','departmentController@addsdepartment');
+        //编辑
+        Route::get('editdepartment/{id}','departmentController@editdepartment');
+        //编辑方法
+        Route::post('editsdepartment','departmentController@editsdepartment');
+        //删除
+        Route::get('deldepartment/{id}','departmentController@deldepartment');
+        //状态
+        Route::get('departmentStatus','departmentController@departmentStatus');
 
 
 
         //岗位列表
         Route::get('postList','postController@postList');
-
-
+        //添加
+        Route::get('addpost','postController@addpost');
+        //添加方法
+        Route::post('addspost','postController@addspost');
+        //编辑
+        Route::get('editpost/{id}','postController@editpost');
+        //编辑方法
+        Route::post('editspost','postController@editspost');
+        //删除
+        Route::get('delpost/{id}','postController@delpost');
+        //状态
+        Route::get('postStatus','postController@postStatus');
 
     });
 

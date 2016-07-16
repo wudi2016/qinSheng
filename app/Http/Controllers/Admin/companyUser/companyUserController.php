@@ -19,7 +19,20 @@ class companyUserController extends Controller{
      */
     public function companyUserList(Request $request){
 
-        $query = DB::table('companyuser as com');
+        $query = DB::table('companyuser as com')
+                ->leftjoin('department as dep','com.departId','=','dep.id')
+                ->leftjoin('post as p','com.postId','=','p.id')
+                ->select('dep.departName','p.postName','com.id','com.username','com.realname','com.phone','com.email','com.roleId','com.status','com.created_at','com.updated_at');
+
+        if($request->type == 1){
+            $query = $query->where('com.realname','like','%'.trim($request['search']).'%');
+        }
+        if($request->type == 2){
+            $query = $query->where('dep.departName','like','%'.trim($request['search']).'%');
+        }
+        if($request->type == 3){
+            $query = $query->where('p.postName','like','%'.trim($request['search']).'%');
+        }
 
         $data = $query->paginate(10);
 
@@ -31,7 +44,8 @@ class companyUserController extends Controller{
      * 添加
      */
     public function addcompanyUser(){
-        return view('admin.companyUser.addcompanyUser');
+        $depart = DB::table('department')->get();
+        return view('admin.companyUser.addcompanyUser')->with('depart',$depart);
     }
 
 
@@ -49,6 +63,7 @@ class companyUserController extends Controller{
         //加密 (解密用Crypt::decrypt())
         $input['password'] = Crypt::encrypt($input['password']);
         $input['upassword'] = Crypt::encrypt($input['upassword']);
+//        dd($input);
         if(Crypt::decrypt($input['password']) == Crypt::decrypt($input['upassword']) ){
             //销毁upassword字段
             unset($input['upassword']);
@@ -69,7 +84,9 @@ class companyUserController extends Controller{
      */
     public function editcompanyUser($id){
         $data = DB::table('companyuser')->where('id',$id)->first();
-        return view('admin.companyUser.editcompanyUser')->with('data',$data);
+        $depart = DB::table('department')->get();
+        $post = DB::table('post')->get();
+        return view('admin.companyUser.editcompanyUser')->with('data',$data)->with('depart',$depart)->with('post',$post);
     }
 
 
@@ -79,6 +96,7 @@ class companyUserController extends Controller{
     public function editscompanyUser(Request $request){
         $input = Input::except('_token');
         $input['updated_at'] = Carbon::now();
+//        dd($input);
         //验证
         $validate = $this->validator_edit($input);
         if($validate->fails()){
@@ -106,6 +124,7 @@ class companyUserController extends Controller{
             return redirect()->back()->withInput()->withErrors('删除失败！');
         }
     }
+
 
 
     /**
@@ -147,6 +166,16 @@ class companyUserController extends Controller{
 
 
     /**
+     * depart---post
+     */
+    public function departPost(Request $request){
+        $data = DB::table('post')->where('parentId',$request['id'])->get();
+        echo json_encode($data);
+    }
+
+
+
+    /**
      * 状态
      */
     public function companyStatus(Request $request){
@@ -182,7 +211,7 @@ class companyUserController extends Controller{
             'password.max' => '密码最多16位',
             'phone.required' => '请输入手机号',
             'phone.digits' => '手机号为11位数字',
-            'email' => '请输入邮箱',
+            'email.required' => '请输入邮箱',
         ];
 
         return \Validator::make($data, $rules, $messages);
@@ -203,7 +232,7 @@ class companyUserController extends Controller{
             'realname.required' => '请输入姓名',
             'phone.required' => '请输入手机号',
             'phone.digits' => '手机号为11位数字',
-            'email' => '请输入邮箱',
+            'email.required' => '请输入邮箱',
         ];
 
         return \Validator::make($data, $rules, $messages);

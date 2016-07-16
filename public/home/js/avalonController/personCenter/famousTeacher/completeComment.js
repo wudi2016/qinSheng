@@ -9,25 +9,32 @@ define([], function () {
         type:'',
         completeCommentList: [],
         getCompleteCommentInfo: function (type) {
-            $.ajax({
-                url: '/member/completeComment',
-                type: 'POST',
-                data:{type:type},
-                dataType: 'json',
-                success: function (response) {
-                    if (response.type) {
-                        completeCommentController.realInfo = true;
-                        completeCommentController.completeCommentList = response.data;
-                        completeCommentController.total = response.total;
-                    } else {
-                        completeCommentController.realInfo = false;
-                        completeCommentController.total = response.total;
-                    }
+            $('#page_sureComment').pagination({
+                dataSource: function (done) {
+                    $.ajax({
+                        url: '/member/completeComment',
+                        type: 'POST',
+                        data:{type:type},
+                        dataType: 'json',
+                        success: function (response) {
+                            completeCommentController.total = response.total;
+                            if (response.type) {
+                                done(response.data);
+                            }
+                        },
+                    });
                 },
-                error: function (error) {
+                pageSize: 2,
+                className: "paginationjs-theme-blue",
+                showGoInput: true,
+                showGoButton: true,
+                callback: function (data) {
+                    if (data) {
+                        completeCommentController.completeCommentList = data;
+                    }
 
                 }
-            });
+            })
         },
     })
     return {

@@ -22,18 +22,18 @@
 		<div class="list">
 
 			<!-- 每一行 -->
-			{{--
+
 			<div class="list_line" ms-repeat="newlist" >
 				<div class="title_time">
 					<div class="title">
 						<a ms-attr-href="lujing + el.id" ms-html="el.description" >  </a>
 					</div>
 					<div class="time" ms-html="el.time">
-						
+
 					</div>
 				</div>
 			</div>
-			--}}
+
 
 			
 
@@ -58,50 +58,50 @@
 
 	<script type="text/javascript" src="{{asset('home/js/games/pagination.js')}}"></script>
 	<script>
-        // require(['/community/newlist.js'], function () {
-            
-        //     avalon.scan();
-        // });
+         require(['/community/newlist.js'], function () {
+
+             avalon.scan();
+         });
     </script>
 
 
     <script>
-        function getdata(){
-
-            $('#demo').pagination({
-                dataSource: function(done) {
-                    $.ajax({
-                        type: 'GET',
-                        url: '/community/getnewlist',
-                        dataType : 'json',
-                        success: function(response) {
-                        	// console.log(response);
-                            if(response.statuss){
-                                done(response.data);
-                            }
-                        }
-                    });
-                },
-                pageSize: 10,
-                className:"paginationjs-theme-blue",
-                showGoInput: true,
-                showGoButton: true,
-                callback: function(data) {
-                	console.log(data);
-                    if(data){
-                        var str = '';
-                        $.each(data,function(id,info){
-                            str += "<div class=\"list_line\"><div class=\"title_time\"><div class=\"title\"><a href=\""+'/community/newdetail/'+info.id+"\">"+info.description+"</a></div><div class=\"time\">"+info.time+"</div></div></div>";
-                        })
-                        $('.list').html(str);
-                    }
-
-               // console.log(data);
-                }
-            })
-        }
-
-        getdata();
+//        function getdata(){
+//
+//            $('#demo').pagination({
+//                dataSource: function(done) {
+//                    $.ajax({
+//                        type: 'GET',
+//                        url: '/community/getnewlist',
+//                        dataType : 'json',
+//                        success: function(response) {
+//                        	// console.log(response);
+//                            if(response.statuss){
+//                                done(response.data);
+//                            }
+//                        }
+//                    });
+//                },
+//                pageSize: 10,
+//                className:"paginationjs-theme-blue",
+//                showGoInput: true,
+//                showGoButton: true,
+//                callback: function(data) {
+//                	console.log(data);
+//                    if(data){
+//                        var str = '';
+//                        $.each(data,function(id,info){
+//                            str += "<div class=\"list_line\"><div class=\"title_time\"><div class=\"title\"><a href=\""+'/community/newdetail/'+info.id+"\">"+info.description+"</a></div><div class=\"time\">"+info.time+"</div></div></div>";
+//                        })
+//                        $('.list').html(str);
+//                    }
+//
+//               // console.log(data);
+//                }
+//            })
+//        }
+//
+//        getdata();
 
     </script>
 

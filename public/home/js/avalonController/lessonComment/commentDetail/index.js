@@ -82,14 +82,14 @@ define([], function() {
                     image: comment[model].coursePic,
                     sources: [{
                         label: "超清",
-                        file: comment[model].courseHighPath,
+                        file: comment[model].courseHighPath || comment[model].courseMediumPath || comment[model].courseLowPath,
                         height: 720,
                         width: 1280,
                 		type: "mp4"
                     },{
 						default: true,
                         label: "高清",
-                        file: comment[model].courseMediumPath,
+                        file: comment[model].courseMediumPath || comment[model].courseLowPath,
                         height: 360,
                         width: 640,
                	 		type: "mp4"
@@ -109,7 +109,7 @@ define([], function() {
             });
             typeof callback === 'function' && callback();
             comment.bought || comment.thePlayer.onTime(function(){
-	            if (comment.thePlayer.getPosition() >= 2) {
+	            if (comment.thePlayer.getPosition() >= 12) {
 	                comment.thePlayer.play(false);
 	                comment.thePlayer.remove();
 	                comment.overtime = true;

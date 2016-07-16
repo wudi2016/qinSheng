@@ -15,6 +15,13 @@ class buyCommentController extends Controller
 {
     use Gadget;
 
+
+    public function __construct()
+    {
+        PaasUser::apply();
+    }
+
+
     /**
      * 支付页面
      *
@@ -59,8 +66,9 @@ class buyCommentController extends Controller
     public function upload($orderID)
     {
         PaasUser::apply();
-        DB::table('orders') -> select('id') -> where(['id' => $orderID, 'userId' => \Auth::user() -> id, 'status' => 0]) -> first() || abort(404);
-        return view('home.lessonComment.buyComment.upload') -> with('orderID', $orderID) -> with('mineID', \Auth::user() -> id);
+        $result = DB::table('orders') -> select('id', 'orderSn', 'teacherId') -> where(['id' => $orderID, 'userId' => \Auth::user() -> id, 'status' => 0]) -> first();
+        $result || abort(404);
+        return view('home.lessonComment.buyComment.upload') -> with('info', $result) -> with('mineID', \Auth::user() -> id);
     }
 
 
@@ -74,7 +82,8 @@ class buyCommentController extends Controller
         PaasUser::apply();
         $result = DB::table('applycourse') -> select('id', 'courseTitle', 'message') -> where(['id' => $applyID, 'userId' => \Auth::user() -> id, 'state' => 0]) -> first();
         $result || abort(404);
-        return view('home.lessonComment.buyComment.upload') -> with('orderID', $orderID) -> with('mineID', \Auth::user() -> id);
+        return view('home.lessonComment.buyComment.reUpload') -> with('applyID', $result -> id) 
+               -> with('courseTitle', $result -> courseTitle) -> with('message', $result -> message) -> with('mineID', \Auth::user() -> id);
     }
 
 
@@ -97,32 +106,6 @@ class buyCommentController extends Controller
     }
 
 
-    /**
-     * pass平台上传资源
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function uploadResource(Request $request)
-    {
-        if (!PaasUser::apply()) return Response() -> json(["type" => false, 'status' => '401']);
-        $recourse = PaasResource::getuploadstatus("/?md5=". $request['md5'] ."&filename=". $request['filename'] ."&directory=". $request['directory']);
-        return $this -> returnResult($recourse);
-    }
-
-
-    /**
-     * pass平台资源转换
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function transformation(Request $request)
-    {
-        if (!PaasUser::apply()) return Response() -> json(["type" => false, 'status' => '401']);
-        $recourse = PaasResource::transformation("?fileid=". $request['fileID']);
-        return $this -> returnResult($recourse);
-    }
-
-
      /**
      * 完成上传
      *
@@ -131,10 +114,6 @@ class buyCommentController extends Controller
     public function finishUpload(Request $request)
     {
         foreach ($request['data'] as $key => $value) $request['data'][$key] && $data[$key] = $request['data'][$key];
-        $result = DB::table('orders') -> select('orderSn', 'teacherId') -> where('id', $request['orderID']) -> first();
-        if(!$result) return $this -> returnResult(false);
-        $data['orderSn'] = $result -> orderSn;
-        $data['teacherId'] = $result -> teacherId;
         $data['created_at'] = Carbon::now();
         $data['updated_at'] = Carbon::now();
         $data['state'] = 1;

@@ -122,7 +122,8 @@
                     <div class="contain_lesson_center_data_info_bot">
                         <span class="top" ms-text="el.title"></span>
                         <div class="center">
-                            <span class="left classes" ms-text="el.counttime+'课时'"></span><span class="right study" ms-text="el.countpeople+'人学过'"></span>
+                            <span class="left classes" ms-text="el.counttime+'课时'"></span>
+                            <span class="right study" ms-text="el.countpeople+'人学过'"></span>
                         </div>
                         <span class="bot" ms-text="'￥'+el.price"></span>
                     </div>

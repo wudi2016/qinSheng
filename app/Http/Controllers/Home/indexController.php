@@ -545,5 +545,5 @@ class indexController extends Controller
             return response()->json(['status'=>false,]);
         }
     }
-
+    
 }

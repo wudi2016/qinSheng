@@ -75,6 +75,7 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
         //选项卡
         tabStatus: 'basicInfo',
         changeTab:function(value,type){
+
             if(value == 'lessonSubject'){
                 if(type == 'teacher'){
                     courseTeacher.courseTeacher.courseInfo.length == '0' ? courseTeacher.courseTeacher.getCourseInfo(2,1) : courseTeacher.courseTeacher.courseInfo;
@@ -111,7 +112,9 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
             }
 
             if(value == 'waitComment'){
+
                 waitCommentController.waitCommentController.waitCommentList.length == '0' ? waitCommentController.waitCommentController.getCommentInfo() : waitCommentController.waitCommentController.waitCommentList;
+
             }
 
             if(value == 'sureComment'){

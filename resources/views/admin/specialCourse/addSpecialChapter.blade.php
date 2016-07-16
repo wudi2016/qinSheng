@@ -1,4 +1,7 @@
 @extends('layouts.layoutAdmin')
+@section('css')
+    <link rel="stylesheet" type="text/css" href="{{asset('home/css/lessonComment/commentDetail/uploadComment.css')}}">
+@endsection
 @section('content')
     <div class="main-content" ms-controller="addChapter">
         <div class="breadcrumbs" id="breadcrumbs">
@@ -40,7 +43,7 @@
                 </div>
             @endif
 
-            <div class="row">
+            <div class="row" ms-controller="addChapter">
                 <div class="col-xs-12">
                     <!-- PAGE CONTENT BEGINS -->
 
@@ -119,14 +122,35 @@
                         <div class="space-4"></div>
 
                         <div class="form-group" ms-if="section">
+
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 添加视频 </label>
 
-                            <div class="col-sm-9">
+                            {{--<div class="col-sm-9">--}}
                                 {{--<input type="hidden" name="organurl" value="{{$data->url}}">--}}
-                                <img src="{{asset('admin/image/up.png')}}" alt="" id="form-field-1" style="position:absolute;">
-                                <input type="file" name="url" id="file_upload" multiple="true" value="" />
-                                <div class="uploadarea_bar_r_msg"></div>
-                                <div id="uploadurl"></div>
+                                {{--<img src="{{asset('admin/image/up.png')}}" alt="" id="form-field-1" style="position:absolute;">--}}
+                                {{--<input type="file" name="url" id="file_upload" multiple="true" value="" />--}}
+                                {{--<div class="uploadarea_bar_r_msg"></div>--}}
+                                {{--<div id="uploadurl"></div>--}}
+                            {{--</div>--}}
+
+                            <div id="fileDiv" class="fileButton"></div>
+                            <input type="text" value="" class="fileButton" id="md5container">
+
+                            <div class="add_video">
+                                <div class="add_video_top">
+                                    <div></div>
+                                    <div ms-slectfile='file'>本地上传</div>
+                                    <div>请上传不超过1GB大小的视频文件</div>
+                                </div>
+                                <div class="add_video_tip" style="display: none;" ms-visible="uploadStatus == 1">(支持mp4、fiv、avi、rmvb、wmv、mkv格式上传)</div>
+                                <div class="add_video_loading" style="display: none;" ms-visible="uploadStatus == 2">
+                                    <div class="progress_bar">
+                                        <div ms-css-width="[--progressBar--]%"></div>
+                                    </div>
+                                    <div class="progress_tip">视频上传中，请勿关闭页面...</div>
+                                    <div class="progress_close" ms-click="endUpload()">取消上传</div>
+                                </div>
+                                <div class="add_video_success" style="display: none;" ms-visible="uploadStatus == 3" ms-html='uploadTip'></div>
                             </div>
                         </div>
 
@@ -160,7 +184,7 @@
     </div><!-- /.main-content -->
 @endsection
 @section('js')
-    <script type="text/javascript" src="{{ URL::asset('admin/js/jquery.uploadify.js') }}"></script>
+    {{--<script type="text/javascript" src="{{ URL::asset('admin/js/jquery.uploadify.js') }}"></script>--}}
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('admin/css/upload.css') }}">
     <script>
         require(['/specialCourse/addChapter'], function (detail) {
@@ -168,31 +192,53 @@
         });
 
 
-        //上传文件
-        var evaluatPic = '';
+        {{--//上传文件--}}
+        {{--var evaluatPic = '';--}}
 
-        var addMsg = function(){
-            $('.uploadarea_bar_r_msg').html('资源上传成功!');
-        }
+        {{--var addMsg = function(){--}}
+            {{--$('.uploadarea_bar_r_msg').html('资源上传成功!');--}}
+        {{--}--}}
 
-        $('#file_upload').uploadify({
-            'swf'      : '/admin/image/uploadify.swf',
-            'uploader' : '/admin/specialCourse/doUploadfile',
-            'buttonText' : '',
-            'width':'160',
-            'height':'40',
-            'post_params' : {
-                '_token' : '{{csrf_token()}}'
-            },
-            'onUploadSuccess' : function(file, data, response) {
-                evaluatPic = '<input type="hidden" name="dataPath" value="'+data+'">';
-                $('#uploadurl').html(evaluatPic);
-                if(data){
-                    setTimeout('addMsg()',4000);
-                }
-            }
+        {{--$('#file_upload').uploadify({--}}
+            {{--'swf'      : '/admin/image/uploadify.swf',--}}
+            {{--'uploader' : '/admin/specialCourse/doUploadfile',--}}
+            {{--'buttonText' : '',--}}
+            {{--'width':'160',--}}
+            {{--'height':'40',--}}
+            {{--'post_params' : {--}}
+                {{--'_token' : '{{csrf_token()}}'--}}
+            {{--},--}}
+            {{--'onUploadSuccess' : function(file, data, response) {--}}
+                {{--evaluatPic = '<input type="hidden" name="dataPath" value="'+data+'">';--}}
+                {{--$('#uploadurl').html(evaluatPic);--}}
+                {{--if(data){--}}
+                    {{--setTimeout('addMsg()',4000);--}}
+                {{--}--}}
+            {{--}--}}
+        {{--});--}}
+
+
+
+        require(['lessonComment/directive', 'lessonComment/buyComment/upload'], function (directive, upload) {
+            {{--upload.orderID = {{$orderID}} || null;--}}
+            {{--upload.mineID = {{$mineID}} || null;--}}
+
+            upload.$watch('uploadInfo.courseTitle', function(value, oldValue) {
+                if (value.length > 20) upload.uploadInfo.courseTitle = oldValue;
+                upload.titleLength = upload.uploadInfo.courseTitle.length;
+                upload.warning.title = false;
+            });
+
+            upload.$watch('uploadInfo.message', function(value, oldValue) {
+                if (value.length > 80) upload.uploadInfo.message = oldValue;
+                upload.messageLength = upload.uploadInfo.message.length;
+                upload.warning.message = false;
+            });
+
+            avalon.scan();
         });
 
 
     </script>
+
 @endsection

@@ -15,9 +15,9 @@ define([], function () {
                         dataType: 'json',
                         data : {username:username},
                         success: function (response) {
+                            commentCourse.total = response.total;
                             if (response.status) {
                                 done(response.data);
-                                commentCourse.total = response.total;
                             }
                         },
                     });

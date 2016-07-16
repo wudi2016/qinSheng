@@ -3,8 +3,8 @@ avalon.directive('theteacheryincang', {
         // 超出部分隐藏
         $('.content_introduce div').each(function(){
             var maxwidth=80;
-            if($(this).text().length>maxwidth){
-                $($(this)).text($($(this)).text().substring(0,maxwidth));
+            if($(this).html().length>maxwidth){
+                $($(this)).html($($(this)).html().substring(0,maxwidth));
                 $($(this)).html($($(this)).html()+'…');
             }
         });
@@ -20,22 +20,56 @@ define([],function(){
         $id : 'theteacher',
         //名师主页路由
         teacherhomepage : '/lessonComment/teacher/',
-
+        Yes: false,
+        No:false,
         //名师
         theteacherlist: '',
         gettheteacher:function(type){
-            $.ajax({
-                url : '/community/gettheteacher/'+type,
-                type : 'get',
-                dataType : 'json',
-                success: function(response){
-                    if(response.statuss){
-                        model.theteacherlist = response.data;
-                    }else{
-                        model.theteacherlist = [];
-                    }
-                },
-            })
+             model.Yes = false;
+             model.No = false;
+             $('#page').pagination({
+                 dataSource: function(done) {
+                     $.ajax({
+                         type: 'GET',
+                         url : '/community/gettheteacher/'+type,
+                         dataType : 'json',
+                         success: function(response) {
+                             if(response.statuss){
+                                 //console.log(response);
+                                 done(response.data);
+                                 model.Yes = true;
+                             }else{
+                                 //console.log(response);
+                                 model.No = true;
+                             }
+                         }
+                     });
+                 },
+                 pageSize: 3,
+                 className:"paginationjs-theme-blue",
+                 showGoInput: true,
+                 showGoButton: true,
+                 callback: function(data) {
+                     if(data){
+                         model.theteacherlist = data;
+                     }
+
+                 }
+             })
+     
+            //$.ajax({
+            //    url : '/community/gettheteacher/'+type,
+            //    type : 'get',
+            //    dataType : 'json',
+            //    success: function(response){
+            //        if(response.statuss){
+            //            model.theteacherlist = response.data;
+            //        }else{
+            //            model.theteacherlist = [];
+            //        }
+            //    },
+            //})
+
         },
 
         tabs:function(type){

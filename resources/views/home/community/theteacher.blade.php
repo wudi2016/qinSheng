@@ -4,6 +4,8 @@
 
 @section('css')
 	<link rel="stylesheet" type="text/css" href="{{asset('home/css/community/theteacher.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{asset('home/css/games/pagination.css')}}">
+
 @endsection
 
 @section('content')
@@ -62,7 +64,7 @@
 			<div class="table_loop"  >
 
 				<!-- 内容 -->
-				<div class="content" ms-repeat="theteacherlist" >
+				<div class="content" ms-repeat="theteacherlist" ms-if-loop="Yes" >
 
 					<!--字母标题  -->
 					<div class="lettertitle">
@@ -93,9 +95,7 @@
 					</div>				
 				</div>
 
-
-
-
+				<div class="noteacher" ms-if="No">暂无名师...</div>
 
 
 			</div>
@@ -103,16 +103,23 @@
 
 		</div>
 
-		<div style="height:75px"></div>
+		<div style="height:25px"></div>
+		<div class="pagecon" style=" width:1200px; height:35px; margin: 0 auto;" >
+			<div id="page"></div>
+		</div>
 
 
+		<div style="height:35px">
 
 
+		</div>
 
 @endsection
 
 @section('js')
 	{{--<script type="text/javascript" src="{{asset('home/js/community/theteacher.js')}}"></script>--}}
+	    <script type="text/javascript" src="{{asset('home/js/games/pagination.js')}}"></script>
+
 
 	<script>
 		require(['/community/theteacher.js'], function ($) {

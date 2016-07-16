@@ -2,13 +2,7 @@ define([], function() {
 
 	var comment = avalon.define({
 		$id: 'waitCommentController',
-		studentInfo: {
-			header: '/home/image/lessonComment/teacherHomepage/lingbo.jpg',
-			name: '李雪',
-			create_time: '2015-03-23',
-			title: '彩云追月',
-			description: '我看着你的脸轻刷着和弦，情人节卡片手写的永远，还记得广场公园一起表演，校园旁糖果店记忆里，在微甜。我看着你的脸轻刷着和弦，初恋是整遍手写的从前，还记得那年秋天说了再见，当恋情已走远，我将你深埋在心里面。'
-		},
+		studentInfo: [],
 		getData: function(url, model, data, method, callback) {
 			$.ajax({
 				type: method || 'GET',
@@ -33,14 +27,14 @@ define([], function() {
                     image: comment.studentInfo.coursePic,
                     sources: [{
                         label: "超清",
-                        file: comment.studentInfo.courseHighPath,
+                        file: comment.studentInfo.courseHighPath || comment.studentInfo.courseMediumPath || comment.studentInfo.courseLowPath,
                         height: 720,
                         width: 1280,
                 		type: "mp4"
                     },{
 						default: true,
                         label: "高清",
-                        file: comment.studentInfo.courseMediumPath,
+                        file: comment.studentInfo.courseMediumPath || comment.studentInfo.courseLowPath,
                         height: 360,
                         width: 640,
                	 		type: "mp4"
@@ -58,7 +52,6 @@ define([], function() {
                 aspectratio: '16:9',
                 type: "mp4"
             });
-            // typeof callback === 'function' && callback();
 		}
 	});
 

@@ -61,32 +61,32 @@
                 <div class="height5"></div>
                 <div class="account_manger">账户管理</div>
                 <div class="height5"></div>
-                <span class="span_hover"></span><div class="account_common" ms-click="changeTab('myOrders')">我的订单</div>
-                <span class="span_hover"></span><div class="account_common" ms-click="changeTab('myFocus')">我的关注</div>
-                <span class="span_hover"></span><div class="account_common" ms-click="changeTab('myFriends')">我的好友</div>
+                <span class="span_hover"></span><div name='myOrders' class="account_common" ms-click="changeTab('myOrders')">我的订单</div>
+                <span class="span_hover"></span><div name='myFocus'  class="account_common" ms-click="changeTab('myFocus')">我的关注</div>
+                <span class="span_hover"></span><div name='myFriends'  class="account_common" ms-click="changeTab('myFriends')">我的好友</div>
 
                 <!--我的通知-->
                 <div class="height5"></div>
                 <div class="account_manger">我的通知</div>
                 <div class="height5"></div>
-                <span class="span_hover"></span><div class="account_common" ms-click="changeTab('wholeNotice')">全部通知</div>
-                <span class="span_hover"></span><div class="account_common" ms-click="changeTab('commentAnswer')">评论回复</div>
+                <span class="span_hover"></span><div name='wholeNotice'  class="account_common" ms-click="changeTab('wholeNotice')">全部通知</div>
+                <span class="span_hover"></span><div name='commentAnswer'  class="account_common" ms-click="changeTab('commentAnswer')">评论回复</div>
 
 
                 <!--课程管理-->
                 <div class="height5"></div>
                 <div class="account_manger">课程管理</div>
                 <div class="height5"></div>
-                <span class="span_hover"></span><div class="account_common" ms-click="changeTab('lessonComment')">点评课程</div>
-                <span class="span_hover"></span><div class="account_common" ms-click="changeTab('lessonSubject','student')">专题课程</div>
-                <span class="span_hover"></span><div class="account_common" ms-click="changeTab('lessonStore','student')">收藏课程</div>
+                <span class="span_hover"></span><div name='lessonComment'  class="account_common" ms-click="changeTab('lessonComment')">点评课程</div>
+                <span class="span_hover"></span><div name='lessonSubject'  class="account_common" ms-click="changeTab('lessonSubject','student')">专题课程</div>
+                <span class="span_hover"></span><div name='lessonStore'  class="account_common" ms-click="changeTab('lessonStore','student')">收藏课程</div>
 
 
                 <!--个人设置-->
                 <div class="height5"></div>
                 <div class="account_manger">个人设置</div>
                 <div class="height5"></div>
-                <span class="span_hover"></span><div class="account_common blue_common" ms-click="changeTab('basicInfo')">基本信息</div>
+                <span class="span_hover"></span><div name="basicInfo"  class="account_common blue_common" ms-click="changeTab('basicInfo')">基本信息</div>
                 <span class="span_hover"></span><div class="account_common" ms-click="changeTab('changePass')">密码修改</div>
                 <span class="span_hover"></span><div class="account_common" ms-click="changeTab('changePhone')"><span>修改手机号</span></div>
 
@@ -227,7 +227,7 @@
             <div class="center_right_top">
                 <div class="height50"></div>
                 <div class="center_right_information">我的关注</div>
-                <div class="center_right_count">共<span ms-text="'&nbsp;'+total+'&nbsp;'"></span>个关注</div>
+                <div class="center_right_count">共&nbsp;<span ms-text="total"></span>&nbsp;个关注</div>
             </div>
             <div class="height20"></div>
 
@@ -261,7 +261,7 @@
             <div class="center_right_top">
                 <div class="height50"></div>
                 <div class="center_right_information">我的好友</div>
-                <div class="center_right_count">共<span ms-text="'&nbsp;'+total+'&nbsp;'"></span>个好友</div>
+                <div class="center_right_count">共&nbsp;<span ms-text="total"></span>&nbsp;个好友</div>
             </div>
             <div class="height20"></div>
 
@@ -373,7 +373,7 @@
                 <div class="height50"></div>
                 <div class="center_right_information">点评课程</div>
                 <div class="center_right_count">
-                    <div class="right_count_left">共<span ms-text="'&nbsp;' + total + '&nbsp;'"></span>个视频</div>
+                    <div class="right_count_left">共&nbsp;<span ms-text="total"></span>&nbsp;个视频</div>
                     <div class="right_count_right"><span ms-click="getCommentCourse('{{$mineUsername}}',1);">最新</span>&nbsp;-&nbsp;<span class="count_right_hot" ms-click="getCommentCourse('{{$mineUsername}}',2);">热门</span>
                     </div>
                 </div>
@@ -418,7 +418,7 @@
                 <div class="height50"></div>
                 <div class="center_right_information">专题课程</div>
                 <div class="center_right_count">
-                    <div class="right_count_left">共<span ms-text="'&nbsp;' + total + '&nbsp;'"></span>个视频</div>
+                    <div class="right_count_left">共&nbsp;<span ms-text="total"></span>&nbsp;个视频</div>
                     <div class="right_count_right"><span ms-click="getCourseInfo(1,1);">最新</span>&nbsp;-&nbsp;<span class="count_right_hot" ms-click="getCourseInfo(1,2);">热门</span>
                     </div>
                 </div>
@@ -453,7 +453,7 @@
                 <div class="height50"></div>
                 <div class="center_right_information">收藏课程</div>
                 <div class="center_right_count">
-                    <div class="right_count_left">共<span ms-text="'&nbsp;' + total + '&nbsp;'"></span>个视频</div>
+                    <div class="right_count_left">共&nbsp;<span ms-text="total"></span>&nbsp;个视频</div>
                     <div class="right_count_right">
                         {{--<span ms-click="getCollectionInfo(1);">最新</span>&nbsp;-&nbsp;<span class="count_right_hot" ms-click="getCollectionInfo(2);">热门</span>--}}
                         <div>
@@ -771,7 +771,7 @@
                 {{--验证身份--}}
                 <div class="checkPhone_old_phone hide" ms-visible="next == 'checkAuth'">
                     <label class="old_phone_label_first">
-                        <input class="input" type="text" placeholder="请输入原绑定手机号" ms-duplex="phone">
+                        <input type="text" placeholder="请输入原绑定手机号" ms-duplex="phone">
                     </label>
                     <div class="shoujiMsg Msgaa"></div>
                     <label class="old_phone_label_second">
@@ -785,7 +785,7 @@
                 {{--绑定手机号--}}
                 <div class="checkPhone_old_phone hide" ms-visible="next == 'next1'">
                     <label class="old_phone_label_first">
-                        <input class="input" type="text" placeholder="请输入需要绑定手机号" ms-duplex="newphone">
+                        <input type="text" placeholder="请输入需要绑定手机号" ms-duplex="newphone">
                     </label>
                     <div class="shoujiMsg Msgcc"></div>
                     <label class="old_phone_label_second">
@@ -846,21 +846,12 @@
                 <div class="clear"></div>
                 <div class="bot">
                     <span class="bot_span_select2">退款原因&nbsp;:&nbsp;</span>
-                    {{--<span class="bot_select2_plugin hide">--}}
-                        {{--<select class="js-example-basic-single" ms-click="popUpSwitch('applyRefund')">--}}
-                            {{--<option value="" selected>请选择退款原因</option>--}}
-                            {{--<option value="">课程购买错误</option>--}}
-                            {{--<option value="">课程内容与描述不符</option>--}}
-                            {{--<option id='option' onclick="change()" value="">其他</option>--}}
-                        {{--</select>--}}
-                    {{--</span>--}}
-                    <span class="bot_span_last bot_span_triangle1">
-                        <select name="" id="" class="hide">
-                            <option value="">课程购买错误</option>
-                            <option value="">课程内容与描述不符</option>
-                            <option id='option' value="">其他</option>
-                        </select>
-                    </span>
+                    <span class="bot_span_last bot_span_triangle2 hide"></span>
+                    <select name="" id="" class="hide">
+                        <option value="课程购买错误">课程购买错误</option>
+                        <option value="课程内容与描述不符">课程内容与描述不符</option>
+                        <option value="其他">其他</option>
+                    </select>
                 </div>
                 <div class="clear"></div>
                 <div class="last hide">
@@ -987,11 +978,6 @@
                 DaySelector: ".sel_day"
             });
 
-            if ($('.bot_span_last select').css('display') == 'none') {
-                setTimeout(function () {
-                    $('.bot_span_last select').css('display','block');
-                }, 2500);
-            };
         });
     </script>
     <script type="text/javascript" src="{{asset('home/js/games/pagination.js')}}"></script>

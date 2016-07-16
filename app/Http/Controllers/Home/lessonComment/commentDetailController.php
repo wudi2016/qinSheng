@@ -8,10 +8,19 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use DB;
+use PaasResource;
+use PaasUser;
 
 class commentDetailController extends Controller
 {
     use Gadget;
+
+
+    public function __construct()
+    {
+        PaasUser::apply();
+    }
+
 
     /**
      * 已完成点评详情
@@ -43,15 +52,23 @@ class commentDetailController extends Controller
      */
     public function getDetailInfo($commentID, $type)
     {
+        PaasUser::apply();
         $tableName = $type ? 'commentcourse' : 'applycourse';
         $joinField = $type ? 'teacherId' : 'userId';
         $extra = $type ? 'coursePrice' : 'courseTitle';
+        $levelOrMessage = $type ? 'suitlevel' : 'message';
         $condition = $type ? 'id' : 'orderSn';
         $result = \DB::table($tableName) -> join('users', $tableName.'.'.$joinField, '=', 'users.id')
-                -> select('users.pic', 'users.username', $tableName.'.courseLowPath', $tableName.'.courseMediumPath', $tableName.'.courseHighPath', $tableName.'.message', 
+                -> select('users.pic', 'users.username', $tableName.'.courseLowPath', $tableName.'.courseMediumPath', $tableName.'.courseHighPath', $tableName.'.'.$levelOrMessage, 
                     $tableName.'.created_at', $tableName.'.'.$extra.' as extra', $tableName.'.'.$joinField, $tableName.'.orderSn', $tableName.'.coursePic')
                 -> where([$tableName.'.'.$condition => $commentID, $tableName.'.state' => 2, $tableName.'.courseStatus' => 0, $tableName.'.courseIsDel' => 0]) -> first();
-        $result && $result -> created_at = explode(' ', $result -> created_at)[0];
+        if ($result) {
+            $result -> time = floor((time() - strtotime($result -> created_at)) / 86400) + 1;
+            $result -> created_at = explode(' ', $result -> created_at)[0];
+            $result -> courseLowPath = $this -> getPlayUrl($result -> courseLowPath);
+            $result -> courseMediumPath = $this -> getPlayUrl($result -> courseMediumPath);
+            $result -> courseHighPath = $this -> getPlayUrl($result -> courseHighPath);
+        }
         return $this -> returnResult($result);
     }
 
@@ -114,13 +131,13 @@ class commentDetailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function wait($commentID)
+    public function wait($applyID)
     {
         $userType = \Auth::user() -> type != 2 ? 'userId' : 'teacherId';
         $result = DB::table('applycourse') -> select('orderSn', 'created_at') 
-                -> where(['state' => 2, 'courseStatus' => 0, 'courseIsDel' => 0, $userType => \Auth::user() -> id, 'id' => $commentID]) -> first();
+                -> where(['state' => 2, 'courseStatus' => 0, 'courseIsDel' => 0, $userType => \Auth::user() -> id, 'id' => $applyID]) -> first();
         $result || abort(404);
-        return view('home.lessonComment.commentDetail.wait', ['created_at' => floor((time() - strtotime($result -> created_at))/86400), 'commentID' => $commentID, 'orderSn' => $result -> orderSn]);
+        return view('home.lessonComment.commentDetail.wait', ['created_at' => floor((time() - strtotime($result -> created_at))/86400), 'commentID' => $applyID, 'orderSn' => $result -> orderSn]);
     }
 
 
@@ -129,8 +146,43 @@ class commentDetailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function uploadComment($commentID)
+    public function uploadComment($orderSn)
     {
-        return view('home.lessonComment.commentDetail.uploadComment') -> with('commentID', $commentID);
+        $result = DB::table('orders') -> join('applycourse', 'orders.orderSn', '=', 'applycourse.orderSn') 
+                -> select('orders.id', 'orders.userName', 'orders.userId', 'orders.teacherId', 'orders.teacherName', 'applycourse.courseTitle')
+                -> where(['orders.orderSn' => $orderSn, 'orders.status' => 1, 'orders.isDelete' => 0, 'orders.teacherId' => \Auth::user() -> id]) -> first();
+        $result || abort(404);
+        return view('home.lessonComment.commentDetail.uploadComment') -> with('orderSn', $orderSn) -> with('info', get_object_vars($result));
+    }
+
+
+    /**
+     * 审核未通过重新上传视频
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function reUploadComment($orderSn)
+    {
+        $result = DB::table('orders') -> join('applycourse', 'orders.orderSn', '=', 'applycourse.orderSn') 
+                -> select('orders.id', 'orders.userName', 'orders.userId', 'orders.teacherId', 'orders.teacherName', 'applycourse.courseTitle')
+                -> where(['orders.orderSn' => $orderSn, 'orders.status' => 1, 'orders.isDelete' => 0, 'orders.teacherId' => \Auth::user() -> id]) -> first();
+        $result || abort(404);
+        return view('home.lessonComment.commentDetail.uploadComment') -> with('orderSn', $orderSn) -> with('info', get_object_vars($result));
+    }
+
+
+    /**
+     * 完成点评视频上传
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function finishComment(Request $request)
+    {
+        $request['created_at'] = Carbon::now();
+        $request['updated_at'] = Carbon::now();
+        $result = DB::table('commentcourse') -> insertGetId($request -> all());
+        if (!$result) return $this -> returnResult(false);
+        DB::table('orders') -> where('orderSn', $request['orderSn']) -> update(['courseId' => $result]) || $result = !(DB::table('commentcourse') -> where('id', $result) -> delete());
+        return $this -> returnResult($result);
     }
 }

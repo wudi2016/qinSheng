@@ -2,14 +2,20 @@
 
 namespace App\Http\Controllers\Home\lessonComment;
 
+use Illuminate\Http\Request;
+use PaasResource;
+use PaasUser;
+
 trait Gadget {
 
 	public $number = 6;
+
 
     public function getSkip($page, $number) 
     {
         return ($page - 1) * $number;
     }
+
 
     public function returnResult($result)
     {
@@ -18,6 +24,51 @@ trait Gadget {
         } else {
             return Response() -> json(["type" => false]); 
         }
+    }
+
+
+    /**
+     * pass平台资源临时播放url
+     *
+     * @param   fileID  该资源的在平台中的唯一ID号
+     * @param   host    白名单域名   【可选】
+     *
+     * @return  \Illuminate\Http\Response
+     */
+    private function getPlayUrl($fileID, $host = '')
+    {
+        $path = PaasResource::clickplay($fileID, $host);
+        if ($path['message'] == 'OK' && $path['code'] == 200) {
+            return $path['data'];
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
+     * pass平台上传资源
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function uploadResource(Request $request)
+    {
+        if (!PaasUser::apply()) return Response() -> json(["type" => false, 'status' => '401']);
+        $recourse = PaasResource::getuploadstatus("/?md5=". $request['md5'] ."&filename=". $request['filename'] ."&directory=". $request['directory']);
+        return $this -> returnResult($recourse);
+    }
+
+
+    /**
+     * pass平台资源转换
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function transformation(Request $request)
+    {
+        if (!PaasUser::apply()) return Response() -> json(["type" => false, 'status' => '401']);
+        $recourse = PaasResource::transformation("?fileid=". $request['fileID']);
+        return $this -> returnResult($recourse);
     }
 
 }

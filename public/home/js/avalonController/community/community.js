@@ -2,11 +2,11 @@ avalon.directive('theteacheryincang', {
     update: function (value) {
         // 超出部分隐藏(名师主页)
         $('.content_introduce div').each(function(){
-            // var bbb = $(this).text().length;
-            // alert(bbb);
+             //var bbb = $(this).html().length;
+             //alert(bbb);
             var maxwidth=40;
-            if($(this).text().length>maxwidth){
-                $($(this)).text($($(this)).text().substring(0,maxwidth));
+            if($(this).html().length>maxwidth){
+                $($(this)).html($($(this)).html().substring(0,maxwidth));
                 $($(this)).html($($(this)).html()+'…');
             }
         });
@@ -19,8 +19,8 @@ avalon.directive('newyincang', {
         // 超出部分隐藏(新闻资讯)
         $('.new_content_font div').each(function(){
             var maxwidth=30;
-            if($(this).text().length>maxwidth){
-                $($(this)).text($($(this)).text().substring(0,maxwidth));
+            if($(this).html().length>maxwidth){
+                $($(this)).html($($(this)).html().substring(0,maxwidth));
                 $($(this)).html($($(this)).html()+'…');
             }
         });

@@ -66,9 +66,13 @@ class SpecialCourseController extends Controller
     public function doAddSpecialCourse(specialCourseRequest $request){
         $data = $request->except('_token');
         $data['coursePrice'] = $request['coursePrice'] * 1000;
-        $data['courseDiscount'] = $request['courseDiscount'] * 1000;
         $data['created_at'] = Carbon::now();
         $data['updated_at'] = Carbon::now();
+        if($request['courseType'] == 1){
+            $data['courseDiscount'] = $request['courseDiscount'] * 1000;
+        }else{
+            $data['courseDiscount'] = 0;
+        }
         if($request->hasFile('coursePic')){ //判断文件是否存在
             if($request->file('coursePic')->isValid()){ //判断文件在上传过程中是否出错
                 $name = $request->file('coursePic')->getClientOriginalName();//获取图片名
@@ -125,8 +129,13 @@ class SpecialCourseController extends Controller
         }
         $data = $request->except('_token');
         $data['coursePrice'] = $request['coursePrice'] * 1000;
-        $data['courseDiscount'] = $request['courseDiscount'] * 1000;
         $data['updated_at'] = Carbon::now();
+        if($request['courseType'] == 1){
+            $data['courseDiscount'] = $request['courseDiscount'] * 1000;
+        }else{
+            $data['courseDiscount'] = 0;
+        }
+
         if($request->hasFile('coursePic')){ //判断文件是否存在
             if($request->file('coursePic')->isValid()){ //判断文件在上传过程中是否出错
                 $name = $request->file('coursePic')->getClientOriginalName();//获取图片名

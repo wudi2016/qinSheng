@@ -126,6 +126,51 @@
 
 
 
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1">  对应部门 </label>
+                            <div class="col-sm-9">
+                                <select name="departId" id="depart" class="col-xs-10 col-sm-5" >
+                                    <option value="" selected>--部门--</option>
+                                    @foreach($depart as $depart)
+                                        {{--<option value="{{$depart->id}}">{{$depart->departName}}</option>--}}
+                                        <option value="{{$depart->id}}" @if($data->departId == $depart->id) selected @endif >{{$depart->departName}}</option>
+                                    @endforeach
+                                </select>
+                                <span class="help-inline col-xs-12 col-sm-7">
+                                <span class="middle"></span>
+                            </span>
+
+                            </div>
+                        </div>
+
+                        <div class="space-4"></div>
+
+
+
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1">  对应岗位 </label>
+                            <div class="col-sm-9">
+                                <select name="postId" id="post" class="col-xs-10 col-sm-5" >
+                                    <option value="" selected>--岗位--</option>
+                                    @foreach($post as $post)
+                                        {{--<option value="{{$depart->id}}">{{$depart->departName}}</option>--}}
+                                        <option value="{{$post->id}}" @if($data->postId == $post->id) selected @endif >{{$post->postName}}</option>
+                                    @endforeach
+                                </select>
+                                <span class="help-inline col-xs-12 col-sm-7">
+                                <span class="middle"></span>
+                            </span>
+
+                            </div>
+                        </div>
+
+                        <div class="space-4"></div>
+
+
+
+
+
 
 
                         <div class="clearfix form-actions">
@@ -190,6 +235,36 @@
 
         })
 
+
+
+    </script>
+
+
+
+    <script>
+
+
+        $(function(){
+            $('#depart').change(function(){
+                var departid = $('#depart').val();
+//                alert(departid);
+                $.ajax({
+                    type:'get',
+                    data:{'id':departid},
+                    url:'{{url('admin/companyUser/departPost')}}',
+                    success:function(data){
+//                         alert(data);
+                        var str = '<option value="">--岗位--</option>';
+                        $.each(data,function(i,val){
+                            str += '<option value="'+val.id+'">'+val.postName+'</option>';
+                        })
+                        $('#post').html(str);
+                    },
+                    dataType:'json',
+                    'async':false
+                });
+            })
+        })
 
 
     </script>

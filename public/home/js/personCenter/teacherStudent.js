@@ -5,11 +5,38 @@ $(function(){
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    //
+
+    //个人中心选项卡切换
     $(".account_common").click(function(){
         $(this).addClass('blue_common');
         $(this).siblings().removeClass('blue_common');
     })
+
+    //url定位选项卡
+    var href = location.href.split('/');
+    var url = '';
+    //学员
+    if(href[4] == 'student') {
+        if(href[6]) {
+            url = href[6];
+        }else {
+            url = 'basicInfo';
+        }
+
+    }else if(href[4] == 'famousTeacher') {
+        if( href[5] ) {
+            url = href[5];
+        }else {
+            url = 'basicInfo';
+        }
+    }
+
+    console.log(url);
+    $("div[name='"+url+"']").addClass('blue_common');
+    $("div[name='"+url+"']").siblings().removeClass('blue_common');
+
+
+
     //hover
     $(".account_common").hover(
         function () {
@@ -19,6 +46,34 @@ $(function(){
             $(this).removeClass("active_hover").prev('span').removeClass('span_active');
 
         });
+    //学员我的订单-- select-block
+
+    if ($('.bot select').css('display') == 'none') {
+        setTimeout(function () {
+            $('.bot_span_last').css('display','block');
+            $('.bot_span_last').html('请选择退款原因');
+        }, 2500);
+        setTimeout(function () {
+            $('.bot select').css('display','block');
+        }, 2500);
+    };
+
+    $(".bot select").change(function(){
+        //console.log($(this).prev());
+        $(this).prev().html($(this).val());
+        if($(this).val() == '其他'){
+            $('.last').removeClass('hide');
+        }else{
+            $('.last').addClass('hide');
+        }
+
+   })
+    //
+    //$('.bot select').click(function(){
+    //    $(this).prev().removeClass('bot_span_triangle1').addClass('bot_span_triangle2');
+    //
+    //})
+    //
     //修改切换
     $(".center_right_phone_button").click(function(){
         $(this).parent().css('display','none');

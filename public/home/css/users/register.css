@@ -124,9 +124,28 @@ body{
     font-size: 14px;
     color:#000000;
     float:left;
-    text-indent:30px;
+    /*text-indent:30px;*/
     font-weight: bold;
 }
+
+
+.clearInputs{
+    width:20px;
+    height:36px;
+    float: left;
+}
+
+.clearInput{
+    width:20px;
+    height:36px;
+    float: left;
+    position: relative;
+    top:0;
+    left:370px;
+    background: url('/home/image/register/del.png') no-repeat 0 10px;
+    cursor: pointer;
+}
+
 .center_con_r_bar_m{
     width:300px;
     height:36px;

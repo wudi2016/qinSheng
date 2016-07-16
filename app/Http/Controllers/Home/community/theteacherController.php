@@ -30,7 +30,7 @@ class theteacherController extends Controller
                 ->select('t.id','u.school','u.username','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->orderBy('t.firstletter','asc')
-                ->limit(7)
+//                ->limit(7)
                 ->get();
         }elseif($type == '1') {
             $gettheteacher = DB::table('teacher as t')

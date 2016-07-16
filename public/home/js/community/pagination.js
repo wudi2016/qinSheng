@@ -221,7 +221,7 @@
                             }
                         }
                         else{
-                            html += '<li class="'+ classPrefix +'-prev J-paginationjs-previous" data-num="'+ (currentPage - 1) +'" title="Previous page"><a href="'+ pageLink +'">'+ prevText +'<\/a><\/li>';
+                            html += '<li class="'+ classPrefix +'-prev J-paginationjs-previous" data-num="'+ (currentPage - 1) +'" title=""><a href="'+ pageLink +'">'+ prevText +'<\/a><\/li>';
                         }
                     }
 
@@ -277,7 +277,7 @@
                             }
                         }
                         else{
-                            html += '<li class="'+ classPrefix +'-next J-paginationjs-next" data-num="'+ (currentPage + 1) +'" title="Next page"><a href="'+ pageLink +'">'+ nextText +'<\/a><\/li>';
+                            html += '<li class="'+ classPrefix +'-next J-paginationjs-next" data-num="'+ (currentPage + 1) +'" title=""><a href="'+ pageLink +'">'+ nextText +'<\/a><\/li>';
                         }
                     }
 

@@ -44,7 +44,7 @@ class lessonSubjectController extends Controller
 
 
     // 专题课程列表页 规则排序 数据接口=============== data ================
-    public function getList(Request $request,$type)
+    public function getList($type)
     {
         switch ($type) {
             case 1:
@@ -60,8 +60,7 @@ class lessonSubjectController extends Controller
                 $asc = 'desc';
                 break;
         }
-        $this->number = 8;
-        $List = DB::table('course')->where('courseStatus', '0')->orderBy($orderBy, $asc)-> skip($this -> getSkip($request['page'], $this -> number)) -> take($this -> number)->get();
+        $List = DB::table('course')->where('courseStatus', '0')->orderBy($orderBy, $asc)->get();
         foreach ($List as $key => $value) {
             if($List[$key]->courseDiscount){
                 $List[$key]->coursePrice = ceil(($List[$key]->courseDiscount/10000)*$List[$key]->coursePrice/1000);
@@ -73,17 +72,9 @@ class lessonSubjectController extends Controller
         return $this->returnResult($List);
     }
 
-    public function getCount(Request $request)
-    {
-        $tableName = $request['type'] ? 'commentcourse' : 'course';
-        $result = \DB::table($tableName)-> where('courseStatus', '0') -> orderBy("id", "desc") -> count();
-        return $this -> returnResult($result);
-    }
-
     // 点评课程列表页 规则排序 数据接口
-    public function getCommentList($type,Request $request)
+    public function getCommentList($type)
     {
-        $this->number = 8;
         switch ($type) {
             case 1:
                 $orderBy = 'id';
@@ -95,7 +86,7 @@ class lessonSubjectController extends Controller
                 $orderBy = 'coursePlayView';
                 break;
         }
-        $List = DB::table('commentcourse')->where(['courseStatus' => '0', 'state' => '2'])->orderBy($orderBy, 'desc')-> skip($this -> getSkip($request['page'], $this -> number)) -> take($this -> number)->get();
+        $List = DB::table('commentcourse')->where(['courseStatus' => '0', 'state' => '2'])->orderBy($orderBy, 'desc')->get();
         foreach ($List as $key => $value) {
             $List[$key]->coursePrice = ceil($value->coursePrice / 1000);
         }
@@ -148,9 +139,9 @@ class lessonSubjectController extends Controller
     // 获取目录信息
     public function getCatalogInfo($id)
     {
-        $info = DB::table('coursechapter')->select('id', 'title', 'coursePath')->where(['status' => 0, 'parentId' => '0', 'courseId' => $id])->get();
+        $info = DB::table('coursechapter')->select('id', 'title')->where(['status' => 0, 'parentId' => '0', 'courseId' => $id])->get();
         foreach ($info as $key => $value) {
-            $info[$key]->section = (DB::table('coursechapter')->select('id', 'title', 'coursePath')->where(['status' => 0, 'parentId' => $value->id, 'courseId' => $id])->get());
+            $info[$key]->section = (DB::table('coursechapter')->select('id', 'title', 'courseLowPath', 'courseMediumPath', 'courseHighPath')->where(['status' => 0, 'parentId' => $value->id, 'courseId' => $id])->get());
         }
         return $this->returnResult($info);
     }
@@ -237,7 +228,7 @@ class lessonSubjectController extends Controller
         }
     }
 
-// 发表反馈意见
+    // 发表反馈意见
     public function publishFeedBack(Request $request)
     {
         $input = $request->all();

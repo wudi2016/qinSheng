@@ -32,14 +32,16 @@
                 {{--用户名--}}
                 <div style="height:10px;"></div>
                 <div class="center_con_r_bar">
-                    <div class="center_con_r_bar_l"></div>
+                    <div class="center_con_r_bar_l"><div class="clearInput hide"></div></div>
                     <div class="center_con_r_bar_m"><input class="txt uname" type="text" name="username" placeholder="请输入用户名或手机号"></div>
+                    <div class="cklogo cuo hide"><img src="{{url('home/image/register/rog.png')}}" alt=""></div>
                 </div>
                 {{--密码--}}
                 <div style="height:40px;"></div>
                 <div class="center_con_r_bar">
-                    <div class="center_con_r_bar_l"></div>
+                    <div class="center_con_r_bar_l"><div class="clearInput hide"></div></div>
                     <div class="center_con_r_bar_m"><input class="txt psd" type="password" name="password" placeholder="请输入密码"></div>
+                    <div class="cklogo cuo hide"><img src="{{url('home/image/register/rog.png')}}" alt=""></div>
                 </div>
 
                 {{--记住用户--}}

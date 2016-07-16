@@ -502,12 +502,12 @@ class perSpaceController extends Controller
         else
             return false;
 
-        $data = DB::table('commentcourse as cs')
-            ->join('orders as o','o.orderSn','=','cs.orderSn')
-            ->join('applycourse as app','app.orderSn','=','o.orderSn')
-            ->join('users as u','u.id','=','cs.userId')
-            ->select('cs.teachername','cs.courseTitle as commentTitle','cs.id as commentId','cs.courseLowPath as low','cs.courseMediumPath as medium','cs.courseHighPath as high','u.realname','cs.state','o.status','app.id as applyId','app.courseTitle as applayTitle','app.created_at as time')
-            ->where(['cs.teacherId'=>$id,'cs.courseStatus'=>0,'cs.courseIsDel'=>0,'o.isDelete'=>0])
+        $data = \DB::table('orders as o')
+            ->leftJoin('applycourse as app','app.orderSn','=','o.orderSn')
+            ->leftJoin('commentcourse as cs','cs.orderSn','=','o.orderSn')
+            ->join('users as u','u.id','=','o.userId')
+            ->select('o.teacherName','o.status','cs.courseTitle as commentTitle','cs.id as commentId','cs.courseLowPath as low','cs.courseMediumPath as medium','cs.courseHighPath as high','u.realname','cs.state as commentState','app.id as applyId','app.courseTitle as applyTitle','app.created_at as time','app.state as applyState')
+            ->where(['o.teacherId'=>$id,'o.isDelete'=>0,'cs.courseStatus'=>0,'cs.courseIsDel'=>0,'app.courseStatus'=>0,'app.courseIsDel'=>0])
             ->where('cs.state','<>',2)  //点评已完成不在此显示
             ->orderBy('cs.created_at','desc')
             ->get();
@@ -515,7 +515,7 @@ class perSpaceController extends Controller
         if($data){
             return response()->json(['total'=>count($data),'data'=>$data,'type'=>true]);
         }else{
-            return response()->json(['total'=>0,'data'=>'','type'=>false]);
+            return response()->json(['total'=>0,'type'=>false]);
         }
 
     }
@@ -549,7 +549,7 @@ class perSpaceController extends Controller
         if($data){
             return response()->json(['total'=>count($data),'data'=>$data,'type'=>true]);
         }else{
-            return response()->json(['total'=>0,'data'=>'','type'=>false]);
+            return response()->json(['total'=>0,'type'=>false]);
         }
 
     }

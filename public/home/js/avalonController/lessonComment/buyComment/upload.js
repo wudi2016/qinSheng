@@ -40,7 +40,7 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 									}, 500);
 								} 
 							} else {
-								upload.endUpload('中断上传');
+								upload.endUpload('上传中断');
 							}
 						}
 						if (model == 'transformation') {
@@ -60,8 +60,11 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 								}
 							}
 						}
-						if (model == 'finishUpload') {
-							location.href = '/member/student/' + upload.mineID;
+						if (model == 'finishUpload' || model == 'isReload') {
+							location.href = '/member/student/'+ upload.mineID +'/lessonComment';
+						}
+						if (model == 'comment') {
+							location.href = '/member/famousTeacher/waitComment';
 						}
 					}
 				},
@@ -89,6 +92,10 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 					upload.endUpload('上传失败请重试');
 				}
 			}, function(pos, size){
+				if (upload.uploadStatus != 2) {
+					upload.endUpload('上传中断');
+					return false;
+				}
 				console.log('文件扫描进度： ' + parseInt(pos / size * 100) + '%');
 				upload.progressBar = pos / size * 100 * 0.25;
 			});
@@ -99,21 +106,74 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 			upload.uploadStatus = 3;
 			upload.uploadTip = tip || '';
 		},
-		submit: function() {
+		submit: function(isReload) {
 			if (!upload.submitDisable) return false;
 			if (!upload.uploadInfo.fileID) {
 				upload.uploadStatus = 3
 				upload.uploadTip = '<span style="color: red;">请先上传视频</span>';
 				return false;
 			}
-			for (var i in upload.warning) {
-				if (upload[i+'Length'] < 1) {
-					upload.warning[i] = true;
+			if (isReload === 'comment') {
+				if (upload.selectedLevel.size() < 1) {
+					upload.levelWarning = true;
+					upload.levelWarningText = '请选择适用等级';
 					return false;
 				}
+				delete upload.uploadInfo.message;
+				upload.uploadInfo.suitlevel = upload.selectedLevel.join(',');
+				upload.uploadInfo.state = 1;
+				upload.getData('/lessonComment/finishComment', 'comment', upload.uploadInfo, 'POST');
+			} else {
+				for (var i in upload.warning) {
+					if (upload[i+'Length'] < 1) {
+						upload.warning[i] = true;
+						return false;
+					}
+				}
+				if (isReload) {
+					for (var i in upload.temp) upload.temp[i] == upload.uploadInfo[i] && delete upload.uploadInfo[i];
+					upload.uploadInfo.state = 1;
+					upload.getData('/lessonComment/getFirst', 'isReload', {data: upload.uploadInfo, table: 'applycourse', condition: {id: upload.applyID}, action: 4}, 'POST');
+				} else {
+					upload.uploadInfo.userId = upload.mineID;
+					upload.getData('/lessonComment/finishUpload', 'finishUpload', {data: upload.uploadInfo, orderID: upload.orderID}, 'POST');
+				}
 			}
-			upload.uploadInfo.userId = upload.mineID;
-			upload.getData('/lessonComment/finishUpload', 'finishUpload', {data: upload.uploadInfo, orderID: upload.orderID}, 'POST');
+			
+		},
+		suitlevel: [
+			{title: '钢琴一级', id: 1}, 
+			{title: '钢琴二级', id: 2}, 
+			{title: '钢琴三级', id: 3}, 
+			{title: '钢琴四级', id: 4}, 
+			{title: '钢琴五级', id: 5}, 
+			{title: '钢琴六级', id: 6}, 
+			{title: '钢琴七级', id: 7}, 
+			{title: '钢琴八级', id: 8}, 
+			{title: '钢琴九级', id: 9}, 
+			{title: '钢琴十级', id: 10}
+		],
+		selectedLevel: [],
+		levelWarning: false,
+		levelWarningText: '( 最多选择三项 )',
+		selectLevel: function() {
+			upload.levelWarning = false;
+			upload.levelWarningText = '( 最多选择三项 )';
+			if (avalon(this).attr('class')) {
+				avalon(this).removeClass('checked');
+				for (var i in upload.selectedLevel) {
+					if (upload.selectedLevel[i] == avalon(this).attr('value')) {
+						upload.selectedLevel.remove(upload.selectedLevel[i]);
+					};
+				}
+			} else {
+				if (upload.selectedLevel[2]) {
+					upload.levelWarning = true;
+				} else {
+					avalon(this).addClass('checked');
+					upload.selectedLevel.push(avalon(this).attr('value'));
+				};
+			};
 		}
 	});
 

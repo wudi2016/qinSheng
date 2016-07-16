@@ -37,10 +37,8 @@
                     </div>
                 </div>
                 <div class="contain_lessonDetail_top_video_right">
-                    <div class="contain_lessonDetail_top_video_right_name" ms-html="detailInfo.courseTitle">钢琴演奏基础课程
-                    </div>
-                    <div class="contain_lessonDetail_top_video_right_price">价格：<span
-                                ms-html="'￥' + detailInfo.coursePrice + '元'"></span></div>
+                    <div class="contain_lessonDetail_top_video_right_name" ms-html="detailInfo.courseTitle">钢琴演奏基础课程</div>
+                    <div class="contain_lessonDetail_top_video_right_price">价格：<span ms-html="'￥' + detailInfo.coursePrice + '元'"></span></div>
                     <div class="contain_lessonDetail_top_video_right_detail">
                         <span class="classes" ms-html="detailInfo.classHour + '课时'"></span>
                         <span class="study" ms-html="detailInfo.coursePlayView + '人学习'"></span>
@@ -67,16 +65,13 @@
                 <!-- 选项卡切换 -->
                 <div class="contain_lessonDetail_bot_left_tip">
                     <div class="left active">
-                        <span class="light" name="course" ms-changeoption="changeOption"
-                              ms-click="changeSwitch('course');">课程介绍</span>
+                        <span class="light" name="course" ms-changeoption="changeOption" ms-click="changeSwitch('course');">课程介绍</span>
                     </div>
                     <div class="center">
-                        <span name="comment" ms-changeoption="changeOption"
-                              ms-click="changeSwitch('comment');">学员评论</span>
+                        <span name="comment" ms-changeoption="changeOption" ms-click="changeSwitch('comment');">学员评论</span>
                     </div>
                     <div class="right">
-                        <span name="dataDownload" ms-changeoption="changeOption"
-                              ms-click="changeSwitch('dataDownload');">资料下载</span>
+                        <span name="dataDownload" ms-changeoption="changeOption" ms-click="changeSwitch('dataDownload');">资料下载</span>
                     </div>
                 </div>
                 <!-- 简介 -->
@@ -93,7 +88,11 @@
                             <div style="width: 100%;height: 5px"></div>
                             <div class="contain_lessonDetail_bot_left_info_div">
                                 <div class="data" ms-repeat="el.section">
-                                    <span class="spot"></span><span class="data_content" ms-html="el.title"></span>
+                                    <span class="spot"></span>
+                                    <span class="data_content" ms-html="el.title" ms-click="changeVideo(el.courseLowPath);"></span>
+                                    <span class="try">试学</span>
+                                    <span class="have">已学</span>
+                                    <span class="play" ms-click="changeVideo(el.courseLowPath);"></span>
                                 </div>
                             </div>
                         </div>
@@ -101,11 +100,11 @@
                 </div>
                 <div name="comment" class="hide" ms-visible="changeOption == 'comment'">
                     @if(Auth::check())
-                    <div ms-if="detailInfo.isBuy || detailInfo.isAuthor" class="contain_lessonDetail_bot_left_comment">
-                        <textarea ms-duplex="commentContent"></textarea>
-                        <span ms-on-mouseout="descriptionSwitch('replyWarning', false)" ms-click="publishComment(detailInfo.id,commentContent);">发布</span>
-                        <div class="teacherHomepage_detail_content_applyTip" ms-visible="replyWarning">请输入评论内容</div>
-                    </div>
+                        <div ms-if="detailInfo.isBuy || detailInfo.isAuthor" class="contain_lessonDetail_bot_left_comment">
+                            <textarea ms-duplex="commentContent"></textarea>
+                            <span ms-on-mouseout="descriptionSwitch('replyWarning', false)" ms-click="publishComment(detailInfo.id,commentContent);">发布</span>
+                            <div class="teacherHomepage_detail_content_applyTip" ms-visible="replyWarning">请输入评论内容</div>
+                        </div>
                     @endif
                     <div class="clear" style="width: 100%;height: 20px;"></div>
                     <div class="first_not">
@@ -122,11 +121,13 @@
                                     <span ms-html="el.commentContent"></span></div>
                                 <div class="bot">
                                     @if(Auth::check())
-                                        <a href="#input_content" ms-if="(!el.isSelf && detailInfo.isBuy) || (!el.isSelf && detailInfo.isAuthor)" ms-click="replyComment(el.username,el.id);"><span class="first">回复</span></a>
+                                        <a href="#input_content" ms-if="(!el.isSelf && detailInfo.isBuy) || (!el.isSelf && detailInfo.isAuthor)" ms-click="replyComment(el.username,el.id);">
+                                            <span class="first">回复</span>
+                                        </a>
                                     @endif
                                     <span class="third" ms-if="el.isSelf" ms-click="deleteComment($index)">删除</span>
-                                    <span  class="second" ms-click="addLike(el);" ms-if="!el.isLike">点赞（[-- el.likeTotal || 0--] )</span>
-                                    <span  class="no_hover" ms-if="el.isLike" ms-click="addLike(el);">点赞（[-- el.likeTotal || 0--] )</span>
+                                    <span class="second" ms-click="addLike(el);" ms-if="!el.isLike">点赞（[-- el.likeTotal || 0--] )</span>
+                                    <span class="no_hover" ms-if="el.isLike" ms-click="addLike(el);">点赞（[-- el.likeTotal || 0--] )</span>
                                 </div>
                             </div>
                         </div>
@@ -139,7 +140,7 @@
                             <div style="width: 100%;height: 5px"></div>
                             <div class="contain_lessonDetail_bot_left_info_div">
                                 <div class="data" ms-repeat="dataDownload">
-                                    <span class="spot"></span><span class="data_content" ms-html="el.dataName" ms-click="popUpSwitch('dataDownload',detailInfo.isBuy,el.dataPath,el.dataName);"></span>
+                                    <span class="spot"></span><span class="data_download_content" ms-html="el.dataName" ms-click="popUpSwitch('dataDownload',detailInfo.isBuy,el.dataPath,el.dataName);"></span>
                                 </div>
                             </div>
                         </div>
@@ -151,8 +152,7 @@
                 <div class="contain_lessonDetail_bot_right_teacher" ms-controller="teacherInfoController">
                     <span class="teacher">讲师介绍</span>
                     <div class="photo">
-                        <a ms-attr-href="'/' + teacherInfo.id"><img ms-attr-src="teacherInfo.pic" width="90" height="90"
-                                                                    alt=""/></a>
+                        <a ms-attr-href="'/' + teacherInfo.id"><img ms-attr-src="teacherInfo.pic" width="90" height="90" alt=""/></a>
                     </div>
                     <div class="desc">
                         <span class="name" ms-html="teacherInfo.realname"></span>
@@ -224,7 +224,8 @@
             </div>
             <div class="feedback_center">
                 <div class="top">
-                    <div class="question"><span>1</span><span class="last">选择问题类型：</span><span style="color: red" ms-html="warnBackType"></span></div>
+                    <div class="question"><span>1</span><span class="last">选择问题类型：</span><span style="color: red" ms-html="warnBackType"></span>
+                    </div>
                     <div class="choose">
                         <input type="radio" ms-duplex-string="backType" value="内容无关"/><span>内容无关</span>
                         <input type="radio" ms-duplex-string="backType" value="播放不了"/><span>播放不了</span>
@@ -233,13 +234,15 @@
                 </div>
                 <div class="clear"></div>
                 <div class="center">
-                    <div class="question"><span>2</span><span class="last">填写问题描述：</span><span style="color: red" ms-html="warnBackContent"></span></div>
+                    <div class="question"><span>2</span><span class="last">填写问题描述：</span><span style="color: red" ms-html="warnBackContent"></span>
+                    </div>
                     <div class="content">
                         <textarea name="" ms-duplex="backContent" placeholder="详细描述一些你遇到的问题或建议"></textarea>
                     </div>
                 </div>
                 <div class="feedback_center_last">
-                    <div class="question"><span>3</span><span class="last">留下联系方式：</span><span style="color: red" ms-html="warnTel"></span></div>
+                    <div class="question"><span>3</span><span class="last">留下联系方式：</span><span style="color: red" ms-html="warnTel"></span>
+                    </div>
                     <div class="contact_way">
                         <input type="text" class="method" ms-duplex="tel" placeholder="QQ/Email/手机号"/>
                     </div>
@@ -288,7 +291,7 @@
 @section('js')
     <script type="text/javascript" src="{{asset('home/jplayer/jwplayer.js')}}"></script>
     <script>
-        require(['/lessonSubject/detail','/lessonSubject/teacherInfo','/lessonSubject/catalogInfo'], function (detail,teacherInfo,catalogInfo) {
+        require(['/lessonSubject/detail', '/lessonSubject/teacherInfo', '/lessonSubject/catalogInfo'], function (detail, teacherInfo, catalogInfo) {
             detail.mineUsername = '{{$mineUsername}}' || null;
             detail.mineUserId = '{{$mineUserId}}' || null;
             detail.mineType = '{{$mineType}}' || null;
@@ -302,13 +305,12 @@
             // 获取章节信息
             catalogInfo.getCatalogInfo({{$detailId}});
 
-            detail.$watch('commentContent', function(value) {
+            detail.$watch('commentContent', function (value) {
                 if (value.length < detail.commentContentLength) {
                     detail.commentContentLength = '';
                     detail.commentContent = '';
                     detail.tousername = '';
                     detail.parentId = '';
-
                 }
             });
             avalon.scan();

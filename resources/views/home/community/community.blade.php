@@ -4,7 +4,7 @@
 
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{asset('home/css/community/community.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{asset('home/css/games/pagination.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('home/css/community/pagination.css')}}">
 
 
     <style>
@@ -15,7 +15,7 @@
             top:-110px;
             left:90px;
             opacity: 0; 
-            filter:alpha(opacity=50);
+            filter:alpha(opacity=0);
         }
 
         
@@ -25,9 +25,10 @@
             top:-105px;
             left:1210px;
             opacity: 0;
-            filter:alpha(opacity=50);
+            filter:alpha(opacity=0);
             z-index:2;
         }
+       
 
     </style>
 
@@ -88,7 +89,7 @@
                             </div>
                             <!-- 介绍 -->
                             <div class="content_introduce">
-                                <a ms-attr-href="teacherhomepage + el.id">
+                                <a ms-attr-href="teacherhomepage + el.userId">
                                     <div ms-html="el.intro" ms-theteacheryincang></div>
                                 </a>
                             </div>
@@ -240,7 +241,8 @@
             avalon.scan();
         });
     </script>
-    
+
+
 
     <script>
         function getdata(){
@@ -252,7 +254,7 @@
                         url: '/community/getstudent/',
                         dataType : 'json',
                         success: function(response) {
-                             console.log(response);
+                             // console.log(response);
                             if(response.statuss){
                                 done(response.data);
                             }
@@ -279,10 +281,10 @@
         }
 
         getdata();
-
+        
 
     </script>
-
+    
 
 
 
