@@ -328,6 +328,7 @@
                     </div>
                 </div>
                 {{--//通知循环结束--}}
+                <div ms-visible="noticeMsg" class="warning_msg">暂无通知消息...</div>
             </div>
             <div class="pagecon_parent">
                 <div class="pagecon">
@@ -358,6 +359,7 @@
                     </div>
                 </div>
                 {{--//回复循环结束--}}
+                <div ms-visible="answerMsg" class="warning_msg">暂无评论回复...</div>
             </div>
             <div class="pagecon_parent">
                 <div class="pagecon">
@@ -405,6 +407,7 @@
                     <div class="comment_repeat_price" ms-if="el.state == '2'" ms-text="'￥ ' + el.coursePrice"></div>
                 </div>
             </div>
+            <div ms-visible="commentMsg" class="warning_msg">暂无相关课程...</div>
             <div class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_course_comment"></div>
@@ -438,6 +441,7 @@
                 </div>
                 {{--//专题课程循环结束--}}
             </div>
+            <div ms-visible="subjectMsg" class="warning_msg">暂无相关课程...</div>
             <div class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_course"></div>
@@ -484,6 +488,7 @@
                     <div class="comment_repeat_price" ms-text="'￥ ' + el.coursePrice"></div>
                 </div>
                 {{--//点评课程循环结束--}}
+                <div ms-visible="collectionMsg" class="warning_msg">暂无收藏课程...</div>
             </div>
             <div class="pagecon_parent">
                 <div class="pagecon">

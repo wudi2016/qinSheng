@@ -103,7 +103,6 @@ class lessonSubjectController extends Controller
         }else{
             $info->coursePrice = ceil($info->coursePrice/1000);
         }
-        $info->courseNotice = $info->courseNotice ? $info->courseNotice : '暂无课程公告';
         $info->classHour = DB::table('coursechapter')->where(['courseId' => $id, 'status' => 0])->where('parentId', '<>', '0')->count();
         $info->courseLowPath = $result ? $result->courseLowPath : '';
         $info->courseMediumPath = $result ? $result->courseMediumPath : '';

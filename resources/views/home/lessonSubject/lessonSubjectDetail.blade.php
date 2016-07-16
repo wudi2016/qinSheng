@@ -96,6 +96,7 @@
                                 </div>
                             </div>
                         </div>
+                        <div ms-visible="catalogMsg" class="catalog_msg">暂无相关目录信息...</div>
                     </div>
                 </div>
                 <div name="comment" class="hide" ms-visible="changeOption == 'comment'">
@@ -132,6 +133,7 @@
                             </div>
                         </div>
                     </div>
+                    <div ms-visible="commentMsg" class="comment_msg">暂无相关评论...</div>
                 </div>
                 <div name="dataDownload" class="hide" ms-visible="changeOption == 'dataDownload'">
                     <div class="contain_lessonDetail_bot_left_download">
@@ -145,6 +147,7 @@
                             </div>
                         </div>
                     </div>
+                    <div ms-visible="downloadMsg" class="download_msg">暂无相关资料...</div>
                 </div>
             </div>
             <div class="contain_lessonDetail_bot_right">
@@ -163,8 +166,9 @@
                 </div>
                 <!-- 课程公告 -->
                 <div class="contain_lessonDetail_bot_right_notice">
-                    <span class="tip">课程公告</span>
+                    <span class="notice_tip">课程公告</span>
                     <span class="notice" ms-html="detailInfo.courseNotice"></span>
+                    <div ms-if="!detailInfo.courseNotice" class="notice_msg">暂无课程公告...</div>
                 </div>
             </div>
         </div>
@@ -296,7 +300,6 @@
             detail.mineUserId = '{{$mineUserId}}' || null;
             detail.mineType = '{{$mineType}}' || null;
             detail.minePic = '{{$minePic}}' || null;
-
             detail.detailId = '{{$detailId}}' || null;
             // 获取详细信息
             detail.getDetail({{$detailId}});

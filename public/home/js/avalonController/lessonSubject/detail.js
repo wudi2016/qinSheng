@@ -39,6 +39,7 @@ define([], function () {
                 detail.dataDownload.length == 0 ? detail.getDataDownload(detail.detailId) : detail.dataDownload;
             }
         },
+        downloadMsg:false, commentMsg: false,
         getData: function (url, type, data, model, callback) {
             $.ajax({
                 url: url, type: type || 'GET', data: data || {}, dataType: 'json',
@@ -54,10 +55,10 @@ define([], function () {
                     if (response.status) {
                         detail[model] = response.data;
                     } else {
-                        detail[model] = [];
+                        if(model == 'commentInfo') detail.commentMsg = true;
+                        if(model == 'dataDownload') detail.downloadMsg = true;
                     }
-                    model == 'detailInfo' && detail.setVideo(function () {
-                    });
+                    model == 'detailInfo' && detail.setVideo(function () {});
                 }, error: function (error) {
                 }
             })

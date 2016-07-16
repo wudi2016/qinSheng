@@ -5,6 +5,7 @@ define([], function () {
     var notice = avalon.define({
         $id: 'noticeController',
         noticeInfo: [],
+        noticeMsg : false,
         getNoticeInfo: function (username) {
             $('#page_notice').pagination({
                 dataSource: function (done) {
@@ -16,6 +17,9 @@ define([], function () {
                         success: function (response) {
                             if (response.status) {
                                 done(response.data);
+                            }else{
+                                notice.noticeMsg = true;
+                                notice.noticeInfo = [];
                             }
                         },
                     });

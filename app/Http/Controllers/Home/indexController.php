@@ -142,8 +142,8 @@ class indexController extends Controller
     public function login()
     {
         $ignorearr = [
-            'http://qinsheng2.com/index/login',
-            'http://qinsheng2.com/index/register'
+            'http://'.$_SERVER['HTTP_HOST'].'/index/login',
+            'http://'.$_SERVER['HTTP_HOST'].'/index/register'
         ];
         if(!in_array($_SERVER['HTTP_REFERER'],$ignorearr)){
             session(['lastUrl' => $_SERVER['HTTP_REFERER']]);

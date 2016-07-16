@@ -1601,3 +1601,16 @@
     background:#DD5044;
 }
 
+
+/* ================ 暂无消息 ==================== */
+.warning_msg{
+    margin: 0 auto;
+    font-family: '微软雅黑';
+    color: grey;
+    font-size: 20px;
+    height: 400px;
+    line-height: 400px;
+    text-align: center;
+    width: 750px;
+}
+/* ================ 暂无消息 ==================== */

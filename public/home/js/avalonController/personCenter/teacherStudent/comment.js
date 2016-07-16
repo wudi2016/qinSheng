@@ -5,6 +5,7 @@ define([], function () {
     var comment = avalon.define({
         $id: 'commentController',
         commentInfo: [],
+        answerMsg : false,
         getCommentInfo: function (username) {
             $('#page_comment').pagination({
                 dataSource: function (done) {
@@ -16,6 +17,9 @@ define([], function () {
                         success: function (response) {
                             if (response.status) {
                                 done(response.data);
+                            }else{
+                                comment.commentInfo = [];
+                                comment.answerMsg = true;
                             }
                         },
                     });

@@ -208,6 +208,8 @@ class perSpaceController extends Controller
         foreach ($info as $key => $value) {
                 $info[$key]->coursePrice = ceil($info[$key]->coursePrice/1000);
         }
+        $data = DB::table('');
+        dd($data);
         if ($info) {
             return response()->json(['status' => true, 'data' => $info, 'total' => count($info)]);
         } else {

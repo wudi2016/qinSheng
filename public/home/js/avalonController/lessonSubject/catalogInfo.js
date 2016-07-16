@@ -6,6 +6,7 @@
         var catalogInfo = avalon.define({
             $id: 'catalogInfoController',
             catalogInfo: [],
+            catalogMsg : false,
             getCatalogInfo: function (id) {
                 $.ajax({
                     url: '/lessonSubject/getCatalogInfo/' + id,
@@ -14,6 +15,8 @@
                     success: function (response) {
                         if (response.status) {
                             catalogInfo.catalogInfo = response.data;
+                        }else{
+                            catalogInfo.catalogMsg = true;
                         }
                     }
                 })

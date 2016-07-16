@@ -395,7 +395,7 @@
     height: 280px;
     background-color: #ffffff;
 }
-.contain_lessonDetail_bot_right_notice .tip{
+.contain_lessonDetail_bot_right_notice .notice_tip{
     display: block;
     width: 320px;
     height: 35px;
@@ -458,7 +458,7 @@
     border: 0;
 }
 .first_not{
-    min-height: 800px;
+    /*min-height: 800px;*/
 }
 .contain_lessonDetail_bot_left_comment_content{
     width: 735px;
@@ -1249,4 +1249,39 @@
     font-size: 14px;
     display: none;
     cursor: pointer;
+}
+
+.comment_msg{
+    color: #d0d8e0;
+    font-size: 20px;
+    height: 400px;
+    line-height: 400px;
+    text-align: center;
+    width: 800px;
+}
+.download_msg{
+    color: #d0d8e0;
+    font-size: 20px;
+    height: 400px;
+    line-height: 237px;
+    text-align: center;
+    width: 800px
+}
+.notice_msg{
+    color: #d0d8e0;
+    font-size: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    width: 320px;
+    margin: -125px auto;
+
+}
+.catalog_msg{
+    color: #d0d8e0;
+    font-size: 20px;
+    height: 400px;
+    line-height: 400px;
+    text-align: center;
+    width: 800px
 }

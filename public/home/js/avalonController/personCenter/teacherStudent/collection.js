@@ -11,6 +11,7 @@ define([], function () {
         realInfo : false,
         total: '',
         collectionInfo : [],
+        collectionMsg : false,
         getCollectionInfo : function(){
             $('#page_collection').pagination({
                 dataSource: function (done) {
@@ -22,6 +23,8 @@ define([], function () {
                             collection.total = response.total;
                             if (response.status) {
                                 done(response.data);
+                            }else{
+                                collection.collectionMsg = true;
                             }
                         },
                     });
@@ -48,6 +51,9 @@ define([], function () {
                     if(response.status){
                         collection.collectionInfo.removeAt(index);
                         collection.total == 0 ? 0 : collection.total--;
+                        if(collection.total == 0){
+                            collection.collectionMsg = true;
+                        }
                     }else{
                         alert('删除失败');
                     }

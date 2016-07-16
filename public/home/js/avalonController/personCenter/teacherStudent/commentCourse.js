@@ -6,6 +6,7 @@ define([], function () {
         $id: 'commentCourseController',
         commentCourseInfo: [],
         total: '',
+        commentMsg : false,
         getCommentCourse: function (username,type) {
             $('#page_course_comment').pagination({
                 dataSource: function (done) {
@@ -18,6 +19,8 @@ define([], function () {
                             commentCourse.total = response.total;
                             if (response.status) {
                                 done(response.data);
+                            }else{
+                                commentCourse.commentMsg = true;
                             }
                         },
                     });
