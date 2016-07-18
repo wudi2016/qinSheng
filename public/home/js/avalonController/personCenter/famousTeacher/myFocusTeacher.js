@@ -6,6 +6,7 @@ define([], function () {
         $id: 'myFocusTeacher',
         realInfo: false,
         total: '',
+        myFocus : false,
         myFocusList: [],
         getMyFocusInfo: function () {
             $('#page_focus').pagination({
@@ -18,6 +19,10 @@ define([], function () {
                             if (response.type) {
                                 done(response.data);
                                 myFocusTeacher.total = response.total;
+                            }else{
+                                myFocusTeacher.total =0;
+                                myFocusTeacher.myFocus = true;
+                                myFocusTeacher.myFocusList = [];
                             }
                         },
                     });

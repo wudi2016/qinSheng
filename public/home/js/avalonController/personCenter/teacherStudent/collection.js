@@ -53,6 +53,7 @@ define([], function () {
                         collection.total == 0 ? 0 : collection.total--;
                         if(collection.total == 0){
                             collection.collectionMsg = true;
+                            $('#page_collection').css('display','none');
                         }
                     }else{
                         alert('删除失败');

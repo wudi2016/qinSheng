@@ -92,10 +92,8 @@
                                     <th>邮箱</th>
                                     <th>部门</th>
                                     <th>岗位</th>
-                                    <th>角色</th>
                                     <th>状态</th>
                                     <th>创建时间</th>
-                                    <th>更新时间</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
@@ -110,17 +108,16 @@
                                         <td>{{$com->email}}</td>
                                         <td>{{$com->departName}}</td>
                                         <td>{{$com->postName}}</td>
-                                        <td>{{$com->roleId}}</td>
                                         <td>
-                                            @if($com->status == 0)
+                                            @if($com->checks == 0)
                                                 激活
-                                            @elseif($com->status == 1)
+                                            @elseif($com->checks == 1)
                                                 锁定
                                             @endif
                                         </td>
 
                                         <td>{{$com->created_at}}</td>
-                                        <td>{{$com->updated_at}}</td>
+                                    
                                         <td>
                                             <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
 

@@ -9,9 +9,9 @@ avalon.directive('imgbig', {
         var w2 = w1 + 40;
         var h2 = h1 + 40;
         $('.img_big').hover(function(){
-            $(this).stop().animate({height: h2, width: w2, left: "-20px", top: "-20px"}, 1);
+            $(this).stop().animate({height: h2, width: w2, left: "-20px", top: "-20px"}, 'fast');
         },function () {
-            $(this).stop().animate({height: h1, width: w1, left: "0px", top: "0px"}, 1);
+            $(this).stop().animate({height: h1, width: w1, left: "0px", top: "0px"}, 'fast');
         })
     }
 });
@@ -84,7 +84,7 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
                 }
             }
             if(value == 'lessonComment'){
-                commentCourse.commentCourse.commentCourseInfo.length == '0' ? commentCourse.commentCourse.getCommentCourse(sideBar.mineUsername,1) : commentCourse.commentCourse.commentCourseInfo;
+                commentCourse.commentCourse.commentCourseInfo.length == '0' ? commentCourse.commentCourse.getCommentCourse(sideBar.mineUserId,1) : commentCourse.commentCourse.commentCourseInfo;
             }
             if(value == 'lessonStore'){
                 if(type == 'teacher'){

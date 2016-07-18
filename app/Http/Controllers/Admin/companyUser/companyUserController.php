@@ -19,13 +19,15 @@ class companyUserController extends Controller{
      */
     public function companyUserList(Request $request){
 
-        $query = DB::table('companyuser as com')
-                ->leftjoin('department as dep','com.departId','=','dep.id')
-                ->leftjoin('post as p','com.postId','=','p.id')
-                ->select('dep.departName','p.postName','com.id','com.username','com.realname','com.phone','com.email','com.roleId','com.status','com.created_at','com.updated_at');
+
+        $query = DB::table('users as u')
+                ->leftjoin('department as dep','dep.id','=','u.departId')
+                ->leftjoin('post as p','p.id','=','u.postId')
+                ->select('dep.departName','p.postName','u.id','u.username','u.realname','u.phone','u.email','u.checks','u.created_at')
+                ->where('type',3);
 
         if($request->type == 1){
-            $query = $query->where('com.realname','like','%'.trim($request['search']).'%');
+            $query = $query->where('u.realname','like','%'.trim($request['search']).'%');
         }
         if($request->type == 2){
             $query = $query->where('dep.departName','like','%'.trim($request['search']).'%');
@@ -54,6 +56,7 @@ class companyUserController extends Controller{
      */
     public function addscompanyUser(Request $request){
         $input = Input::except('_token');
+        $input['type'] = '3';
         //验证
         $validate = $this->validator($input);
         if($validate->fails()){
@@ -63,11 +66,10 @@ class companyUserController extends Controller{
         //加密 (解密用Crypt::decrypt())
         $input['password'] = Crypt::encrypt($input['password']);
         $input['upassword'] = Crypt::encrypt($input['upassword']);
-//        dd($input);
         if(Crypt::decrypt($input['password']) == Crypt::decrypt($input['upassword']) ){
             //销毁upassword字段
             unset($input['upassword']);
-            $res = DB::table('companyuser')->insert($input);
+            $res = DB::table('users')->insert($input);
         }else{
             return redirect()->back()->withInput()->withErrors('与第一次输入的密码不同，请重新输入');
         }
@@ -83,7 +85,7 @@ class companyUserController extends Controller{
      * 编辑
      */
     public function editcompanyUser($id){
-        $data = DB::table('companyuser')->where('id',$id)->first();
+        $data = DB::table('users')->where('id',$id)->first();
         $depart = DB::table('department')->get();
         $post = DB::table('post')->get();
         return view('admin.companyUser.editcompanyUser')->with('data',$data)->with('depart',$depart)->with('post',$post);
@@ -95,14 +97,15 @@ class companyUserController extends Controller{
      */
     public function editscompanyUser(Request $request){
         $input = Input::except('_token');
-        $input['updated_at'] = Carbon::now();
+        $input['type'] = '3';
+        // $input['updated_at'] = Carbon::now();
 //        dd($input);
         //验证
         $validate = $this->validator_edit($input);
         if($validate->fails()){
             return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
         }
-        $res = DB::table('companyuser')->where('id',$input['id'])->update($input);
+        $res = DB::table('users')->where('id',$input['id'])->update($input);
         if($res){
             return redirect('admin/message')->with(['status'=>'编辑成功','redirect'=>'companyUser/companyUserList']);
         }else{
@@ -117,7 +120,7 @@ class companyUserController extends Controller{
      * 删除
      */
     public function delcompanyUser($id){
-        $res = DB::table('companyuser')->where('id',$id)->delete();
+        $res = DB::table('users')->where('id',$id)->delete();
         if($res){
             return redirect('admin/message')->with(['status'=>'删除成功','redirect'=>'companyUser/companyUserList']);
         }else{
@@ -131,7 +134,7 @@ class companyUserController extends Controller{
      * 重置密码页面
      */
     public function resetPassword($id){
-        $data = DB::table('companyuser')->where('id',$id)->first();
+        $data = DB::table('users')->where('id',$id)->first();
         return view('admin.companyUser.editresetPassword')->with('data',$data);
     }
 
@@ -152,7 +155,7 @@ class companyUserController extends Controller{
         if(Crypt::decrypt($input['password']) == Crypt::decrypt($input['upassword']) ){
             //销毁upassword字段
             unset($input['upassword']);
-            $res = DB::table('companyuser')->where('id',$input['id'])->update($input);
+            $res = DB::table('users')->where('id',$input['id'])->update($input);
         }else{
             return redirect()->back()->withInput()->withErrors('与第一次输入的密码不同，请重新输入');
         }
@@ -179,8 +182,8 @@ class companyUserController extends Controller{
      * 状态
      */
     public function companyStatus(Request $request){
-        $data['status'] = $request['status'];
-        $data = DB::table('companyuser')->where('id',$request['id'])->update($data);
+        $data['checks'] = $request['status'];
+        $data = DB::table('users')->where('id',$request['id'])->update($data);
         if($data){
             echo 1;
         }else{

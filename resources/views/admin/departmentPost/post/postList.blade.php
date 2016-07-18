@@ -88,7 +88,6 @@
                                     <th>岗位</th>
                                     <th>状态</th>
                                     <th>创建时间</th>
-                                    <th>更新时间</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
@@ -108,7 +107,6 @@
                                         </td>
 
                                         <td>{{$p->created_at}}</td>
-                                        <td>{{$p->updated_at}}</td>
                                         <td>
                                             <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
 

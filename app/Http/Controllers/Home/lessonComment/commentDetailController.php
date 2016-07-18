@@ -152,7 +152,7 @@ class commentDetailController extends Controller
                 -> select('orders.id', 'orders.userName', 'orders.userId', 'orders.teacherId', 'orders.teacherName', 'applycourse.courseTitle')
                 -> where(['orders.orderSn' => $orderSn, 'orders.status' => 1, 'orders.isDelete' => 0, 'orders.teacherId' => \Auth::user() -> id]) -> first();
         $result || abort(404);
-        return view('home.lessonComment.commentDetail.uploadComment') -> with('orderSn', $orderSn) -> with('info', get_object_vars($result));
+        return view('home.lessonComment.commentDetail.uploadComment') -> with('orderSn', $orderSn) -> with('info', $result);
     }
 
 
@@ -161,13 +161,12 @@ class commentDetailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function reUploadComment($orderSn)
+    public function reUploadComment($commentID)
     {
-        $result = DB::table('orders') -> join('applycourse', 'orders.orderSn', '=', 'applycourse.orderSn') 
-                -> select('orders.id', 'orders.userName', 'orders.userId', 'orders.teacherId', 'orders.teacherName', 'applycourse.courseTitle')
-                -> where(['orders.orderSn' => $orderSn, 'orders.status' => 1, 'orders.isDelete' => 0, 'orders.teacherId' => \Auth::user() -> id]) -> first();
+        $result = DB::table('commentcourse') -> select('id', 'suitlevel') 
+                -> where(['state' => 0, 'courseStatus' => 0, 'courseIsDel' => 0, 'id' => $commentID, 'teacherId' => \Auth::user() -> id]) -> first();
         $result || abort(404);
-        return view('home.lessonComment.commentDetail.uploadComment') -> with('orderSn', $orderSn) -> with('info', get_object_vars($result));
+        return view('home.lessonComment.commentDetail.reUploadComment') -> with('info', $result);
     }
 
 

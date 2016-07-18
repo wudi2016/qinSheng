@@ -144,7 +144,7 @@
                     <div class="right_order_th_repeat" ms-if="el.orderType == 0">
                         <div class="height30"></div>
                         <div class="right_order_repeat_name">
-                            <div class="repeat_name_content" ms-html="el.orderTitle"></div>
+                            <div class="repeat_name_content" ms-html="el.orderTitle" ms-attr-title="el.orderTitle"></div>
                             <div class="repeat_content_orderno">订单编号：[--el.orderSn--]</div>
                         </div>
 
@@ -166,7 +166,7 @@
                     <div class="right_order_th_repeat" ms-if="el.orderType == 1">
                         <div class="height30"></div>
                         <div class="right_order_repeat_name">
-                            <div class="repeat_name_content" ms-text="'申请点评-'+el.realname"></div>
+                            <div class="repeat_name_content" ms-text="'申请点评-'+el.realname" ms-attr-title="el.orderTitle"></div>
                             <div class="repeat_content_orderno">订单编号：[--el.orderSn--]</div>
                         </div>
 
@@ -192,7 +192,7 @@
                     <div class="right_order_th_repeat" ms-if="el.orderType == 2">
                         <div class="height30"></div>
                         <div class="right_order_repeat_name">
-                            <div class="repeat_name_content" ms-text="'点评课程-'+el.realname"></div>
+                            <div class="repeat_name_content" ms-text="el.orderTitle" ms-attr-title="el.orderTitle"></div>
                             <div class="repeat_content_orderno">订单编号：[--el.orderSn--]</div>
                         </div>
 
@@ -213,6 +213,7 @@
                     </div>
                 </div>
                 <!--===================================//我的订单循环结束===================================-->
+                <div ms-visible="myOrders" class="warning_msg">暂无订单...</div>
             </div>
             <div class="pagecon_parent">
                 <div class="pagecon">
@@ -247,6 +248,7 @@
                     </a>
                 </div>
                 {{--===============================我的关注循环结束====================================--}}
+                <div ms-visible="myFocus" class="warning_info">暂无关注...</div>
             </div>
             <div class="pagecon_parent">
                 <div class="pagecon">
@@ -281,6 +283,7 @@
                     </a>
                 </div>
                 {{--===============================我的好友循环结束====================================--}}
+                <div ms-visible="myFans" class="warning_info">暂无好友...</div>
             </div>
             <div class="pagecon_parent">
                 <div class="pagecon">
@@ -387,24 +390,29 @@
                 <div class="right_comment_repeat" ms-repeat="commentCourseInfo">
                     <div class="comment_repeat_img">
                         <!-- 视频审核未通过 -->
-                        <a ms-attr-href="'/lessonComment/upload/' + el.id" ms-if="el.state == '0'">
+                        <a ms-attr-href="'/lessonComment/upload/' + el.id" ms-if="el.applyState == '0'">
                         <div class="repeat_img_unchecked">
                             <div class="comment_video_unchecked">视频审核未通过</div>
-                            <div class="comment_video_time" ms-text="'发布时间：' + el.lastCheckTime"></div>
+                            <div class="comment_video_time" ms-text="'发布时间：' + el.created_at"></div>
                         </div>
                         </a>
                         <!-- 视频审核中 -->
-                        <div class="repeat_img_unchecked" ms-if="el.state == '1'">
+                        <div class="repeat_img_unchecked" ms-if="el.applyState == '1'">
                             <div class="comment_video_unchecked">视频审核中</div>
-                            <div class="comment_video_time" ms-text="'发布时间：' + el.lastCheckTime"></div>
+                            <div class="comment_video_time" ms-text="'发布时间：' + el.created_at"></div>
                         </div>
                         <!-- 视频审核通过 -->
-                        <a ms-attr-href="'/lessonComment/detail/' + el.id"><img ms-if="el.state == '2'" ms-attr-src="el.coursePic" alt="" width="280" height="180" class="img_big" ms-imgBig /></a>
+                        <a ms-attr-href="'/lessonComment/detail/' + el.id"><img ms-if="el.applyState == '2' && el.commentState == '2'" ms-attr-src="el.coursePic" alt="" width="280" height="180" class="img_big" ms-imgBig /></a>
+                        <!-- 视频等待点评中 -->
+                        <div class="repeat_img_unchecked" ms-if="el.applyState == '2' && el.commentState != 2">
+                            <div class="comment_video_unchecked">等待点评</div>
+                            <div class="comment_video_time" ms-text="'发布时间：' + el.created_at"></div>
+                        </div>
                     </div>
                     <div class="comment_repeat_title" ms-text="el.courseTitle"></div>
-                    <div class="comment_repeat_name" ms-if="el.state == '2'"><span ms-text="'讲师：' + el.teachername"></span> <span ms-text="el.coursePlayView + '人学过'"></span></div>
-                    <div class="comment_repeat_unchecked" ms-if="el.state != '2'"><span ms-text="'点评讲师：' + el.teachername"></span><span ms-text="'发布者：' + el.username"></span></div>
-                    <div class="comment_repeat_price" ms-if="el.state == '2'" ms-text="'￥ ' + el.coursePrice"></div>
+                    <div class="comment_repeat_name" ms-if="el.applyState == '2' && el.commentState == '2'"><span ms-text="'讲师：' + el.teacherName"></span> <span ms-text="el.coursePlayView + '人学过'"></span></div>
+                    <div class="comment_repeat_unchecked" ms-if="el.commentState != '2'"><span ms-text="'点评讲师：' + el.teacherName"></span><span ms-text="'发布者：' + el.username"></span></div>
+                    <div class="comment_repeat_price" ms-if="el.applyState == '2' && el.commentState == '2'" ms-text="'￥ ' + el.coursePrice"></div>
                 </div>
             </div>
             <div ms-visible="commentMsg" class="warning_msg">暂无相关课程...</div>
@@ -946,6 +954,7 @@
     <script type="text/javascript">
         require(['/personCenter/index'], function (sideBar) {
             sideBar.mineUsername = '{{$mineUsername}}' || null;
+            sideBar.mineUserId = '{{$mineUserId}}' || null;
             sideBar.tab = '{{$tab}}' || null;
             if (sideBar.tab) {
                 sideBar.tabStatus = sideBar.tab;

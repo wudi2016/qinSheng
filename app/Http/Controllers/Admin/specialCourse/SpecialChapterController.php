@@ -72,25 +72,50 @@ class SpecialChapterController extends Controller
      *执行添加课程章节
      */
     public function doAddSpecialChapter(Request $request){
-//        dd($request->all());
-        $validator = $this -> validator($request->all());
-        if ($validator -> fails()){
-            return Redirect()->back()->withInput()->withErrors($validator);
+//        dd($request->all());exit();
+        if($request['selectid'] == 1){ //表示章
+            $data['courseid'] = $request['courseid'];
+            $data['title'] = $request['title'];
+            $data['parentId'] = 0;
+
         }
-       $data = $request->except('_token');
+        if($request['selectid'] == 2){ //节
+            $data['courseid'] = $request['courseid'];
+            $data['title'] = $request['title'];
+            $data['fileID'] = $request['fileID'];
+            $data['parentId'] = $request['parentId'];
+            if($request['courseLowPath']){
+                $data['courseLowPath'] = $request['courseLowPath'];
+            }
+            if($request['courseMediumPath']){
+                $data['courseMediumPath'] = $request['courseMediumPath'];
+            }
+            if($request['courseHighPath']){
+                $data['courseHighPath'] = $request['courseHighPath'];
+            }
+            //当三种转码格式都没有时状态值改为锁定
+            if(!$request['courseLowPath'] && !$request['courseMediumPath'] && !$request['courseHighPath']){
+                $data['status'] = 1;
+            }
+        }
         $data['created_at'] = Carbon::now();
         $data['updated_at'] = Carbon::now();
-        dd($data);
+
+        if(DB::table('coursechapter')->insert($data)){
+            echo 1;
+        }else{
+            echo 0;
+        }
     }
 
     /**
      *删除章节
      */
-    public function delSpecialChapter($id){
+    public function delSpecialChapter($courseid,$id){
         if(DB::table('coursechapter')->where('id',$id)->delete()){
-            return redirect('admin/message')->with(['status'=>'课程章节删除成功','redirect'=>'specialCourse/specialChapterList']);
+            return redirect('admin/message')->with(['status'=>'课程章节删除成功','redirect'=>'specialCourse/specialChapterList/'.$courseid]);
         }else{
-            return redirect('admin/message')->with(['status'=>'课程章节删除失败','redirect'=>'specialCourse/specialChapterList']);
+            return redirect('admin/message')->with(['status'=>'课程章节删除失败','redirect'=>'specialCourse/specialChapterList/'.$courseid]);
         }
     }
 

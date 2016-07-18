@@ -102,9 +102,9 @@ avalon.directive("lessonfoo", {
         $w2 = $w + 40;
         $h2 = $h + 40;
         $('.img_big').hover(function () {
-            $(this).stop().animate({height: $h2, width: $w2, left: "-20px", top: "-20px"}, 1);
+            $(this).stop().animate({height: $h2, width: $w2, left: "-20px", top: "-20px"}, 'fast');
         }, function () {
-            $(this).stop().animate({height: $h, width: $w, left: "0px", top: "0px"}, 1);
+            $(this).stop().animate({height: $h, width: $w, left: "0px", top: "0px"}, 'fast');
         });
     }
 

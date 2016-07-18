@@ -67,7 +67,7 @@
 				<div class="teacherHomepage_detail_content_comment" style="font-size: 18px; color: rgb(102, 102, 102); margin-bottom: 22px;">
 					<img src="{{asset('/home/image/lessonComment/teacherHomepage/point.png')}}">钢琴演奏
 				</div>
-				@if (\Auth::user() -> id != $userID)
+				@if (\Auth::check() && \Auth::user() -> id != $userID)
 					<a ms-attr-href="[--userInfo.stock > 0 ? '/lessonComment/buy/{{$userID}}' : '#nostock'--]" class="teacherHomepage_detail_content_button" ms-applycomment="userInfo.stock">
 						立即申请
 						<div class="teacherHomepage_detail_content_applyTips">该老师近期没有点评名额</div>

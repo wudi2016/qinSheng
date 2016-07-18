@@ -65,7 +65,7 @@ class indexController extends Controller
     {
         $courses = DB::table('hotcourse')
             ->leftJoin('course', 'course.id', '=', 'hotcourse.courseId')
-            ->select('course.id as id', 'course.coursePic as img', 'course.courseTitle as title','course.coursePlayView as countpeople','course.coursePrice as price')
+            ->select('course.id as id', 'course.coursePic as img', 'course.courseTitle as title','course.coursePlayView as countpeople','course.coursePrice as price','course.courseType as courseType','course.courseDiscount as courseDiscount')
             ->where('course.courseStatus',0)
             ->orderBy('hotcourse.sort', 'desc')
             ->skip(0)->take(8)
@@ -162,14 +162,14 @@ class indexController extends Controller
         $password = $_POST['password'];
 
         //判断账号是否存在
-        if($username = DB::table('users')->select('username')->where('username',$uname)->first()){
+        if($username = DB::table('users')->select('username')->where('username',$uname)->where('type','<>',3)->first()){
             $psd = DB::table('users')->select('password')->where('username',$uname)->first()->password;
             if(Hash::check($password,$psd)){
                 echo 2;  //密码正确
             }else{
                 echo 3;  //密码错误
             }
-        }elseif($phone = DB::table('users')->select('phone')->where('phone',$uname)->first()){
+        }elseif($phone = DB::table('users')->select('phone')->where('phone',$uname)->where('type','<>',3)->first()){
             $psd = DB::table('users')->select('password')->where('phone',$uname)->first()->password;
             if(Hash::check($password,$psd)){
                 echo 2;  //密码正确
@@ -415,7 +415,7 @@ class indexController extends Controller
      */
     public function getgames($type)
     {
-        $data = DB::table('activity')->select('id','path as img','title','beginTime as starttime','endTime as endtime','activityRrom as org')
+        $data = DB::table('activity')->select('id','path as img','title','beginTime as starttime','endTime as endtime','activityRrom as org','url')
             ->where('status',$type)
             ->get();
 //        $data1 = [

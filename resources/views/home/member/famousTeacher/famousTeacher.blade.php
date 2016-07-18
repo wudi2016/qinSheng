@@ -103,7 +103,7 @@
                 {{--//点评课程循环开始--}}
                 <div class="right_comment_repeat" ms-repeat="waitCommentList">
                     <!--审核未通过-->
-                    <div ms-if="el.status == 0 && el.applyState ==2  && el.commentState == 0">
+                    <div ms-if="el.status == 0 && el.applyState == 2  && el.commentState == 0">
                         <div class="comment_repeat_img">
                             <a ms-attr-href="'/lessonComment/reUploadComment/'+ el.commentId">
                                 <div class="repeat_img_unchecked">
@@ -167,6 +167,7 @@
                     </div>
                 </div>
                 {{--//点评课程循环结束--}}
+                <div ms-visible="waitComment" class="warning_msg">暂无待评作品...</div>
 
                 {{--<div class="right_comment_repeat">--}}
                     {{--<div class="comment_repeat_img">--}}
@@ -226,6 +227,8 @@
                         <span class="repeat_leader_lastSpan" ms-html="el.fav + ' 人'"></span>
                     </div>
                 </div>
+                {{--//点评课程循环结束--}}
+                <div ms-visible="sureComment" class="warning_msg">暂无已评课程...</div>
             </div>
             <!--分页-->
             <div class="pagecon_parent">
@@ -265,8 +268,9 @@
                                 ms-text="el.coursePlayView + '人学过'"></span></div>
                     <div class="comment_repeat_price" ms-text="'￥ ' + el.coursePrice"></div>
                 </div>
-                {{--//点评课程循环结束--}}
+                {{--//专题课程循环结束--}}
             </div>
+            <div ms-visible="subjectMsg" class="warning_msg">暂无相关课程...</div>
             <div class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_course"></div>
@@ -315,6 +319,7 @@
                         </div>
                     </div>
                 </div>
+                <div ms-visible="noticeMsg" class="warning_msg">暂无通知消息...</div>
                 <!-- 遮罩层 -->
                 <div class="shadow hide" ms-popup="popUp" value="close"></div>
                 <!-- 删除评论弹出层 -->
@@ -353,9 +358,9 @@
                     </div>
                 </div>
             </div>
-            {{--//点评课程--}}
+            {{--//收藏课程--}}
             <div class="center_right_comment">
-                {{--//点评课程循环开始--}}
+                {{--//收藏课程循环开始--}}
                 <div class="right_comment_repeat" ms-repeat="collectionInfo">
                     <div class="comment_repeat_img">
                         <a ms-attr-href="el.href">
@@ -376,14 +381,15 @@
                     </div>
                     <div class="comment_repeat_price" ms-text="'￥ ' + el.coursePrice"></div>
                 </div>
-                {{--//点评课程循环结束--}}
+                {{--//收藏课程循环结束--}}
+                <div ms-visible="collectionMsg" class="warning_msg">暂无收藏课程...</div>
             </div>
+
             <div class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_collection"></div>
                 </div>
             </div>
-
         </div>
         <!--======================================================我的粉丝=======================================================-->
 
@@ -412,13 +418,13 @@
                     </a>
                 </div>
                 {{--===============================我的粉丝循环结束====================================--}}
+                <div ms-visible="myFans" class="warning_info">暂无粉丝...</div>
             </div>
             <div class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_friend"></div>
                 </div>
             </div>
-
         </div>
 
         <!--======================================================我的关注=======================================================-->
@@ -448,13 +454,13 @@
                     </a>
                 </div>
                 {{--===============================我的关注循环结束====================================--}}
+                <div ms-visible="myFocus" class="warning_info">暂无关注...</div>
             </div>
             <div class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_focus"></div>
                 </div>
             </div>
-
         </div>
 
 

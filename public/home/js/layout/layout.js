@@ -20,10 +20,10 @@ $.ajaxSetup({
 
 // 头像个人信息
 $('.touxiang').click(function(){
-	$(".persapce").slideToggle("slow");
+	$(".persapce").stop().slideToggle("slow");
 })
 
-// 资讯
+// 咨询
 $('.qq').hover(function(){
 	$(this).children(".mmsg").removeClass('hide');
 },function(){
@@ -53,8 +53,19 @@ $('.mmsg').mouseout(function(){
 	$(this).addClass('hide');
 })
 
-var url = window.location.href.split('/');
+// 底部联系方式
+$('.lxlogoa').hover(function(){
+	$('.lxfsa').removeClass('hide');
+},function(){
+	$('.lxfsa').addClass('hide');
+})
+$('.lxlogob').hover(function(){
+	$('.lxfsb').removeClass('hide');
+},function(){
+	$('.lxfsb').addClass('hide');
+})
 
+var url = window.location.href.split('/');
 switch (url[3]) {
 	case '':
 		url = 'index';
@@ -72,7 +83,6 @@ switch (url[3]) {
 		url = 'aboutUs';
 		break;
 }
-
 $('.'+url).addClass('sels');
 
 

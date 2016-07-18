@@ -155,7 +155,7 @@
                                                         <i class="icon-edit bigger-120"></i>
                                                     </a>
 
-                                                    <a href="{{url('/admin/specialCourse/delSpecialChapter/'.$chapter->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
+                                                    <a href="{{url('/admin/specialCourse/delSpecialChapter/'.$data->courseId.'/'.$chapter->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
                                                         <i class="icon-trash bigger-120"></i>
                                                     </a>
 

@@ -113,7 +113,7 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 				upload.uploadTip = '<span style="color: red;">请先上传视频</span>';
 				return false;
 			}
-			if (isReload === 'comment') {
+			if (isReload === 'comment' || isReload === 'reComment') {
 				if (upload.selectedLevel.size() < 1) {
 					upload.levelWarning = true;
 					upload.levelWarningText = '请选择适用等级';
@@ -122,7 +122,12 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 				delete upload.uploadInfo.message;
 				upload.uploadInfo.suitlevel = upload.selectedLevel.join(',');
 				upload.uploadInfo.state = 1;
-				upload.getData('/lessonComment/finishComment', 'comment', upload.uploadInfo, 'POST');
+				if (isReload === 'reComment') {
+					delete upload.uploadInfo.courseTitle;
+					upload.getData('/lessonComment/getFirst', 'comment', {data: upload.uploadInfo, action: 4, condition: {id: upload.commentID}, table: 'commentcourse'}, 'POST');
+				} else {
+					upload.getData('/lessonComment/finishComment', 'comment', upload.uploadInfo, 'POST');
+				}
 			} else {
 				for (var i in upload.warning) {
 					if (upload[i+'Length'] < 1) {

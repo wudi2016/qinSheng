@@ -6,6 +6,7 @@ define([], function () {
         $id: 'waitCommentController',
         realInfo: false,
         total: '',
+        waitComment:false,
         waitCommentList: [],
         getCommentInfo: function () {
             $('#page_waitComment').pagination({
@@ -19,6 +20,9 @@ define([], function () {
                             if (response.type) {
                                 waitCommentController.realInfo = true;
                                 done(response.data);
+                            }else{
+                                waitCommentController.waitComment = true;
+                                waitCommentController.waitCommentList = [];
                             }
                         },
                     });

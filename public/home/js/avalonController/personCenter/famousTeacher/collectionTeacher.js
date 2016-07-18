@@ -11,6 +11,7 @@ define([], function () {
         realInfo : false,
         total: '',
         collectionInfo : [],
+        collectionMsg : false,
         getCollectionInfo : function(){
             $('#page_collection').pagination({
                 dataSource: function (done) {
@@ -22,6 +23,8 @@ define([], function () {
                             collectionTeacher.total = response.total;
                             if (response.status) {
                                 done(response.data);
+                            }else{
+                                collectionTeacher.collectionMsg = true;
                             }
                         },
                     });
@@ -48,6 +51,10 @@ define([], function () {
                     if(response.status){
                         collectionTeacher.collectionInfo.removeAt(index);
                         collectionTeacher.total == 0 ? 0 : collectionTeacher.total--;
+                        if(collectionTeacher.total == 0){
+                            collectionTeacher.collectionMsg = true;
+                            $('#page_collection').css('display','none');
+                        }
                     }else{
                         alert('删除失败');
                     }

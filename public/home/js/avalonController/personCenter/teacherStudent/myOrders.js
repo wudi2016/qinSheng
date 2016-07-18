@@ -7,6 +7,7 @@ define([], function () {
         realInfo : false,
         total : '',
         isDelete: 0,
+        myOrders: false,
         myOrdersList: [],
         getMyOrdersInfo: function () {
             $('#page_orders').pagination({
@@ -19,6 +20,9 @@ define([], function () {
                         success: function (response) {
                             if (response.type) {
                                 done(response.data);
+                            }else{
+                                myOrdersStudent.myOrders = true;
+                                myOrdersStudent.myOrdersList = [];
                             }
                         },
                     });

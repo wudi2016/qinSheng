@@ -20,7 +20,7 @@ class indexController extends Controller
         //定义搜索初值
         $search = [];
         //搜索
-        $query = DB::table('users as u')
+        $query = \DB::table('users as u')
                 ->leftJoin('users as us','u.fromyaoqingma','=','us.yaoqingma');
         if($request->type == 0){
             $query = $query->where('u.username','like','%'.trim($request->search).'%');
@@ -64,12 +64,15 @@ class indexController extends Controller
         }
         //导出数据处理
         $excels = $query->select('u.id','u.username','u.checks','u.phone','u.type','us.id as userId','us.username as name','u.created_at','u.updated_at')
-            ->where('u.type','<>',2)
+            ->where('u.type','=',0)
+            ->orWhere('u.type','=',1)
             ->get();
         $excels = json_encode($excels);
         //列表页展示数据
         $data = $query->select('u.id','u.username','u.checks','u.phone','u.type','u.pic','us.id as userId','us.username as name','u.created_at','u.updated_at')
-            ->where('u.type','<>',2)->orderBy('id','desc')
+            ->where('u.type','=',0)
+            ->orWhere('u.type','=',1)
+            ->orderBy('id','desc')
             ->paginate();
         return view('admin.users.userList',compact('data','search','excels'));
     }

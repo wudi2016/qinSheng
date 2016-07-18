@@ -347,3 +347,10 @@
 	height:155px;
 	background:#ffffff;
 }
+
+.logo_hot{
+	float: left;
+	position: relative;
+	top:-286px;
+	left:218px;
+}

@@ -119,7 +119,7 @@ class ExcelController extends Controller
         if (Input::hasFile('excel')) { //判断是否止传文件
             $entension = Input::file('excel')->getClientOriginalExtension();//上传文件的后缀
             if ($entension == 'xls' || $entension == 'xlsx') { //判断上传格式是否是excel格式
-                Excel::load(Input::file('excel'), function ($reader) use ($table,&$result,&$res,&$username,&$phone) {
+                Excel::load(Input::file('excel'), function ($reader) use ($table,&$result,&$res,&$username,&$phone,&$userFlag,&$phoneFlag) {
                     $reader = $reader->getSheet(0);//获取excel的第几张表
                     $results = $reader->toArray();//获取表中的数据
 
@@ -138,15 +138,25 @@ class ExcelController extends Controller
                         foreach($results as $key=>$val){
                             $res = array_combine($names,$val);
                             if(!empty($res['username'])){
-                                if(DB::table('users')->where('username',$res['username'])->first()){
+                                if(DB::table('users')->where('username',$res['username'])->where('type','<>','3')->first()){
                                     $username = true;
                                     return $username;
+                                }
+                                //验证用户名格式
+                                if(!preg_match("/^[\x80-\xff_a-zA-Z0-9]{4,16}$/",$res['username'])){
+                                    $userFlag = true;
+                                    return $userFlag;
                                 }
                             }
                             if(!empty($res['phone'])){
                                 if(DB::table('users')->where('phone',$res['phone'])->first()){
                                     $phone = true;
                                     return $phone;
+                                }
+                                //验证手机号格式
+                                if(!preg_match('/^[1][358][0-9]{9}$/',$res['phone']) && !preg_match('/^[1][7][07][0-9]{8}$/',$res['phone'])){
+                                    $phoneFlag = true;
+                                    return $phoneFlag;
                                 }
                             }
                         }
@@ -183,6 +193,9 @@ class ExcelController extends Controller
 
                 if($phone) return redirect()->back()->with('errors', "手机号 {$res['phone']} 已存在");
 
+                if($userFlag) return redirect()->back()->with('errors', "用户名 {$res['username']} 格式不正确");
+
+                if($phoneFlag) return redirect()->back()->with('errors', "手机号 {$res['phone']} 格式不正确");
 
                 if($result){
                     return redirect()->back()->with('status', '信息导入成功');
@@ -236,6 +249,9 @@ class ExcelController extends Controller
         $array['password'] = 'password';
         $array['checks'] = 1;
         $array['remember_token'] = 'remember_token';
+        $array['email'] = 'email';
+        $array['postId'] = 1;
+        $array['departId'] = 1;
 
         if ($array['id']) {
             unset($array['id']);
@@ -266,6 +282,15 @@ class ExcelController extends Controller
         }
         if ($array['remember_token']) {
             unset($array['remember_token']);
+        }
+        if ($array['email']) {
+            unset($array['email']);
+        }
+        if ($array['postId']) {
+            unset($array['postId']);
+        }
+        if ($array['departId']) {
+            unset($array['departId']);
         }
 
 

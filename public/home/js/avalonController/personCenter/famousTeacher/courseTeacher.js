@@ -8,6 +8,7 @@ define([], function () {
         href: '/lessonSubject/detail/',
         total: '',
         courseInfo: [],
+        subjectMsg : false,
         getCourseInfo: function (type,flag) {
             $('#page_course').pagination({
                 dataSource: function (done) {
@@ -16,9 +17,11 @@ define([], function () {
                         type: 'GET',
                         dataType: 'json',
                         success: function (response) {
+                            courseTeacher.total = response.total;
                             if (response.status) {
                                 done(response.data);
-                                courseTeacher.total = response.total;
+                            }else{
+                                courseTeacher.subjectMsg = true;
                             }
                         },
                     });

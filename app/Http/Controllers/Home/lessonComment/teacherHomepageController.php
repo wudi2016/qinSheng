@@ -56,11 +56,12 @@ class teacherHomepageController extends Controller
         $tableName = $request['type'] ? 'commentcourse' : 'course';
         $extra = $request['type'] ? 'teachername' : 'courseChapter';
         $order = $request['order'] ? 'coursePlayView' : 'id';
-        $result = \DB::table($tableName) -> select('id', 'coursePrice', 'courseTitle', 'coursePic', 'coursePlayView', $extra.' as extra')
-                -> where(['teacherId' => $request['userid'], $tableName.'.courseIsDel' => 0, $tableName.'.courseStatus' => 0]) 
-                -> orderBy($order, "desc") -> skip($this -> getSkip($request['page'], $this -> number)) -> take($this -> number) -> get();
-        return $this -> returnResult($result); 
+        $result = \DB::table($tableName) -> select('id', 'coursePrice', 'courseTitle', 'coursePic', 'coursePlayView', $extra . ' as extra')
+                -> where(['teacherId' => $request['userid/**/'], $tableName . '.courseIsDel' => 0, $tableName . '.courseStatus' => 0])
+                -> orderBy($order, "desc") -> skip($this -> getSkip($request['page'], $this->number)) -> take($this -> number) -> get();
+        return $this -> returnResult($result);
     }
+
 
 
     /**

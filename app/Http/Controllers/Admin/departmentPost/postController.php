@@ -18,7 +18,7 @@ class postController extends Controller{
     public function postList(Request $request){
         $query = DB::table('post as p')
                 ->leftjoin('department as dep','dep.id','=','p.parentId')
-                ->select('p.id','dep.departName','p.postName','p.status','p.created_at','p.updated_at');
+                ->select('p.id','dep.departName','p.postName','p.status','p.created_at');
 
         if($request->type == 1){
             $query = $query->where('p.postName','like','%'.trim($request['search']).'%');
@@ -77,7 +77,7 @@ class postController extends Controller{
         $input = Input::except('_token');
         $input['parentId'] = $input['depart'];
         unset($input['depart']);
-        $input['updated_at'] = Carbon::now();
+//        $input['updated_at'] = Carbon::now();
         $res = DB::table('post')->where('id',$input['id'])->update($input);
         if($res){
             return redirect('admin/message')->with(['status'=>'更新成功','redirect'=>'departmentPost/postList']);

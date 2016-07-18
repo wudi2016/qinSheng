@@ -96,6 +96,7 @@ class AuthController extends Controller
         $randomUpcase  = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
         $randomarr     = array_merge($randomNum,$randomLowcase,$randomUpcase);
         $keyarr        = array_rand($randomarr,6);
+        $keyarr        = array_rand($randomarr,6);
 
         for ($i=0;$i<6;$i++){
             $yaoqingma .= $randomarr[$keyarr[$i]];
@@ -106,5 +107,15 @@ class AuthController extends Controller
         $data['password'] = bcrypt($data['password']);
         $data = array_filter($data);
         return User::create($data);
+    }
+
+
+    public function adminLogin(Request $request)
+    {
+        if (Auth::attempt(['username' => $request -> username, 'password' => $request -> password, 'type' => 3])) {
+            return redirect() -> intended('admin/index');
+        } else {
+            return redirect('admin/login') -> withErrors('账号或密码错误!');
+        }
     }
 }

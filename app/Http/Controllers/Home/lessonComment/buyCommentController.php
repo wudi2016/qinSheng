@@ -80,7 +80,8 @@ class buyCommentController extends Controller
     public function reUpload($applyID)
     {
         PaasUser::apply();
-        $result = DB::table('applycourse') -> select('id', 'courseTitle', 'message') -> where(['id' => $applyID, 'userId' => \Auth::user() -> id, 'state' => 0]) -> first();
+        $result = DB::table('applycourse') -> select('id', 'courseTitle', 'message') 
+                -> where(['id' => $applyID, 'userId' => \Auth::user() -> id, 'state' => 0, 'courseStatus' => 0, 'courseIsDel' => 0]) -> first();
         $result || abort(404);
         return view('home.lessonComment.buyComment.reUpload') -> with('applyID', $result -> id) 
                -> with('courseTitle', $result -> courseTitle) -> with('message', $result -> message) -> with('mineID', \Auth::user() -> id);

@@ -6,6 +6,7 @@ define([], function () {
         $id: 'completeCommentController',
         realInfo: false,
         total: '',
+        sureComment:false,
         type:'',
         completeCommentList: [],
         getCompleteCommentInfo: function (type) {
@@ -20,6 +21,9 @@ define([], function () {
                             completeCommentController.total = response.total;
                             if (response.type) {
                                 done(response.data);
+                            }else{
+                                completeCommentController.sureComment = true;
+                                completeCommentController.completeCommentList = [];
                             }
                         },
                     });

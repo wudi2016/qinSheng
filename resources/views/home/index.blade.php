@@ -12,8 +12,8 @@
     <!-- 滚动栏 -->
     <div class="bar">
         <ul class="bxslider">
-            <li><img src="{{asset('home/image/index/banner.png')}}" /></li>
-            <li><img src="{{asset('home/image/index/banner2.png')}}" /></li>
+            <li><img style="width: 100%;" src="{{asset('home/image/index/banner.png')}}" /></li>
+            <li><img style="width: 100%;" src="{{asset('home/image/index/banner2.png')}}" /></li>
         </ul>
     </div>
     <!-- 课程，赛事活动 -->
@@ -54,7 +54,7 @@
             </div>
             <div class="teacher_con_con">
                 <div class="teacher_con_con_li" ms-foo ms-repeat="datas">
-                    <a ms-href="{{url('lessonComment/teacher/[--el.id--]')}}">
+                    <a ms-attr-href="{{url('lessonComment/teacher/[--el.id--]')}}">
                     {{--教师头像--}}
                     <img ms-attr-src="{{asset('[--el.img--]')}}" alt="">
                     {{--姓名 学校--}}
@@ -115,10 +115,11 @@
             </div>
             <div class="recommend_con_con">
                 <div class="recommend_con_con_li" ms-repeat="datas">
-                    <a ms-href="{{url('lessonSubject/detail/[--el.id--]')}}">
+                    <a ms-attr-href="{{url('lessonSubject/detail/[--el.id--]')}}">
                     <div class="contain_lesson_center_data_info_top">
                         <img ms-attr-src="{{asset('[--el.img--]')}}" ms-lessonfoo width="280" height="180" class="img_big"/>
                     </div>
+
                     <div class="contain_lesson_center_data_info_bot">
                         <span class="top" ms-text="el.title"></span>
                         <div class="center">
@@ -127,6 +128,9 @@
                         </div>
                         <span class="bot" ms-text="'￥'+el.price"></span>
                     </div>
+                    <img class="logo_hot hide" ms-class="show:el.courseType == 1" ms-attr-src="{{asset('/home/image/index/course/[--el.courseDiscount--].png')}}" alt="">
+                    <img class="logo_hot hide" ms-class="show:el.courseType == 2" src="{{asset('/home/image/index/course/hot.png')}}" alt="">
+                    <img class="logo_hot hide" ms-class="show:el.courseType == 3" src="{{asset('/home/image/index/course/new.png')}}" alt="">
                     </a>
                 </div>
                 {{--<div class="recommend_con_con_li">--}}
@@ -159,7 +163,7 @@
             </div>
             <div class="recommend_con_con">
                 <div class="recommend_con_con_li" ms-repeat="datas">
-                    <a ms-href="{{url('lessonComment/detail/[--el.id--]')}}">
+                    <a ms-attr-href="{{url('lessonComment/detail/[--el.id--]')}}">
 
                     <div class="contain_lesson_center_data_info_top">
                         <img ms-attr-src="{{asset('[--el.img--]')}}" ms-lessonfoo width="280" height="180" class="img_big"/>
@@ -207,7 +211,6 @@
     <script type="text/javascript" src="{{asset('home/js/index/jquery.bxslider.js')}}"></script>
     <script>
         require(['/index/index'], function () {
-
             avalon.scan(document.body);
         });
     </script>

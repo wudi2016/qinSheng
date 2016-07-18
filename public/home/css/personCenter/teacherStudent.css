@@ -696,8 +696,9 @@
 
 .right_order_th .right_order_price {
     float: left;
-    width: 21.7983%;
-    text-align: center;
+    width: 14.89%;
+    text-align: left;
+    margin-left:60px;
 }
 
 .right_order_th .right_order_status {
@@ -726,15 +727,16 @@
     width: 30%;
 }
 .right_order_repeat_name .repeat_name_content{
-    width:100%;
+    width:90%;
     height:30px;
     overflow: hidden;
     text-overflow:ellipsis;
     white-space:nowrap;
-
+    cursor: pointer;
+    padding-right:20px;
 }
 .right_order_repeat_name .repeat_content_orderno{
-    width:100%;
+    width:94%;
     height:30px;
     font-size:14px;
     color:rgb(153,153,153);
@@ -753,14 +755,16 @@
     font-size:14px;
     color:rgb(102,102,102);
     margin-top:5px;
+    margin-left:4px;
     line-height:22px;
 }
 
 .right_order_td .right_order_repeat_price {
     float: left;
-    width: 22.89%;
-    text-align: center;
+    width: 14.89%;
+    text-align: left;
     margin-top:5px;
+    margin-left:60px;
     font-size:14px;
     color:rgb(102,102,102);
 }
@@ -1032,7 +1036,7 @@
     display: inline-block;
     font-size:14px;
     color:rgb(156,156,156);
-    margin-left:45px;
+    margin-left:48px;
     background: url("/home/image/personCenter/zan.png") no-repeat left;
     text-indent:2em;
 }
@@ -1366,6 +1370,7 @@
     resize: none;
     font-family: '微软雅黑';
     letter-spacing:2px;
+    font-size: 17px;
 }
 .buy_course .pay_btn{
     width: 160px;
@@ -1612,5 +1617,20 @@
     line-height: 400px;
     text-align: center;
     width: 750px;
+    letter-spacing: 1.5px;
+}
+/* ================ 暂无消息 ==================== */
+
+/* ================ 暂无消息 ==================== */
+.warning_info{
+    margin-left: -80px;
+    font-family: '微软雅黑';
+    color: grey;
+    font-size: 20px;
+    height: 400px;
+    line-height: 400px;
+    text-align: center;
+    width: 100%;
+    letter-spacing:1.5px;
 }
 /* ================ 暂无消息 ==================== */

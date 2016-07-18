@@ -191,6 +191,7 @@ class perSpaceController extends Controller
                 $info[$key]->coursePrice = ceil($info[$key]->coursePrice/1000);
             }
             $info[$key]->classHour = DB::table('coursechapter')->where(['courseId' => $value->id, 'status' => 0])->where('parentId', '<>', '0')->count();
+            $info[$key]->coursePlayView = count(DB::table('courseview')->select('courseId','userId','courseType')->where(['courseId' => $value->id, 'courseType' => 0])->distinct()->get());
         }
         if ($info) {
             return response()->json(['status' => true, 'data' => $info, 'total' => count($info)]);
@@ -203,13 +204,17 @@ class perSpaceController extends Controller
     public function getCommentCourse(Request $request,$type)
     {
         $type == '1' ? $order = 'id' : $order = 'coursePlayView';
-        $info = DB::table('commentcourse')->select('id', 'courseTitle', 'coursePic', 'coursePrice', 'coursePlayView','username','state','teachername','lastCheckTime')
-            ->where(['username' => $request->username, 'courseStatus' => '0'])->orderBy($order, 'desc')->get();
+        $info = DB::table('applycourse as a')
+            ->leftJoin('orders as o', 'a.orderSn', '=', 'o.orderSn')
+            ->leftJoin('commentcourse as c','c.orderSn', '=', 'a.orderSn')
+            ->where(['a.userId' => $request->userId, 'a.courseStatus' => 0])->where('o.orderType', '<>', '0')
+            ->select('a.id','a.courseTitle','a.coursePic','o.username','o.teacherName','a.coursePlayView','c.coursePrice','a.courseLowPath',
+                'a.courseMediumPath','a.courseHighPath','a.state as applyState','o.status','c.state as commentState','a.created_at')
+            ->get();
         foreach ($info as $key => $value) {
-                $info[$key]->coursePrice = ceil($info[$key]->coursePrice/1000);
+            $info[$key]->coursePrice = ceil($info[$key]->coursePrice/1000);
+            $info[$key]->coursePlayView = count(DB::table('courseview')->select('courseId','userId','courseType')->where(['courseId' => $value->id, 'courseType' => 1])->distinct()->get());
         }
-        $data = DB::table('');
-        dd($data);
         if ($info) {
             return response()->json(['status' => true, 'data' => $info, 'total' => count($info)]);
         } else {
@@ -225,7 +230,6 @@ class perSpaceController extends Controller
         if ($info) {
             foreach ($info as $key => $value) {
                 if ($value->type == '0') { // 收藏课程为专题课程
-
                     $course[$key] = DB::table('course')->select('id', 'courseTitle', 'coursePic', 'coursePlayView', 'coursePrice', 'courseDiscount')->where('id', $value->courseId)->first();
                     if($course[$key]->courseDiscount){
                         $course[$key]->coursePrice = ceil(($course[$key]->courseDiscount/10000)*$course[$key]->coursePrice/1000);
@@ -236,6 +240,7 @@ class perSpaceController extends Controller
                     $course[$key]->isCourse = 0;
                     $course[$key]->href = '/lessonSubject/detail/' . $course[$key]->id;
                     $course[$key]->collectId = $value->id;
+                    $course[$key]->coursePlayView = count(DB::table('courseview')->select('courseId','userId','courseType')->where(['courseId' => $value->id, 'courseType' => 0])->distinct()->get());
 
                 } else if($value->type == '1'){ // 收藏课程为点评课程
                     $course[$key] = DB::table('commentcourse')->select('id', 'courseTitle', 'coursePic', 'coursePlayView', 'coursePrice', 'teachername')->where('id', $value->courseId)->first();
@@ -243,6 +248,7 @@ class perSpaceController extends Controller
                     $course[$key]->isCourse = 1;
                     $course[$key]->href = '/lessonComment/detail/' . $course[$key]->id;
                     $course[$key]->collectId = $value->id;
+                    $course[$key]->coursePlayView = count(DB::table('courseview')->select('courseId','userId','courseType')->where(['courseId' => $value->id, 'courseType' => 1])->distinct()->get());
                 }
             }
             return response()->json(['data' => $course, 'total' => count($info), 'status' => true]);
@@ -509,7 +515,7 @@ class perSpaceController extends Controller
             ->leftJoin('commentcourse as cs','cs.orderSn','=','o.orderSn')
             ->join('users as u','u.id','=','o.userId')
             ->select('o.teacherName','o.status','cs.courseTitle as commentTitle','cs.id as commentId','cs.courseLowPath as low','cs.courseMediumPath as medium','cs.courseHighPath as high','u.realname','cs.state as commentState','app.id as applyId','app.courseTitle as applyTitle','app.created_at as time','app.state as applyState')
-            ->where(['o.teacherId'=>$id,'o.isDelete'=>0,'cs.courseStatus'=>0,'cs.courseIsDel'=>0,'app.courseStatus'=>0,'app.courseIsDel'=>0])
+            ->where(['o.teacherId'=>$id,'o.isDelete'=>0,'o.orderType'=>1,'cs.courseStatus'=>0,'cs.courseIsDel'=>0,'app.courseStatus'=>0,'app.courseIsDel'=>0])
             ->where('cs.state','<>',2)  //点评已完成不在此显示
             ->orderBy('cs.created_at','desc')
             ->get();
@@ -539,12 +545,12 @@ class perSpaceController extends Controller
             $condition = 'cs.created_at';
         }
 
-        $data = DB::table('commentcourse as cs')
+        $data = \DB::table('commentcourse as cs')
             ->join('orders as o','o.orderSn','=','cs.orderSn')
             ->join('applycourse as app','app.orderSn','=','o.orderSn')
             ->join('users as u','u.id','=','cs.userId')
             ->select('cs.teachername','cs.courseTitle as commentTitle','cs.id as commentId','cs.coursePlayView as view','cs.courseFav as fav','cs.created_at as commentTime','u.realname','cs.state','o.status','app.id as applyId','app.courseTitle as applayTitle','app.created_at as time')
-            ->where(['cs.teacherId'=>$id,'cs.courseStatus'=>0,'cs.state'=>2,'cs.courseIsDel'=>0,'o.isDelete'=>0])
+            ->where(['cs.teacherId'=>$id,'cs.courseStatus'=>0,'o.orderType'=>1,'cs.state'=>2,'cs.courseIsDel'=>0,'o.isDelete'=>0])
             ->orderBy($condition,'desc')
             ->get();
 //        dd($data);

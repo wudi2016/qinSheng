@@ -12,6 +12,7 @@
         <div style="width: 100%;height: 15px;"></div>
         <div class="contain_lessonDetail_top">
             <div class="contain_lessonDetail_top_breadcrumb">
+                <div id="changeVideo" style="width: 1px;height: 1px;position: absolute;z-index: 1;top: 0px;"></div>
                 <a ms-attr-href="pageInfo.index">首页</a> >
                 <a ms-attr-href="pageInfo.course">课程</a> >
                 <a ms-attr-href="pageInfo.lessonSubject">专题课程</a> > 课程详情
@@ -89,10 +90,10 @@
                             <div class="contain_lessonDetail_bot_left_info_div">
                                 <div class="data" ms-repeat="el.section">
                                     <span class="spot"></span>
-                                    <span class="data_content" ms-html="el.title" ms-click="changeVideo(el.courseLowPath);"></span>
-                                    <span class="try">试学</span>
-                                    <span class="have">已学</span>
-                                    <span class="play" ms-click="changeVideo(el.courseLowPath);"></span>
+                                    <a href="#changeVideo"><span class="data_content" ms-html="el.title" ms-click="changeVideo(el.id,el.courseLowPath);"></span></a>
+                                    <span ms-if="el.isLearn" class="try">试学</span>
+                                    <span ms-if="el.isLearn" class="have">已学</span>
+                                    <a href="#changeVideo"><span class="play" ms-click="changeVideo(el.id,el.courseLowPath);"></span></a>
                                 </div>
                             </div>
                         </div>

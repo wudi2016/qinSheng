@@ -20,6 +20,7 @@
                 <div class="cont_con_con_con ">
                     <div ms-repeat="datas" ms-if-loop="Con">
                         <div style="height:30px;"></div>
+                        <a ms-attr-href="[--el.url--]" target="_blank">
                         <div class="cont_con_con_con_li">
                             <div class="cont_con_con_con_li_l"><img ms-attr-src="{{asset('[--el.img--]')}}" alt=""></div>
                             <div class="cont_con_con_con_li_r">
@@ -28,6 +29,7 @@
                                 <div class="cont_con_con_con_li_r_from" ms-text="el.org"></div>
                             </div>
                         </div>
+                        </a>
                     </div>
                     <div class="Msg" ms-if="Msg">没有相关赛事...</div>
                 </div>

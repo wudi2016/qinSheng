@@ -20,7 +20,7 @@ $('.clearInput').click(function(){
 })
 
 var postcheck = function(){
-
+    var checkLogin = false;
     var username = $('.uname').val();
     var password = $('.psd').val();
 
@@ -28,10 +28,12 @@ var postcheck = function(){
         $('.errorMsg').html('* 请输入用户名或手机号！');
         $('.uname').parent().siblings('.cuo').removeClass('hide');
         return false;
+        exit;
     }else if(!password){
         $('.errorMsg').html('* 请输入密码！');
         $('.psd').parent().siblings('.cuo').removeClass('hide');
         return false;
+        exit;
     }else{
         $.ajax({
             type: "post",
@@ -42,25 +44,27 @@ var postcheck = function(){
                 if(data == 1){
                     $('.errorMsg').html('* 您输入的账号不存在！');
                     $('.uname').parent().siblings('.cuo').removeClass('hide');
-                    window.event.returnValue = false;
-                    return false;
+                    // window.event.returnValue = false;
+                    // return false;
                 }else if(data == 3){
                     $('.errorMsg').html('* 您输入的密码错误！');
                     $('.psd').parent().siblings('.cuo').removeClass('hide');
-                    window.event.returnValue = false;
-                    return false;
+                    // window.event.returnValue = false;
+                    // return false;
                 }else if(data == 2){
-                    return true;
+                    // return true;
+                    checkLogin = true;
                 }
             },
             error:function(XMLHttpRequest, textStatus, errorThrown){
                 $('.errorMsg').html('* 未知错误，请重新尝试！');
-                window.event.returnValue = false;
-                return false;
+                // window.event.returnValue = false;
+                // return false;
             }
         });
     }
-    //return false;                //tmp
+
+    return checkLogin;                //tmp
 }
 
 

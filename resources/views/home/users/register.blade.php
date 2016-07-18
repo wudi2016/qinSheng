@@ -45,7 +45,7 @@
                     {{--验证码--}}
                     <div class="center_con_r_bar">
                         <div class="center_con_r_bar_ll"><div class="clearInputs"></div>验证码</div>
-                        <div class="center_con_r_bar_m" style="width:310px;"><input class="txtt" type="text"><button type="button" class="getyzm" onclick="getMsg()">获取验证码</button></div>
+                        <div class="center_con_r_bar_m" style="width:300px;"><input class="txtt" type="text"><button type="button" class="getyzm" onclick="getMsg()">获取验证码</button></div>
                         <div class="cklogo dui hide"><img src="{{url('home/image/register/rht.png')}}" alt=""></div>
                         <div class="cklogo cuo hide"><img src="{{url('home/image/register/rog.png')}}" alt=""></div>
                     </div>

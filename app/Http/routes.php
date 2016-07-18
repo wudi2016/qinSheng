@@ -104,7 +104,7 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
                 ||--------------------------------------------------------------------------------------
                  */
         //学员个人中心主页    0 学生学员&&    1  教师学员
-        Route::get('/student/{personID}/{tab?}', 'perSpaceController@index');
+        Route::get('/student/{personID}/{tab?}',['middleware' => 'users','uses'=>'perSpaceController@index']);
         //	名师个人中心主页  type 为 2
         Route::get('/famousTeacher/{tab?}', 'perSpaceController@famousTeacher');
 
@@ -257,7 +257,8 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         Route::post('/deleteComment', 'lessonSubjectController@deleteComment');
         // 发表意见反馈
         Route::post('/publishFeedBack', 'lessonSubjectController@publishFeedBack');
-
+        // 增加课程观看数
+        Route::post('/addCourseView', 'lessonSubjectController@addCourseView');
     });
 
 
@@ -380,14 +381,17 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
 ||     -------------------------- 各位根据模块或者控制器再另建路由组 ----------------------------
 ||--------------------------------------------------------------------------------------
 ||----------后台路由命名规则 列表的路由：***List;添加的路由:add***;修改的路由edit***;删除的路由:del***;以便侧边栏选中判断----
+
  */
-Route::post('/admin/login', 'Auth\AuthController@postLogin');
+Route::post('/admin/login', 'Auth\AuthController@adminLogin');
+
 Route::group(['prefix' => '/admin', 'namespace' => 'Admin'], function () {
+
     //后台首页
     Route::get('index', 'IndexController@index');
     //后台登录
     Route::get('login', function () {
-//        session(['lastUrl' => '/admin/index']);
+    //        session(['lastUrl' => '/admin/index']);
 
         return view('admin.auth.login');
     });
@@ -396,6 +400,78 @@ Route::group(['prefix' => '/admin', 'namespace' => 'Admin'], function () {
     Route::get('message', function () {
         return view('admin.message');
     });
+
+
+
+    /*
+    ||--------------------------------------------------------------------------------------
+    ||     -------------------------- 权限管理 ----------------------------
+    ||--------------------------------------------------------------------------------------
+     */
+    Route::group(['prefix' => '/auth', 'namespace' => 'auth'], function () {
+        /*
+        ||--------------------------------------------------------------------------------------
+        ||     -------------------------- 角色管理 ----------------------------
+        ||--------------------------------------------------------------------------------------
+         */
+        //  角色列表
+        Route::get('/roleList', ['middleware' => 'permission:role.list', 'uses' => 'RoleController@roleList']);
+        //  添加角色
+        Route::get('/addRole', ['middleware' => 'permission:add.role', 'uses' => 'RoleController@addRole']);
+        //  创建角色
+        Route::post('/createRole', ['middleware' => 'permission:add.role', 'uses' => 'RoleController@createRole']);
+        //  删除角色
+        Route::get('/deleteRole/{roleID}', ['middleware' => 'permission:delete.role', 'uses' => 'RoleController@deleteRole']);
+        //  编辑角色
+        Route::get('/editRole/{roleID}', ['middleware' => 'permission:edit.role', 'uses' => 'RoleController@editRole']);
+        //  修改角色
+        Route::post('/updateRole', ['middleware' => 'permission:edit.role', 'uses' => 'RoleController@updateRole']);
+
+
+        //  查看角色用户
+        Route::get('/checkRoleUser/{roleID}', ['middleware' => 'permission:role.list', 'uses' => 'RoleController@checkRoleUser']);
+        //  删除角色用户
+        Route::get('/deleteRoleUser/{type}/{roleID}', ['middleware' => 'permission:delete.role', 'uses' => 'RoleController@deleteRoleUser']);
+        //  添加角色用户
+        Route::get('/addRoleUser/{roleID}', ['middleware' => 'permission:add.role', 'uses' => 'RoleController@addRoleUser']);
+        //  创建角色用户
+        Route::post('/createRoleUser', ['middleware' => 'permission:add.role', 'uses' => 'RoleController@createRoleUser']);
+        //  获取部门或者职位信息
+        Route::get('/getList/{departmentID?}', ['middleware' => 'permission:add.role', 'uses' => 'RoleController@getList']);
+        //  获取用户信息
+        Route::get('/getUser/{type}/{id}/{roleID}', ['middleware' => 'permission:add.role', 'uses' => 'RoleController@getUser']);
+
+
+        //  查看角色权限
+        Route::get('/checkRolePermission/{roleID}', ['middleware' => 'permission:role.list', 'uses' => 'RoleController@checkRolePermission']);
+        //  添加角色权限
+        Route::get('/addRolePermission/{roleID}', ['middleware' => 'permission:add.role', 'uses' => 'RoleController@addRolePermission']);
+        //  创建角色用户
+        Route::post('/createRolePermission', ['middleware' => 'permission:add.role', 'uses' => 'RoleController@createRolePermission']);
+        //  获取操作权限信息
+        Route::get('/getPermissionInfo/{modelName?}/{roleID?}', ['middleware' => 'permission:add.role', 'uses' => 'RoleController@getPermissionInfo']);
+
+        /*
+        ||--------------------------------------------------------------------------------------
+        ||     -------------------------- 操作权限 ----------------------------
+        ||--------------------------------------------------------------------------------------
+         */
+        //  操作权限列表
+        Route::get('/permissionList', ['middleware' => 'level:1', 'uses' => 'PermissionController@permissionList']);
+        //  添加操作权限
+        Route::get('/addPermission', ['middleware' => 'level:1', 'uses' => 'PermissionController@addPermission']);
+        //  创建操作权限
+        Route::post('/createPermission', ['middleware' => 'level:1', 'uses' => 'PermissionController@createPermission']);
+        //  删除操作权限
+        Route::get('/deletePermission/{permissionID}', ['middleware' => 'level:1', 'uses' => 'PermissionController@deletePermission']);
+        //  编辑操作权限
+        Route::get('/editPermission/{permissionID}', ['middleware' => 'level:1', 'uses' => 'PermissionController@editPermission']);
+        //  修改操作权限
+        Route::post('/updatePermission', ['middleware' => 'level:1', 'uses' => 'PermissionController@updatePermission']);
+    });
+
+
+        
 
 
 

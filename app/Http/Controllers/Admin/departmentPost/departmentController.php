@@ -69,7 +69,7 @@ class departmentController extends Controller{
      */
     public function editsdepartment(){
         $input = Input::except('_token');
-        $input['updated_at'] = Carbon::now();
+//        $input['updated_at'] = Carbon::now();
         $res = DB::table('department')->where('id',$input['id'])->update($input);
         if($res){
             return redirect('admin/message')->with(['status'=>'更新成功','redirect'=>'departmentPost/departmentList']);

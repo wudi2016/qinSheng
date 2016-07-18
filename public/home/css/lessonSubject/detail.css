@@ -1252,7 +1252,7 @@
 }
 
 .comment_msg{
-    color: #d0d8e0;
+    color: grey;
     font-size: 20px;
     height: 400px;
     line-height: 400px;
@@ -1260,7 +1260,7 @@
     width: 800px;
 }
 .download_msg{
-    color: #d0d8e0;
+    color: grey;
     font-size: 20px;
     height: 400px;
     line-height: 237px;
@@ -1268,7 +1268,7 @@
     width: 800px
 }
 .notice_msg{
-    color: #d0d8e0;
+    color: grey;
     font-size: 20px;
     height: 20px;
     line-height: 20px;
@@ -1278,7 +1278,7 @@
 
 }
 .catalog_msg{
-    color: #d0d8e0;
+    color: grey;
     font-size: 20px;
     height: 400px;
     line-height: 400px;

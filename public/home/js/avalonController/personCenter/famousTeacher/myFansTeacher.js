@@ -6,6 +6,7 @@ define([], function () {
         $id: 'myFansTeacher',
         realInfo: false,
         total: '',
+        myFans:false,
         myFansList: [],
         getMyFansInfo: function () {
             $('#page_friend').pagination({
@@ -18,6 +19,10 @@ define([], function () {
                             if (response.type) {
                                 done(response.data);
                                 myFansTeacher.total = response.total;
+                            }else{
+                                myFansTeacher.total = 0;
+                                myFansTeacher.myFans = true;
+                                myFansTeacher.myFansList = [];
                             }
                         },
                     });

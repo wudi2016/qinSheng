@@ -36,9 +36,9 @@ avalon.directive('bigimg', {
         var w2 = w1 + 40;
         var h2 = h1 + 40;
         $('.big_img').hover(function(){
-            $(this).stop().animate({height: h2, width: w2, left: "-20px", top: "-20px"}, 1);
+            $(this).stop().animate({height: h2, width: w2, left: "-20px", top: "-20px"}, 'fast');
         },function () {
-            $(this).stop().animate({height: h1, width: w1, left: "0px", top: "0px"}, 1);
+            $(this).stop().animate({height: h1, width: w1, left: "0px", top: "0px"}, 'fast');
         })
     }
 });

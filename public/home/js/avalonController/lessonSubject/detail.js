@@ -254,27 +254,25 @@ define([], function () {
             }
 
         },
-
         overtime: false,
         thePlayer: {},
         videoType: true,
-        videoTime: {videoOne: 0, videoTow: 0},
         setVideo: function (callback) {
-            var model = 'detailInfo';
+            var model = detail.videoType ? 'detailInfo' : 'videoPath';
             detail.thePlayer = jwplayer('mediaplayer').setup({
                 flashplayer: 'jwplayer/jwplayer.flash.swf',
                 playlist: [{
                     image: detail[model].coursePic,
                     sources: [{
                         label: "超清",
-                        file: detail[model].courseHighPath,
+                        file: detail[model].courseHighPath || detail[model].courseMediumPath || detail[model].courseLowPath,
                         height: 720,
                         width: 1280,
                         type: "mp4"
                     }, {
                         default: true,
                         label: "高清",
-                        file: detail[model].courseMediumPath,
+                        file: detail[model].courseMediumPath || detail[model].courseLowPath,
                         height: 360,
                         width: 640,
                         type: "mp4"
@@ -301,8 +299,16 @@ define([], function () {
                 }
             });
         },
-        changeVideo : function(path){
-
+        videoPath : [],
+        changeVideo : function(chapterId,path){
+            detail.videoType = false;
+            detail.videoPath = {
+                courseHighPath : path,
+                courseMediumPath : path,
+                courseLowPath : path,
+            };
+            detail.setVideo(function () {});
+            detail.getData('/lessonSubject/addCourseView', 'POST', {chapterId : chapterId, userId : detail.mineUserId, courseId : detail.detailId}, 'addCourseView');
         }
     });
     return detail;

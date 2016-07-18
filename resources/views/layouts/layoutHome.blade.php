@@ -20,7 +20,7 @@
     		</div>
     		<div class="head_con_login">
     		    <!-- 登陆前 -->
-				@if (!Auth::check())
+				@if (!Auth::check() || \Auth::user()->type == 3)
 				<div class="head_con_login_con "><a href="{{url('/index/login')}}"><span>登陆</span></a>&nbsp;|&nbsp;<a href="{{url('/index/register')}}"><span>注册</span></a></div>
     		    <!-- 登陆后 -->
 				@else
@@ -144,9 +144,11 @@
     	    	<div class="foot_con_m_a">关注我们</div>
 	    	    <div style="height:35px;"></div>
     	    	<div class="foot_con_r_con">
-    	    		<img src="{{asset('home/image/layout/weibo.png')}}">&nbsp;&nbsp;
-    	    		<img src="{{asset('home/image/layout/weixin.png')}}">
+    	    		<img class="lxlogoa" src="{{asset('home/image/layout/weibo.png')}}">&nbsp;&nbsp;
+    	    		<img class="lxlogob" src="{{asset('home/image/layout/weixin.png')}}">
     	    	</div>
+				{{--<div class="lxfsa hide"></div>--}}
+				{{--<div class="lxfsb hide"></div>--}}
     	    </div>
     	</div>
     </div>
