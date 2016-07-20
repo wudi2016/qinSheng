@@ -1,9 +1,10 @@
 @extends('layouts.layoutAdmin')
 @section('css')
     <link rel="stylesheet" href="{{asset('admin/css/popUp.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{asset('admin/video/css2/jquery.fancybox.css')}}" />
 @endsection
 @section('content')
-    <div class="main-content" ms-controller="specialcommentdetail">
+    <div class="main-content">
         <div class="breadcrumbs" id="breadcrumbs">
             <script type="text/javascript">
                 try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
@@ -77,7 +78,7 @@
                 <i class="icon-ok bigger-110">添加</i>
             </a>
 
-            <div class="row">
+            <div class="row" ms-controller="specialcommentdetail">
 
                 <div class="col-xs-12">
                     <!-- PAGE CONTENT BEGINS -->
@@ -97,6 +98,7 @@
                                         <th>ID</th>
                                         {{--<th>课程名称</th>--}}
                                         <th>章节名称</th>
+                                        <th>父级ID</th>
                                         <th>课程</th>
                                         <th>时长</th>
                                         <th>大小</th>
@@ -122,10 +124,16 @@
                                             <td>
                                                 <a href="#">{{$chapter->id}}</a>
                                             </td>
-                                            {{--<td>{{$chapter->courseTitle}}</td>--}}
                                             <td>{{$chapter->title}}</td>
+                                            <td>{{$chapter->parentId}}</td>
                                             <td>
-                                                <a href="{{url('/lessonSubject/detail/'.$data->courseId)}}">查看</a>
+                                                @if($chapter->parentId == 0)
+                                                @elseif(!$chapter->courseLowPath && !$chapter->courseMediumPath && !$chapter->courseHighPath)
+                                                    正在转码...
+                                                @else
+                                                    <span class="lookVideo" onclick="lookVideo('{{$chapter->courseLowPathurl}}')" style="color: #00a0e9;cursor:pointer;">查看</span>
+                                                @endif
+
                                             </td>
                                             <td>{{$chapter->courseTime}}</td>
                                             <td>{{$chapter->courseSize}}</td>
@@ -151,13 +159,17 @@
                                                     </span>
 
 
-                                                    <a href="{{url('/admin/specialCourse/editSpecialChapter/'.$chapter->id)}}" class="btn btn-xs btn-info">
+                                                    <a href="{{url('/admin/specialCourse/editSpecialChapter/'.$data->courseId.'/'.$chapter->id)}}" class="btn btn-xs btn-info">
                                                         <i class="icon-edit bigger-120"></i>
                                                     </a>
 
                                                     <a href="{{url('/admin/specialCourse/delSpecialChapter/'.$data->courseId.'/'.$chapter->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
                                                         <i class="icon-trash bigger-120"></i>
                                                     </a>
+
+                                                    <div href="" class="btn btn-xs btn-warning" ms-click="commentdetailpop()">
+                                                        <i class="icon-flag bigger-120"></i>
+                                                    </div>
 
                                                 </div>
 
@@ -209,6 +221,19 @@
             </div><!-- /.row -->
         </div><!-- /.page-content -->
 
+        <!--弹窗显示详情-->
+        <div id="videodetailpupUpback" class="videodetailpupUpback">
+            <div class="videopopup1" style="width: 700px;height: 400px;">
+                <div class="videodetailtopbaner">
+                    <div class="detailtitle" style="width: 650px;padding-left: 40px">视频</div>
+                    <div class="deldetail" style="float: right"></div>
+                </div>
+                <div class="content1">
+                    <div id="myplayer" ></div>
+                </div>
+            </div>
+        </div>
+
     </div><!-- /.main-content -->
 
 @endsection
@@ -216,6 +241,21 @@
     <script language="javascript" type="text/javascript" src="{{asset('DatePicker/WdatePicker.js') }}"></script>
     <script language="javascript" type="text/javascript" src="{{asset('admin/js/searchtype.js') }}"></script>
     <script language="javascript" type="text/javascript" src="{{asset('admin/js/specialCourse/specialChapter.js') }}"></script>
+
+
+    <script type="text/javascript" src="{{asset('home/jplayer/jwplayer.js')}}"></script>
+    <script type="text/javascript" src="{{asset('home/js/layout/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{asset('admin/js/videoPop.js') }}"></script>
+    <script>
+//        jwplayer('myplayer').setup({
+//            flashplayer: 'jwplayer/jwplayer.flash.swf',
+//            file: '/uploads/video/introduce/default.mp4',
+//            image:'/home/image/index/vdo.png',
+//            width: '700',
+//            height: '400',
+//            type:'mp4'
+//        });
+    </script>
 
 
 @endsection

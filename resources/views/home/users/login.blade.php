@@ -17,7 +17,8 @@
         <div class="center_con">
             {{--视频介绍--}}
             <div class="center_con_l">
-                <img src="{{asset('home/image/index/vdo.png')}}" style="width:100%;height:100%" alt="">
+                {{--<img src="{{asset('home/image/index/vdo.png')}}" style="width:100%;height:100%" alt="">--}}
+                <div id="myplayer" ></div>
             </div>
             {{--登陆框--}}
             <div class="center_con_r">
@@ -75,6 +76,15 @@
         </div>
     </div>
 </body>
+<script type="text/javascript" src="{{asset('home/jplayer/jwplayer.js')}}"></script>
 <script type="text/javascript" src="{{asset('home/js/layout/jquery.min.js') }}"></script>
 <script type="text/javascript" src="{{asset('home/js/users/login.js') }}"></script>
+<script>
+    jwplayer('myplayer').setup({
+        flashplayer: 'jwplayer/jwplayer.flash.swf',
+        file: '/uploads/video/introduce/default.mp4',
+        image:'/home/image/index/vdo.png',
+        width: '700',
+        height: '400'});
+</script>
 </html>

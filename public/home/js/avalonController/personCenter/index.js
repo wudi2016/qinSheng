@@ -34,6 +34,17 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
         popUp: false,
         noticeId : null,
         commentId : null,
+        //我的订单  弹出层
+        refundableAmount:'',
+        applyRefund  : {},
+        refundContent: '',
+        refundType   : '',
+        selectChange : function(a){
+            sideBar.refundType = a
+
+            //console.log(sideBar.refundType + '___');
+        },
+        //sideBar.applyRefund.refundableAmount = response.data;
 
         popUpSwitch: function(value,needId) {
             if(value == 'deleteNotice'){ //获取删除的ID
@@ -70,10 +81,83 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
                     }
                 })
             }
+
+
+            if(needId == 1){
+                sideBar.refundableAmount = '';
+                sideBar.refundContent = '';
+                sideBar.refundType = '';
+                $('.select_require_msg').html('');
+                $('.bot_span_last').html('请选择退款原因');
+                $('.last').addClass('hide');
+                //console.log(sideBar.refundType);
+            }
+            //我的订单弹窗
+
+            if(value == 'applyRefund') {
+                sideBar.applyRefund = needId;
+                //console.log(sideBar.applyRefund);
+                if(sideBar.applyRefund.orderType == 0) {
+                    //console.log(sideBar.applyRefund);
+                    $.ajax ({
+                        url      : '/member/applyRefund',
+                        type     : 'POST',
+                        dataType : 'json',
+                        data     : { courseId : sideBar.applyRefund.courseId, userId : sideBar.applyRefund.userId, payPrice : sideBar.applyRefund.payPrice},
+                        success  : function ( response ) {
+                            if ( response.type ) {
+                                sideBar.refundableAmount = response.data;
+                                //console.log(sideBar.applyRefund.refundableAmount);
+                            }else {
+                                sideBar.refundableAmount = 0;
+                            }
+                        }
+                    })
+                }else if (sideBar.applyRefund.orderType == 1 || sideBar.applyRefund.orderType == 2) {
+                    sideBar.refundableAmount = sideBar.applyRefund.payPrice;
+                }
+
+            }
+
+            //提交退款申请
+            if(value == 'submitApply') {
+
+                if( sideBar.refundType == ''){
+                    $('.select_require_msg').html('亲，请选择退款原因！');
+                    return;
+                }
+                sideBar.refundContent = '';
+
+                $.ajax ({
+                    url      : '/member/submitApply',
+                    type     : 'POST',
+                    dataType : 'json',
+                    data     : {id:sideBar.applyRefund.id ,refundType : sideBar.refundType,refundAmount:sideBar.applyRefund.refundableAmount,orderTitle:sideBar.applyRefund.orderTitle,orderSn:sideBar.applyRefund.orderSn,username:sideBar.applyRefund.userName,status:0,refundContent:sideBar.refundContent,refundableAmount:sideBar.refundableAmount},
+                    success  : function ( response ) {
+
+                        if ( response.type ) {
+                            sideBar.popUp = false;
+                            alert( response.msg );
+                            myOrdersStudent.myOrdersStudent.getMyOrdersInfo();
+                            sideBar.refundableAmount = '';
+                            sideBar.selectChange('');
+                            sideBar.refundContent = '';
+                            $('.select_require_msg').html('');
+                            $('.bot_span_last').html('请选择退款原因');
+                            $('.last').addClass('hide');
+                        }else{
+                            sideBar.popUp = 'applyRefund';
+                        }
+
+                    }
+                })
+            }
+
+
             sideBar.popUp = value;
         },
         //选项卡
-        tabStatus: 'basicInfo',
+        tabStatus: '',
         changeTab:function(value,type){
 
             if(value == 'lessonSubject'){

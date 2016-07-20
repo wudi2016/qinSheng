@@ -137,7 +137,11 @@
                                         <td>{{$teaccourse->courseTitle}}</td>
                                         <td>{{$teaccourse->username}}</td>
                                         <td>
-                                            <a href="{{url('/lessonComment/detail/'.$teaccourse->id)}}">查看</a>
+                                            @if(!$teaccourse->courseLowPath && !$teaccourse->courseMediumPath && !$teaccourse->courseHighPath)
+                                                正在转码...
+                                            @else
+                                                <span class="lookVideo" onclick="lookVideo('{{$teaccourse->courseLowPathurl}}')" style="color: #00a0e9;cursor:pointer;">查看</span>
+                                            @endif
                                         </td>
                                         <td>
                                             {{--<a id="example2-2" href="{{asset($comcourse->coursePic)}}">查看--}}
@@ -311,7 +315,7 @@
 
                     <div class="form-group">
                         <lable class="labtitle">学员留言:</lable>
-                        <textarea name="" id="" readonly cols="30" rows="10" ms-duplex="info.message"></textarea>
+                        <textarea name="" id="" readonly cols="30" rows="10" ms-duplex="info.suitlevel"></textarea>
                     </div>
 
                     <div class="form-group">
@@ -339,10 +343,10 @@
                         <input type="text" readonly placeholder="" ms-duplex="info.courseFav">
                     </div>
 
-                    <div class="form-group">
-                        <lable class="labtitle">上传日期:</lable>
-                        <input type="text" readonly placeholder="" ms-duplex="info.addTime">
-                    </div>
+                    {{--<div class="form-group">--}}
+                        {{--<lable class="labtitle">上传日期:</lable>--}}
+                        {{--<input type="text" readonly placeholder="" ms-duplex="info.addTime">--}}
+                    {{--</div>--}}
 
                     <div class="form-group">
                         <lable class="labtitle">最近审核时间:</lable>
@@ -369,6 +373,20 @@
             </div>
         </div>
 
+
+        <!--视频弹窗显示详情-->
+        <div id="videodetailpupUpback" class="videodetailpupUpback">
+            <div class="videopopup1" style="width: 700px;height: 400px;">
+                <div class="videodetailtopbaner">
+                    <div class="detailtitle" style="width: 650px;padding-left: 40px">视频</div>
+                    <div class="deldetail" style="float: right"></div>
+                </div>
+                <div class="content1">
+                    <div id="myplayer" ></div>
+                </div>
+            </div>
+        </div>
+
     </div><!-- /.main-content -->
 
 @endsection
@@ -381,4 +399,8 @@
              avalon.scan();
         });
     </script>
+
+    <script type="text/javascript" src="{{asset('home/jplayer/jwplayer.js')}}"></script>
+    <script type="text/javascript" src="{{asset('home/js/layout/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{asset('admin/js/videoPop.js') }}"></script>
 @endsection

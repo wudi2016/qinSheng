@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Home\lessonComment;
 use Illuminate\Http\Request;
 use PaasResource;
 use PaasUser;
+use Cache;
+use Primecloud\Weixin\Kernel\WxPayConfig;
 
 trait Gadget {
 
@@ -69,6 +71,29 @@ trait Gadget {
         if (!PaasUser::apply()) return Response() -> json(["type" => false, 'status' => '401']);
         $recourse = PaasResource::transformation("?fileid=". $request['fileID']);
         return $this -> returnResult($recourse);
+    }
+
+
+    /**
+     * 生成微信统一订单
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function makeUnifiedOrder($wxPay, $inputObj, $wxBase, $order, $callback)
+    {
+        $inputObj -> SetAppid(WxPayConfig::APPID);
+        $inputObj -> SetMch_id(WxPayConfig::MCHID);
+        $inputObj -> SetDevice_info("WEB");
+        $inputObj -> SetNonce_str($wxPay -> getNonceStr());
+        $inputObj -> SetSign();
+        $inputObj -> SetBody($order -> orderTitle);
+        $inputObj -> SetOut_trade_no($order -> orderSn);
+        $inputObj -> SetTotal_fee(intval(ceil($order -> orderPrice * 100)));
+        $inputObj -> SetSpbill_create_ip($_SERVER['REMOTE_ADDR']);
+        $inputObj -> SetNotify_url($callback);
+        $inputObj -> SetProduct_id($order -> orderSn);
+        $inputObj -> SetTrade_type('NATIVE');
+        return $wxPay -> unifiedOrder($inputObj);
     }
 
 }

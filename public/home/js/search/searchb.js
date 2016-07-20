@@ -10,10 +10,10 @@
 // });
 
 $('.img_big').live('mouseover',function(){
-    $(this).stop().animate({height: 220, width: 320, left: "-20px", top: "-20px"}, 1);
+    $(this).stop().animate({height: 220, width: 320, left: "-20px", top: "-20px"}, 'fast');
 })
 $('.img_big').live('mouseout',function(){
-    $(this).stop().animate({height: 180, width: 280, left: "0px", top: "0px"}, 1);
+    $(this).stop().animate({height: 180, width: 280, left: "0px", top: "0px"}, 'fast');
 })
 //
 $('.selOrd').click(function(){

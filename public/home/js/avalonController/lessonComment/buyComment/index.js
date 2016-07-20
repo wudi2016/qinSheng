@@ -11,15 +11,27 @@ define([], function() {
 				data: data,
 				dataType: "json",
 				success: function(response) {
+					if (model == 'deleteOrder') {
+						response.type && window.location.reload();
+					};
+					if (model == 'orderStatus') {
+						if (response.type) {
+							window.location.href = '/lessonComment/buySuccess/'+comment.orderID;
+						} else {
+							setTimeout(function() {
+								comment.getData('/lessonComment/orderStatus/'+comment.orderID, 'orderStatus');
+							}, 3000);
+						}
+					};
 					if (model == 'orderInfo') {
-						callback(response);
+						response.type && callback(response);
 						return;
 					};
-					if (response.type) comment[model] = response.data;
+					if (response.type) {
+						comment[model] = response.data;
+					}
 				},
-				error: function(error) {
-					alert('数据请求失败');
-				}
+				error: function(error) {}
 			});
 		},
 		payType: null,
@@ -41,14 +53,15 @@ define([], function() {
 				teacherId: comment.teacherInfo.id,
 				teacherName: comment.teacherInfo.username,
 				orderType: 1,
-				//	模拟
-				orderPrice: comment.teacherInfo.price, 
-				status: 0,
-				payPrice: comment.teacherInfo.price, 
-				orderTitle: '测试订单_' + new Date().getTime()
+				orderPrice: comment.teacherInfo.price,
+				orderTitle: '学员'+ comment.mineName +'申请'+ comment.teacherInfo.username +'老师点评。'
 			};
 			comment.getData('/lessonComment/generateOrder', 'orderInfo', data, 'POST', function(response) {
-				location.href = '/lessonComment/buySuccess/' + response.data;
+				if (comment.payType) {
+					location.href = '/lessonComment/scan/' + response.data;
+				} else {
+					location.href = '/lessonComment/buySuccess/' + response.data;
+				};
 			});
 		}
 	});

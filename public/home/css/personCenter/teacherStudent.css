@@ -225,7 +225,8 @@
     background: #fff;
     font-size: 18px;
     float: right;
-    padding-bottom: 40px;
+    padding-bottom: 30px;
+    margin-bottom: 100px;
 }
 
 .center_right .input {
@@ -671,6 +672,7 @@
     text-align: left;
     font-size: 18px;
     font-weight: 500;
+    padding-bottom: 40px;
 }
 
 .center_right_order .right_order_th {
@@ -1264,7 +1266,7 @@
     height:45px;
     line-height:45px;
     letter-spacing:1px;
-    width:93px;
+    width:78.89%;
     color:rgb(255,0,0);
 }
 .buy_course_center .center .center_refundPrice{
@@ -1304,6 +1306,16 @@
     line-height:36px;
     margin-top: 5px;
     text-indent: 0.5em;
+}
+.buy_course_center .bot .select_require_msg{
+    width:157px;
+    height:45px;
+    line-height:45px;
+    display: block;
+    float:left;
+    color:rgb(255,0,0);
+    font-size:15px;
+    text-indent: 0.3em;
 }
 .bot_span_triangle1{
     background:  url("/home/image/personCenter/triangle1.png") no-repeat 274px 14px;
@@ -1623,7 +1635,8 @@
 
 /* ================ 暂无消息 ==================== */
 .warning_info{
-    margin-left: -80px;
+    margin-left: -68px;
+    margin-top:-20px;
     font-family: '微软雅黑';
     color: grey;
     font-size: 20px;

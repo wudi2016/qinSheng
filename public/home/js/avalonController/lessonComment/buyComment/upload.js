@@ -69,7 +69,7 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 					}
 				},
 				error: function(error) {
-					upload.endUpload('上传失败请重试');
+					upload.endUpload('上传失败请重试.');
 				}
 			});
 		},
@@ -169,7 +169,7 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 				for (var i in upload.selectedLevel) {
 					if (upload.selectedLevel[i] == avalon(this).attr('value')) {
 						upload.selectedLevel.remove(upload.selectedLevel[i]);
-					};
+					}
 				}
 			} else {
 				if (upload.selectedLevel[2]) {
@@ -177,8 +177,8 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 				} else {
 					avalon(this).addClass('checked');
 					upload.selectedLevel.push(avalon(this).attr('value'));
-				};
-			};
+				}
+			}
 		}
 	});
 

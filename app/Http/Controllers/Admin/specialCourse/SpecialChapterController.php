@@ -8,9 +8,18 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use DB;
 use Carbon\Carbon;
+use App\Http\Controllers\Home\lessonComment\Gadget;
+use PaasResource;
+use PaasUser;
+use Cache;
 
 class SpecialChapterController extends Controller
 {
+    use Gadget;
+    public function __construct()
+    {
+        PaasUser::apply();
+    }
     /**
      *课程章节列表
      */
@@ -34,6 +43,19 @@ class SpecialChapterController extends Controller
             ->where('ch.courseId',$id)
             ->orderBy('ch.id','desc')
             ->paginate(15);
+        foreach($data as &$val){
+            if($val->parentId != 0){ //表示是节
+                if($val->courseLowPath){
+                    if(!Cache::get($val->courseLowPath)){
+                        $val->courseLowPathurl = $this->getPlayUrl($val->courseLowPath);
+                        Cache::put($val->courseLowPath,$val->courseLowPathurl,1800);
+                    }else{
+                        $val->courseLowPathurl = Cache::get($val->courseLowPath);
+                    }
+                }
+            }
+        }
+//        dd($data);
         $data->type = $request['type'];
         $data->courseId = $id;
         return view('admin/specialCourse/specialChapterList',['data'=>$data]);
@@ -107,6 +129,51 @@ class SpecialChapterController extends Controller
             echo 0;
         }
     }
+
+    /**
+     *编辑课程章节
+     */
+    public function editSpecialChapter($courseid,$id){
+        $data = DB::table('coursechapter')->where('id',$id)->first();
+        $chapters = DB::table('coursechapter')->where('courseId',$courseid)->where('parentId',0)->get();
+        return view('admin/specialCourse/editSpecialChapter',['data'=>$data,'chapters'=>$chapters]);
+    }
+
+    /**
+     *执行课程章节编辑
+     */
+    public function doEditSpecialChapter(Request $request){
+//        dd($request->all());
+        if($request['selectid'] == 1){  //章
+            $data['title'] = $request['title'];
+        }
+        if($request['selectid'] == 2){
+            $data['title'] = $request['title'];
+            $data['fileID'] = $request['fileID'];
+            if($request['courseLowPath']){
+                $data['courseLowPath'] = $request['courseLowPath'];
+            }
+            if($request['courseMediumPath']){
+                $data['courseMediumPath'] = $request['courseMediumPath'];
+            }
+            if($request['courseHighPath']){
+                $data['courseHighPath'] = $request['courseHighPath'];
+            }
+            //当三种转码格式都没有时状态值改为锁定
+            if(!$request['courseLowPath'] && !$request['courseMediumPath'] && !$request['courseHighPath']){
+                $data['status'] = 1;
+            }else{
+                $data['status'] = 0;
+            }
+        }
+        $data['updated_at'] = Carbon::now();
+        if(DB::table('coursechapter')->where('id',$request['id'])->update($data)){
+            echo 1;
+        }else{
+            echo 0;
+        }
+    }
+
 
     /**
      *删除章节

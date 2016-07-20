@@ -89,6 +89,7 @@
                                     <th>id</th>
                                     <th>banner名称</th>
                                     <th>封面图片</th>
+                                    <th>链接地址</th>
                                     <th>banner状态</th>
                                     <th>创建时间</th>
                                     <th>操作</th>
@@ -101,6 +102,7 @@
                                         <td>{{$ban->id}}</td>
                                         <td>{{$ban->title}}</td>
                                         <td> <img src="{{asset($ban->path)}}" alt="" width="80" height="60" > </td>
+                                        <td><a href="http://{{$ban->url}}">{{$ban->url}}</a></td>
                                         <td >
                                             @if($ban->status == 0)
                                                 激活
@@ -133,6 +135,11 @@
                                                             <option value="1" >锁定</option>
                                                         </select>
                                                     </span>
+
+
+                                                <a href="{{url('/')}}"  class="btn btn-xs btn-success">
+                                                    <i class="icon-ok bigger-120">预览</i>
+                                                </a>
 
 
                                             </div>

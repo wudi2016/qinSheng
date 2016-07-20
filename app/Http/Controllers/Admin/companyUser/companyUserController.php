@@ -63,10 +63,8 @@ class companyUserController extends Controller{
             return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
         }
         $input['created_at'] = Carbon::now();
-        //加密 (解密用Crypt::decrypt())
-        $input['password'] = Crypt::encrypt($input['password']);
-        $input['upassword'] = Crypt::encrypt($input['upassword']);
-        if(Crypt::decrypt($input['password']) == Crypt::decrypt($input['upassword']) ){
+        if(($input['password']) == $input['upassword'] ){
+            $input['password'] = bcrypt($input['password']);
             //销毁upassword字段
             unset($input['upassword']);
             $res = DB::table('users')->insert($input);
@@ -149,10 +147,9 @@ class companyUserController extends Controller{
         if($validate->fails()){
             return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
         }
-        //加密 (解密用Crypt::decrypt())
-        $input['password'] = Crypt::encrypt($input['password']);
-        $input['upassword'] = Crypt::encrypt($input['upassword']);
-        if(Crypt::decrypt($input['password']) == Crypt::decrypt($input['upassword']) ){
+
+        if(($input['password']) == $input['upassword'] ){
+            $input['password'] = bcrypt($input['password']);
             //销毁upassword字段
             unset($input['upassword']);
             $res = DB::table('users')->where('id',$input['id'])->update($input);

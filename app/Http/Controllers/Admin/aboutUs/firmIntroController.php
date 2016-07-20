@@ -33,6 +33,7 @@ class firmIntroController extends Controller{
     public function editsfirmIntro(Request $request){
         $input = Input::except('_token');
         $input['updated_at'] = Carbon\Carbon::now();
+//        dd($input);
         $res = DB::table('about')->where('id',$input['id'])->update($input);
         if($res){
             return redirect('admin/message')->with(['status'=>'修改成功','redirect'=>'aboutUs/firmIntroList']);

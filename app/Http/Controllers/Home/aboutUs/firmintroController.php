@@ -13,8 +13,8 @@ class firmintroController extends Controller{
     /**
      *列表
      */
-    public function index(){
-        return view('home.aboutUs.aboutus');
+    public function index($type){
+        return view('home.aboutUs.aboutus')->with('type',$type);
     }
 
     //公司介绍
@@ -93,19 +93,21 @@ class firmintroController extends Controller{
     //友情链接
     public function getListfive(){
         $link = DB::table('link')->get();
-            if($link){
-                foreach($link as $k => $v){
-                    $data['data'][] = [
-                        'id' => $v->id,
-                        'title' => $v->title,
-                        'url' => $v->url,
-                    ];
-                }
-                $data['statuss'] = true;
-            }else{
-                $data['statuss'] = false;
+        if($link){
+            foreach($link as $k => $v){
+                $data['data'][] = [
+                    'id' => $v->id,
+                    'title' => $v->title,
+                    'url' => $v->url,
+                    'path' => $v->path
+                ];
             }
-            echo json_encode($data);
+            $data['statuss'] = true;
+        }else{
+            $data['statuss'] = false;
+        }
+//        dd($data);
+        echo json_encode($data);
     }
 
 

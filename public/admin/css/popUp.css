@@ -164,3 +164,38 @@
     margin: 0 auto;
     text-align: right;
 }
+
+
+/*视频弹窗*/
+.videodetailpupUpback{
+    width: 100%;
+    height:100%;
+    position: fixed;
+    top:0px;
+    left:0px;
+    z-index: 9999999;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+}
+.videopopup1{
+    width: 650px;
+    /*height: 400px;*/
+    background: #ffffff;
+    position: absolute;
+    left: 50%;
+    top:40%;
+    margin-left: -300px;
+    margin-top: -300px;
+    border-radius: 10px;
+}
+.videodetailtopbaner{
+    float: left;
+    width: 100%;
+    height:40px;
+    line-height: 40px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+    background: #438EB9;
+    border-radius: 10px 10px 0px 0px;
+}

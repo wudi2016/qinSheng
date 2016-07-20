@@ -8,9 +8,19 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use DB;
+use App\Http\Controllers\Home\lessonComment\Gadget;
+use PaasResource;
+use PaasUser;
+use Cache;
+use Messages;
 
 class commentCourseController extends Controller
 {
+    use Gadget;
+    public function __construct()
+    {
+        PaasUser::apply();
+    }
     /**
      *演奏视频列表
      */
@@ -35,9 +45,19 @@ class commentCourseController extends Controller
             ->leftJoin('users as u','a.userId','=','u.id')
             ->leftJoin('users as ut','a.teacherId','=','ut.id')
             ->where('a.courseIsDel',0)
-            ->select('a.*','u.username','ut.realname as teachername')
+            ->select('a.*','u.username','ut.realname as teachername','ut.phone as teacherPhone')
             ->orderBy('a.id','desc')
             ->paginate(15);
+        foreach($data as &$val){
+            if($val->courseLowPath){
+                if(!Cache::get($val->courseLowPath)){
+                    $val->courseLowPathurl = $this->getPlayUrl($val->courseLowPath);
+                    Cache::put($val->courseLowPath,$val->courseLowPathurl,1800);
+                }else{
+                    $val->courseLowPathurl = Cache::get($val->courseLowPath);
+                }
+            }
+        }
         $data->type = $request['type'];
 //        dd($data);
         return view('admin.commentCourse.commentCourseList',['data'=>$data]);
@@ -193,5 +213,17 @@ class commentCourseController extends Controller
         ];
 
         return \Validator::make($data, $rules, $messages);
+    }
+
+    /**
+     * 给名师发送短信提示
+     */
+    public function sendMessage(Messages $message, $telephone)
+    {
+        $code = '';
+        $content = '老师您好,您现有一个新的点评辅导申请,请及时查看【琴晟教育】';
+        $message::setInfo($telephone,$content);
+        $result = $message::sendMsg();
+        return $message::response($result,$code);
     }
 }

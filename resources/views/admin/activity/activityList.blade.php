@@ -131,17 +131,20 @@
                                             <td>{{$act->updated_at}}</td>
                                             <td>
                                                 <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
-                                                    
 
+                                                    @permission('edit.activity')
                                                     <a href="{{url('/admin/activity/editactivity/'.$act->id)}}" class="btn btn-xs btn-info">
                                                         <i class="icon-edit bigger-120"></i>
                                                     </a>
+                                                    @endpermission
 
+                                                    @permission('delete.activity')
                                                     <a href="{{url('/admin/activity/delactivity/'.$act->id)}}" style="width:29px" class="btn btn-xs btn-danger" onclick="return confirm('删除后将无法找回,确定要删除吗?');">
                                                         <i class="icon-trash bigger-120"></i>
                                                     </a>
+                                                    @endpermission
 
-                                                    
+                                                    @permission('edit.activity')
                                                     <span class="btn btn-xs btn-primary" style="position: relative;display: inline-block;">
                                                         <strong>审核状态</strong>
                                                         <span class="icon-caret-down icon-on-right"></span>
@@ -153,6 +156,7 @@
                                                             <option value="1" >已结束</option>
                                                         </select>
                                                     </span>
+                                                    @endpermission
 
 
                                                 </div>

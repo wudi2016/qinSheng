@@ -174,17 +174,6 @@ class indexController extends Controller
     }
 
     /**
-     * 管理员信息
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function personDetail()
-    {
-        return view('admin.users.personDetail');
-    }
-
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id

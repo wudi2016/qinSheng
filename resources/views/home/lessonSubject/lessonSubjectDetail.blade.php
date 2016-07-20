@@ -38,11 +38,11 @@
                     </div>
                 </div>
                 <div class="contain_lessonDetail_top_video_right">
-                    <div class="contain_lessonDetail_top_video_right_name" ms-html="detailInfo.courseTitle">钢琴演奏基础课程</div>
-                    <div class="contain_lessonDetail_top_video_right_price">价格：<span ms-html="'￥' + detailInfo.coursePrice + '元'"></span></div>
+                    <div class="contain_lessonDetail_top_video_right_name" ms-text="detailInfo.courseTitle">钢琴演奏基础课程</div>
+                    <div class="contain_lessonDetail_top_video_right_price">价格：<span ms-text="'￥' + detailInfo.coursePrice + '元'"></span></div>
                     <div class="contain_lessonDetail_top_video_right_detail">
-                        <span class="classes" ms-html="detailInfo.classHour + '课时'"></span>
-                        <span class="study" ms-html="detailInfo.coursePlayView + '人学习'"></span>
+                        <span class="classes" ms-text="detailInfo.classHour + '课时'"></span>
+                        <span class="study" ms-text="detailInfo.coursePlayView + '人学习'"></span>
                     </div>
                     <div class="contain_lessonDetail_top_video_right_btn">
                         <span class="first" ms-click="popUpSwitch('buyCourse')" ms-visible="!detailInfo.isBuy">立即购买</span>
@@ -103,7 +103,7 @@
                 <div name="comment" class="hide" ms-visible="changeOption == 'comment'">
                     @if(Auth::check())
                         <div ms-if="detailInfo.isBuy || detailInfo.isAuthor" class="contain_lessonDetail_bot_left_comment">
-                            <textarea ms-duplex="commentContent"></textarea>
+                            <textarea ms-duplex="commentContent" maxlength="100"></textarea>
                             <span ms-on-mouseout="descriptionSwitch('replyWarning', false)" ms-click="publishComment(detailInfo.id,commentContent);">发布</span>
                             <div class="teacherHomepage_detail_content_applyTip" ms-visible="replyWarning">请输入评论内容</div>
                         </div>
@@ -120,7 +120,8 @@
                                 </div>
                                 <div class="center">
                                     <span class="touser" ms-html="'@' + el.tousername" ms-if="el.tousername"></span>
-                                    <span ms-html="el.commentContent"></span></div>
+                                    <span class="content" ms-html="el.commentContent"></span>
+                                </div>
                                 <div class="bot">
                                     @if(Auth::check())
                                         <a href="#input_content" ms-if="(!el.isSelf && detailInfo.isBuy) || (!el.isSelf && detailInfo.isAuthor)" ms-click="replyComment(el.username,el.id);">
@@ -164,6 +165,7 @@
                     </div>
                     <div class="clear"></div>
                     <span class="content" ms-html="teacherInfo.intro"></span>
+                    <div ms-if="!teacherInfo" class="notice_msg">暂无讲师信息...</div>
                 </div>
                 <!-- 课程公告 -->
                 <div class="contain_lessonDetail_bot_right_notice">
@@ -189,8 +191,8 @@
                 <div class="center">课程价格：<span ms-html="'￥ ' + detailInfo.coursePrice + ' 元'"></span></div>
                 <div class="bot">
                     <div>支付方式：</div>
-                    <div class="aliPay"><input type="radio" ms-duplex-string="payMethod" value="1" name="payMethod"/><span></span></div>
-                    <div class="weChat"><input type="radio" ms-duplex-string="payMethod" value="2" name="payMethod"/><span></span></div>
+                    <div class="aliPay"><input type="radio" ms-duplex-string="payMethod" value="0" name="payMethod"/><span></span></div>
+                    <div class="weChat"><input type="radio" ms-duplex-string="payMethod" value="1" name="payMethod"/><span></span></div>
                 </div>
                 <span class="warnPayMethod" ms-html="warnPayMethod"></span>
                 <div class="clear"></div>
@@ -242,7 +244,7 @@
                     <div class="question"><span>2</span><span class="last">填写问题描述：</span><span style="color: red" ms-html="warnBackContent"></span>
                     </div>
                     <div class="content">
-                        <textarea name="" ms-duplex="backContent" placeholder="详细描述一些你遇到的问题或建议"></textarea>
+                        <textarea name="" ms-duplex="backContent" maxlength="80" placeholder="详细描述一些你遇到的问题或建议"></textarea>
                     </div>
                 </div>
                 <div class="feedback_center_last">

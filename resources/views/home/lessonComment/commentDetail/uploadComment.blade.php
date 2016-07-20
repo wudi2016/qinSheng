@@ -64,7 +64,7 @@
 	<script type="text/javascript">
 		require(['lessonComment/directive', 'lessonComment/buyComment/upload'], function (directive, upload) {
 			upload.orderID = {{$info -> id}} || null;
-			upload.uploadInfo.orderSn = {{$orderSn}} || null;
+			upload.uploadInfo.orderSn = '{{$orderSn}}' || null;
 			upload.uploadInfo.courseTitle = '{{$info -> courseTitle}}' || null;
 			upload.uploadInfo.userName = '{{$info -> userName}}' || null;
 			upload.uploadInfo.userId = '{{$info -> userId}}' || null;

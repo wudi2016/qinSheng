@@ -59,7 +59,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 上传资源 </label>
 
                             <div class="col-sm-9">
-                                <input type="hidden" name="organurl" value="{{$data->coursePath}}">
+                                <input type="hidden" name="coursePath" value="{{$data->coursePath}}">
                                 <img src="{{asset('admin/image/sczy.png')}}" alt="" id="form-field-1" style="position:absolute;">
                                 <input type="file" name="coursePath" id="file_upload" multiple="true" value="" />
                                 <div class="uploadarea_bar_r_msg"></div>

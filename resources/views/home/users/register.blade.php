@@ -17,7 +17,8 @@
         <div class="center_con">
             {{--视频介绍--}}
             <div class="center_con_l">
-                <img src="{{asset('home/image/index/vdo.png')}}" style="width:100%;height:100%" alt="">
+                {{--<img src="{{asset('home/image/index/vdo.png')}}" style="width:100%;height:100%" alt="">--}}
+                <div id="myplayer" ></div>
             </div>
             {{--注册框--}}
             <div class="center_con_r">
@@ -95,7 +96,7 @@
                     <div class="center_con_r_bar">
                         <div class="center_con_r_bar_l"></div>
                         <div class="center_con_r_bar_m">
-                            <input class="deal" type="checkbox" >已阅读并同意<a href=""><span style="color:#209EEA">《点评网账号使用协议》</span></a>
+                            <input class="deal" type="checkbox" >已阅读并同意<a href="/aboutUs/firmintro/4"><span style="color:#209EEA">《点评网账号使用协议》</span></a>
                         </div>
                     </div>
 
@@ -124,6 +125,15 @@
         <div style="width:100%;height:40px;"></div>
     </div>
 </body>
+<script type="text/javascript" src="{{asset('home/jplayer/jwplayer.js')}}"></script>
 <script type="text/javascript" src="{{asset('home/js/layout/jquery.min.js') }}"></script>
 <script type="text/javascript" src="{{asset('home/js/users/register.js') }}"></script>
+<script>
+    jwplayer('myplayer').setup({
+        flashplayer: 'jwplayer/jwplayer.flash.swf',
+        file: '/uploads/video/introduce/default.mp4',
+        image:'/home/image/index/vdo.png',
+        width: '700',
+        height: '400'});
+</script>
 </html>

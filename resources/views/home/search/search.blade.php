@@ -93,7 +93,7 @@
         {{--专题课程--}}
         <div class="con_con aa">
             <div class="con_con_top">
-                <div class="con_con_top_l">和<span class="gl">{{$search}}</span>有关专题课程</div>
+                <div class="con_con_top_l">和<span class="gl">{{$searchInfo}}</span>有关专题课程</div>
                 <div class="con_con_top_r"><span class="gl" onclick="morecourse(1)">更多</span>&nbsp;&nbsp;</div>
             </div>
             <div style="height:40px;"></div>
@@ -129,7 +129,7 @@
         {{--点评课程--}}
         <div class="con_con bb">
             <div class="con_con_top">
-                <div class="con_con_top_l">和<span class="gl">{{$search}}</span>有关点评课程</div>
+                <div class="con_con_top_l">和<span class="gl">{{$searchInfo}}</span>有关点评课程</div>
                 <div class="con_con_top_r"><span class="gl" onclick="morecourse(2)">更多</span>&nbsp;&nbsp;</div>
             </div>
             <div style="height:40px;"></div>

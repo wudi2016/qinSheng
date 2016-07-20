@@ -128,7 +128,7 @@
                                                         <i class="icon-edit bigger-120">修改</i>
                                                     </a>
 
-                                                    <a href="{{url('/aboutUs/firmintro')}}"  class="btn btn-xs btn-success">
+                                                    <a href="{{url('/aboutUs/firmintro/'.$firm->id)}}"  class="btn btn-xs btn-success">
                                                         <i class="icon-ok bigger-120">预览</i>
                                                     </a>
 

@@ -513,13 +513,20 @@
     margin-top: 20px;
     margin-left: 25px;
     letter-spacing:1px;
-    line-height: 25px;
 }
 .contain_lessonDetail_bot_left_comment_content .right .center .touser{
-    display: inline-block;
-    width: 80px;
-    height: 20px;
+    width: 100px;
+    height: 22px;
+    line-height: 22px;
     color: #209EEA;
+    overflow: hidden;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.contain_lessonDetail_bot_left_comment_content .right .center .content{
+    line-height: 22px;
+    width: 480px;
 }
 .contain_lessonDetail_bot_left_comment_content .right .bot{
     width: 350px;

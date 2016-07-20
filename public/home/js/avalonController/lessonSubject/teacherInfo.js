@@ -6,6 +6,7 @@
         var teacherInfo = avalon.define({
             $id: 'teacherInfoController',
             teacherInfo: [],
+
             getTeacherInfo: function (id) {
                 $.ajax({
                     type: "get",

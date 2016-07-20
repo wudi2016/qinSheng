@@ -10,6 +10,13 @@ use Carbon\Carbon;
 use DB;
 use PaasResource;
 use PaasUser;
+use Cache;
+use QrCode;
+use Primecloud\Weixin\Kernel\WxPayConfig;
+use Primecloud\Weixin\Kernel\WxPayApi;
+use Primecloud\Weixin\Kernel\WxPayDataBase;
+use Primecloud\Weixin\Kernel\WxPayUnifiedOrder;
+use Primecloud\Weixin\Kernel\WxPayBizPayUrl;
 
 class buyCommentController extends Controller
 {
@@ -40,9 +47,52 @@ class buyCommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function scan($commentID)
+    public function scan(WxPayApi $wxPay, WxPayDataBase $wxBase, WxPayUnifiedOrder $inputObj, $orderID)
     {
-        return view('home.lessonComment.buyComment.scan') -> with('commentID', $commentID);
+        $result = DB::table('orders') -> select('orderPrice', 'orderTitle', 'orderSn', 'id') -> where(['id' => $orderID, 'userId' => \Auth::user() -> id, 'isDelete' => 0]) -> first();
+        $result || abort(404);
+        $code_url = $this -> makeUnifiedOrder($wxPay, $inputObj, $wxBase, $result, 'http://qinsheng.zuren8.com/lessonComment/wxPayCallback');
+        empty($code_url['code_url']) && abort(404);
+        return view('home.lessonComment.buyComment.scan') -> with('orderID', $orderID) -> with('orderInfo', $result) -> with('url', $code_url['code_url']);
+    }
+
+
+    /**
+     * 微信支付回调地址
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function wxPayCallback(Request $request)
+    {
+        $message = [];
+        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
+        $message = (array) simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+        if ($message['result_code'] == 'SUCCESS' && $message['return_code'] == 'SUCCESS') {
+            $orderSn = $message['out_trade_no'];
+            $result['payPrice'] = $message['total_fee'];
+            $result['tradeSn'] = $message['transaction_id'];
+            $result['payTime'] = Carbon::now();
+            $result['status'] = 0;
+            DB::table('teacher') -> join('orders', 'teacher.parentId', '=', 'orders.teacherId') -> where('orders.orderSn', $orderSn) -> decrement('teacher.stock');
+            $order = DB::table('orders') -> where('orderSn', $orderSn) -> update($result);
+            if ($order) {
+                echo "SUCCESS";
+            }
+        } else {
+            file_put_contents(public_path().'/order.txt', date('Y-M-D H:i:s', time())." -----  {$message['transaction_id']}  ---------- fail ----------- \r\n", FILE_APPEND);
+        }
+    }
+
+
+    /**
+     * 微信扫码获取订单状态
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function orderStatus($orderID)
+    {
+        $result = DB::table('orders') -> select('id') -> where(['id' => $orderID, 'userId' => \Auth::user() -> id, 'isDelete' => 0, 'status' => 0]) -> first();
+        return $this -> returnResult($result);
     }
 
 
@@ -53,7 +103,7 @@ class buyCommentController extends Controller
      */
     public function buySuccess($orderID)
     {
-        DB::table('orders') -> where(['id' => $orderID, 'userId' => \Auth::user() -> id, 'status' => 0]) -> first() || abort(404);
+        DB::table('orders') -> where(['id' => $orderID, 'userId' => \Auth::user() -> id, 'status' => 0, 'isDelete' => 0]) -> first() || abort(404);
         return view('home.lessonComment.buyComment.buySuccess') -> with('orderID', $orderID);
     }
 
@@ -95,14 +145,10 @@ class buyCommentController extends Controller
      */
     public function generateOrder(Request $request)
     {
-        $request['orderSn'] = date('YmdHis', time());
-        $request['tradeSn'] = time();
-        $request['payTime'] = Carbon::now();
+        $request['orderSn'] = date('Ymd', time()).uniqid();
         $request['created_at'] = Carbon::now();
         $request['updated_at'] = Carbon::now();
         $result = DB::table('orders') -> insertGetId($request -> all());
-        if (!$result) return $this -> returnResult(false);
-        DB::table('teacher') -> where('parentId', $request['teacherId']) -> decrement('stock') || $result = !(DB::table('orders') -> where('id', $result) -> delete());
         return $this -> returnResult($result);
     }
 

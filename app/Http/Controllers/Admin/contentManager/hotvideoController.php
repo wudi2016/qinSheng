@@ -51,7 +51,7 @@ class hotvideoController extends Controller{
                 $entension = $request->file('cover')->getClientOriginalExtension();//上传文件的后缀
                 $newname = md5(date('cover'.$name)).'.'.$entension;//拼接新的图片名
                 if($request->file('cover')->move('./admin/image/contentManager/hotvideo',$newname)){
-                    $input['cover'] = 'admin/image/contentManager/hotvideo/'.$newname;
+                    $input['cover'] = '/admin/image/contentManager/hotvideo/'.$newname;
                 }else{
                     return redirect()->back()->withInput()->withErrors('文件保存失败');
                 }
@@ -91,7 +91,7 @@ class hotvideoController extends Controller{
                 $entension = $request->file('cover')->getClientOriginalExtension();//上传文件的后缀
                 $newname = md5(date('cover'.$name)).'.'.$entension;//拼接新的图片名
                 if($request->file('cover')->move('./admin/image/contentManager/hotvideo',$newname)){
-                    $input['cover'] = 'admin/image/contentManager/hotvideo/'.$newname;
+                    $input['cover'] = '/admin/image/contentManager/hotvideo/'.$newname;
                 }else{
                     return redirect()->back()->withInput()->withErrors('文件保存失败');
                 }

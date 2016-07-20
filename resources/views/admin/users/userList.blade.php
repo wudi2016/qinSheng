@@ -54,10 +54,12 @@
                         <i class="icon-double-angle-right"></i>
                         用户管理列表
                     </small>
+                    @permission('add.user')
                     <a href="{{url('admin/users/addUser')}}" class="btn btn-xs btn-info"
                        style="margin-left:8px;">
                         <strong class="icon-expand-alt bigger-30">&nbsp;添加用户</strong>
                     </a>
+                    @endpermission
                 </h1>
             </div><!-- /.page-header -->
 
@@ -91,14 +93,18 @@
                         <div class="col-xs-12">
                             <div class="table-responsive">
                                 <form action="{{url('admin/excel/userInfoImport')}}" method="post" enctype="multipart/form-data" style="float:right;">
-                                    <input type="submit" class="btn btn-xs btn-info" id="infoExport" value="导入用户信息" style="width:86px; cursor: pointer;margin-left:40px;" />
-                                    <input type="file" name="excel" style="float:right;width:50%; cursor: pointer;margin-right:0;"/>
-                                    <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+                                    @permission('add.user')
+                                        <input type="submit" class="btn btn-xs btn-info" id="infoExport" value="导入用户信息" style="width:86px; cursor: pointer;margin-left:40px;" />
+                                        <input type="file" name="excel" style="float:right;width:50%; cursor: pointer;margin-right:0;"/>
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+                                    @endpermission
 
                                 </form>
-                                <a href="{{url('admin/excel/userInfoTemplate')}}" class="btn btn-xs btn-info" style="float: right;margin-right:-30px;">
-                                    下载导入模板
-                                </a>
+                                @permission('add.user')
+                                    <a href="{{url('admin/excel/userInfoTemplate')}}" class="btn btn-xs btn-info" style="float: right;margin-right:-30px;">
+                                        下载导入模板
+                                    </a>
+                                @endpermission
 
 
 
@@ -134,27 +140,35 @@
                                             <td>{{$value->updated_at}}</td>
                                             <td>
                                                 <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+                                                    @permission('edit.user')
                                                     <a href="{{url('admin/users/editUser/'.$value->id)}}"
                                                        class="btn btn-xs btn-info">
                                                         <strong>编辑</strong>
                                                     </a>
+                                                    @endpermission
 
+                                                    @permission('delete.user')
                                                     <a href="{{url('admin/users/delUser/'.$value->id)}}"
                                                        class="btn btn-xs btn-danger">
                                                         <strong>删除</strong>
                                                     </a>
+                                                    @endpermission
 
+                                                    @permission('resetPass.user')
                                                     <a href="{{url('admin/users/resetPass/'.$value->id)}}"
                                                        class="btn btn-xs btn-inverse" name="reset-pass">
                                                         <strong>重置密码</strong>
                                                     </a>
+                                                    @endpermission
 
+                                                    @permission('user.list')
                                                     <a href="{{url('admin/users/show/'.$value->id)}}"
                                                        class="btn btn-xs btn-success" name="person-detail">
                                                         <strong>查看详情</strong>
                                                     </a>
+                                                    @endpermission
 
-
+                                                    @permission('changeStatus.user')
                                                     <span class="btn btn-xs btn-default" name="btn-status" onchange="changeStatus({{$value->id}});" style="position: relative;display: inline-block;">
                                                             <strong>审核状态</strong>
                                                             <select id="form-field-status{{$value->id}}" class="col-xs-10 col-sm-2" name="form-field-status" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:59px;">
@@ -162,16 +176,21 @@
                                                                 <option value="1" {{$value->checks==1 ? 'selected':''}}>禁用</option>
                                                             </select>
                                                     </span>
+                                                    @endpermission
 
+                                                    @permission('user.list')
                                                     <a href="{{url('admin/users/focusList/'.$value->id)}}"
                                                        class="btn btn-xs btn-inverse">
                                                         <strong>关注</strong>
                                                     </a>
+                                                    @endpermission
 
+                                                    @permission('user.list')
                                                     <a href="{{url('admin/users/friendsList/'.$value->id)}}"
                                                        class="btn btn-xs btn-inverse">
                                                         <strong>好友</strong>
                                                     </a>
+                                                    @endpermission
                                                </div>
                                             </td>
                                         </tr>
@@ -180,13 +199,15 @@
                                     </tbody>
                                 </table>
                                 {!! $data -> appends( app('request') -> all() ) -> render() !!}
-                                @if(count($excels))
-                                    <form action="{{url('admin/excel/userInfoExport')}}" method="post" style="float: right;margin-top:65px;margin-right:-130px;">
-                                        <input type="submit" class="btn btn-xs btn-info"  value="导出用户信息" style="width:86px; cursor: pointer; margin-top:-87px;margin-right:130px;" />
-                                        {{csrf_field()}}
-                                        <input type="hidden" name="excels" value="{{$excels}}"/>
-                                    </form>
-                                @endif
+                                @permission('user.list')
+                                    @if(count($excels))
+                                        <form action="{{url('admin/excel/userInfoExport')}}" method="post" style="float: right;margin-top:65px;margin-right:-130px;">
+                                            <input type="submit" class="btn btn-xs btn-info"  value="导出用户信息" style="width:86px; cursor: pointer; margin-top:-87px;margin-right:130px;" />
+                                            {{csrf_field()}}
+                                            <input type="hidden" name="excels" value="{{$excels}}"/>
+                                        </form>
+                                    @endif
+                                @endpermission
                             </div><!-- /.table-responsive -->
                         </div><!-- /span -->
                     </div><!-- /row -->

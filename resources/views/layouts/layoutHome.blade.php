@@ -16,7 +16,7 @@
 				<a href="{{url('/')}}"><div class="head_con_li"><div class="head_con_li_con index" >首页</div></div></a>
 				<a href="{{url('/lessonSubject/list/1')}}"><div class="head_con_li" ><div class="head_con_li_con lessonSubject" >课程</div></div></a>
 				<a href="{{url('/community')}}"><div class="head_con_li" ><div class="head_con_li_con community">社区</div></div></a>
-				<a href="{{url('/aboutUs/firmintro')}}"><div class="head_con_li" ><div class="head_con_li_con aboutUs">关于</div></div></a>
+				<a href="{{url('/aboutUs/firmintro/1')}}"><div class="head_con_li" ><div class="head_con_li_con aboutUs">关于</div></div></a>
     		</div>
     		<div class="head_con_login">
     		    <!-- 登陆前 -->
@@ -29,16 +29,20 @@
                 	<div class="persapce_li">
 						<div class="persapce_li_con_per">
 							@if(\Auth::user()->type == 0)
-								<a href="{{url('/member/student/0')}}">个人中心</a>
+								<a href="{{url('/member/student/0/basicInfo')}}">个人中心</a>
 							@elseif(\Auth::user()->type == 1)
-								<a href="{{url('/member/student/1')}}">个人中心</a>
+								<a href="{{url('/member/student/1/basicInfo')}}">个人中心</a>
 							@elseif(\Auth::user()->type == 2)
-								<a href="{{url('/member/famousTeacher')}}">个人中心</a>
+								<a href="{{url('/member/famousTeacher/basicInfo')}}">个人中心</a>
 							@endif
 						</div>
 					</div>
-                	<div class="persapce_li"><div class="persapce_li_con_msg">消息通知</div></div>
-                	<div class="persapce_li" style="border-bottom:1px solid #F5F5F5"><div class="persapce_li_con_cha">切换账号</div></div>
+					@if( \Auth::user()->type != 2 )
+						<div class="persapce_li"><a href="{{asset('/member/student/'.\Auth::user()->type.'/wholeNotice')}}"><div class="persapce_li_con_msg">消息通知</div></a></div>
+					@else
+						<div class="persapce_li"><a href="{{asset('/member/famousTeacher/wholeNotice')}}"><div class="persapce_li_con_msg">消息通知</div></a></div>
+					@endif
+                	<div class="persapce_li" style="border-bottom:1px solid #F5F5F5"><a href="{{url('/index/switchs')}}"><div class="persapce_li_con_cha">切换账号</div></a></div>
                 	<div class="persapce_li"><a href="{{url('/auth/logout')}}"><div class="persapce_li_con_lout">退出登录</div></a></div>
                 </div>
 				@endif
@@ -135,20 +139,20 @@
     	    	<div style="height:40px;"></div>
     	    	<div class="foot_con_m_a">关于我们</div>
     	    	<div style="height:20px;"></div>
-    	    	<div class="foot_con_m_b">公司介绍 &nbsp;&nbsp;&nbsp;&nbsp; 用户协议</div>
-    	    	<div class="foot_con_m_b">联系我们 &nbsp;&nbsp;&nbsp;&nbsp; 友情链接</div>
-    	    	<div class="foot_con_m_b">常见问题 &nbsp;&nbsp;&nbsp;&nbsp; 意见反馈</div>
+    	    	<div class="foot_con_m_b"><a href="/aboutUs/firmintro/1">公司介绍</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="/aboutUs/firmintro/4">用户协议</a></div>
+    	    	<div class="foot_con_m_b"><a href="/aboutUs/firmintro/2">联系我们</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="/aboutUs/firmintro/5">友情链接</a></div>
+    	    	<div class="foot_con_m_b"><a href="/aboutUs/firmintro/3">常见问题</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="/aboutUs/firmintro/6">意见反馈</a></div>
     	    </div>
     	    <div class="foot_con_r">
 	    	    <div style="height:40px;"></div>
     	    	<div class="foot_con_m_a">关注我们</div>
 	    	    <div style="height:35px;"></div>
     	    	<div class="foot_con_r_con">
-    	    		<img class="lxlogoa" src="{{asset('home/image/layout/weibo.png')}}">&nbsp;&nbsp;
+					<a href="{{url($weibo)}}" title="官方微博"><img class="lxlogoa" src="{{asset('home/image/layout/weibo.png')}}"></a>&nbsp;&nbsp;
     	    		<img class="lxlogob" src="{{asset('home/image/layout/weixin.png')}}">
     	    	</div>
-				{{--<div class="lxfsa hide"></div>--}}
-				{{--<div class="lxfsb hide"></div>--}}
+				{{--<div class="lxfsb hide"><img src="{{asset('home/image/layout/gzh.png')}}" alt=""></div>--}}
+				<div class="lxfsb hide">{!! $weixin !!}</div>
     	    </div>
     	</div>
     </div>

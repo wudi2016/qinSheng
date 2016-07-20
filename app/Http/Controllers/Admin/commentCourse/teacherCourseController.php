@@ -8,9 +8,18 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use DB;
 use Carbon\Carbon;
+use App\Http\Controllers\Home\lessonComment\Gadget;
+use PaasResource;
+use PaasUser;
+use Cache;
 
 class teacherCourseController extends Controller
 {
+    use Gadget;
+    public function __construct()
+    {
+        PaasUser::apply();
+    }
     /**
      *名师点评列表
      */
@@ -35,6 +44,16 @@ class teacherCourseController extends Controller
             ->where('courseIsDel',0)
             ->orderBy('id','desc')
             ->paginate(15);
+        foreach($data as &$val){
+            if($val->courseLowPath){
+                if(!Cache::get($val->courseLowPath)){
+                    $val->courseLowPathurl = $this->getPlayUrl($val->courseLowPath);
+                    Cache::put($val->courseLowPath,$val->courseLowPathurl,1800);
+                }else{
+                    $val->courseLowPathurl = Cache::get($val->courseLowPath);
+                }
+            }
+        }
         $data->type = $request['type'];
 //        dd($data);
         return view('admin.teacherCourse.teacherCourseList',['data'=>$data]);

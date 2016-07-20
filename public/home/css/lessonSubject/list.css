@@ -160,6 +160,7 @@
     color: #999999;
     margin-right: 23px;
     padding-left: 35px;
+    line-height:25px;
 }
 
 .contain_lesson_center_data_info_bot .center .left {
@@ -171,6 +172,7 @@
     font-family: 微软雅黑;
     margin-left: 8px;
     padding-left: 35px;
+    line-height: 25px;
 }
 .classes{
     background: url("/home/image/lessonSubject/list/classes.png") no-repeat;

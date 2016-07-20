@@ -15,7 +15,6 @@ class commentDetailController extends Controller
 {
     use Gadget;
 
-
     public function __construct()
     {
         PaasUser::apply();

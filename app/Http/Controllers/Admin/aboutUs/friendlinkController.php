@@ -54,8 +54,8 @@ class friendlinkController extends Controller
                 $name = $request->file('path')->getClientOriginalName();//获取图片名
                 $entension = $request->file('path')->getClientOriginalExtension();//上传文件的后缀
                 $newname = md5(date('path'.$name)).'.'.$entension;//拼接新的图片名
-                if($request->file('path')->move('/admin/image/aboutus/friendlink',$newname)){
-                    $input['path'] = 'admin/image/aboutus/friendlink/'.$newname;
+                if($request->file('path')->move('./admin/image/aboutus/friendlink',$newname)){
+                    $input['path'] = '/admin/image/aboutus/friendlink/'.$newname;
                 }else{
                     return redirect()->back()->withInput()->withErrors('文件保存失败');
                 }
@@ -95,8 +95,8 @@ class friendlinkController extends Controller
                 $name = $request->file('path')->getClientOriginalName();//获取图片名
                 $entension = $request->file('path')->getClientOriginalExtension();//上传文件的后缀
                 $newname = md5(date('path'.$name)).'.'.$entension;//拼接新的图片名
-                if($request->file('path')->move('/admin/image/aboutus/friendlink',$newname)){
-                    $input['path'] = 'admin/image/aboutus/friendlink/'.$newname;
+                if($request->file('path')->move('./admin/image/aboutus/friendlink',$newname)){
+                    $input['path'] = '/admin/image/aboutus/friendlink/'.$newname;
                 }else{
                     return redirect()->back()->withInput()->withErrors('文件保存失败');
                 }
@@ -105,6 +105,7 @@ class friendlinkController extends Controller
                 return redirect()->back()->withInput()->withErrors('文件在上传过程中出错');
             }
         }
+//        dd($input);
         $res = DB::table('link')->where('id',$input['id'])->update($input);
         if($res){
             return redirect('admin/message')->with(['status'=>'编辑成功','redirect'=>'aboutUs/friendlinkList']);

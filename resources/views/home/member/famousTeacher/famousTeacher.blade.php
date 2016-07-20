@@ -384,7 +384,6 @@
                 {{--//收藏课程循环结束--}}
                 <div ms-visible="collectionMsg" class="warning_msg">暂无收藏课程...</div>
             </div>
-
             <div class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_collection"></div>
@@ -465,7 +464,7 @@
 
 
         <!--======================================================基本信息=======================================================-->
-        <div class="center_right" name="selectName" ms-visible="tabStatus === 'basicInfo'">
+        <div class="center_right hide" name="selectName" ms-visible="tabStatus === 'basicInfo'">
             @if (session('right'))
                 <div class="editResInfo dui">* {{session('right')}}</div>
             @elseif(session('wrong'))
@@ -495,7 +494,7 @@
             <div class="height40"></div>
             <div class="height5"></div>
             <div class="center_right_username">
-                <label><span>真实姓名</span><input class="input" type="text" placeholder="请填写真实姓名" name="realname" value="{{$data->realname}}"></label>
+                <label><span>真实姓名</span><input style="color:black;" class="input" type="text" placeholder="请填写真实姓名" name="realname" value="{{$data->realname}}"></label>
             </div>
 
 

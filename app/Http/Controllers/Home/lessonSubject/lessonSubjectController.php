@@ -11,6 +11,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Home\lessonComment\Gadget;
 use PaasResource;
 use PaasUser;
+use QrCode;
+use Primecloud\Weixin\Kernel\WxPayConfig;
+use Primecloud\Weixin\Kernel\WxPayApi;
+use Primecloud\Weixin\Kernel\WxPayDataBase;
+use Primecloud\Weixin\Kernel\WxPayUnifiedOrder;
+use Primecloud\Weixin\Kernel\WxPayBizPayUrl;
 
 
 class lessonSubjectController extends Controller
@@ -19,7 +25,7 @@ class lessonSubjectController extends Controller
 
     public function __construct()
     {
-        PaasUser::apply();
+//        PaasUser::apply();
     }
     // 专题课程列表页 =============== page =======================
     public function lessonSubjectList($type)
@@ -35,20 +41,8 @@ class lessonSubjectController extends Controller
         $mineType = Auth::check() ? Auth::user()->type : '';
         $minePic = Auth::check() ? Auth::user()->pic : '';
         DB::table('course')->where('id',$id)->increment('courseView',1);
-        return view('home.lessonSubject.lessonSubjectDetail')
-            ->with('mineUsername', $mineUsername)
-            ->with('mineUserId',$mineUserId)
-            ->with('mineType',$mineType)
-            ->with('minePic',$minePic)
-            ->with('detailId', $id);
+        return view('home.lessonSubject.lessonSubjectDetail')->with('mineUsername', $mineUsername)->with('mineUserId',$mineUserId)->with('mineType',$mineType)->with('minePic',$minePic)->with('detailId', $id);
     }
-
-    // 微信扫码支付页
-    public function lessonSubjectWeChatPay()
-    {
-        return view('home.lessonSubject.lessonSubjectWeChatPay');
-    }
-
 
     // 专题课程列表页 规则排序 数据接口=============== data ================
     public function getList($type)
@@ -113,10 +107,9 @@ class lessonSubjectController extends Controller
         $chapterId = $result ? $result->id : '';
         $mineUserId = Auth::check() ? Auth::user()->id : '';
         $view = DB::table('courseview')->where(['courseId' => $id, 'userId' => $mineUserId, 'chapterId' => $chapterId])->first();
-        if(!$view){
+        if(!$view && $mineUserId){
             DB::table('courseview')->insertGetId(['userId' => $mineUserId, 'courseId' => $id, 'chapterId' => $chapterId,'courseType' => 0]);
         }
-
         if($info->courseDiscount){
             $info->coursePrice = ceil(($info->courseDiscount/10000)*$info->coursePrice/1000);
         }else{
@@ -140,12 +133,6 @@ class lessonSubjectController extends Controller
             $info->isAuthor = false;
         }
         return $this->returnResult($info);
-    }
-
-    // 微信扫码支付页 数据接口
-    public function getWeChatPay()
-    {
-
     }
 
     // 获取讲师信息
@@ -265,7 +252,6 @@ class lessonSubjectController extends Controller
         $input['courseType'] = '0';
         $input['status'] = '0';
         $input['created_at'] = Carbon::now();
-        $input['updated_at'] = Carbon::now();
         $insertId = DB::table('coursefeedback')->insertGetId($input);
         return $this->returnResult($insertId);
     }
@@ -308,12 +294,64 @@ class lessonSubjectController extends Controller
         $input = $request->all();
         $input['courseType'] = 0;
         $view = DB::table('courseview')->where(['courseId' => $request->courseId, 'userId' => $request->userId, 'chapterId' => $request->chapterId])->first();
-        if(!$view){
+        if(!$view && !empty($request->userId)){
            $result = DB::table('courseview')->insertGetId($input);
         }else{
             $result = '';
         }
         return $this->returnResult($result);
+    }
+
+    /**
+     * 生成订单
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function addOrder(Request $request)
+    {
+
+        $request['orderSn'] = date('YmdHis', time()) .'_'. uniqid();
+        $request['created_at'] = Carbon::now();
+        $request['updated_at'] = Carbon::now();
+        $result = DB::table('orders') -> insertGetId($request -> all());
+        if (!$result) return $this -> returnResult(false);
+        return $this -> returnResult($result);
+    }
+
+
+    // 微信扫码支付页
+    public function lessonSubjectWeChatPay(WxPayApi $wxPay, WxPayDataBase $wxBase, WxPayUnifiedOrder $inputObj, $orderID)
+    {
+        $result = DB::table('orders') -> select('orderPrice', 'orderTitle', 'orderSn', 'id') -> where(['id' => $orderID, 'userId' => \Auth::user() -> id, 'isDelete' => 0]) -> first();
+        $result || abort(404);
+        $code_url = $this -> makeUnifiedOrder($wxPay, $inputObj, $wxBase, $result, 'http://qinsheng.zuren8.com/lessonComment/wxPayCallback');
+        empty($code_url['code_url']) && abort(404);
+        return view('home.lessonSubject.lessonSubjectWeChatPay') -> with('orderID', $orderID) -> with('orderInfo', $result) -> with('url', $code_url['code_url']);
+    }
+
+    /**
+     * 微信支付回调地址
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function wxPayCallback(Request $request)
+    {
+        $message = [];
+        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
+        $message = (array) simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+        if ($message['result_code'] == 'SUCCESS' && $message['return_code'] == 'SUCCESS') {
+            $orderSn = $message['out_trade_no'];
+            $result['payPrice'] = $message['total_fee'];
+            $result['tradeSn'] = $message['transaction_id'];
+            $result['payTime'] = Carbon::now();
+            $result['status'] = 0;
+            $order = DB::table('orders') -> where('orderSn', $orderSn) -> update($result);
+            if ($order) {
+                echo "SUCCESS";
+            }
+        } else {
+            file_put_contents(public_path().'/order.txt', date('Y-M-D H:i:s', time())." -----  {$message['transaction_id']}  ---------- fail ----------- \r\n", FILE_APPEND);
+        }
     }
 
     function returnResult($result)
@@ -324,4 +362,5 @@ class lessonSubjectController extends Controller
             return Response()->json(["status" => false]);
         }
     }
+
 }

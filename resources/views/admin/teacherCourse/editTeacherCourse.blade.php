@@ -112,7 +112,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 留言 </label>
 
                             <div class="col-sm-9">
-                                <textarea name="message"  placeholder="留言" id="form-field-1" class="col-xs-10 col-sm-5" cols="50" rows="10" style="resize: none;">{{$data->message}}</textarea>
+                                <textarea name="suitlevel"  placeholder="留言" id="form-field-1" class="col-xs-10 col-sm-5" cols="50" rows="10" style="resize: none;">{{$data->suitlevel}}</textarea>
                             <span class="help-inline col-xs-12 col-sm-7">
                                 <label class="middle">
                                     <span class="lbl"></span>

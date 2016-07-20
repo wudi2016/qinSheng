@@ -1,8 +1,9 @@
 //审核状态
-function selectCheck(id,checkid,username,teachername){
+function selectCheck(id,checkid,username,teachername,teacherPhone){
     var id = id;
     var stateid = checkid;
     var username = username;
+    var teacherPhone = teacherPhone;
     $.ajax({
         type: "get",
         data:{'id':id,'state':stateid},
@@ -21,12 +22,23 @@ function selectCheck(id,checkid,username,teachername){
             }
             if(res.state == 2){
                 $('#pupUpback1').css({'display':'block'});
+                $('.teacherPhone').val(teacherPhone);
             }
         }
     });
 }
 
 $('#suer_btn0').click(function(){
+    var phone = $('.teacherPhone').val();
+    $.ajax({
+        type: "get",
+        url: "/admin/commentCourse/sendMessage/" + phone,
+        dataType: 'json',
+        success: function (res) {
+            if(res == true){
+            }
+        }
+    });
     $('#pupUpback').css({'display':'none'});
     location.reload();
 });

@@ -154,11 +154,16 @@
 
                         <div class="right_order_repeat_price" ms-text="el.orderPrice + '.00元'"></div>
 
+                        <div class="right_order_repeat_status" ms-if="el.status == 5">未付款</div>
                         <div class="right_order_repeat_status" ms-if="el.status == 0">已付款</div>
                         <div class="right_order_repeat_status" ms-if="el.status == 2">已完成</div>
+                        <div class="right_order_repeat_status" ms-if="el.status == 3">退款中</div>
+                        <div class="right_order_repeat_status" ms-if="el.status == 4">已退款</div>
 
-                        <div class="right_order_repeat_control" ms-if="el.status == 0" ms-click="popUpSwitch('applyRefund')"><a
+                        <div class="right_order_repeat_control" ms-if="el.status == 0 && el.seven == 1" ms-click="popUpSwitch('applyRefund',el)"><a
                                     href="#">申请退款</a></div>
+                        <div class="right_order_repeat_control" ms-if="el.status == 5"><a
+                                    ms-attr-href="'/lessonComment/scan/'+ el.id">去付款</a></div>
 
                     </div>
 
@@ -176,6 +181,7 @@
 
                         <div class="right_order_repeat_price" ms-text="el.orderPrice + '.00元'"></div>
 
+                        <div class="right_order_repeat_status" ms-if="el.status == 5">未付款</div>
                         <div class="right_order_repeat_status" ms-if="el.status == 0">已付款</div>
                         <div class="right_order_repeat_status" ms-if="el.status == 1">待点评</div>
                         <div class="right_order_repeat_status" ms-if="el.status == 2">已完成</div>
@@ -184,6 +190,8 @@
 
                         <div class="right_order_repeat_control" ms-if="el.status == 0"><a
                                     ms-attr-href="'/lessonComment/buy/upload/'+el.id">去上传</a></div>
+                        <div class="right_order_repeat_control" ms-if="el.status == 5"><a
+                                    ms-attr-href="'/lessonComment/scan/'+ el.id">去付款</a></div>
 
                     </div>
 
@@ -202,13 +210,16 @@
 
                         <div class="right_order_repeat_price" ms-text="el.orderPrice + '.00元'"></div>
 
+                        <div class="right_order_repeat_status" ms-if="el.status == 5">未付款</div>
                         <div class="right_order_repeat_status" ms-if="el.status == 0">已付款</div>
                         <div class="right_order_repeat_status" ms-if="el.status == 2">已完成</div>
                         <div class="right_order_repeat_status" ms-if="el.status == 3">退款中</div>
                         <div class="right_order_repeat_status" ms-if="el.status == 4">已退款</div>
 
-                        <div class="right_order_repeat_control"  ms-if="el.status == 0" ms-click="popUpSwitch('applyRefund')"><a
+                        <div class="right_order_repeat_control"  ms-if="el.status == 0 && el.seven == 1" ms-click="popUpSwitch('applyRefund',el)"><a
                                     href="#">申请退款</a></div>
+                        <div class="right_order_repeat_control" ms-if="el.status == 5"><a
+                                    ms-attr-href="'/lessonComment/scan/'+ el.id">去付款</a></div>
 
                     </div>
                 </div>
@@ -379,7 +390,7 @@
                 <div class="center_right_information">点评课程</div>
                 <div class="center_right_count">
                     <div class="right_count_left">共&nbsp;<span ms-text="total"></span>&nbsp;个视频</div>
-                    <div class="right_count_right"><span ms-click="getCommentCourse('{{$mineUsername}}',1);">最新</span>&nbsp;-&nbsp;<span class="count_right_hot" ms-click="getCommentCourse('{{$mineUsername}}',2);">热门</span>
+                    <div class="right_count_right"><span ms-click="getCommentCourse('{{$mineUserId}}',1);">最新</span>&nbsp;-&nbsp;<span class="count_right_hot" ms-click="getCommentCourse('{{$mineUserId}}',2);">热门</span>
                     </div>
                 </div>
             </div>
@@ -716,20 +727,20 @@
 
                 <div class="center_right_changePassword">
                 <div class="right_changePassword_currentPassword">
-                    <label><span>当前密码</span><input class="input" type="password" class="unowPsd txtt" placeholder="" value=""><span class="msg msga"></span></label>
+                    <label><span>当前密码</span><input type="password" class="unowPsd txtt input" placeholder="" value=""><span class="msg msga"></span></label>
                 </div>
 
                 <div class="height60"></div>
                 <div class="height20"></div>
                 <div class="right_changePassword_currentPassword">
-                    <label><span>新密码</span><input class="input" type="password" name="password" class="unewPsd txtt" placeholder="" value=""><span class="msg msgb"></span></label>
+                    <label><span>新密码</span><input type="password" name="password" class="unewPsd txtt input" placeholder="" value=""><span class="msg msgb"></span></label>
                 </div>
 
 
                 <div class="height60"></div>
                 <div class="height20"></div>
                 <div class="right_changePassword_currentPassword">
-                    <label><span>确认密码</span><input class="input" type="password" class="urePsd txtt" placeholder="" value=""><span class="msg msgc"></span></label>
+                    <label><span>确认密码</span><input type="password" class="urePsd txtt input" placeholder="" value=""><span class="msg msgc"></span></label>
                 </div>
                 </div>
 
@@ -842,38 +853,39 @@
         <div class="buy_course hide" ms-popup="popUp" value="applyRefund">
             <div class="buy_course_top">
                 <span class="left">申请退款</span>
-                <span class="right" ms-click="popUpSwitch(false)"></span>
+                <span class="right" ms-click="popUpSwitch(false,1)"></span>
             </div>
             <div class="buy_course_center">
                 <div class="top">
                     <span>订单名称&nbsp;:&nbsp;</span>
-                    <span class="orderName">钢琴演奏基础课程</span>
+                    <span class="orderName" ms-text="applyRefund.orderTitle"></span>
                 </div>
                 <div class="center">
                     <span>可退金额：</span>
-                    <span class="canMoney">99元</span>
+                    <span class="canMoney" ms-text="refundableAmount + ' 元'"></span>
                     <div class="center_refundPrice">
-                        (购买时价格&nbsp;:&nbsp;299元,扣除已观看课程费用)
+                        (购买时价格&nbsp;:&nbsp;[--applyRefund.payPrice--]元,扣除已观看课程费用)
                     </div>
                 </div>
                 <div class="clear"></div>
                 <div class="bot">
                     <span class="bot_span_select2">退款原因&nbsp;:&nbsp;</span>
                     <span class="bot_span_last bot_span_triangle2 hide"></span>
-                    <select name="" id="" class="hide">
-                        <option value="课程购买错误">课程购买错误</option>
-                        <option value="课程内容与描述不符">课程内容与描述不符</option>
-                        <option value="其他">其他</option>
+                    <span class="select_require_msg hide" ms-visible="refundType == ''"></span>
+                    <select name="" id="" class="hide" ms-duplex="refundType" data-duplex-changed="selectChange">
+                        <option value="0">课程购买错误</option>
+                        <option value="1">课程内容与描述不符</option>
+                        <option value="2">其他</option>
                     </select>
                 </div>
                 <div class="clear"></div>
                 <div class="last hide">
                     <span>其他原因&nbsp;:&nbsp;</span>
-                    <textarea name="otherReason" id="otherReason" placeholder="请描述退款原因"></textarea>
+                    <textarea name="otherReason" id="otherReason" placeholder="请描述退款原因" ms-duplex="refundContent"></textarea>
                 </div>
             </div>
             <div class="clear"></div>
-            <div class="pay_btn" ms-click="popUpSwitch('paySuccess')">提交申请</div>
+            <div class="pay_btn" ms-click="popUpSwitch('submitApply')">提交申请</div>
         </div>
     </div>
 
@@ -960,6 +972,7 @@
                 sideBar.tabStatus = sideBar.tab;
                 sideBar.changeTab(sideBar.tab);
             }
+
             {{--sideBar.tabStatus = '{{$tab}}' || 'basicInfo';--}}
             avalon.directive('popup', {
                 update: function (value) {

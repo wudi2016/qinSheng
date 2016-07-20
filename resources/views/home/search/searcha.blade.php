@@ -92,7 +92,7 @@
         <div style="height:40px;"></div>
         <div class="con_con">
             <div class="con_con_top">
-                <div class="con_con_top_l">和<span class="gl">{{$search}}</span>有关专题课程</div>
+                <div class="con_con_top_l">和<span class="gl">{{$searchInfo}}</span>有关专题课程</div>
                 <div class="con_con_top_r"><span class="selOrd gl" onclick="sel(1)">最新</span> - <span class="selOrd" onclick="sel(2)">热门</span>&nbsp;&nbsp;</div>
             </div>
             <div style="height:40px;"></div>

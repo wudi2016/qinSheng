@@ -507,12 +507,12 @@
                 $("input[name='phone']").blur(function () {
                     var obj = $(this);
                     var phone = obj.val();
+                    obj.next('span').html('');
                     var original = $("input[name='oldPhone']").val();//获取原来的手机号
                     if(original != phone){
                         if(!phone.match(/^[1][358][0-9]{9}$/) && !phone.match(/^[1][7][07][0-9]{8}$/)){//格式错误
                             obj.next('span').html('* 手机号格式错误');
                             checkPhone = false;
-                            return false;
                         }else{//验证唯一性
                             $.ajax({
                                 type: "post",
@@ -533,6 +533,7 @@
                             })
                         }
                     }else{
+                        obj.next('span').html('');
                         checkPhone = true;
                     }
 

@@ -169,7 +169,7 @@ define(['PrimecloudPaas'], function(PrimecloudPaas) {
             }else{
                 if(upload.uploadInfo.selectid == 2){ //选择节
                     if(!$('#belong').val()){
-                        upload.errormessagebelong = '<span style="color: red;">请选择所属章</span>';
+                        upload.errormessagebelong = '<span style="color: red;">请选择所属章(如没有请先添加章)</span>';
                         return false;
                     }
                     if(!upload.uploadInfo.title){

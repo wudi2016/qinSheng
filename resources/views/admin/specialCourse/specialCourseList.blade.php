@@ -100,7 +100,7 @@
                                         <th>课程类型</th>
                                         <th>视频格式</th>
                                         <th>授课讲师</th>
-                                        <th>课程</th>
+                                        {{--<th>课程</th>--}}
                                         <th>封面图</th>
                                         <th>折扣</th>
                                         <th>价格</th>
@@ -132,9 +132,9 @@
                                             <td>{{$special->typeName}}</td>
                                             <td>{{$special->courseFormat}}</td>
                                             <td>{{$special->username}}</td>
-                                            <td>
-                                                <a href="{{url('/lessonSubject/detail/'.$special->id)}}">查看</a>
-                                            </td>
+                                            {{--<td>--}}
+                                                {{--<a href="{{url('/lessonSubject/detail/'.$special->id)}}">查看</a>--}}
+                                            {{--</td>--}}
                                             <td>
                                                 {{--<a id="example2-2" href="{{asset($comcourse->coursePic)}}">查看--}}
                                                 <img src="{{asset($special->coursePic)}}" alt="" width="50px" height="50px">

@@ -102,7 +102,7 @@ class activityController extends Controller{
                 $entension = $request->file('path')->getClientOriginalExtension();//上传文件的后缀
                 $newname = md5(date('path'.$name)).'.'.$entension;//拼接新的图片名
                 if($request->file('path')->move('./admin/image/activity',$newname)){
-                    $input['path'] = 'admin/image/activity/'.$newname;
+                    $input['path'] = '/admin/image/activity/'.$newname;
                 }else{
                     return redirect()->back()->withInput()->withErrors('文件保存失败');
                 }

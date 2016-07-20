@@ -12,6 +12,8 @@ $(function(){
         $(this).siblings().removeClass('blue_common');
     })
 
+
+
     //url定位选项卡
     var href = location.href.split('/');
     var url = '';
@@ -31,7 +33,7 @@ $(function(){
         }
     }
 
-    console.log(url);
+    //console.log(url);
     $("div[name='"+url+"']").addClass('blue_common');
     $("div[name='"+url+"']").siblings().removeClass('blue_common');
 
@@ -59,21 +61,29 @@ $(function(){
     };
 
     $(".bot select").change(function(){
-        //console.log($(this).prev());
-        $(this).prev().html($(this).val());
-        if($(this).val() == '其他'){
+        $(this).prev().prev().html($(this).find("option:selected").text());
+        if($(this).find("option:selected").text() == '其他'){
             $('.last').removeClass('hide');
         }else{
             $('.last').addClass('hide');
         }
 
-   })
-    //
-    //$('.bot select').click(function(){
-    //    $(this).prev().removeClass('bot_span_triangle1').addClass('bot_span_triangle2');
-    //
-    //})
-    //
+   });
+
+    //上下三角切换
+    $('.bot select').click(function(){
+        //console.log($(this).prev().prev().html());
+        //if($(this).find("option:selected")){
+        //    $(this).prev().prev().removeClass('bot_span_triangle2');
+        //    $(this).prev().prev().addClass('bot_span_triangle1');
+        //}
+        if($(this).prev().prev().hasClass('bot_span_triangle2')){
+            $(this).prev().prev().removeClass('bot_span_triangle2').addClass('bot_span_triangle1');
+        }else{
+            $(this).prev().prev().removeClass('bot_span_triangle1').addClass('bot_span_triangle2');
+        }
+    })
+
     //修改切换
     $(".center_right_phone_button").click(function(){
         $(this).parent().css('display','none');

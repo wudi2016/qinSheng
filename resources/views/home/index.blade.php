@@ -12,8 +12,12 @@
     <!-- 滚动栏 -->
     <div class="bar">
         <ul class="bxslider">
-            <li><img style="width: 100%;" src="{{asset('home/image/index/banner.png')}}" /></li>
-            <li><img style="width: 100%;" src="{{asset('home/image/index/banner2.png')}}" /></li>
+            @foreach ($banners as $banner)
+                <li><a href="{{url($banner->url)}}"><img style="width: 100%;" src="{{asset($banner->path)}}" /></a></li>
+            @endforeach
+
+            {{--<li><a href=""><img style="width: 100%;" src="{{asset('home/image/index/banner.png')}}" /></a></li>--}}
+            {{--<li><a href=""><img style="width: 100%;" src="{{asset('home/image/index/banner2.png')}}" /></a></li>--}}
         </ul>
     </div>
     <!-- 课程，赛事活动 -->

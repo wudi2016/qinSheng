@@ -265,9 +265,7 @@
 	line-height: 40px;
 	padding-top: 5px;
 	padding-left: 10px;
-
 	font-size: 16px;
-	font-weight: bold;
 	font-family: 微软雅黑;
 }
 
@@ -328,7 +326,6 @@
 	color: #FF0000;
 	font-size: 18px;
 	font-family: 微软雅黑;
-	font-weight: 600;
 }
 
 .recommend_con_more{

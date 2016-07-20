@@ -160,15 +160,69 @@
 
 
 /*友情链接*/
-.friendship_link{
-    width:314px;
-    height:30px;
+/*.friendship_link{*/
+    /*width:314px;*/
+    /*height:30px;*/
+    /*float: left;*/
+    /*text-align: center;*/
+/*}*/
+
+
+/*.a_two{*/
+    /*text-decoration:underline;*/
+    /*color:blue;*/
+/*}*/
+
+
+.main_right_content_intro1{
+    width:627px;
+    height:240px;
+    font-size: 18px;
+    /*color:#ffffff;*/
+    font-family:"微软雅黑";
+    /*text-indent:2em;*/
+    /*letter-spacing: 2px;*/
+}
+
+
+
+/*友情链接*/
+.friendlink_content{
+    width:636px;
+    height:609px;
     float: left;
+    margin-left: -12px;
+    /*background: #eee;*/
+}
+
+.friendlink_content_each{
+    width:200px;
+    height:140px;
+    float:left;
+    margin-left: 12px;
+    margin-top: 12px;
+    /*background: #eee;*/
+}
+
+
+.friendlink_content_each_img{
+    width:200px;
+    height:110px;
+    /*background: blue;*/
+}
+
+.friendlink_content_each_font{
+    width:200px;
+    height:30px;
+    font-size:15px;
     text-align: center;
+    line-height: 30px;
+    /*background: green;*/
 }
 
 
-.a_two{
-    text-decoration:underline;
-    color:blue;
-}
+
+/*百度地图*/
+
+.iw_poi_title {color:#CC5522;font-size:14px;font-weight:bold;overflow:hidden;padding-right:13px;white-space:nowrap}
+.iw_poi_content {font:12px arial,sans-serif;overflow:visible;padding-top:4px;white-space:-moz-pre-wrap;word-wrap:break-word}

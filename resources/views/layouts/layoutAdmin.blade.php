@@ -193,6 +193,7 @@
 
 
 						<!--用户管理-->
+						@permission('user.list')
 						<li>
 							<a href="#" class="dropdown-toggle">
 								<i class="icon-user"></i>
@@ -209,22 +210,18 @@
 									</a>
 								</li>
 
+								@permission('add.user')
 								<li class="usersadds">
 									<a href="{{url('admin/users/addUser')}}">
 										<i class="icon-double-angle-right"></i>
 										添加用户
 									</a>
 								</li>
-
-								<li class="usersdetail">
-									<a href="{{url('admin/users/personDetail')}}">
-										<i class="icon-double-angle-right"></i>
-										管理员信息
-									</a>
-								</li>
+								@endpermission
 
 							</ul>
 						</li>
+						@endpermission
 
 						<!--名师管理-->
 						<li>
@@ -410,6 +407,7 @@
 
 
 
+						@permission('activity.list')
 						{{--赛事管理--}}
 						<li>
 							<a href="#" class="dropdown-toggle">
@@ -437,6 +435,7 @@
 
 							</ul>
 						</li>
+						@endpermission
 
 
 
@@ -511,6 +510,8 @@
 									</a>
 								</li>
 
+
+
 							</ul>
 						</li>
 
@@ -550,6 +551,7 @@
 
 
 
+						@permission('department.list')
 						<!--部门岗位管理-->
 						<li>
 							<a href="#" class="dropdown-toggle">
@@ -578,6 +580,7 @@
 							</ul>
 
 						</li>
+						@endpermission
 
 
 

@@ -19,7 +19,8 @@ class indexController extends Controller
      */
     public function index()
     {
-        return view('home.index');
+        $banners = DB::table('banner')->select('path','url')->get();
+        return view('home.index',compact('banners'));
     }
 
     /**
@@ -75,6 +76,7 @@ class indexController extends Controller
             foreach ($courses as &$course){
                 $course -> counttime = DB::table('coursechapter')->where('courseId',$course->id)->where('parentId','<>',0)->where('status',0)->count();
                 $course -> price = ceil($course->price/1000);
+                $course -> countpeople = count(DB::table('courseview')->select('courseId','userId','courseType')->where(['courseId' => $course->id, 'courseType' => 0])->distinct()->get());
             }
         }
 
@@ -114,6 +116,7 @@ class indexController extends Controller
         if($courses){
             foreach ($courses as &$course){
                 $course -> price = ceil($course->price/1000);
+                $course -> countpeople = count(DB::table('courseview')->select('courseId','userId','courseType')->where(['courseId' => $course->id, 'courseType' => 1])->distinct()->get());
             }
         }
 //        $data = [
@@ -148,6 +151,17 @@ class indexController extends Controller
         if(!in_array($_SERVER['HTTP_REFERER'],$ignorearr)){
             session(['lastUrl' => $_SERVER['HTTP_REFERER']]);
         }
+        return view('home.users.login');
+    }
+
+    /**
+     * 切换账号
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function switchs()
+    {
+        Auth::logout();
         return view('home.users.login');
     }
 
@@ -447,15 +461,26 @@ class indexController extends Controller
     {
         $search = $_POST['search'];
         $type   = $_POST['type'];
+
+        $searchInfo = $this->substr_cut($search,6);
+
         if($type == 'all'){
-            return view('home.search.search',compact('search'));
+            return view('home.search.search',compact('search','searchInfo'));
         }elseif($type == 'course'){
-            return view('home.search.searcha',compact('search'));
+            return view('home.search.searcha',compact('search','searchInfo'));
         }else{
-            return view('home.search.searchb',compact('search'));
+            return view('home.search.searchb',compact('search','searchInfo'));
         }
     }
 
+    function substr_cut($str_cut,$length)
+    {
+        if (mb_strlen($str_cut,'utf-8') > $length)
+        {
+            $str_cut = mb_substr($str_cut,0,6,'utf-8')."..";
+        }
+        return $str_cut;
+    }
 
     /**
      * 搜索专题课程接口

@@ -52,6 +52,10 @@ define([], function () {
                         callback(response.data)
                         return;
                     }
+                    if (model == 'orderInfo') {
+                        response.status && callback(response);
+                        return;
+                    };
                     if (response.status) {
                         detail[model] = response.data;
                     } else {
@@ -64,7 +68,12 @@ define([], function () {
             })
         },
         // 获取详细数据
-        detailInfo: [],
+        detailInfo: {
+            courseTitle: '',
+            coursePrice: '',
+            classHour : '',
+            coursePlayView : ''
+        },
         getDetail: function (id) {
             detail.getData('/lessonSubject/getDetail/' + id, '', {}, 'detailInfo');
         },
@@ -173,7 +182,7 @@ define([], function () {
                 detail.popUp = false;
                 return;
             }
-            if (value == 'feedback') {
+            if (value == 'feedback' || value == 'buyCourse') {
                 if (detail.mineUsername) {
                     detail.popUp = value;
                 } else {
@@ -201,7 +210,7 @@ define([], function () {
             if (detail.tel.match(/\s*/) == null || detail.tel == '') {
                 detail.warnTel = '请留下联系方式';
                 return;
-            } else if (detail.tel.match(/^[1][358][0-9]{9}$/) == null && detail.tel.match(/[1-9][0-9]{5,10}/) == null && detail.tel.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/) == null) {
+            } else if (detail.tel.match(/^1(3|5|8|7){1}[0-9]{9}$/) == null && detail.tel.match(/[1-9][0-9]{5,10}/) == null && detail.tel.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/) == null) {
                 detail.warnTel = '请正确联系方式';
                 return;
             } else {
@@ -241,17 +250,23 @@ define([], function () {
         // 立即支付 paySuccess
         payMethod: '', warnPayMethod: '',
         payRightNow: function () {
-            if (detail.payMethod.length == '0') {
-                detail.warnPayMethod = '请选择问题类型';
-                return;
-            } else {
-                detail.warnPayMethod = '';
-            }
-            if (detail.payMethod == '1') {
-                detail.popUp = 'paySuccess';
-            } else {
-                location.href = '/lessonSubject/WeChatPay';
-            }
+            if (detail.payMethod.length == '0') { detail.warnPayMethod = '请选择支付方式'; return; } else { detail.warnPayMethod = ''; }
+            var data = {
+                payType: detail.payMethod,
+                userName: detail.mineUsername,
+                userId: detail.mineUserId,
+                orderType: 0,
+                orderPrice: detail.detailInfo.coursePrice,
+                orderTitle: detail.detailInfo.courseTitle,
+                courseId : detail.detailId
+            };
+            detail.getData('/lessonSubject/addOrder','POST',  data,  'orderInfo', function(response) {
+                if (detail.payMethod) {
+                    location.href = '/lessonSubject/WeChatPay/' + response.data;
+                } else {
+                    location.href = '/lessonSubject/buySuccess/' + response.data;
+                };
+            });
 
         },
         overtime: false,
@@ -259,6 +274,7 @@ define([], function () {
         videoType: true,
         setVideo: function (callback) {
             var model = detail.videoType ? 'detailInfo' : 'videoPath';
+
             detail.thePlayer = jwplayer('mediaplayer').setup({
                 flashplayer: 'jwplayer/jwplayer.flash.swf',
                 playlist: [{
@@ -302,13 +318,16 @@ define([], function () {
         videoPath : [],
         changeVideo : function(chapterId,path){
             detail.videoType = false;
+            detail.overtime = false;
             detail.videoPath = {
                 courseHighPath : path,
                 courseMediumPath : path,
                 courseLowPath : path,
             };
             detail.setVideo(function () {});
-            detail.getData('/lessonSubject/addCourseView', 'POST', {chapterId : chapterId, userId : detail.mineUserId, courseId : detail.detailId}, 'addCourseView');
+            if(detail.mineUserId != null){
+                detail.getData('/lessonSubject/addCourseView', 'POST', {chapterId : chapterId, userId : detail.mineUserId, courseId : detail.detailId}, 'addCourseView');
+            }
         }
     });
     return detail;

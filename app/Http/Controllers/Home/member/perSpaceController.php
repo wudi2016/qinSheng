@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Home\member;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -22,7 +23,7 @@ class perSpaceController extends Controller
     public function index($typeID,$tab = null)
     {
         //0学生学员   &&   １教师学员
-        if (Auth::check()) {
+        if (Auth::check() && Auth::user()->type != 3) {
             $mineUsername = Auth::user()->username;
             $mineUserId = Auth::user()->id;
             $data = DB::table('users')
@@ -44,7 +45,7 @@ class perSpaceController extends Controller
     public function famousTeacher($tab = null)
     {
         //名师个人中心主页
-        if (Auth::check()) {
+        if (Auth::check() && Auth::user()->type != 3) {
             $id = Auth::user()->id;
             $mineUsername = Auth::user()->username;
             $mineUserId = Auth::user()->id;
@@ -203,13 +204,14 @@ class perSpaceController extends Controller
     // 个人中心我的点评课程
     public function getCommentCourse(Request $request,$type)
     {
-        $type == '1' ? $order = 'id' : $order = 'coursePlayView';
+        $type == '1' ? $order = 'a.id' : $order = 'a.coursePlayView';
         $info = DB::table('applycourse as a')
             ->leftJoin('orders as o', 'a.orderSn', '=', 'o.orderSn')
             ->leftJoin('commentcourse as c','c.orderSn', '=', 'a.orderSn')
             ->where(['a.userId' => $request->userId, 'a.courseStatus' => 0])->where('o.orderType', '<>', '0')
             ->select('a.id','a.courseTitle','a.coursePic','o.username','o.teacherName','a.coursePlayView','c.coursePrice','a.courseLowPath',
                 'a.courseMediumPath','a.courseHighPath','a.state as applyState','o.status','c.state as commentState','a.created_at')
+            ->orderBy($order,'desc')
             ->get();
         foreach ($info as $key => $value) {
             $info[$key]->coursePrice = ceil($info[$key]->coursePrice/1000);
@@ -484,18 +486,29 @@ class perSpaceController extends Controller
             return false;
         $data = DB::table('orders as o')
             ->join('users as u','u.id','=','o.teacherId')
-            ->select('o.id','o.orderSn','o.orderTitle','o.orderPrice','o.orderType','o.courseId','o.status','o.payTime','u.realname','u.username')
+            ->select('o.id','o.userId','o.orderSn','o.userName','o.orderTitle','o.orderPrice','o.payPrice','o.orderType','o.courseId','o.status','o.created_at as payTime','u.realname','u.username')
             ->where(['o.userId'=>$id,'o.isDelete'=>0])
-            ->orderBy('o.payTime','desc')
+            ->orderBy('o.id','desc')
             ->get();
-//        dd($data);
+
+        $seven = Carbon::today()->subDays(7);
         if($data){
             foreach($data as $key=>$value){
                 $data[$key]->orderPrice = ceil($value->orderPrice/1000);
+                $data[$key]->payPrice = ceil($value->payPrice/1000);
                 $data[$key]->realname || $data[$key]->realname = $data[$key]->username;
+                //0是超过七天，1是不超过7天
+                $data[$key]->seven = ($seven <= $data[$key]->payTime) ? 1 : 0;
             }
-        }
-        return $this->returnResult($data);
+
+//              dd($data);
+
+            return response()->json(['seven'=>$seven,'data'=>$data,'type'=>true]);
+
+            }else{
+
+                return response()->json(['seven'=>$seven,'type'=>false]);
+            }
     }
 
 
@@ -561,4 +574,39 @@ class perSpaceController extends Controller
         }
 
     }
+
+
+
+    //我的订单 -- 申请退款页面数据接口
+
+    public function applyRefund(Request $request)
+    {
+        $total   = \DB::table('coursechapter')->where(['courseId'=>$request['courseId']])->where('parentId','<>',0)->count() ?: 1;
+        $chapter = \DB::table('courseview')->where(['userId'=>$request['userId'],'courseId'=>$request['courseId'],'courseType'=>0])->count() ?: 1;
+        $price = floor($request['payPrice'] / $total * ($total-$chapter));
+        if($total - $chapter >= 0)
+            return response()->json(['data'=>$price,'type'=>true]);
+        else
+            return response()->json(['data'=>'','type'=>false]);
+    }
+
+
+
+    //我的订单 -- 提交退款申请
+
+    public function submitApply(Request $request)
+    {
+        $input = $request->except('refundableAmount','id');
+        $input['created_at'] = $input['updated_at']  = Carbon::now();
+        $id = \DB::table('refund')->insertGetId($input);
+        if($id){
+            \DB::table('orders')->where('id',$request['id'])->update(['refundableAmount'=>$request['refundableAmount'],'status'=>3]);
+            return response()->json(['type'=>true,'msg'=>'请等待申请结果！']);
+        }else {
+            return response()->json(['type'=>false,'msg'=>'申请退款失败']);
+        }
+    }
+
+
+
 }

@@ -135,8 +135,13 @@
                                         <td>{{$comcourse->orderSn}}</td>
                                         <td>{{$comcourse->courseTitle}}</td>
                                         <td>{{$comcourse->username}}</td>
-                                        <td>
-                                            <a href="{{url('/lessonComment/detail/'.$comcourse->id)}}">查看</a>
+                                        <td style="color: #0b6cbc">
+                                            {{--<a href="{{url('/lessonComment/detail/'.$comcourse->id)}}">查看</a>--}}
+                                            @if(!$comcourse->courseLowPath && !$comcourse->courseMediumPath && !$comcourse->courseHighPath)
+                                                正在转码...
+                                            @else
+                                                <span class="lookVideo" onclick="lookVideo('{{$comcourse->courseLowPathurl}}')" style="color: #00a0e9;cursor:pointer;">查看</span>
+                                            @endif
                                         </td>
                                         <td>
                                             {{--<a id="example2-2" href="{{asset($comcourse->coursePic)}}">查看--}}
@@ -165,7 +170,7 @@
                                                 <span class="btn btn-xs btn-primary" style="position: relative;display: inline-block;">
                                                     <strong>审核状态</strong>
                                                     <span class="icon-caret-down icon-on-right"></span>
-                                                    <select id="selectCheck" class="col-xs-10 col-sm-2" onchange="selectCheck({{$comcourse->id}},this.value,'{{$comcourse->username}}','{{$comcourse->teachername}}');" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">
+                                                    <select id="selectCheck" class="col-xs-10 col-sm-2" onchange="selectCheck({{$comcourse->id}},this.value,'{{$comcourse->username}}','{{$comcourse->teachername}}','{{$comcourse->teacherPhone}}');" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">
                                                         <option value="44" selected></option>
                                                         <option value="0" >审核未通过</option>
                                                         <option value="1" >审核中</option>
@@ -250,6 +255,7 @@
                 <div class="topbaner">审核结果</div>
                 <div class="content">审核通过!</div>
                 <div class="bottom">
+                    <input type="hidden" class="teacherPhone" value="">
                     <div class="suer_btn" id="suer_btn0">确认</div>
                 </div>
             </div>
@@ -361,6 +367,20 @@
             </div>
         </div>
 
+
+        <!--视频弹窗显示详情-->
+        <div id="videodetailpupUpback" class="videodetailpupUpback">
+            <div class="videopopup1" style="width: 700px;height: 400px;">
+                <div class="videodetailtopbaner">
+                    <div class="detailtitle" style="width: 650px;padding-left: 40px">视频</div>
+                    <div class="deldetail" style="float: right"></div>
+                </div>
+                <div class="content1">
+                    <div id="myplayer" ></div>
+                </div>
+            </div>
+        </div>
+
     </div><!-- /.main-content -->
 
 @endsection
@@ -373,4 +393,8 @@
              avalon.scan();
         });
     </script>
+
+    <script type="text/javascript" src="{{asset('home/jplayer/jwplayer.js')}}"></script>
+    <script type="text/javascript" src="{{asset('home/js/layout/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{asset('admin/js/videoPop.js') }}"></script>
 @endsection
