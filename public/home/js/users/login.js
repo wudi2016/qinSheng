@@ -51,6 +51,8 @@ var postcheck = function(){
                     $('.psd').parent().siblings('.cuo').removeClass('hide');
                     // window.event.returnValue = false;
                     // return false;
+                }else if(data == 4){
+                    $('.errorMsg').html('* 该账号被禁用，请联系管理员！');
                 }else if(data == 2){
                     // return true;
                     checkLogin = true;

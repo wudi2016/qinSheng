@@ -48,19 +48,19 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                          @foreach( $roleList as $roles )
+                                          @foreach($roleList as $roles)
                                             <tr>
                                                 <td> <a> {{ $roles -> slug }} </a> </td>
                                                 <td> <a> {{ $roles -> created_at }} </a> </td>
 
                                                 <td>
-                                                    @permission('role.list')
+                                                    @permission('check.role')
                                                     <a href="{{ url('admin/auth/checkRoleUser/'. $roles -> id) }}" class="btn btn-xs btn-success">查看成员</a>
                                                     @endpermission
 
                                                     &nbsp;&nbsp;
 
-                                                    @permission('role.list')
+                                                    @permission('check.role')
                                                     <a href="{{ url('admin/auth/checkRolePermission/'. $roles -> id) }}" class="btn btn-xs btn-success">查看权限</a>
                                                     @endpermission
 

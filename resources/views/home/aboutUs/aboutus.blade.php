@@ -4,9 +4,14 @@
 
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{asset('home/css/aboutus/aboutus.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{asset('home/css/games/pagination.css')}}">
+
 
     <style type="text/css">
-
+        #page{
+           margin-top: -20px;
+            margin-left: -24px;
+        }
     </style>
 
 @endsection
@@ -132,12 +137,10 @@
                             </div>
                             <a ms-attr-href="linkurl+ el.url"><div class="friendlink_content_each_font" ms-html="el.title" ></div></a>
                         </div>
-
-
-
                     </div>
 
 
+                        {{--<div id="page"></div>--}}
 
                 </div>
 
@@ -159,6 +162,12 @@
 
             </div>
 
+
+
+
+
+
+
         </div>
 
 
@@ -174,6 +183,8 @@
 
 @section('js')
     <script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.1&services=true"></script>
+    <script type="text/javascript" src="{{asset('home/js/games/pagination.js')}}"></script>
+
 
     <script>
         require(['/aboutus/firmintro'], function (model) {

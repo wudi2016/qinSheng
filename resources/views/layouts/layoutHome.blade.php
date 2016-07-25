@@ -21,10 +21,10 @@
     		<div class="head_con_login">
     		    <!-- 登陆前 -->
 				@if (!Auth::check() || \Auth::user()->type == 3)
-				<div class="head_con_login_con "><a href="{{url('/index/login')}}"><span>登陆</span></a>&nbsp;|&nbsp;<a href="{{url('/index/register')}}"><span>注册</span></a></div>
+				<div class="head_con_login_con "><a href="{{url('/index/login')}}"><span>登录</span></a>&nbsp;|&nbsp;<a href="{{url('/index/register')}}"><span>注册</span></a></div>
     		    <!-- 登陆后 -->
 				@else
-                <img  class="touxiang " src="{{asset(\Auth::user()->pic)}}">
+                <img  class="touxiang " src="{{asset(\Auth::user()->pic)}}" onerror="javascript:this.src='/home/image/layout/default.png';">
                 <div  class="persapce hide">
                 	<div class="persapce_li">
 						<div class="persapce_li_con_per">

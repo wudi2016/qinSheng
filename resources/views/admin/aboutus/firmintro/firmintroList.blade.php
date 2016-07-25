@@ -128,10 +128,12 @@
                                                         <i class="icon-edit bigger-120">修改</i>
                                                     </a>
 
+
+                                                    @if($firm->id <7 )
                                                     <a href="{{url('/aboutUs/firmintro/'.$firm->id)}}"  class="btn btn-xs btn-success">
                                                         <i class="icon-ok bigger-120">预览</i>
                                                     </a>
-
+                                                    @endif
 
 
                                                 </div>

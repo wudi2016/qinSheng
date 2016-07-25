@@ -4,7 +4,7 @@ define([], function(){
     var newdetail = avalon.define({
         $id: 'newdetail',
 
-        newdetails :'',
+        newdetails :[],
         getData:function(newId){
             $.ajax({
                 url : '/community/getnewdetail/'+ newId,

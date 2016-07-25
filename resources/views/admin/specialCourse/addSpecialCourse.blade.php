@@ -203,7 +203,7 @@
                                     <option value="9">9折</option>
                                     <option value="8">8折</option>
                                     <option value="7">7折</option>
-                                    <option value="6">3折</option>
+                                    <option value="6">6折</option>
                                     <option value="5">5折</option>
                                     <option value="4">4折</option>
                                     <option value="3">3折</option>
@@ -231,6 +231,25 @@
                             </div>
                         </div>
                         {{--@endif--}}
+
+                        <div class="space-4"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 状态 </label>
+
+                            <div class="col-sm-9">
+                                {{--<input type="text" name="teacherId" id="form-field-1" placeholder="讲师" class="col-xs-10 col-sm-5" value="" />--}}
+                                <select id="form-field-2" class="col-xs-10 col-sm-5" name="courseStatus">
+                                    <option value="0">激活</option>
+                                    <option value="1">锁定</option>
+                                </select>
+                                <span class="help-inline col-xs-12 col-sm-7">
+                                    <label class="middle">
+                                        <span class="lbl"></span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
 
 
                         <div class="clearfix form-actions">

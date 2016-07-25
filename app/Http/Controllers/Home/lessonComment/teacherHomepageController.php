@@ -13,6 +13,7 @@ class teacherHomepageController extends Controller
 {
     use Gadget;
 
+
     /**
      * 名师主页
      *
@@ -36,11 +37,13 @@ class teacherHomepageController extends Controller
     {
         $teacherInfo = DB::table('users') 
                     -> join('teacher', 'users.id', '=', 'teacher.parentId')
-                    -> join('city', 'users.cityId', '=', 'city.code')
-                    -> select('users.id', 'users.username', 'users.sex', 'city.name as city', 'users.created_at', 'users.type', 'users.pic', 'users.company', 
+                    -> select('users.id', 'users.username', 'users.sex', 'users.created_at', 'users.type', 'users.cityId', 'users.pic', 'users.company', 
                         'teacher.intro', 'teacher.stock', 'teacher.price', 'teacher.cover') 
                     -> where(['users.id' => $teacherID, 'users.type' => 2]) -> first();
         $teacherInfo && $teacherInfo -> created_at = floor((time() - strtotime($teacherInfo -> created_at)) / 86400);
+        $teacherInfo -> created_at || $teacherInfo -> created_at = 1;
+        $city = DB::table('city') -> select('name') -> where('code', $teacherInfo -> cityId) -> first();
+        $city && $teacherInfo -> city = $city -> name;
         return $this -> returnResult($teacherInfo);
     }
 
@@ -54,11 +57,14 @@ class teacherHomepageController extends Controller
     {
         sleep(1);
         $tableName = $request['type'] ? 'commentcourse' : 'course';
-        $extra = $request['type'] ? 'teachername' : 'courseChapter';
         $order = $request['order'] ? 'coursePlayView' : 'id';
-        $result = \DB::table($tableName) -> select('id', 'coursePrice', 'courseTitle', 'coursePic', 'coursePlayView', $extra . ' as extra')
-                -> where(['teacherId' => $request['userid/**/'], $tableName . '.courseIsDel' => 0, $tableName . '.courseStatus' => 0])
+        $condition = ['id', 'coursePrice', 'courseTitle', 'coursePic', 'coursePlayView'];
+        $request['type'] && array_push($condition, 'teachername as extra');
+
+        $result = \DB::table($tableName) -> select($condition)
+                -> where(['teacherId' => $request['userid'], $tableName.'.courseIsDel' => 0, $tableName.'.courseStatus' => 0])
                 -> orderBy($order, "desc") -> skip($this -> getSkip($request['page'], $this->number)) -> take($this -> number) -> get();
+
         return $this -> returnResult($result);
     }
 
@@ -72,9 +78,9 @@ class teacherHomepageController extends Controller
     public function getTeacherVideoCount(Request $request)
     {
         $tableName = $request['type'] ? 'commentcourse' : 'course';
-        $order = $request['order'] ? 'coursePlayView' : 'id';
-        $result = \DB::table($tableName)
-                -> where(['teacherId' => $request['userid']]) -> orderBy($order, "desc") -> count();
+        $where = ['teacherId' => $request['userid'], 'courseStatus' => 0, 'courseIsDel' => 0];
+        $request['type'] && $where['state'] = 2;
+        $result = \DB::table($tableName) -> where($where) -> count();
         return $this -> returnResult($result);
     }
 

@@ -12,20 +12,21 @@ use App\Http\Controllers\Home\lessonComment\Gadget;
 use PaasResource;
 use PaasUser;
 use QrCode;
-use Primecloud\Weixin\Kernel\WxPayConfig;
-use Primecloud\Weixin\Kernel\WxPayApi;
-use Primecloud\Weixin\Kernel\WxPayDataBase;
-use Primecloud\Weixin\Kernel\WxPayUnifiedOrder;
-use Primecloud\Weixin\Kernel\WxPayBizPayUrl;
-
+use Primecloud\Pay\Weixin\Kernel\WxPayConfig;
+use Primecloud\Pay\Weixin\Kernel\WxPayApi;
+use Primecloud\Pay\Weixin\Kernel\WxPayDataBase;
+use Primecloud\Pay\Weixin\Kernel\WxPayUnifiedOrder;
+use Primecloud\Pay\Weixin\Kernel\WxPayResults;
 
 class lessonSubjectController extends Controller
 {
     use Gadget;
 
+    public static $errMessage;
+
     public function __construct()
     {
-//        PaasUser::apply();
+        PaasUser::apply();
     }
     // 专题课程列表页 =============== page =======================
     public function lessonSubjectList($type)
@@ -50,7 +51,7 @@ class lessonSubjectController extends Controller
         switch ($type) {
             case 1:
                 $orderBy = 'id';
-                $asc = 'asc';
+                $asc = 'desc';
                 break;
             case 2:
                 $orderBy = 'created_at';
@@ -64,13 +65,16 @@ class lessonSubjectController extends Controller
         $List = DB::table('course')->where(['courseStatus' => 0, 'courseIsDel' => 0])->orderBy($orderBy, $asc)->get();
         foreach ($List as $key => $value) {
             if($List[$key]->courseDiscount){
-                $List[$key]->coursePrice = ceil(($List[$key]->courseDiscount/10000)*$List[$key]->coursePrice/1000);
+//                $List[$key]->coursePrice = ceil(($List[$key]->courseDiscount/10000)*$List[$key]->coursePrice/100);
+                $List[$key]->coursePrice = ($List[$key]->courseDiscount/10000)*$List[$key]->coursePrice/100;
             }else{
-                $List[$key]->coursePrice = ceil($List[$key]->coursePrice/1000);
+//                $List[$key]->coursePrice = ceil($List[$key]->coursePrice/100);
+                $List[$key]->coursePrice = $List[$key]->coursePrice/100;
             }
             $List[$key]->coursePlayView = count(DB::table('courseview')->select('courseId','userId','courseType')->where(['courseId' => $value->id, 'courseType' => 0])->distinct()->get());
             $List[$key]->classHour = DB::table('coursechapter')->where(['courseId' => $value->id, 'status' => 0])->where('parentId', '<>', '0')->count();
         }
+
         return $this->returnResult($List);
     }
 
@@ -90,7 +94,8 @@ class lessonSubjectController extends Controller
         }
         $List = DB::table('commentcourse')->where(['courseStatus' => '0', 'state' => '2', 'courseIsDel' => 0])->orderBy($orderBy, 'desc')->get();
         foreach ($List as $key => $value) {
-            $List[$key]->coursePrice = ceil($value->coursePrice / 1000);
+//            $List[$key]->coursePrice = ceil($value->coursePrice / 100);
+            $List[$key]->coursePrice = $value->coursePrice / 100;
             $List[$key]->coursePlayView = count(DB::table('courseview')->select('courseId','userId','courseType')->where(['courseId' => $value->id, 'courseType' => 0])->distinct()->get());
         }
         return $this->returnResult($List);
@@ -99,11 +104,9 @@ class lessonSubjectController extends Controller
     // 专题课程详细页 数据接口
     public function getDetail($id)
     {
-//        PaasUser::apply();
+        PaasUser::apply();
         $info = DB::table('course')->select()->where('id', $id)->first();
-        $result = DB::table('coursechapter')->where(['courseId' => $id, 'status' => 0])->where('parentId','0')->first();
-
-
+        $result = DB::table('coursechapter')->where(['courseId' => $id, 'status' => 0])->where('parentId','<>','0')->first();
         $chapterId = $result ? $result->id : '';
         $mineUserId = Auth::check() ? Auth::user()->id : '';
         $view = DB::table('courseview')->where(['courseId' => $id, 'userId' => $mineUserId, 'chapterId' => $chapterId])->first();
@@ -111,26 +114,30 @@ class lessonSubjectController extends Controller
             DB::table('courseview')->insertGetId(['userId' => $mineUserId, 'courseId' => $id, 'chapterId' => $chapterId,'courseType' => 0]);
         }
         if($info->courseDiscount){
-            $info->coursePrice = ceil(($info->courseDiscount/10000)*$info->coursePrice/1000);
+//            $info->coursePrice = ceil(($info->courseDiscount/10000)*$info->coursePrice/100);
+            $info->coursePrice = ($info->courseDiscount/10000)*$info->coursePrice/100;
         }else{
-            $info->coursePrice = ceil($info->coursePrice/1000);
+//            $info->coursePrice = ceil($info->coursePrice/100);
+            $info->coursePrice = $info->coursePrice/100;
         }
         $info->classHour = DB::table('coursechapter')->where(['courseId' => $id, 'status' => 0])->where('parentId', '<>', '0')->count();
-//        $info->courseLowPath = $result ? $this -> getPlayUrl($result->courseLowPath) : '';
-//        $info->courseMediumPath = $result ? $this -> getPlayUrl($result->courseMediumPath) : '';
-//        $info->courseHighPath = $result ? $this -> getPlayUrl($result->courseHighPath) : '';
-        $info->courseLowPath = $result ? $result->courseLowPath : '';
-        $info->courseMediumPath = $result ? $result->courseMediumPath : '';
-        $info->courseHighPath = $result ? $result->courseHighPath : '';
+        $info->courseLowPath = $result ? $this -> getPlayUrl($result->courseLowPath) : '';
+        $info->courseMediumPath = $result ? $this -> getPlayUrl($result->courseMediumPath) : '';
+        $info->courseHighPath = $result ? $this -> getPlayUrl($result->courseHighPath) : '';
+//        $info->courseLowPath = $result ? $result->courseLowPath : '';
+//        $info->courseMediumPath = $result ? $result->courseMediumPath : '';
+//        $info->courseHighPath = $result ? $result->courseHighPath : '';
         $info->coursePlayView = count(DB::table('courseview')->select('courseId','userId','courseType')->where(['courseId' => $id, 'courseType' => 0])->distinct()->get());
         if (Auth::check()) {
             $info->isCollection = (DB::table('collection')->select('id')->where(['courseId' => $info->id, 'userId' => Auth::user()->id])->first() ? true : false);
-            $info->isBuy = (DB::table('orders')->select('id')->where(['userId' => Auth::user()->id, 'orderType' => '0', 'courseId' => $id])->first() ? true : false);
+            $info->isBuy = (DB::table('orders')->select('id')->where(['userId' => Auth::user()->id, 'orderType' => '0', 'courseId' => $id, 'status' => 0])->first() ? true : false);
             $info->isAuthor = $info->teacherId == Auth::user()->id ? true : false;
+            $info->isTeacher = Auth::user()->type == '2' ? true : false;
         } else {
             $info->isCollection = false;
             $info->isBuy = false;
             $info->isAuthor = false;
+            $info->isTeacher = false;
         }
         return $this->returnResult($info);
     }
@@ -141,22 +148,23 @@ class lessonSubjectController extends Controller
         $info = DB::table('course as c')
             ->join('users as u', 'c.teacherId', '=', 'u.id')
             ->join('teacher as t', 't.parentId', '=', 'c.teacherId')
-            ->where('c.id', $id)->select('u.realname', 'u.pic', 'u.school', 't.intro')->first();
+            ->where('c.id', $id)->select('u.id','u.realname', 'u.pic', 'u.school', 't.intro')->first();
         return $this->returnResult($info);
     }
 
     // 获取目录信息
     public function getCatalogInfo($id)
     {
-//        PaasUser::apply();
+        PaasUser::apply();
         $mineUserId = Auth::check() ? Auth::user()->id : '';
         $info = DB::table('coursechapter')->select('id', 'title')->where(['status' => 0, 'parentId' => '0', 'courseId' => $id])->get();
         foreach ($info as $key => $value) {
             $info[$key]->section = (DB::table('coursechapter')->select('id', 'title', 'courseLowPath', 'courseMediumPath', 'courseHighPath')->where(['status' => 0, 'parentId' => $value->id, 'courseId' => $id])->get());
             foreach($info[$key]->section as $k => $v){
-//                $v->courseLowPath = $this -> getPlayUrl($v->courseLowPath);
-//                $v->courseMediumPath = $this -> getPlayUrl($v->courseMediumPath);
-//                $v->courseHighPath = $this -> getPlayUrl($v->courseHighPath);
+                    $v->courseLowPath = $this -> getPlayUrl($v->courseLowPath);
+                    $v->courseMediumPath = $this -> getPlayUrl($v->courseMediumPath);
+                    $v->courseHighPath = $this -> getPlayUrl($v->courseHighPath);
+
                 $v->isLearn = DB::table('courseview')->where(['courseId' => $id,'userId' => $mineUserId, 'chapterId' => $v->id])->first() ? true : false;
             }
         }
@@ -192,12 +200,13 @@ class lessonSubjectController extends Controller
             $input['updated_at'] = Carbon::now();
             $input['status'] = '0';
             $insertId = DB::table('coursecomment')->insertGetId($input);
+            $result = DB::table('coursecomment')->where('id',$input['parentId'])->select('commentContent')->first();
             if($insertId){
                 $info['toUsername'] = $input['tousername'];
                 $info['fromUsername'] = $input['username'];
                 $info['username'] = $input['username'];
                 $info['type'] = 5;
-                $info['content'] = $input['commentContent'];
+                $info['content'] = $result ? $result->commentContent : '';
                 $info['client_ip'] = $_SERVER["REMOTE_ADDR"];
                 $info['actionId'] = $input['courseId'];
                 $info['created_at'] = Carbon::now();
@@ -309,12 +318,11 @@ class lessonSubjectController extends Controller
      */
     public function addOrder(Request $request)
     {
-
         $request['orderSn'] = date('YmdHis', time()) .'_'. uniqid();
         $request['created_at'] = Carbon::now();
         $request['updated_at'] = Carbon::now();
+        $request['orderPrice'] = $request->orderPrice * 100;
         $result = DB::table('orders') -> insertGetId($request -> all());
-        if (!$result) return $this -> returnResult(false);
         return $this -> returnResult($result);
     }
 
@@ -322,9 +330,9 @@ class lessonSubjectController extends Controller
     // 微信扫码支付页
     public function lessonSubjectWeChatPay(WxPayApi $wxPay, WxPayDataBase $wxBase, WxPayUnifiedOrder $inputObj, $orderID)
     {
-        $result = DB::table('orders') -> select('orderPrice', 'orderTitle', 'orderSn', 'id') -> where(['id' => $orderID, 'userId' => \Auth::user() -> id, 'isDelete' => 0]) -> first();
+        $result = DB::table('orders') -> select('orderPrice', 'orderTitle', 'orderSn', 'id', 'orderType') -> where(['id' => $orderID, 'userId' => \Auth::user() -> id, 'isDelete' => 0, 'status' => 5]) -> first();
         $result || abort(404);
-        $code_url = $this -> makeUnifiedOrder($wxPay, $inputObj, $wxBase, $result, 'http://qinsheng.zuren8.com/lessonComment/wxPayCallback');
+        $code_url = $this -> makeUnifiedOrder($wxPay, $inputObj, $wxBase, $result, 'http://qinsheng.zuren8.com/lessonSubject/wxPayCallback');
         empty($code_url['code_url']) && abort(404);
         return view('home.lessonSubject.lessonSubjectWeChatPay') -> with('orderID', $orderID) -> with('orderInfo', $result) -> with('url', $code_url['code_url']);
     }
@@ -334,24 +342,130 @@ class lessonSubjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function wxPayCallback(Request $request)
+    public function wxPayCallback(WxPayDataBase $wxBase)
     {
-        $message = [];
-        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
-        $message = (array) simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
-        if ($message['result_code'] == 'SUCCESS' && $message['return_code'] == 'SUCCESS') {
-            $orderSn = $message['out_trade_no'];
-            $result['payPrice'] = $message['total_fee'];
-            $result['tradeSn'] = $message['transaction_id'];
+        try {
+            $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
+            $xml = WxPayResults::Init($xml);
+            if ($xml) {
+                if ($xml['result_code'] == 'SUCCESS' && $xml['return_code'] == 'SUCCESS') {
+                    $orderSn = $xml['out_trade_no'];
+                    $result['payPrice'] = $xml['total_fee'];
+                    $result['tradeSn'] = $xml['transaction_id'];
+                    $result['payTime'] = Carbon::now();
+                    $result['status'] = 0;
+                    switch ($xml['product_id']) {
+                        case 1:
+                            $result['status'] = 0;
+                            break;
+                        case 2:
+                            $result['status'] = 2;
+                            break;
+                    }
+                    $order = DB::table('orders') -> where('orderSn', $orderSn) -> update($result);
+                    if ($order) echo "SUCCESS";
+                } else {
+                    \Log::info(json_encode($xml)." --- order pay fail");
+                }
+            } else {
+                \Log::info(json_encode($xml)." --- check fail");
+            }
+        } catch (\Exception $e) {
+            \Log::info($e -> getMessage()." --- try catch errors");
+        }
+    }
+
+    /**
+     * 微信扫码获取订单状态
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function orderStatus($orderID)
+    {
+        $result = DB::table('orders') -> select('id', 'orderType', 'courseId') -> where('status', '!=', 5)  -> where(['id' => $orderID, 'userId' => \Auth::user() -> id, 'isDelete' => 0]) -> first();
+        return $this -> returnResult($result);
+    }
+
+    /**
+     * 支付成功
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function buySuccess($orderID)
+    {
+        $result = DB::table('orders') -> where(['id' => $orderID, 'userId' => \Auth::user() -> id, 'status' => 0, 'isDelete' => 0]) ->select('courseId') -> first();
+        $result || abort(404);
+        return view('home.lessonSubject.buySuccess') -> with('courseId', $result->courseId);
+    }
+
+    /**
+     * 支付宝异步回调页面
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function alipayAsyncCallback()
+    {
+        if (! app('alipay.web') -> verify()) {
+            Log::info('Alipay verification fail.', [
+                'data' => json_encode(Input::all())
+            ]);
+            return 'fail';
+        }
+        if (Input::get('trade_status') == 'TRADE_SUCCESS' || Input::get('trade_status') == 'TRADE_FINISHED') {
+            return 'success';
+        }
+    }
+
+    /**
+     * 支付宝同步回调页面
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function alipaySyncCallback()
+    {
+        if (! app('alipay.web') -> verify()) {
+            Log::info('Alipay return query data verification fail.', [
+                'data' => Request::getQueryString()
+            ]);
+            abort(404);
+        }
+
+        if (Input::get('trade_status') == 'TRADE_SUCCESS' || Input::get('trade_status') == 'TRADE_FINISHED') {
+            $orderSn = Input::get('out_trade_no');
+            $result['payPrice'] = Input::get('total_fee') * 100;
+            $result['tradeSn'] = Input::get('trade_no');
             $result['payTime'] = Carbon::now();
-            $result['status'] = 0;
+            if (preg_match('/^\/lessonComment\/buySuccess\/[0-9]{1,}/', Input::get('body'))) {
+                $result['status'] = 0;
+            } else if (preg_match('/^\/lessonComment\/detail\/[0-9]{1,}/', Input::get('body'))) {
+                $result['status'] = 2;
+            }
             $order = DB::table('orders') -> where('orderSn', $orderSn) -> update($result);
             if ($order) {
-                echo "SUCCESS";
+                return redirect() -> to(Input::get('body'));
+            } else {
+                abort(404);
             }
-        } else {
-            file_put_contents(public_path().'/order.txt', date('Y-M-D H:i:s', time())." -----  {$message['transaction_id']}  ---------- fail ----------- \r\n", FILE_APPEND);
         }
+    }
+
+    /**
+     * 支付宝支付
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function alipay($orderID, $callback)
+    {
+        $result = DB::table('orders') -> select('orderPrice', 'orderTitle', 'orderSn', 'id') -> where(['id' => $orderID, 'userId' => \Auth::user() -> id, 'isDelete' => 0, 'status' => 5]) -> first();
+        $result || abort(404);
+        $callback = str_replace('&', '/', $callback);
+        $alipay = app('alipay.web');
+        $alipay -> setOutTradeNo($result -> orderSn);
+        $alipay -> setTotalFee($result -> orderPrice / 100);
+        $alipay -> setSubject($result -> orderTitle);
+        $alipay -> setBody($callback);
+        $alipay -> setQrPayMode('4');
+        return redirect() -> to($alipay -> getPayLink());
     }
 
     function returnResult($result)

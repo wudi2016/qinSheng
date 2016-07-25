@@ -149,7 +149,7 @@
 
                                                     @permission('delete.user')
                                                     <a href="{{url('admin/users/delUser/'.$value->id)}}"
-                                                       class="btn btn-xs btn-danger">
+                                                       class="btn btn-xs btn-danger" onclick="return confirm('确定要删除该用户?');">
                                                         <strong>删除</strong>
                                                     </a>
                                                     @endpermission

@@ -36,6 +36,12 @@ class recommendCourseController extends Controller
         if(DB::table('hotcourse')->where('courseId',$request['courseId'])->first()){
             return redirect()->back()->withInput()->withErrors('课程不可重复推荐');
         }
+        //判断推荐位是否存在
+        $isexit = DB::table('hotcourse')->where('sort',$request['sort'])->first();
+        if($isexit){
+            DB::table('hotcourse')->where('id',$isexit->id)->update(['sort'=>0]);
+        }
+
         $courseTitle = DB::table('course')->where('id',$request['courseId'])->select('id','courseTitle')->first();
         $data['courseName'] = $courseTitle->courseTitle;
         $data['created_at'] = Carbon::now();
@@ -60,6 +66,11 @@ class recommendCourseController extends Controller
      */
     public function doEditRecommendSpecialCourse(Request $request){
         $data = $request->except('_token');
+        //判断推荐位是否存在
+        $isexit = DB::table('hotcourse')->where('sort',$request['sort'])->first();
+        if($isexit){
+            DB::table('hotcourse')->where('id',$isexit->id)->update(['sort'=>0]);
+        }
         $data['updated_at'] = Carbon::now();
         if(DB::table('hotcourse')->where('id',$request['id'])->update($data)){
             return redirect('admin/message')->with(['status'=>'课程推荐修改成功','redirect'=>'specialCourse/recommendSpecialCourseList']);

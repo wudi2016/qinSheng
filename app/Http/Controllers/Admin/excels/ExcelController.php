@@ -49,6 +49,33 @@ class ExcelController extends Controller
         return $this->export($info,'订单表');
     }
 
+    /**
+     *导出播放统计
+     */
+    public function specialCountExport(){
+        $info = json_decode($_POST['excels']);
+        return $this->export($info,'播放统计');
+    }
+
+    /**
+     *导出用户统计数
+     */
+    public function userCountExport(){
+        $infos = json_decode($_POST['excels']);
+        $categories = $infos->categories;
+        $data = $infos->data;
+        $combine[] = array_combine($categories,$data);
+//        dd($combine);
+//        foreach($combine as $key=>$val){
+//            $combines[][$key] = $val;
+//        }
+//        foreach($combines as $val){
+//            $info[] = (object)$val;
+//        }
+//        dd($info);
+        return $this->exportCount($combine,'用户数据统计');
+    }
+
 
     /**
      *封装导入
@@ -297,6 +324,26 @@ class ExcelController extends Controller
         $data[] = $array;
         $messages = array_combine($array, $msg);
         $data[1] = $messages;
+        Excel::create(iconv('UTF-8', 'GBK',$title), function ($excel) use ($data) {
+            $excel->sheet('sheet', function ($sheet) use ($data) {
+                $sheet->rows($data);
+            });
+        })->download('xlsx');
+    }
+
+
+    /**
+     *封装导出
+     */
+    public function exportCount($info, $title)
+    {
+        if(!$info){
+            return redirect()->back()->withInput()->withErrors('没有数据可导出');
+        }
+        $data = $info;
+        $titles = array_keys($data[0]);
+        $titles = array_combine($titles, $titles);
+        array_unshift($data, $titles);
         Excel::create(iconv('UTF-8', 'GBK',$title), function ($excel) use ($data) {
             $excel->sheet('sheet', function ($sheet) use ($data) {
                 $sheet->rows($data);

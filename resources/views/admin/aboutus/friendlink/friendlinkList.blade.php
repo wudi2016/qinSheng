@@ -22,10 +22,8 @@
                 <form action="" method="get" class="form-search">
                     <select name="type" id="form-field-1" class="searchtype">
                         <option value="1">ID</option>
-                        <option value="2">youlian</option>
-                        <option value="3">未开始</option>
-                        <option value="4">已结束</option>
-                        <option value="5">时间筛选</option>
+                        <option value="2">友链名称</option>
+                        <option value="3">时间筛选</option>
                         <option value="6">全部</option>
                     </select>
 

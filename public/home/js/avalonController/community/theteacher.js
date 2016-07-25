@@ -23,7 +23,7 @@ define([],function(){
         Yes: false,
         No:false,
         //名师
-        theteacherlist: '',
+        theteacherlist: [],
         gettheteacher:function(type){
              model.Yes = false;
              model.No = false;

@@ -113,7 +113,6 @@
     cursor: pointer;
 }
 .contain_lessonDetail_top_video_right_btn .third{
-    display: none;
     float: left;
     width: 150px;
     height: 50px;
@@ -435,10 +434,10 @@
     width: 725px;
     height: 142px;
     resize: vertical;
-    text-indent: 10px;
     padding-top: 8px;
     font-size: 18px;
     position: relative;
+    white-space: pre-line;
 }
 .contain_lessonDetail_bot_left_comment span{
     background-color: #E8E8E8;
@@ -508,9 +507,9 @@
 .contain_lessonDetail_bot_left_comment_content .right .center{
     font-size: 14px;
     color: #222222;
-    width: 595px;
-    height: 60px;
-    margin-top: 20px;
+    width: 630px;
+    height: 70px;
+    margin-top: 15px;
     margin-left: 25px;
     letter-spacing:1px;
 }
@@ -519,20 +518,23 @@
     height: 22px;
     line-height: 22px;
     color: #209EEA;
-    overflow: hidden;
     text-align: left;
     text-overflow: ellipsis;
     white-space: nowrap;
+    overflow: hidden;
 }
 .contain_lessonDetail_bot_left_comment_content .right .center .content{
     line-height: 22px;
-    width: 480px;
+    width: 600px;
+    height: 50px;
+    word-wrap:break-word;
 }
 .contain_lessonDetail_bot_left_comment_content .right .bot{
     width: 350px;
     height: 15px;
     line-height:15px;
     float: right;
+    margin-top: 5px;
 }
 
 .contain_lessonDetail_bot_left_comment_content .right .bot span{
@@ -1033,15 +1035,32 @@
 }
 .feedback_center .center .content textarea{
     width: 550px;
-    height: 125px;
+    height: 100px;
     margin-top:5px;
-    border: 2px solid #ccc;
-    border-radius: 3px;
+    border-top: 2px solid #ccc;
+    border-left: 2px solid #ccc;
+    border-right: 2px solid #ccc;
+    border-bottom: none;
+    border-radius: 3px 3px 0px 0px;
     padding-left: 15px;
     padding-top: 5px;
     margin-left: 30px;
     font-size: 18px;
     resize: none;
+}
+.feedback_center .center .content div{
+    width: 566px;
+    height: 25px;
+    line-height: 25px;
+    margin-left: 35px;
+    border-top: none;
+    border-left: 2px solid #ccc;
+    border-right: 2px solid #ccc;
+    border-bottom: 2px solid #ccc;
+    border-radius: 0px 0px 3px 3px;
+    text-align: right;
+    margin-top: -1px;
+    color:#ccc;
 }
 .feedback .feedback_center .feedback_center_last{
     width: 95%;

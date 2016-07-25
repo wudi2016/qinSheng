@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -41,7 +40,7 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         //切换账号
         Route::get('/switchs', 'indexController@switchs');
         //注册
-        Route::get('/register', 'indexController@register');
+        Route::get('/register',['middleware' => 'users','uses'=>'indexController@register']);
         //判断用户类型
         Route::get('/judge', 'indexController@judge');
         //注册成功（老师）
@@ -105,10 +104,10 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
                 ||     -------------------------- 个人中心路由组 ----------------------------
                 ||--------------------------------------------------------------------------------------
                  */
-        //学员个人中心主页    0 学生学员&&    1  教师学员
-        Route::get('/student/{personID}/{tab?}','perSpaceController@index');
+        //学员个人中心主页    0 学生学员&&    1  教师学员  tab为选项卡可选参数
+        Route::get('/student/{personID}/{tab?}',['middleware' => 'check','uses'=>'perSpaceController@index']);
         //	名师个人中心主页  type 为 2
-        Route::get('/famousTeacher/{tab?}', 'perSpaceController@famousTeacher');
+        Route::get('/famousTeacher/{tab?}', ['middleware' => 'check','uses'=>'perSpaceController@famousTeacher']);
 
 
         //个人中心我的关注
@@ -236,6 +235,8 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         Route::get('/detail/{id}', 'lessonSubjectController@lessonSubjectDetail');
         // 微信扫码支付页
         Route::get('/WeChatPay/{id}', 'lessonSubjectController@lessonSubjectWeChatPay');
+        //  支付成功
+        Route::get('/buySuccess/{orderID}', 'lessonSubjectController@buySuccess');
 
 
         // ============  return result  ===============
@@ -271,7 +272,16 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         // 添加订单接口
         Route::post('/addOrder', 'lessonSubjectController@addOrder');
         //  微信支付回调地址
-        Route::any('/wxPayCallback', 'buyCommentController@wxPayCallback');
+        Route::any('/wxPayCallback', 'lessonSubjectController@wxPayCallback');
+        //  微信扫码获取订单状态
+        Route::get('/orderStatus/{orderID}', 'lessonSubjectController@orderStatus');
+
+        //  支付宝异步回调页面
+        Route::any('/alipayAsyncCallback', 'lessonSubjectController@alipayAsyncCallback');
+        //  支付宝同步回调页面
+        Route::any('/alipaySyncCallback', 'lessonSubjectController@alipaySyncCallback');
+        //  支付宝支付
+        Route::any('/alipay/{orderID}/{callback}', 'lessonSubjectController@alipay');
     });
 
 
@@ -328,8 +338,9 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         Route::get('/getApplyComment/{commentID}', 'commentDetailController@getApplyComment');
         //  评论点赞
         Route::post('/likesComment', 'commentDetailController@likesComment');
-
-        //	待点评详情
+        //  递增视频观看数
+        Route::post('/videoIncrement', ['middleware' => 'check', 'uses' => 'commentDetailController@videoIncrement']);
+        //  待点评详情
         Route::get('/wait/{commentID}', ['middleware' => 'check', 'uses' => 'commentDetailController@wait']);
         //  上传点评视频
         Route::get('/upload/{orderSn}', ['middleware' => 'check', 'uses' => 'commentDetailController@uploadComment']);
@@ -338,7 +349,6 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         //  完成点评视频上传
         Route::post('/finishComment', ['middleware' => 'check', 'uses' => 'commentDetailController@finishComment']);
 
-
         /*
         ||--------------------------------------------------------------------------------------
         ||     -------------------------- 购买点评 ----------------------------
@@ -346,6 +356,7 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
          */
         //	支付页面
         Route::get('/buy/{teacherID}', ['middleware' => 'check', 'uses' => 'buyCommentController@index']);
+        // Route::get('/buy/{teacherID}', ['middleware' => ['check', 'operation'], 'uses' => 'buyCommentController@index']);
         //  生成订单
         Route::post('/generateOrder', ['middleware' => 'check', 'uses' => 'buyCommentController@generateOrder']);
         //  微信扫码
@@ -368,6 +379,14 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         Route::any('/wxPayCallback', 'buyCommentController@wxPayCallback');
         //  微信扫码获取订单状态
         Route::get('/orderStatus/{orderID}', ['middleware' => 'check', 'uses' => 'buyCommentController@orderStatus']);
+
+        //  支付宝异步回调页面
+        Route::any('/alipayAsyncCallback', 'buyCommentController@alipayAsyncCallback');
+        //  支付宝同步回调页面
+        Route::any('/alipaySyncCallback', 'buyCommentController@alipaySyncCallback');
+        //  支付宝支付
+        Route::any('/alipay/{orderID}/{callback}', 'buyCommentController@alipay');
+
     });
 
 
@@ -431,7 +450,7 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
         ||--------------------------------------------------------------------------------------
          */
         //  角色列表
-        Route::get('/roleList', ['middleware' => 'permission:role.list', 'uses' => 'RoleController@roleList']);
+        Route::get('/roleList', ['middleware' => 'permission:check.role', 'uses' => 'RoleController@roleList']);
         //  添加角色
         Route::get('/addRole', ['middleware' => 'permission:add.role', 'uses' => 'RoleController@addRole']);
         //  创建角色
@@ -445,7 +464,7 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
 
 
         //  查看角色用户
-        Route::get('/checkRoleUser/{roleID}', ['middleware' => 'permission:role.list', 'uses' => 'RoleController@checkRoleUser']);
+        Route::get('/checkRoleUser/{roleID}', ['middleware' => 'permission:check.role', 'uses' => 'RoleController@checkRoleUser']);
         //  删除角色用户
         Route::get('/deleteRoleUser/{type}/{roleID}', ['middleware' => 'permission:delete.role', 'uses' => 'RoleController@deleteRoleUser']);
         //  添加角色用户
@@ -459,7 +478,7 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
 
 
         //  查看角色权限
-        Route::get('/checkRolePermission/{roleID}', ['middleware' => 'permission:role.list', 'uses' => 'RoleController@checkRolePermission']);
+        Route::get('/checkRolePermission/{roleID}', ['middleware' => 'permission:check.role', 'uses' => 'RoleController@checkRolePermission']);
         //  添加角色权限
         Route::get('/addRolePermission/{roleID}', ['middleware' => 'permission:add.role', 'uses' => 'RoleController@addRolePermission']);
         //  创建角色用户
@@ -516,7 +535,7 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
         //重置密码
         Route::any('resetPass/{id}',['middleware' => 'permission:resetPass.user', 'uses' =>'indexController@resetPass']);
         //更改用户状态
-        Route::post('changeStatus',['middleware' => 'permission:resetPass.user', 'uses' =>'indexController@changeStatus']);
+        Route::post('changeStatus',['middleware' => 'permission:changeStatus.user', 'uses' =>'indexController@changeStatus']);
 
 
         //我的关注friendsController
@@ -582,6 +601,12 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
 
         //导出订单
         Route::post('orderExport','ExcelController@orderExport');
+
+        //导出播放统计
+        Route::post('specialCountExport','ExcelController@specialCountExport');
+
+        //导出用户统计
+        Route::post('userCountExport','ExcelController@userCountExport');
 
     });
 
@@ -743,19 +768,19 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
          */
     Route::group(['prefix'=>'/order','namespace'=>'order'],function(){
         //订单列表
-        Route::get('orderList','orderController@orderList');
+        Route::get('orderList/{status}','orderController@orderList');
         //订单状态
         Route::get('orderState','orderController@orderState');
         //删除订单
-        Route::get('delOrder/{id}','orderController@delOrder');
+        Route::get('delOrder/{id}/{status}','orderController@delOrder');
         //添加订单备注
         Route::post('remark','orderController@remark');
         //修改应退金额
-        Route::get('editRefundmoney/{id}','orderController@editRefundmoney');
+        Route::get('editRefundmoney/{id}/{status}','orderController@editRefundmoney');
         //执行确认应退金额
         Route::post('doRefundmoney','orderController@doRefundmoney');
         //修改已退金额
-        Route::get('editRetiredmoney/{id}','orderController@editRetiredmoney');
+        Route::get('editRetiredmoney/{id}/{status}','orderController@editRetiredmoney');
         //执行确认已退金额
         Route::post('doRetiredmoney','orderController@doRetiredmoney');
         //备注列表
@@ -765,11 +790,14 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
 
 
         //退款列表
-        Route::get('refundList','orderController@refundList');
+        Route::get('refundList/{orderSn}','orderController@refundList');
         //退款状态
         Route::get('refundState','orderController@refundState');
         //删除退款
-        Route::get('delRefund/{id}','orderController@delRefund');
+        Route::get('delRefund/{orderSn}/{id}','orderController@delRefund');
+
+        //确认退款
+        Route::get('weiXinRefund/{orderSn}','orderController@weiXinRefund');
     });
 
 
@@ -815,13 +843,14 @@ Route::group(['prefix'=>'/commentReply','namespace'=>'commentReply'],function(){
 ||     -------------------------- 用户收藏管理 ------------------------------
 ||--------------------------------------------------------------------------------------
 */
+
 Route::group(['prefix'=>'/collection','namespace'=>'collection'],function(){
 
     //用户收藏列表
-    Route::get('collectionList','collectionController@collectionList');
+    Route::get('collectionList',['middleware' => 'permission:collection.list', 'uses' => 'collectionController@collectionList']);
 
     //删除
-    Route::get('delcollection/{id}','collectionController@delcollection');
+    Route::get('delcollection/{id}',['middleware' => 'permission:delete.collection', 'uses' => 'collectionController@delcollection']);
 
 
 });
@@ -885,7 +914,18 @@ Route::group(['prefix'=>'/contentManager','namespace'=>'contentManager'],functio
     Route::post('dohotvideo','hotvideoController@dohotvideo');
 
 
-
+    //社区名师推荐
+    Route::get('recteacherList','recteacherController@recteacherList');
+    //修改
+    Route::get('editrecteacher/{id}','recteacherController@editrecteacher');
+    //修改方法
+    Route::post('editsrecteacher','recteacherController@editsrecteacher');
+    //添加
+    Route::get('addrecteacher','recteacherController@addrecteacher');
+    //添加方法
+    Route::post('addsrecteacher','recteacherController@addsrecteacher');
+    //删除
+    Route::get('deleterecteacher/{id}','recteacherController@deleterecteacher');
 
 
 
@@ -957,25 +997,26 @@ Route::group(['prefix'=>'/contentManager','namespace'=>'contentManager'],functio
     Route::group(['prefix'=>'/companyUser','namespace'=>'companyUser'],function(){
 
         //列表
-        Route::get('companyUserList','companyUserController@companyUserList');
+        Route::get('companyUserList',['middleware' => 'permission:companyUser.list', 'uses' => 'companyUserController@companyUserList']);
         //添加
-        Route::get('addcompanyUser','companyUserController@addcompanyUser');
+        Route::get('addcompanyUser',['middleware' => 'permission:add.companyUser', 'uses' => 'companyUserController@addcompanyUser']);
         //添加方法
-        Route::post('addscompanyUser','companyUserController@addscompanyUser');
+        Route::post('addscompanyUser',['middleware' => 'permission:add.companyUser', 'uses' => 'companyUserController@addscompanyUser']);
         //编辑
-        Route::get('editcompanyUser/{id}','companyUserController@editcompanyUser');
+        Route::get('editcompanyUser/{id}',['middleware' => 'permission:edit.companyUser', 'uses' => 'companyUserController@editcompanyUser']);
         //编辑方法
-        Route::post('editscompanyUser','companyUserController@editscompanyUser');
+        Route::post('editscompanyUser',['middleware' => 'permission:edit.companyUser', 'uses' => 'companyUserController@editscompanyUser']);
         //删除
-        Route::get('delcompanyUser/{id}','companyUserController@delcompanyUser');
+        Route::get('delcompanyUser/{id}',['middleware' => 'permission:delete.companyUser', 'uses' => 'companyUserController@delcompanyUser']);
         //状态
-        Route::get('companyStatus','companyUserController@companyStatus');
+        Route::get('companyStatus',['middleware' => 'permission:edit.companyUser', 'uses' => 'companyUserController@companyStatus']);
         //重置密码页面
-        Route::get('resetPassword/{id}','companyUserController@resetPassword');
+        Route::get('resetPassword/{id}',['middleware' => 'permission:edit.companyUser', 'uses' => 'companyUserController@resetPassword']);
         //密码提交修改
-        Route::post('resetsPassword','companyUserController@resetsPassword');
+        Route::post('resetsPassword',['middleware' => 'permission:edit.companyUser', 'uses' => 'companyUserController@resetsPassword']);
         //ajax部门取岗位接口
         Route::get('departPost','companyUserController@departPost');
+
 
     });
 
@@ -991,7 +1032,7 @@ Route::group(['prefix'=>'/contentManager','namespace'=>'contentManager'],functio
         //部门列表
 //        Route::get('departmentList','departmentController@departmentList');
 //        Route::get('departmentList',['uses' => 'departmentController@departmentList']);
-        Route::get('departmentList',['middleware' => 'permission:department.list','uses' => 'departmentController@departmentList']);
+        Route::get('departmentList',['middleware' => 'permission:department.list', 'uses' => 'departmentController@departmentList']);
         //添加
         Route::get('adddepartment','departmentController@adddepartment');
         //添加方法
@@ -1067,9 +1108,74 @@ Route::group(['prefix'=>'/contentManager','namespace'=>'contentManager'],functio
     });
 
 
+    /*
+    ||--------------------------------------------------------------------------------------
+    ||     -------------------------- 后台通知管理 ------------------------------
+    ||--------------------------------------------------------------------------------------
+    */
+    Route::group(['prefix' => '/notice', 'namespace' => 'notice'], function () {
+        // 通知列表
+        Route::get('noticeList','noticeController@noticeList');
+        // 发送通知页
+        Route::get('addNotice', 'noticeController@addNotice');
+        // 执行添加通知
+        Route::post('doAddNotice', 'noticeController@doAddNotice');
+        // 删除通知信息
+        Route::get('delNotice/{id}', 'noticeController@delNotice');
+        // 修改通知信息页
+        Route::get('editNotice/{id}', 'noticeController@editNotice');
+        // 执行修改通知信息
+        Route::post('doEditNotice', 'noticeController@doEditNotice');
 
+        // 通知模板列表
+        Route::get('noticeTemList','noticeController@noticeTemList');
+        // 添加通知模板
+        Route::get('addNoticeTem', 'noticeController@addNoticeTem');
+        // 执行添加通知模板
+        Route::post('doAddNoticeTem', 'noticeController@doAddNoticeTem');
+        // 删除通知模板
+        Route::get('delNoticeTem/{id}','noticeController@delNoticeTem');
+        // 通知模板修改页
+        Route::get('editNoticeTem/{id}','noticeController@editNoticeTem');
+        // 执行通知模板修改
+        Route::post('doEditNoticeTem', 'noticeController@doEditNoticeTem');
+    });
+
+    /*
+       ||--------------------------------------------------------------------------------------
+       ||     -------------------------- 后台日志管理 ------------------------------
+       ||--------------------------------------------------------------------------------------
+       */
+
+    Route::group(['prefix'=>'/logs','namespace'=>'logs'],function(){
+
+        //后台日志管理列表
+        Route::get('logList','indexController@logList');
+        //日志删除
+        Route::get('deleteLog/{tableName}/{id}/{time?}','indexController@destroy');
+
+    });
+
+
+    /*
+       ||--------------------------------------------------------------------------------------
+       ||     -------------------------- 后台数据统计 ------------------------------
+       ||--------------------------------------------------------------------------------------
+       */
+
+    Route::group(['prefix'=>'/count','namespace'=>'count'],function(){
+        //注册用户数展示列表
+        Route::get('userCountList','userCountController@userCountList');
+        //用户统计数计算
+        Route::get('userCount/{time?}/{orders?}','userCountController@userCount');
+
+        //订单数
+        Route::get('orderCountList','userCountController@orderCountList');
+
+        //专题课程播放统计
+        Route::get('specialCountList','countController@specialCountList');
+    });
 });
-
 
 
 

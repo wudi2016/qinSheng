@@ -9,11 +9,11 @@
 
 @section('content')
     <div class="contain_lesson" ms-controller="lessonSubjectList">
-        <div style="height: 26px;width: 100%"></div>
+        <div style="height: 26px;width: 100%;background-color: white;"></div>
         <div class="contain_lesson_top">
             <div class="contain_lesson_top_bk"></div>
         </div>
-        <div class="hr_4"></div>
+        <div class="hr_4" style="background-color: white;"></div>
         <div class="contain_lesson_center">
             <div class="contain_lesson_center_tip">
                 <div class="contain_lesson_center_tip_left">

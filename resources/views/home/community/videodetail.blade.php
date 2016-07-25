@@ -29,7 +29,8 @@
 
                 <!-- 视频 -->
                 <div class="video">
-                    <img src="{{url('home/image/community/hotvideo.png') }}" alt="" />
+                    {{--<img src="{{url('home/image/community/hotvideo.png') }}" alt="" />--}}
+                    <div id="mediaplayer"></div>
                 </div>
 
                 <!-- 详情介绍 -->
@@ -63,13 +64,13 @@
 @endsection
 
 @section('js')
-            {{--<script type="text/javascript" src="{{asset('home/jplayer/jwplayer.js')}}"></script>--}}
-
+    <script type="text/javascript" src="{{asset('home/jplayer/jwplayer.js')}}"></script>
     <script>
         require(['/community/videodetail.js'], function ($) {
 
             avalon.scan();
         });
     </script>
+
 
 @endsection

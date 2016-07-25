@@ -75,9 +75,11 @@
 
             <div class="col-xs-12">
                 <!-- PAGE CONTENT BEGINS -->
+                @permission('add.companyUser')
                 <a href="{{url('/admin/companyUser/addcompanyUser')}}" class="btn btn-xs btn-info">
                     <i class="icon-ok bigger-110">添加</i>
                 </a>
+                @endpermission
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="table-responsive">
@@ -121,15 +123,19 @@
                                         <td>
                                             <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
 
-
+                                                @permission('edit.companyUser')
                                                 <a href="{{url('/admin/companyUser/editcompanyUser/'.$com->id)}}" class="btn btn-xs btn-info">
                                                     <i class="icon-edit bigger-120"></i>
                                                 </a>
+                                                @endpermission
 
+                                                @permission('delete.companyUser')
                                                 <a href="{{url('/admin/companyUser/delcompanyUser/'.$com->id)}}" style="width:29px" class="btn btn-xs btn-danger" onclick="return confirm('删除后将无法找回,确定要删除吗?');">
                                                     <i class="icon-trash bigger-120"></i>
                                                 </a>
+                                                @endpermission
 
+                                                @permission('edit.companyUser')
                                                 <a href="{{url('admin/companyUser/resetPassword/'.$com->id)}}"
                                                    class="btn btn-xs btn-inverse" name="reset-pass">
                                                     <strong>重置密码</strong>
@@ -144,7 +150,7 @@
                                                         <option value="1" >锁定</option>
                                                     </select>
                                                 </span>
-
+                                                @endpermission
 
 
 

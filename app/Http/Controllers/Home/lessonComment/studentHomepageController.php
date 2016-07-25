@@ -13,6 +13,7 @@ class studentHomepageController extends Controller
 {
     use Gadget;
 
+
     /**
      * 学员主页
      *
@@ -34,10 +35,12 @@ class studentHomepageController extends Controller
      */
     public function getStuInfo($studentID)
     {
-        $studentInfo = DB::table('users') -> join('city', 'users.cityId', '=', 'city.code')
-                     -> select('users.username', 'users.sex', 'city.name as city', 'users.created_at', 'users.type', 'users.pic') 
-                     -> where(['users.id' => $studentID]) -> where('users.type', '!=', 2) -> first();
+        $studentInfo = DB::table('users') -> select('username', 'sex', 'cityId', 'created_at', 'type', 'pic') 
+                     -> where(['id' => $studentID]) -> where('users.type', '!=', 2) -> first();
         $studentInfo && $studentInfo -> created_at = floor((time() - strtotime($studentInfo -> created_at)) / 86400);
+        $studentInfo -> created_at || $studentInfo -> created_at = 1;
+        $city = DB::table('city') -> select('name') -> where('code', $studentInfo -> cityId) -> first();
+        $city && $studentInfo -> city = $city -> name;
         return $this -> returnResult($studentInfo);
     }
 
@@ -95,12 +98,24 @@ class studentHomepageController extends Controller
     {
         sleep(1);
         $tableName = $request['type'] ? 'commentcourse' : 'course';
-        $extra = $request['type'] ? 'teachername' : 'courseChapter';
         $order = $request['order'] ? 'coursePlayView' : 'created_at';
-        $result = \DB::table('orders') -> join($tableName, 'orders.courseId', '=', $tableName.'.id')
-                -> select('orders.orderType', $tableName.'.id', 'orders.payPrice', $tableName.'.courseTitle', $tableName.'.coursePic', $tableName.'.coursePlayView', $tableName.'.'.$extra.' as extra')
-                -> where(['orders.userId' => $request['userid'], 'orders.orderType' => $request['type'], $tableName.'.courseIsDel' => 0, $tableName.'.courseStatus' => 0]) 
+
+        $condition = ['orders.orderType', $tableName.'.id', $tableName.'.coursePrice', $tableName.'.courseTitle', $tableName.'.coursePic', $tableName.'.coursePlayView'];
+        $where = ['orders.userId' => $request['userid'], $tableName.'.courseIsDel' => 0, $tableName.'.courseStatus' => 0, 'orders.status' => 2];
+
+        $request['type'] && array_push($condition, $tableName.'.teachername as extra');
+        $request['type'] && $where['commentcourse.state'] = 2;
+        $request['type'] || $where['orders.orderType'] = $request['type'];
+
+        $result = \DB::table('orders') -> join($tableName, 'orders.courseId', '=', $tableName.'.id') -> select($condition) -> where($where) 
                 -> orderBy("{$tableName}.{$order}", "desc") -> skip($this -> getSkip($request['page'], $this -> number)) -> take($this -> number)-> get();
+
+        if (!$request['type'] && $result) {
+            foreach ($result as $key => $value) {
+                $result[$key] -> extra = DB::table('coursechapter') -> where('courseId', $result[$key] -> id) -> count();
+            }
+        }
+
         return $this -> returnResult($result); 
     }
 
@@ -113,9 +128,9 @@ class studentHomepageController extends Controller
     public function getVideoCount(Request $request)
     {
         $tableName = $request['type'] ? 'commentcourse' : 'course';
-        $order = $request['order'] ? 'coursePlayView' : 'id';
-        $result = \DB::table('orders') -> join($tableName, 'orders.courseId', '=', $tableName.'.id')
-                -> where(['orders.userId' => $request['userid'], 'orders.orderType' => $request['type']]) -> orderBy("{$tableName}.{$order}", "desc") -> count();
+        $where = ['orders.userId' => $request['userid'], $tableName.'.courseStatus' => 0, $tableName.'.courseIsDel' => 0, 'orders.status' => 2];
+        $request['type'] ? $where['commentcourse.state'] = 2 : $where['orders.orderType'] = $request['type'];
+        $result = DB::table('orders') -> join($tableName, 'orders.courseId', '=', $tableName.'.id') -> where($where) -> count();
         return $this -> returnResult($result);
     }
 

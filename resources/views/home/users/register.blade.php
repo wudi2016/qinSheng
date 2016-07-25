@@ -28,7 +28,7 @@
                     <div style="height:20px;"></div>
                     <div class="center_con_r_bar">
                         <div class="center_con_r_bar_ll"><div class="clearInputs"><div class="clearInput hide"></div></div>用户名</div>
-                        <div class="center_con_r_bar_m"><input class="txt cancleartxt uname" type="text" name="username"></div>
+                        <div class="center_con_r_bar_m"><input class="txt cancleartxt uname" type="text" name="username" placeholder="4-16个字符，字母/中文/数字/下划线"></div>
                         <div class="cklogo dui hide"><img src="{{url('home/image/register/rht.png')}}" alt=""></div>
                         <div class="cklogo cuo hide"><img src="{{url('home/image/register/rog.png')}}" alt=""></div>
                     </div>
@@ -37,7 +37,7 @@
                     {{--手机号--}}
                     <div class="center_con_r_bar">
                         <div class="center_con_r_bar_ll"><div class="clearInputs"><div class="clearInput hide"></div></div>手机号</div>
-                        <div class="center_con_r_bar_m"><input class="txt cancleartxt uphone" type="text" name="phone"></div>
+                        <div class="center_con_r_bar_m"><input class="txt cancleartxt uphone" type="text" name="phone" placeholder="请输入手机号"></div>
                         <div class="cklogo dui hide"><img src="{{url('home/image/register/rht.png')}}" alt=""></div>
                         <div class="cklogo cuo hide"><img src="{{url('home/image/register/rog.png')}}" alt=""></div>
                     </div>
@@ -55,7 +55,7 @@
                     {{--密码--}}
                     <div class="center_con_r_bar">
                         <div class="center_con_r_bar_ll"><div class="clearInputs"><div class="clearInput hide"></div></div>设置密码</div>
-                        <div class="center_con_r_bar_m"><input class="txt cancleartxt upsd" type="password" name="password"></div>
+                        <div class="center_con_r_bar_m"><input class="txt cancleartxt upsd" type="password" name="password" placeholder="支持数字字母组合，6-12位字符"></div>
                         <div class="cklogo dui hide"><img src="{{url('home/image/register/rht.png')}}" alt=""></div>
                         <div class="cklogo cuo hide"><img src="{{url('home/image/register/rog.png')}}" alt=""></div>
                     </div>
@@ -64,7 +64,7 @@
                     {{--确认密码--}}
                     <div class="center_con_r_bar">
                         <div class="center_con_r_bar_ll"><div class="clearInputs"><div class="clearInput hide"></div></div>确认密码</div>
-                        <div class="center_con_r_bar_m"><input class="txt cancleartxt repsd" type="password"></div>
+                        <div class="center_con_r_bar_m"><input class="txt cancleartxt repsd" type="password" placeholder="支持数字字母组合，6-12位字符"></div>
                         <div class="cklogo dui hide"><img src="{{url('home/image/register/rht.png')}}" alt=""></div>
                         <div class="cklogo cuo hide"><img src="{{url('home/image/register/rog.png')}}" alt=""></div>
                     </div>
@@ -73,7 +73,7 @@
                     {{--邀请码--}}
                     <div class="center_con_r_bar">
                         <div class="center_con_r_bar_ll"><div class="clearInputs"><div class="clearInput hide"></div></div>邀请码</div>
-                        <div class="center_con_r_bar_m"><input class="txt cancleartxt incode" type="text" name="fromyaoqingma"></div>
+                        <div class="center_con_r_bar_m"><input class="txt cancleartxt incode" type="text" name="fromyaoqingma" placeholder="请输入您的邀请码（选填）"></div>
                         <div class="cklogo dui hide"><img src="{{url('home/image/register/rht.png')}}" alt=""></div>
                         <div class="cklogo cuo hide"><img src="{{url('home/image/register/rog.png')}}" alt=""></div>
                     </div>

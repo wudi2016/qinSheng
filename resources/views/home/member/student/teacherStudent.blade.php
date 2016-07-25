@@ -145,7 +145,7 @@
                         <div class="height30"></div>
                         <div class="right_order_repeat_name">
                             <div class="repeat_name_content" ms-html="el.orderTitle" ms-attr-title="el.orderTitle"></div>
-                            <div class="repeat_content_orderno">订单编号：[--el.orderSn--]</div>
+                            <div class="repeat_content_orderno" ms-attr-title="el.orderSn">订单编号：[--el.orderSn--]</div>
                         </div>
 
                         <div class="right_order_repeat_time">
@@ -163,7 +163,7 @@
                         <div class="right_order_repeat_control" ms-if="el.status == 0 && el.seven == 1" ms-click="popUpSwitch('applyRefund',el)"><a
                                     href="#">申请退款</a></div>
                         <div class="right_order_repeat_control" ms-if="el.status == 5"><a
-                                    ms-attr-href="'/lessonComment/scan/'+ el.id">去付款</a></div>
+                                    ms-attr-href="'/lessonSubject/WeChatPay/'+ el.id">去付款</a></div>
 
                     </div>
 
@@ -172,7 +172,7 @@
                         <div class="height30"></div>
                         <div class="right_order_repeat_name">
                             <div class="repeat_name_content" ms-text="'申请点评-'+el.realname" ms-attr-title="el.orderTitle"></div>
-                            <div class="repeat_content_orderno">订单编号：[--el.orderSn--]</div>
+                            <div class="repeat_content_orderno" ms-attr-title="el.orderSn">订单编号：[--el.orderSn--]</div>
                         </div>
 
                         <div class="right_order_repeat_time">
@@ -201,7 +201,7 @@
                         <div class="height30"></div>
                         <div class="right_order_repeat_name">
                             <div class="repeat_name_content" ms-text="el.orderTitle" ms-attr-title="el.orderTitle"></div>
-                            <div class="repeat_content_orderno">订单编号：[--el.orderSn--]</div>
+                            <div class="repeat_content_orderno" ms-attr-title="el.orderSn">订单编号：[--el.orderSn--]</div>
                         </div>
 
                         <div class="right_order_repeat_time">
@@ -218,9 +218,9 @@
 
                         <div class="right_order_repeat_control"  ms-if="el.status == 0 && el.seven == 1" ms-click="popUpSwitch('applyRefund',el)"><a
                                     href="#">申请退款</a></div>
-                        <div class="right_order_repeat_control" ms-if="el.status == 5"><a
-                                    ms-attr-href="'/lessonComment/scan/'+ el.id">去付款</a></div>
-
+                        <div class="right_order_repeat_control" ms-if="el.status == 5">
+                            <a ms-attr-href="'/lessonComment/scan/'+ el.id">去付款</a>
+                        </div>
                     </div>
                 </div>
                 <!--===================================//我的订单循环结束===================================-->
@@ -317,7 +317,8 @@
                     <div class="notice_repeat_comment">
                         <!-- 后台发送消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '0'">
-                            <span>您上传的点评视频没有通过审核，原因是：</span><span class="content span_light" ms-text="el.content"></span>
+                            <!-- 后台注册加入 -->
+                            <span ms-text="el.tempName"></span><span ms-text="el.content"></span>
                         </div>
                         <!-- 注册加入消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '1'">
@@ -364,7 +365,11 @@
                 <div class="right_notice_repeat" ms-repeat="commentInfo">
                     <div class="notice_repeat_comment">
                         <div class="repeat_comment_text">
-                            <span class="span_light" ms-text="el.username"></span><span>&nbsp;&nbsp;回复了你的评论，内容是&nbsp;&nbsp;</span><span class="comment_content span_light" ms-attr-title="el.content" ms-text="el.content"></span>
+                            <div style="float: left">
+                                <span class="span_light" ms-text="el.username"></span>
+                                <span>&nbsp;回复了您的评论&nbsp;</span>
+                            </div>
+                            <a ms-attr-href="'/lessonSubject/detail/' + el.actionId"><span class="comment_content span_light" ms-attr-title="el.content" ms-text="el.content"></span></a>
                         </div>
                         <div class="repeat_comment_time">
                             <div class="comment_time" ms-text="el.created_at"></div>
@@ -459,8 +464,8 @@
                     <div class="comment_repeat_price" ms-text="'￥ ' + el.coursePrice"></div>
                 </div>
                 {{--//专题课程循环结束--}}
+                <div ms-visible="subjectMsg" class="warning_msg">暂无相关课程...</div>
             </div>
-            <div ms-visible="subjectMsg" class="warning_msg">暂无相关课程...</div>
             <div class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_course"></div>
@@ -569,7 +574,7 @@
                         @if(!$data->birthYear)
                             <option selected="selected">年</option>
                         @else
-                            <option selected="selected">{{$data->birthYear}}</option>
+                            <option selected="selected">{{$data->birthYear}}年</option>
                         @endif
                     </select>
                     <span style="width:28px;height:0;display:inline-block"></span>
@@ -577,7 +582,7 @@
                          @if(!$data->birthMonth)
                              <option selected="selected">月</option>
                          @else
-                             <option selected="selected">{{$data->birthMonth}}</option>
+                             <option selected="selected">{{$data->birthMonth}}月</option>
                          @endif
                      </select>
 
@@ -586,7 +591,7 @@
                          @if(!$data->birthDay)
                              <option selected="selected">日</option>
                          @else
-                             <option selected="selected">{{$data->birthDay}}</option>
+                             <option selected="selected">{{$data->birthDay}}日</option>
                          @endif
                      </select>
                 </span>
@@ -661,7 +666,7 @@
                         @if(!$data->learnYear)
                             <option selected="selected">年</option>
                         @else
-                            <option value="{{$data->learnYear}}" selected="selected" >{{$data->learnYear}}</option>
+                            <option value="{{$data->learnYear}}" selected="selected" >{{$data->learnYear}}年</option>
                         @endif
                     </select>
                     <span style="width:28px;height:0;display:inline-block"></span>
@@ -669,7 +674,7 @@
                          @if(!$data->learnMonth)
                              <option selected="selected">月</option>
                          @else
-                             <option value="{{$data->learnMonth}}" selected="selected" >{{$data->learnMonth}}</option>
+                             <option value="{{$data->learnMonth}}" selected="selected" >{{$data->learnMonth}}月</option>
                          @endif
                      </select>
                     </span>

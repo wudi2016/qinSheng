@@ -13,6 +13,7 @@ class VerifyCsrfToken extends BaseVerifier
      */
     protected $except = [
         '/lessonComment/wxPayCallback',
-        '/lessonComment/wxReturnPrepay',
+        '/lessonComment/alipayAsyncCallback',
+        '/lessonComment/alipaySyncCallback',
     ];
 }

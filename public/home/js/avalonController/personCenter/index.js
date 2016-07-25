@@ -126,13 +126,12 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
                     $('.select_require_msg').html('亲，请选择退款原因！');
                     return;
                 }
-                sideBar.refundContent = '';
 
                 $.ajax ({
                     url      : '/member/submitApply',
                     type     : 'POST',
                     dataType : 'json',
-                    data     : {id:sideBar.applyRefund.id ,refundType : sideBar.refundType,refundAmount:sideBar.applyRefund.refundableAmount,orderTitle:sideBar.applyRefund.orderTitle,orderSn:sideBar.applyRefund.orderSn,username:sideBar.applyRefund.userName,status:0,refundContent:sideBar.refundContent,refundableAmount:sideBar.refundableAmount},
+                    data     : {id:sideBar.applyRefund.id ,refundType : sideBar.refundType,orderTitle:sideBar.applyRefund.orderTitle,orderSn:sideBar.applyRefund.orderSn,username:sideBar.applyRefund.userName,status:0,refundContent:sideBar.refundContent,refundAmount:sideBar.refundableAmount},
                     success  : function ( response ) {
 
                         if ( response.type ) {

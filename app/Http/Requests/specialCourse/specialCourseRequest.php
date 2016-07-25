@@ -27,7 +27,7 @@ class specialCourseRequest extends Request
             'courseTitle'=>'required',
             'courseIntro'=>'required',
             'courseNotice'=>'required',
-            'coursePrice'=>'required|integer'
+            'coursePrice'=>'required|numeric'
         ];
     }
     public function messages()
@@ -37,7 +37,8 @@ class specialCourseRequest extends Request
             'courseIntro.required'=>'请输入描述',
             'courseNotice.required'=>'请输入公告',
             'coursePrice.required'=>'请输入课程价格',
-            'coursePrice.integer'=>'课程价格必须是整型'
+//            'coursePrice.integer'=>'课程价格必须是整型'
+            'coursePrice.integer'=>'课程价格必须是数字'
         ];
     }
 }

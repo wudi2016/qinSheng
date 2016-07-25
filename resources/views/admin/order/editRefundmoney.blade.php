@@ -46,6 +46,7 @@
 
                     <form action="{{url('admin/order/doRefundmoney')}}" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
                         <input type="hidden" name="id" value="{{$data->id}}">
+                        <input type="hidden" name="status" value="{{$data->status}}">
                         <div class="space-4"></div>
 
                         <div class="form-group">

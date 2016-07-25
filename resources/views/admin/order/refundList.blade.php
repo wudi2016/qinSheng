@@ -104,8 +104,8 @@
                                         <th>退款用户</th>
                                         <th>退款原因</th>
                                         <th>退款描述</th>
-                                        <th>可退金额</th>
-                                        <th>退款状态</th>
+                                        {{--<th>可退金额</th>--}}
+                                        {{--<th>退款状态</th>--}}
                                         <th>操作</th>
                                     </tr>
                                     </thead>
@@ -136,16 +136,16 @@
                                             @endif
                                         </td>
                                         <td>{{$refund->refundContent}}</td>
-                                        <td>{{$refund->refundAmount}}</td>
-                                        <td>
-                                            @if($refund->status == 0)
-                                                申请中
-                                            @elseif($refund->status == 1)
-                                                已确认退款中
-                                            @elseif($refund->status == 2)
-                                                完成
-                                            @endif
-                                        </td>
+                                        {{--<td>{{$refund->refundAmount}}</td>--}}
+                                        {{--<td>--}}
+                                            {{--@if($refund->status == 0)--}}
+                                                {{--申请中--}}
+                                            {{--@elseif($refund->status == 1)--}}
+                                                {{--已确认退款中--}}
+                                            {{--@elseif($refund->status == 2)--}}
+                                                {{--完成--}}
+                                            {{--@endif--}}
+                                        {{--</td>--}}
 
 
                                         <td>
@@ -154,19 +154,19 @@
                                                     {{--<i class="icon-ok bigger-120"></i>--}}
                                                 {{--</button>--}}
 
-                                                <span class="btn btn-xs btn-primary" style="position: relative;display: inline-block;">
-                                                    <strong>订单状态</strong>
-                                                    <span class="icon-caret-down icon-on-right"></span>
-                                                    <select id="selectCheck" class="col-xs-10 col-sm-2" onchange="refundCheck({{$refund->id}},this.value);" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">
-                                                        <option value="44" selected></option>
-                                                        <option value="0" >申请中</option>
-                                                        <option value="1" >已确认退款中</option>
-                                                        <option value="2" >完成</option>
-                                                    </select>
-                                                </span>
+                                                {{--<span class="btn btn-xs btn-primary" style="position: relative;display: inline-block;">--}}
+                                                    {{--<strong>订单状态</strong>--}}
+                                                    {{--<span class="icon-caret-down icon-on-right"></span>--}}
+                                                    {{--<select id="selectCheck" class="col-xs-10 col-sm-2" onchange="refundCheck({{$refund->id}},this.value);" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">--}}
+                                                        {{--<option value="44" selected></option>--}}
+                                                        {{--<option value="0" >申请中</option>--}}
+                                                        {{--<option value="1" >已确认退款中</option>--}}
+                                                        {{--<option value="2" >完成</option>--}}
+                                                    {{--</select>--}}
+                                                {{--</span>--}}
 
 
-                                                <a href="{{url('/admin/order/delRefund/'.$refund->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
+                                                <a href="{{url('/admin/order/delRefund/'.$refund->orderSn.'/'.$refund->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
                                                     <i class="icon-trash bigger-120"></i>
                                                 </a>
 

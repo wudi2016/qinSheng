@@ -3,7 +3,7 @@ define([], function () {
     var model = avalon.define({
         $id: 'hotvideo',
 
-        hotvideos :'',
+        hotvideos :[],
         getData:function(hotId){
             $.ajax({
                 url : '/community/getvideodetail/'+ hotId,
@@ -13,11 +13,29 @@ define([], function () {
                     if(response.statuss){
                         model.hotvideos = response.data;
                     }
+                    var data = response.data;
+                    model.setVideo(data);
                 },
             })
+
         },
 
+
+        setVideo:function(data){
+            jwplayer("mediaplayer").setup({
+                flashplayer: 'jwplayer/jwplayer.flash.swf',
+                file:data[0].coursePath,
+                height:515,
+                width:800,
+                aspectratio: '16:9',
+                type: "mp4",
+                image:data[0].cover,
+            });
+
+        },
     });
+
     model.getData(hotId);
+    //model.setVideo();
     return model;
 });

@@ -104,18 +104,38 @@
                             {{--</div>--}}
                         {{--</div>--}}
 
+                        {{--<div class="space-4"></div>--}}
+
+                        {{--<div class="form-group">--}}
+                            {{--<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 讲师 </label>--}}
+
+                            {{--<div class="col-sm-9">--}}
+                                {{--<input type="text" name="teacherId" id="form-field-1" placeholder="讲师" class="col-xs-10 col-sm-5" value="{{$data->realname}}" />--}}
+                            {{--<span class="help-inline col-xs-12 col-sm-7">--}}
+                                {{--<label class="middle">--}}
+                                    {{--<span class="lbl"></span>--}}
+                                {{--</label>--}}
+                            {{--</span>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+
                         <div class="space-4"></div>
 
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 讲师 </label>
 
                             <div class="col-sm-9">
-                                <input type="text" name="teacherId" id="form-field-1" placeholder="讲师" class="col-xs-10 col-sm-5" value="{{$data->username}}" />
-                            <span class="help-inline col-xs-12 col-sm-7">
-                                <label class="middle">
-                                    <span class="lbl"></span>
-                                </label>
-                            </span>
+                                {{--<input type="text" name="teacherId" id="form-field-1" placeholder="讲师" class="col-xs-10 col-sm-5" value="" />--}}
+                                <select id="form-field-2" class="col-xs-10 col-sm-5" name="teacherId">
+                                    @foreach($data->teacherNames as $teacherNames)
+                                        <option value="{{$teacherNames->id}}" @if($data->teacherId == $teacherNames->id) selected @endif>{{$teacherNames->realname}}</option>
+                                    @endforeach
+                                </select>
+                                <span class="help-inline col-xs-12 col-sm-7">
+                                    <label class="middle">
+                                        <span class="lbl"></span>
+                                    </label>
+                                </span>
                             </div>
                         </div>
 
@@ -284,6 +304,25 @@
                                     <span class="lbl"></span>
                                 </label>
                             </span>
+                            </div>
+                        </div>
+
+                        <div class="space-4"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 状态 </label>
+
+                            <div class="col-sm-9">
+                                {{--<input type="text" name="teacherId" id="form-field-1" placeholder="讲师" class="col-xs-10 col-sm-5" value="" />--}}
+                                <select id="form-field-2" class="col-xs-10 col-sm-5" name="courseStatus">
+                                    <option value="0" @if($data->courseStatus == 0) selected @endif>激活</option>
+                                    <option value="1" @if($data->courseStatus == 1) selected @endif>锁定</option>
+                                </select>
+                                <span class="help-inline col-xs-12 col-sm-7">
+                                    <label class="middle">
+                                        <span class="lbl"></span>
+                                    </label>
+                                </span>
                             </div>
                         </div>
 

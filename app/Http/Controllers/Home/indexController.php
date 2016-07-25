@@ -20,7 +20,8 @@ class indexController extends Controller
     public function index()
     {
         $banners = DB::table('banner')->select('path','url')->get();
-        return view('home.index',compact('banners'));
+        $frids   = DB::table('partner')->select('title','path','url')->get();
+        return view('home.index',compact('banners','frids'));
     }
 
     /**
@@ -75,7 +76,7 @@ class indexController extends Controller
         if($courses){
             foreach ($courses as &$course){
                 $course -> counttime = DB::table('coursechapter')->where('courseId',$course->id)->where('parentId','<>',0)->where('status',0)->count();
-                $course -> price = ceil($course->price/1000);
+                $course -> price = ceil($course->price/100);
                 $course -> countpeople = count(DB::table('courseview')->select('courseId','userId','courseType')->where(['courseId' => $course->id, 'courseType' => 0])->distinct()->get());
             }
         }
@@ -106,7 +107,7 @@ class indexController extends Controller
     {
         $courses = DB::table('hotreviewcourse')
             ->leftJoin('commentcourse', 'commentcourse.id', '=', 'hotreviewcourse.courseId')
-            ->select('commentcourse.id as id', 'commentcourse.coursePic as img', 'commentcourse.courseTitle as title','commentcourse.teachername as teacher','commentcourse.coursePlayView as countpeople','commentcourse.coursePrice as price')
+            ->select('commentcourse.id as id', 'commentcourse.coursePic as img', 'commentcourse.courseTitle as title','commentcourse.teachername as teacher','commentcourse.coursePlayView as countpeople','commentcourse.coursePrice as price','commentcourse.courseType as courseType','commentcourse.courseDiscount as courseDiscount')
             ->where('commentcourse.state',2)
             ->where('commentcourse.courseStatus',0)
             ->orderBy('hotreviewcourse.sort', 'desc')
@@ -115,7 +116,7 @@ class indexController extends Controller
 
         if($courses){
             foreach ($courses as &$course){
-                $course -> price = ceil($course->price/1000);
+                $course -> price = ceil($course->price/100);
                 $course -> countpeople = count(DB::table('courseview')->select('courseId','userId','courseType')->where(['courseId' => $course->id, 'courseType' => 1])->distinct()->get());
             }
         }
@@ -179,14 +180,22 @@ class indexController extends Controller
         if($username = DB::table('users')->select('username')->where('username',$uname)->where('type','<>',3)->first()){
             $psd = DB::table('users')->select('password')->where('username',$uname)->first()->password;
             if(Hash::check($password,$psd)){
-                echo 2;  //密码正确
+                if($userstatus = DB::table('users')->select('checks')->where('username',$uname)->where('type','<>',3)->first()->checks==0){
+                    echo 2;  //正常用户
+                }else{
+                    echo 4;  //状态被锁
+                }
             }else{
                 echo 3;  //密码错误
             }
         }elseif($phone = DB::table('users')->select('phone')->where('phone',$uname)->where('type','<>',3)->first()){
             $psd = DB::table('users')->select('password')->where('phone',$uname)->first()->password;
             if(Hash::check($password,$psd)){
-                echo 2;  //密码正确
+                if($userstatus = DB::table('users')->select('checks')->where('phone',$uname)->where('type','<>',3)->first()->checks==0){
+                    echo 2;  //正常用户
+                }else{
+                    echo 4;  //状态被锁
+                }
             }else{
                 echo 3;  //密码错误
             }
@@ -244,7 +253,7 @@ class indexController extends Controller
     public function getMessage(Messages $message, $telephone)
     {
         $code    = $message::createCode();
-        $content = '您好，感谢注册该软件，请输入手机验证码'.$code.'完成剩余操作。【琴晟教育】';
+        $content = '您好，欢迎注册琴晟艺术教育平台：您的手机验证码'.$code.'【琴晟教育】';
         $message::setInfo($telephone,$content);
         $result = $message::sendMsg();
         return $message::response($result,$code);
@@ -320,6 +329,20 @@ class indexController extends Controller
             DB::table('usermessage')->insert(
                 ['username' => Auth::user()->username, 'type' => 1,'content'=>"恭喜您成功加入点评网，您的邀请码是：".Auth::user()->yaoqingma,'client_ip'=>$cIP, 'created_at' => Carbon::now()]
             );
+
+            //注册有邀请码
+            if(Auth::user()->fromyaoqingma){
+                $fromcode = Auth::user()->fromyaoqingma;
+                $selfcode = Auth::user()->yaoqingma;
+                if($touser = DB::table('users')->where('yaoqingma', $fromcode)->select('id')->first()){
+                    $toid   = $touser->id;
+                    $fromid = Auth::user()->id;
+                    DB::table('friends')->insert([
+                        ['fromUserId'=>$fromid,'toUserId'=>$toid,'created_at'=>Carbon::now()],
+                        ['fromUserId'=>$toid,'toUserId'=>$fromid,'created_at'=>Carbon::now()]
+                    ]);
+                }
+            }
         }
 
         return redirect('/');
@@ -337,18 +360,31 @@ class indexController extends Controller
             $id = Auth::user()->id;
             unset($_POST['_token']);
             DB::table('users')->where('id', $id)->update($_POST);
+            //添加用户通知
+            $cIP = getenv('REMOTE_ADDR');
+            $cIP1 = getenv('HTTP_X_FORWARDED_FOR');
+            $cIP2 = getenv('HTTP_CLIENT_IP');
+            $cIP1 ? $cIP = $cIP1 : null;
+            $cIP2 ? $cIP = $cIP2 : null;
+
+            DB::table('usermessage')->insert(
+                ['username' => Auth::user()->username, 'type' => 1,'content'=>"恭喜您成功加入点评网，您的邀请码是：".Auth::user()->yaoqingma,'client_ip'=>$cIP, 'created_at' => Carbon::now()]
+            );
+
+            //注册有邀请码
+            if(Auth::user()->fromyaoqingma){
+                $fromcode = Auth::user()->fromyaoqingma;
+                $selfcode = Auth::user()->yaoqingma;
+                if($touser = DB::table('users')->where('yaoqingma', $fromcode)->select('id')->first()){
+                    $toid   = $touser->id;
+                    $fromid = Auth::user()->id;
+                    DB::table('friends')->insert([
+                        ['fromUserId'=>$fromid,'toUserId'=>$toid,'created_at'=>Carbon::now()],
+                        ['fromUserId'=>$toid,'toUserId'=>$fromid,'created_at'=>Carbon::now()]
+                    ]);
+                }
+            }
         }
-
-        //添加用户通知
-        $cIP = getenv('REMOTE_ADDR');
-        $cIP1 = getenv('HTTP_X_FORWARDED_FOR');
-        $cIP2 = getenv('HTTP_CLIENT_IP');
-        $cIP1 ? $cIP = $cIP1 : null;
-        $cIP2 ? $cIP = $cIP2 : null;
-
-        DB::table('usermessage')->insert(
-            ['username' => Auth::user()->username, 'type' => 1,'content'=>"恭喜您成功加入点评网，您的邀请码是:".Auth::user()->yaoqingma,'client_ip'=>$cIP]
-        );
 
         return redirect('/');
     }
@@ -514,7 +550,7 @@ class indexController extends Controller
         if($data){
             foreach ($data as &$course){
                 $course -> counttime = DB::table('coursechapter')->where('courseId',$course->id)->where('parentId','<>',0)->where('status',0)->count();
-                $course -> price = ceil($course->price/1000);
+                $course -> price = ceil($course->price/100);
 
             }
         }
@@ -560,7 +596,7 @@ class indexController extends Controller
 
         if($data){
             foreach ($data as &$course){
-                $course -> price = ceil($course->price/1000);
+                $course -> price = ceil($course->price/100);
             }
         }
 

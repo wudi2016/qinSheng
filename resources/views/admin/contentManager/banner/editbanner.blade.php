@@ -74,7 +74,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 链接地址 </label>
 
                             <div class="col-sm-9">
-                                <input  type="text" name="url" id="form-field-1" placeholder="链接地址" class="col-xs-10 col-sm-5" value="{{$data->url}}" />
+                                <input  type="text" name="url" id="form-field-1" placeholder="(填写格式例如: www.baidu.com)" class="col-xs-10 col-sm-5" value="{{$data->url}}" />
                                     <span class="help-inline col-xs-12 col-sm-7">
                                     <label class="middle">
                                         <span class="lbl"></span>
@@ -99,7 +99,7 @@
                             </span>
                             </div>
                         </div>
-
+                        <span style="position:relative;left:313px;font-size:10px;color:red">上传图片推荐大小为(1920 * 656)</span>
                         <div class="space-4"></div>
 
                         <div class="form-group">

@@ -4,21 +4,24 @@
 
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{asset('home/css/index/index.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('home/css/index/jquery.bxslider.css')}}">
 @endsection
 
 @section('content')
     <div ms-controller="index">
     <!-- 滚动栏 -->
     <div class="bar">
-        <ul class="bxslider">
-            @foreach ($banners as $banner)
-                <li><a href="{{url($banner->url)}}"><img style="width: 100%;" src="{{asset($banner->path)}}" /></a></li>
-            @endforeach
+        <div class="banner">
+            <ul>
+                @foreach ($banners as $banner)
+                <li><a href="{{url('http://'.$banner->url)}}" target="_blank"><img style="width: 100%;min-height: 410px;" src="{{asset($banner->path)}}" /></a></li>
+                @endforeach
 
-            {{--<li><a href=""><img style="width: 100%;" src="{{asset('home/image/index/banner.png')}}" /></a></li>--}}
-            {{--<li><a href=""><img style="width: 100%;" src="{{asset('home/image/index/banner2.png')}}" /></a></li>--}}
-        </ul>
+                {{--<li><a href=""><img style="width: 100%;" src="{{asset('home/image/index/banner.png')}}" /></a></li>--}}
+                {{--<li><a href=""><img style="width: 100%;" src="{{asset('home/image/index/banner2.png')}}" /></a></li>--}}
+            </ul>
+            <a href="javascript:void(0);" class="unslider-arrow04 prev"></a>
+            <a href="javascript:void(0);" class="unslider-arrow04 next"></a>
+        </div>
     </div>
     <!-- 课程，赛事活动 -->
     <div class="activity">
@@ -132,7 +135,7 @@
                         </div>
                         <span class="bot" ms-text="'￥'+el.price"></span>
                     </div>
-                    <img class="logo_hot hide" ms-class="show:el.courseType == 1" ms-attr-src="{{asset('/home/image/index/course/[--el.courseDiscount--].png')}}" alt="">
+                    <img class="logo_hot hide" ms-class="show:el.courseType == 1" ms-if="el.courseType == 1" ms-attr-src="{{asset('/home/image/index/course/[--el.courseDiscount--].png')}}" alt="">
                     <img class="logo_hot hide" ms-class="show:el.courseType == 2" src="{{asset('/home/image/index/course/hot.png')}}" alt="">
                     <img class="logo_hot hide" ms-class="show:el.courseType == 3" src="{{asset('/home/image/index/course/new.png')}}" alt="">
                     </a>
@@ -180,6 +183,9 @@
                         </div>
                         <span class="bot" ms-text="'￥'+el.price"></span>
                     </div>
+                    <img class="logo_hot hide" ms-class="show:el.courseType == 1" ms-if="el.courseType == 1" ms-attr-src="{{asset('/home/image/index/course/[--el.courseDiscount--].png')}}" alt="">
+                    <img class="logo_hot hide" ms-class="show:el.courseType == 2" src="{{asset('/home/image/index/course/hot.png')}}" alt="">
+                    <img class="logo_hot hide" ms-class="show:el.courseType == 3" src="{{asset('/home/image/index/course/new.png')}}" alt="">
                     </a>
                 </div>
 
@@ -203,16 +209,21 @@
             </div>
         </div>
     </div>
-    <!-- 友情链接 -->
+    <!-- 合作伙伴 -->
+    <div style="height:50px;background: #ffffff"></div>
     <div class="flinks">
-        <img src="{{asset('home/image/index/tj.png')}}"  style="width: 660px;position:relative;left:50%;margin-left:-330px;margin-top: 50px;" alt="">
+        <div class="flinks_con" style="display: inline">
+            @foreach ($frids as $frid)
+                <a href="{{url('http://'.$frid->url)}}" target="_blank"><img src="{{asset($frid->path)}}" alt="{{$frid->title}}"></a>
+            @endforeach
+        </div>
     </div>
     </div>
 @endsection
 
 @section('js')
     <script type="text/javascript" src="{{asset('home/js/index/index.js')}}"></script>
-    <script type="text/javascript" src="{{asset('home/js/index/jquery.bxslider.js')}}"></script>
+    <script type="text/javascript" src="{{asset('home/js/index/onslider.js')}}"></script>
     <script>
         require(['/index/index'], function () {
             avalon.scan(document.body);

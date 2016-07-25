@@ -131,7 +131,7 @@
                                             {{--<td>{{$special->courseIntro}}</td>--}}
                                             <td>{{$special->typeName}}</td>
                                             <td>{{$special->courseFormat}}</td>
-                                            <td>{{$special->username}}</td>
+                                            <td>{{$special->realname}}</td>
                                             {{--<td>--}}
                                                 {{--<a href="{{url('/lessonSubject/detail/'.$special->id)}}">查看</a>--}}
                                             {{--</td>--}}
@@ -140,7 +140,14 @@
                                                 <img src="{{asset($special->coursePic)}}" alt="" width="50px" height="50px">
                                                 {{--</a>--}}
                                             </td>
-                                            <td>{{$special->courseDiscount}} 折</td>
+                                            <td>
+                                                @if($special->courseDiscount != 0)
+                                                    {{$special->courseDiscount}} 折
+                                                @else
+                                                    无
+                                                @endif
+
+                                            </td>
                                             <td>{{$special->coursePrice}}</td>
                                             <td>{{$special->courseView}}</td>
                                             <td>{{$special->coursePlayView}}</td>

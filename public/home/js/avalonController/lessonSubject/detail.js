@@ -39,7 +39,7 @@ define([], function () {
                 detail.dataDownload.length == 0 ? detail.getDataDownload(detail.detailId) : detail.dataDownload;
             }
         },
-        downloadMsg:false, commentMsg: false,
+        downloadMsg: false, commentMsg: false,
         getData: function (url, type, data, model, callback) {
             $.ajax({
                 url: url, type: type || 'GET', data: data || {}, dataType: 'json',
@@ -55,12 +55,13 @@ define([], function () {
                     if (model == 'orderInfo') {
                         response.status && callback(response);
                         return;
-                    };
+                    }
+                    ;
                     if (response.status) {
                         detail[model] = response.data;
                     } else {
-                        if(model == 'commentInfo') detail.commentMsg = true;
-                        if(model == 'dataDownload') detail.downloadMsg = true;
+                        if (model == 'commentInfo') detail.commentMsg = true;
+                        if (model == 'dataDownload') detail.downloadMsg = true;
                     }
                     model == 'detailInfo' && detail.setVideo(function () {});
                 }, error: function (error) {
@@ -71,8 +72,8 @@ define([], function () {
         detailInfo: {
             courseTitle: '',
             coursePrice: '',
-            classHour : '',
-            coursePlayView : ''
+            classHour: '',
+            coursePlayView: ''
         },
         getDetail: function (id) {
             detail.getData('/lessonSubject/getDetail/' + id, '', {}, 'detailInfo');
@@ -87,11 +88,14 @@ define([], function () {
         getCommentInfo: function (id) {
             detail.getData('/lessonSubject/getCommentInfo/' + id, '', {}, 'commentInfo');
         },
-        tousername: '', parentId: '', commentContentLength: '',commentContent: '',
+        tousername: '', parentId: '', commentContentLength: '', commentContent: '',
         // 回复评论
         replyComment: function (tousername, id) {
-            if(tousername){
-                detail.tousername = '';detail.parentId = '';detail.commentContent = '';detail.commentContentLength = '';
+            if (tousername) {
+                detail.tousername = '';
+                detail.parentId = '';
+                detail.commentContent = '';
+                detail.commentContentLength = '';
             }
             detail.tousername = tousername;
             detail.parentId = id;
@@ -113,7 +117,6 @@ define([], function () {
                 data.commentContent.shift();
                 data.commentContent = data.commentContent.join('');
             }
-            ;
             detail.getData('/lessonSubject/publishComment', 'POST', data, 'submitComment', function (response) {
                 detail.commentInfo.unshift({
                     commentContent: data.commentContent,
@@ -128,6 +131,7 @@ define([], function () {
                     tousername: data.tousername || null,
                     type: detail.mineType,
                 });
+                detail.commentInfo.length == 0 ? detail.commentMsg = true : detail.commentMsg = false;
                 detail.commentContent = '';
                 detail.tousername = '';
             })
@@ -147,7 +151,7 @@ define([], function () {
         deleteIndex: null,
         deleteComment: function (index) {
             detail.deleteIndex = index;
-            detail.popUp = 'deleteComment'
+            detail.popUp = 'deleteComment';
         },
         // 发布评论开关
         descriptionSwitch: function (model, value) {
@@ -163,6 +167,7 @@ define([], function () {
                 }, 'result', function (response) {
                     response && detail.commentInfo.removeAt(detail.deleteIndex);
                     detail.deleteIndex = null;
+                    detail.commentInfo.length == 0 ? detail.commentMsg = true : detail.commentMsg = false;
                 });
             }
             if (value == 'dataDownload') {
@@ -182,7 +187,7 @@ define([], function () {
                 detail.popUp = false;
                 return;
             }
-            if (value == 'feedback' || value == 'buyCourse') {
+            if (value == 'buyCourse') {
                 if (detail.mineUsername) {
                     detail.popUp = value;
                 } else {
@@ -193,7 +198,7 @@ define([], function () {
             detail.popUp = value;
         },
         // 发表反馈建议
-        backType: '', backContent: '', tel: '', warnBackType: '', warnBackContent: '', warnTel: '',
+        backType: '', backContent: '', tel: '', warnBackType: '', warnBackContent: '', warnTel: '',backContentLength : '0',
         publishFeedBack: function (id, value) {
             if (detail.backType.length == '0') {
                 detail.warnBackType = '请选择问题类型';
@@ -250,7 +255,12 @@ define([], function () {
         // 立即支付 paySuccess
         payMethod: '', warnPayMethod: '',
         payRightNow: function () {
-            if (detail.payMethod.length == '0') { detail.warnPayMethod = '请选择支付方式'; return; } else { detail.warnPayMethod = ''; }
+            if (detail.payMethod.length == '0') {
+                detail.warnPayMethod = '请选择支付方式';
+                return;
+            } else {
+                detail.warnPayMethod = '';
+            }
             var data = {
                 payType: detail.payMethod,
                 userName: detail.mineUsername,
@@ -258,14 +268,14 @@ define([], function () {
                 orderType: 0,
                 orderPrice: detail.detailInfo.coursePrice,
                 orderTitle: detail.detailInfo.courseTitle,
-                courseId : detail.detailId
+                courseId: detail.detailId
             };
-            detail.getData('/lessonSubject/addOrder','POST',  data,  'orderInfo', function(response) {
+            detail.getData('/lessonSubject/addOrder', 'POST', data, 'orderInfo', function (response) {
                 if (detail.payMethod) {
                     location.href = '/lessonSubject/WeChatPay/' + response.data;
                 } else {
-                    location.href = '/lessonSubject/buySuccess/' + response.data;
-                };
+                    location.href = '/lessonSubject/alipay/'+ response.data +'/lessonSubject&buySuccess&'+ response.data;
+                }
             });
 
         },
@@ -308,25 +318,30 @@ define([], function () {
             });
             typeof callback === 'function' && callback();
             detail.thePlayer.onTime(function () {
-                if (detail.thePlayer.getPosition() >= 30) {
-                    detail.thePlayer.play(false);
-                    detail.thePlayer.remove();
-                    detail.overtime = true;
-                }
+                //if (detail.thePlayer.getPosition() >= 30) {
+                //    detail.thePlayer.play(false);
+                //    detail.thePlayer.remove();
+                //    detail.overtime = true;
+                //}
             });
         },
-        videoPath : [],
-        changeVideo : function(chapterId,path){
+        videoPath: [],
+        changeVideo: function (chapterId, path) {
             detail.videoType = false;
             detail.overtime = false;
             detail.videoPath = {
-                courseHighPath : path,
-                courseMediumPath : path,
-                courseLowPath : path,
+                courseHighPath: path,
+                courseMediumPath: path,
+                courseLowPath: path,
             };
-            detail.setVideo(function () {});
-            if(detail.mineUserId != null){
-                detail.getData('/lessonSubject/addCourseView', 'POST', {chapterId : chapterId, userId : detail.mineUserId, courseId : detail.detailId}, 'addCourseView');
+            detail.setVideo(function () {
+            });
+            if (detail.mineUserId != null) {
+                detail.getData('/lessonSubject/addCourseView', 'POST', {
+                    chapterId: chapterId,
+                    userId: detail.mineUserId,
+                    courseId: detail.detailId
+                }, 'addCourseView');
             }
         }
     });

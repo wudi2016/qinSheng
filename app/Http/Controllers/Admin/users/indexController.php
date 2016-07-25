@@ -21,32 +21,35 @@ class indexController extends Controller
         $search = [];
         //搜索
         $query = \DB::table('users as u')
-                ->leftJoin('users as us','u.fromyaoqingma','=','us.yaoqingma');
+            ->where('u.type','<>',2)
+            ->where('u.type','<>',3)
+            ->orderBy('u.id','desc');
+        //用户名
         if($request->type == 0){
             $query = $query->where('u.username','like','%'.trim($request->search).'%');
             $search['type'] = 0;
         }
+        //姓名
         if($request->type == 1){
             $query = $query->where('u.realname','like','%'.trim($request->search).'%');
             $search['type'] = 1;
         }
+        //手机号
         if($request->type == 2){
             $query = $query->where('u.phone','like','%'.trim($request->search).'%');
             $search['type'] = 2;
         }
+        //学生学员
         if($request->type == 3){
             $query = $query->where('u.type','=',0);
             $search['type'] = 3;
         }
+        //教师学员
         if($request->type == 4){
             $query = $query->where('u.type','=',1);
             $search['type'] = 4;
         }
-        if($request->type == 5){
-            $query = $query->where('u.type','=',2);
-            $search['type'] = 5;
-
-        }
+        //时间筛选
         if($request->type == 6){
             if($request->beginTime){
                 $query = $query->where('u.created_at','>=',trim($request->beginTime));
@@ -57,25 +60,48 @@ class indexController extends Controller
             }
             $search['type'] = 6;
         }
-
+        //全部
         if($request->type == 7){
             $query = $query;
             $search['type'] = 7;
         }
         //导出数据处理
-        $excels = $query->select('u.id','u.username','u.checks','u.phone','u.type','us.id as userId','us.username as name','u.created_at','u.updated_at')
-            ->where('u.type','=',0)
-            ->orWhere('u.type','=',1)
-            ->get();
+        $excels = $query->select('u.id','u.username','u.checks','u.phone','u.type','u.fromyaoqingma as userId','u.yaoqingma as name','u.created_at','u.updated_at')->get();
+        foreach($excels as $key=>$value){
+            if($excels[$key]->userId){
+                $user = User::where('yaoqingma',$excels[$key]->userId)->select('id','username')->first();
+                if($user){
+                    $excels[$key]->userId =$user->id;
+                    $excels[$key]->name = $user->username;
+                }
+            }else{
+                $excels[$key]->userId = null;
+                $excels[$key]->name = null;
+            }
+        }
+        //列表导出数据
         $excels = json_encode($excels);
+
+
         //列表页展示数据
-        $data = $query->select('u.id','u.username','u.checks','u.phone','u.type','u.pic','us.id as userId','us.username as name','u.created_at','u.updated_at')
-            ->where('u.type','=',0)
-            ->orWhere('u.type','=',1)
-            ->orderBy('id','desc')
-            ->paginate();
+        $data = $query->select('u.id','u.username','u.checks','u.phone','u.type','u.pic','u.fromyaoqingma as userId','u.yaoqingma as name','u.created_at','u.updated_at')->paginate();
+        foreach($data as $key=>$value){
+            if($data[$key]->userId){
+                $user = User::where('yaoqingma',$data[$key]->userId)->select('id','username')->first();
+                if($user){
+                    $data[$key]->userId =$user->id;
+                    $data[$key]->name = $user->username;
+                }
+            }else{
+                $data[$key]->userId = null;
+                $data[$key]->name = null;
+            }
+        }
+
         return view('admin.users.userList',compact('data','search','excels'));
     }
+
+
 
     //省市联动
     public function province(Request $request)
@@ -140,7 +166,8 @@ class indexController extends Controller
         $data['yaoqingma'] = $yaoqingma;
 
 
-        if(User::create($data)){
+        if($id = \DB::table('users')->insertGetId($data)){
+            $this -> OperationLog("新增了用户ID为{$id}的学员", 1);
             return redirect('admin/message')->with(['status'=>'添加用户成功','redirect'=>'users/userList']);
         }else{
             return redirect('admin/message')->with(['status'=>'添加用户失败','redirect'=>'users/userList']);
@@ -211,6 +238,7 @@ class indexController extends Controller
         }
 
         if(FALSE !== DB::table('users')->where(['id'=>$id])->update($input)){
+            $this -> OperationLog("修改了用户ID为{$id}的信息", 1);
             return redirect('admin/message')->with(['status'=>'修改用户信息成功','redirect'=>'users/userList']);
         }else{
             return redirect('admin/message')->with(['status'=>'修改用户信息失败','redirect'=>'users/userList']);
@@ -235,6 +263,7 @@ class indexController extends Controller
                     DB::table('hotteacher')->where('teacherId',$rec->id)->delete();
                 }
             }
+            $this -> OperationLog("删除了用户ID为{$id}的学员", 1);
             return redirect('admin/message')->with(['status'=>'删除用户成功','redirect'=>'users/userList']);
         }else{
             return redirect('admin/message')->with(['status'=>'删除用户失败','redirect'=>'users/userList']);
@@ -255,6 +284,7 @@ class indexController extends Controller
                 }else{
                     //输入信息正确
                     if(User::where('id','=',$id)->update(['password'=>$input['password']])){
+                        $this -> OperationLog("重置了用户ID为{$id}的密码", 1);
                         return redirect('admin/message')->with(['status'=>'重置密码成功','redirect'=>'users/userList']);
                     }else{
                         return redirect('admin/message')->with(['status'=>'重置密码失败','redirect'=>'users/userList']);
@@ -279,6 +309,7 @@ class indexController extends Controller
     {
         $data = $request->except('_token');
         if(User::where('id','=',$data['id'])->update(['checks'=>$data['checks']])){
+            $this -> OperationLog("更改了用户ID为{$request['id']}的状态", 1);
             return response()->json(['status'=>true,'msg'=> $data['checks'] == 0 ? '激活' : '<span style="color:red">禁用</span>']);
         }else{
             return response()->json(['status'=>false,'msg'=>'修改失败！']);

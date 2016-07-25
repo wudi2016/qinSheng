@@ -31,10 +31,11 @@ class AuthController extends Controller
     use AuthenticatesAndRegistersUsers, ThrottlesLogins {
         AuthenticatesAndRegistersUsers::postLogin as laravelPostLogin;
     }
+    
 
     public function postLogin(Request $request)
     {
-        $field = filter_var($request->input('username'),FILTER_SANITIZE_NUMBER_INT) ? 'phone' : 'username';
+        $field = preg_match("/^1(3|5|8|7){1}[0-9]{9}$/", $request->input('username')) ? 'phone' : 'username';
         $request->merge([$field => $request->input('username')]);
         $this->username = $field;
 
@@ -113,6 +114,7 @@ class AuthController extends Controller
     public function adminLogin(Request $request)
     {
         if (Auth::attempt(['username' => $request -> username, 'password' => $request -> password, 'type' => 3])) {
+            $this -> OperationLog('登陆了后台', 0);
             return redirect() -> intended('admin/index');
         } else {
             return redirect('admin/login') -> withErrors('账号或密码错误!');

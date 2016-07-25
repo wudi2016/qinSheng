@@ -15,9 +15,8 @@ a{
 /*主体div*/
 .main{
     width:1200px;
-    /*height:632px;*/
-    height:auto;
     min-height:632px;
+    height:auto;
     /*background: #eee;*/
     margin: 0 auto;
 }
@@ -48,6 +47,7 @@ a{
     width:1196px;
     /*height:596px;*/
     height:auto;
+    min-height:600px;
     border: 2px solid #eeeeee;
 }
 
@@ -64,7 +64,7 @@ a{
 .main_detail{
     width:1120px;
     /*height:380px;*/
-    min-height:210px;
+    min-height:380px;
     height:auto;
     margin-left: 40px;
     font-size: 18px;
@@ -85,6 +85,7 @@ a{
     color:rgb(34,34,34);
     font-family:"微软雅黑";
     text-align: right;
-    /*line-height: 30px;*/
-    margin-top: 28px;
+    line-height: 30px;
+    position: relative;
+    top:28px;
 }

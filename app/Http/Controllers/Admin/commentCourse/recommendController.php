@@ -36,6 +36,11 @@ class recommendController extends Controller
         if(DB::table('hotreviewcourse')->where('courseId',$request['courseId'])->first()){
             return redirect()->back()->withInput()->withErrors('点评视频不可重复推荐');
         }
+        //判断推荐位是否存在
+        $isexit = DB::table('hotreviewcourse')->where('sort',$request['sort'])->first();
+        if($isexit){
+            DB::table('hotreviewcourse')->where('id',$isexit->id)->update(['sort'=>0]);
+        }
         $courseTitle = DB::table('commentcourse')->where('id',$request['courseId'])->select('id','courseTitle')->first();
         $data['courseName'] = $courseTitle->courseTitle;
         $data['created_at'] = Carbon::now();
@@ -60,6 +65,11 @@ class recommendController extends Controller
      */
     public function doEditRecommendCourse(Request $request){
         $data = $request->except('_token');
+        //判断推荐位是否存在
+        $isexit = DB::table('hotreviewcourse')->where('sort',$request['sort'])->first();
+        if($isexit){
+            DB::table('hotreviewcourse')->where('id',$isexit->id)->update(['sort'=>0]);
+        }
         $data['updated_at'] = Carbon::now();
         if(DB::table('hotreviewcourse')->where('id',$request['id'])->update($data)){
             return redirect('admin/message')->with(['status'=>'点评视频推荐修改成功','redirect'=>'commentCourse/recommendCourseList']);

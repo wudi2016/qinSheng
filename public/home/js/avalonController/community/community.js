@@ -27,6 +27,26 @@ avalon.directive('newyincang', {
     }
 });
 
+
+avalon.directive('xueyuan', {
+    update: function (value) {
+        // 超出部分隐藏(新闻资讯)
+        $('.newstudent_name div').each(function(){
+            var maxwidth=5;
+            if($(this).html().length>maxwidth){
+                $($(this)).html($($(this)).html().substring(0,maxwidth));
+                $($(this)).html($($(this)).html()+'…');
+            }
+        });
+
+    }
+});
+
+
+
+
+
+
 //图片放大(热门视频)
 avalon.directive('bigimg', {
     update: function (value) {
@@ -45,18 +65,29 @@ avalon.directive('bigimg', {
 
 
 
+//avalon.directive('fenye',{
+//    update: function (value) {
+//        $('.paginationjs-pages').mouseover(function(){
+//            console.log(true);
+//        })
+//    }
+//});
+
+
+
+
 //鼠标悬浮显示(最新学员)
 // avalon.directive('showhideleft',{
 //     update: function (value){
 //         $('.newstudent_left').mouseover(function(){
 //             $('.newstudent_left_img').removeClass('hide');
-//         }) 
+//         })
 //         $('.newstudent_left').mouseout(function(){
 //             $('.newstudent_left_img').addClass('hide');
 //         })
 //     }
 // });
-
+//
 // avalon.directive('showhideright',{
 //     update: function (value){
 //         $('.newstudent_right').mouseover(function(){
@@ -83,7 +114,7 @@ define([],function(){
 
 
         //名师
-        theteacherlist: '',
+        theteacherlist: [],
         getteacher:function(){
             $.ajax({
                 url : '/community/getteacher/',
@@ -99,7 +130,7 @@ define([],function(){
 
 
         //新闻资讯
-        newlist :'',
+        newlist :[],
         getnewData:function(){
             $.ajax({
                 url : '/community/getlist/',
@@ -115,24 +146,54 @@ define([],function(){
 
 
         //最新学员
-        //studentlist: '',
-        //getstudent:function(){
-        //    $.ajax({
-        //        url : '/community/getstudent/',
-        //        type : 'get',
-        //        dataType : 'json',
-        //        success: function(response){
-        //            if(response.statuss){
-        //                model.studentlist = response.data;
-        //            }
-        //        },
-        //    })
-        //},
+        studentlist: [],
+        getstudent:function(){
+
+            $('#demo').pagination({
+                dataSource: function(done) {
+                    $.ajax({
+                        type: 'GET',
+                        url : '/community/getstudent/',
+                        dataType : 'json',
+                        success: function(response) {
+                            if(response.statuss){
+                                //console.log(response);
+                                done(response.data);
+                            }else{
+
+                            }
+                        }
+                    });
+                },
+                pageSize: 6,
+                className:"paginationjs-theme-blue",
+                showPageNumbers: false,
+                showNavigator: false,
+                callback: function(data) {
+                    if(data){
+                        model.studentlist = data;
+                    }
+
+                }
+            })
+
+
+            //$.ajax({
+            //    url : '/community/getstudent/',
+            //    type : 'get',
+            //    dataType : 'json',
+            //    success: function(response){
+            //        if(response.statuss){
+            //            model.studentlist = response.data;
+            //        }
+            //    },
+            //})
+        },
 
 
 
         //最热视频
-        hotvideo :'',
+        hotvideo :[],
         gethotData:function(){
             $.ajax({
                 url : '/community/gethotvideo/',
@@ -152,6 +213,6 @@ define([],function(){
     model.getnewData();
     model.gethotData();
     model.getteacher();
-    //model.getstudent();
+    model.getstudent();
     return model;
 });

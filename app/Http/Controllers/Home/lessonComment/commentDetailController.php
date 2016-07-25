@@ -15,6 +15,7 @@ class commentDetailController extends Controller
 {
     use Gadget;
 
+
     public function __construct()
     {
         PaasUser::apply();
@@ -32,10 +33,16 @@ class commentDetailController extends Controller
         if (\Auth::check()) {
             $mine = ['id' => \Auth::user() -> id, 'username' => \Auth::user() -> username, 'type' => \Auth::user() -> type, 'pic' => \Auth::user() -> pic];
             $userType = \Auth::user() -> type != 2 ? 'userId' : 'teacherId';
-            $bought = DB::table('orders') -> join('commentcourse', 'orders.courseId', '=', 'commentcourse.id') -> select('orders.id', 'orders.orderType') 
-                    -> where(['orders.orderType' => 1, 'commentcourse.id' => $commentID, 'orders.'.$userType => \Auth::user() -> id, 'orders.status' => 2, 'orders.isDelete' => 0]) 
-                    -> orWhere(['orders.orderType' => 2, 'orders.userId' => \Auth::user() -> id, 'orders.status' => 2, 'orders.isDelete' => 0]) -> first();
-            $bought = $bought ? 1 : 0;
+            $result = DB::table('orders') -> join('commentcourse', 'orders.courseId', '=', 'commentcourse.id') -> select('orders.id', 'orders.orderType') 
+                    -> where(['orders.orderType' => 1, 'commentcourse.id' => $commentID, 'orders.userId' => \Auth::user() -> id, 'orders.status' => 2, 'orders.isDelete' => 0]) 
+                    -> orWhere(['orders.orderType' => 2, 'commentcourse.id' => $commentID, 'orders.userId' => \Auth::user() -> id, 'orders.status' => 2, 'orders.isDelete' => 0]) -> first();
+            if ($result) {
+                $bought = 1;
+            } else {
+                $invited = DB::table('users') -> join('commentcourse', 'users.id', '=', 'commentcourse.userId') -> select('users.id', 'users.fromyaoqingma') 
+                         -> where(['commentcourse.id' => $commentID, 'users.fromyaoqingma' => \Auth::user() -> yaoqingma]) -> first();
+                $bought = $invited ? 1 : 0;
+            }
         } else {
             $mine = ['id' => 0, 'username' => 0, 'type' => 0, 'pic' => 0];
             $bought = 0;
@@ -64,9 +71,9 @@ class commentDetailController extends Controller
         if ($result) {
             $result -> time = floor((time() - strtotime($result -> created_at)) / 86400) + 1;
             $result -> created_at = explode(' ', $result -> created_at)[0];
-            $result -> courseLowPath = $this -> getPlayUrl($result -> courseLowPath);
-            $result -> courseMediumPath = $this -> getPlayUrl($result -> courseMediumPath);
-            $result -> courseHighPath = $this -> getPlayUrl($result -> courseHighPath);
+//            $result -> courseLowPath = $this -> getPlayUrl($result -> courseLowPath);
+//            $result -> courseMediumPath = $this -> getPlayUrl($result -> courseMediumPath);
+//            $result -> courseHighPath = $this -> getPlayUrl($result -> courseHighPath);
         }
         return $this -> returnResult($result);
     }
@@ -181,6 +188,22 @@ class commentDetailController extends Controller
         $result = DB::table('commentcourse') -> insertGetId($request -> all());
         if (!$result) return $this -> returnResult(false);
         DB::table('orders') -> where('orderSn', $request['orderSn']) -> update(['courseId' => $result]) || $result = !(DB::table('commentcourse') -> where('id', $result) -> delete());
+        return $this -> returnResult($result);
+    }
+
+
+    /**
+     * 递增视频观看数
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function videoIncrement(Request $request)
+    {
+        if ($request['action']) {
+            $result = DB::table($request['table']) -> where($request['condition']) -> increment($request['field']);
+        } else {
+            $result = DB::table($request['table']) -> where($request['condition']) -> decrement($request['field']);
+        }
         return $this -> returnResult($result);
     }
 }

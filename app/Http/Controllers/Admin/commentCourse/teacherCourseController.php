@@ -53,6 +53,14 @@ class teacherCourseController extends Controller
                     $val->courseLowPathurl = Cache::get($val->courseLowPath);
                 }
             }
+            $val->coursePrice = $val->coursePrice / 100;
+            $val->courseDiscount = $val->courseDiscount / 1000;
+            if($val->courseType){
+                $coursetype = DB::table('coursetype')->where('id',$val->courseType)->first();
+                $val->typeName = $coursetype->typeName;
+            }else{
+                $val->typeName = '无促销';
+            }
         }
         $data->type = $request['type'];
 //        dd($data);
@@ -123,6 +131,13 @@ class teacherCourseController extends Controller
             ->where('id',$id)
             ->orderBy('id','desc')
             ->first();
+        if($data->courseType){
+            $coursetype = DB::table('coursetype')->where('id',$data->courseType)->first();
+            $data->typeName = $coursetype->typeName;
+        }else{
+            $data->typeName = '无促销';
+        }
+        $data->typeNames = DB::table('coursetype')->get();
         return view('admin.teacherCourse.editTeacherCourse',['data'=>$data]);
     }
 
@@ -136,6 +151,12 @@ class teacherCourseController extends Controller
         }
         $data = $request->except('_token');
         $data['updated_at'] = Carbon::now();
+        $data['coursePrice'] = $request['coursePrice'] * 100;
+        if($request['courseType'] == 1){
+            $data['courseDiscount'] = $request['courseDiscount'] * 1000;
+        }else{
+            $data['courseDiscount'] = 0;
+        }
         if($request->hasFile('coursePic')){ //判断文件是否存在
             if($request->file('coursePic')->isValid()){ //判断文件在上传过程中是否出错
                 $name = $request->file('coursePic')->getClientOriginalName();//获取图片名

@@ -15,7 +15,7 @@ class SpecialTypeController extends Controller
      */
     public function specialTypeList(){
         $data = DB::table('coursetype')->orderBy('id','desc')->paginate(15);
-        return view('admin/specialCourse/SpecialTypeList',['data'=>$data]);
+        return view('admin/specialCourse/specialTypeList',['data'=>$data]);
     }
 
     /**

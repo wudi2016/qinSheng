@@ -164,7 +164,7 @@
 
 
 						
-		                @permission('role.list')
+		                @permission('check.role')
 						<li>
 		                    <a href="#" class="dropdown-toggle">
 		                        <i class="icon-text-width"></i>
@@ -211,7 +211,7 @@
 								</li>
 
 								@permission('add.user')
-								<li class="usersadds">
+								<li class="usersadd">
 									<a href="{{url('admin/users/addUser')}}">
 										<i class="icon-double-angle-right"></i>
 										添加用户
@@ -338,19 +338,73 @@
 
 							<ul class="submenu">
 								<li class="orderorder">
-									<a href="{{url('/admin/order/orderList')}}">
+									<a href="{{url('/admin/order/orderList/5')}}">
 										<i class="icon-double-angle-right"></i>
-										订单列表
+										未付款订单
 									</a>
 								</li>
 
-								<li class="orderrefund">
-									<a href="{{url('/admin/order/refundList')}}">
+								<li class="orderorde0r">
+									<a href="{{url('/admin/order/orderList/0')}}">
 										<i class="icon-double-angle-right"></i>
-										退款列表
+										已付款订单
 									</a>
 								</li>
 
+								<li class="orderorder1">
+									<a href="{{url('/admin/order/orderList/1')}}">
+										<i class="icon-double-angle-right"></i>
+										待点评订单
+									</a>
+								</li>
+
+								<li class="orderorder2">
+									<a href="{{url('/admin/order/orderList/2')}}">
+										<i class="icon-double-angle-right"></i>
+										已完成订单
+									</a>
+								</li>
+
+								<li class="orderorder3">
+									<a href="{{url('/admin/order/orderList/3')}}">
+										<i class="icon-double-angle-right"></i>
+										退款中订单
+									</a>
+								</li>
+
+								<li class="orderorder4">
+									<a href="{{url('/admin/order/orderList/4')}}">
+										<i class="icon-double-angle-right"></i>
+										已退款订单
+									</a>
+								</li>
+
+							</ul>
+						</li>
+
+						<!--通知管理-->
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-desktop"></i>
+								<span class="menu-text"> 通知管理 </span>
+
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								<li class="noticenotice">
+									<a href="{{url('/admin/notice/noticeList')}}">
+										<i class="icon-double-angle-right"></i>
+										通知列表
+									</a>
+								</li>
+
+								<li class="noticenoticetem">
+									<a href="{{url('/admin/notice/noticeTemList')}}">
+										<i class="icon-double-angle-right"></i>
+										通知模板
+									</a>
+								</li>
 							</ul>
 						</li>
 
@@ -384,7 +438,7 @@
 						</li>
 
 
-
+						@permission('collection.list')
 						{{--评论回复管理--}}
 						<li>
 							<a href="#" class="dropdown-toggle">
@@ -404,6 +458,8 @@
 
 							</ul>
 						</li>
+						@endpermission
+
 
 
 
@@ -471,6 +527,15 @@
 								</li>
 
 
+								<li class="contentmanagerrecteacher">
+									<a href="{{url('/admin/contentManager/recteacherList')}}">
+										<i class="icon-double-angle-right"></i>
+										社区名师推荐
+									</a>
+								</li>
+
+
+
 								{{--<li class="contentmanagernews">--}}
 									{{--<a href="{{url('/admin/contentManager/newsList')}}">--}}
 										{{--<i class="icon-double-angle-right"></i>--}}
@@ -482,6 +547,7 @@
 
 							</ul>
 						</li>
+
 
 
 
@@ -510,8 +576,6 @@
 									</a>
 								</li>
 
-
-
 							</ul>
 						</li>
 
@@ -519,6 +583,7 @@
 
 
 
+						@permission('companyUser.list')
 						<!--公司后台用户管理-->
 						<li>
 							<a href="#" class="dropdown-toggle">
@@ -536,18 +601,19 @@
 										后台用户列表
 									</a>
 								</li>
-
+								@permission('add.companyUser')
 								<li class="companyuseraddcompanyuser">
 									<a href="{{url('/admin/companyUser/addcompanyUser')}}">
 										<i class="icon-double-angle-right"></i>
 										添加后台用户
 									</a>
 								</li>
+								@endpermission
 
 							</ul>
 
 						</li>
-
+						@endpermission
 
 
 
@@ -583,7 +649,61 @@
 						@endpermission
 
 
+						<!--后台日志管理-->
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-align-justify"></i>
+								<span class="menu-text"> 后台日志管理 </span>
 
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+
+								<li class="logslog">
+									<a href="{{url('/admin/logs/logList')}}">
+										<i class="icon-double-angle-right"></i>
+										日志列表
+									</a>
+								</li>
+
+							</ul>
+						</li>
+
+						<!--后台日志管理-->
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-align-justify"></i>
+								<span class="menu-text"> 数据统计 </span>
+
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+
+								<li class="countusercount">
+									<a href="{{url('/admin/count/userCountList')}}">
+										<i class="icon-double-angle-right"></i>
+										注册用户
+									</a>
+								</li>
+
+								<li class="countordercount">
+									<a href="{{url('/admin/count/orderCountList')}}">
+										<i class="icon-double-angle-right"></i>
+										订单成交数
+									</a>
+								</li>
+
+								<li class="countspecialcount">
+									<a href="{{url('/admin/count/specialCountList')}}">
+										<i class="icon-double-angle-right"></i>
+										课程播放统计列表
+									</a>
+								</li>
+
+							</ul>
+						</li>
 
 						<!--回收站-->
 						<li>
@@ -625,6 +745,8 @@
 
 							</ul>
 						</li>
+
+
 
 
 
@@ -767,15 +889,19 @@
 
 						} else { // 一个‘/’
 //							alert('aa');
+//							alert('.' + first + route.slice(3));
 							$('.' + first + route.slice(0, -4)).parent().parent().addClass('open');
 							$('.' + first + route.slice(0, -4)).parent().css('display', 'block');
 							$('.' + first + route.slice(0, -4)).addClass('active');
 							$('.' + first + route.slice(4)).parent().parent().addClass('open');
 							$('.' + first + route.slice(4)).parent().css('display', 'block');
 							$('.' + first + route.slice(4)).addClass('active');
-							$('.' + first + route.slice(3)).parent().parent().addClass('open');
-							$('.' + first + route.slice(3)).parent().css('display', 'block');
-							$('.' + first + route.slice(3)).addClass('active');
+							if('.'+first + route.slice(3) != '.usersuser'){
+								$('.' + first + route.slice(3)).parent().parent().addClass('open');
+								$('.' + first + route.slice(3)).parent().css('display', 'block');
+								$('.' + first + route.slice(3)).addClass('active');
+							}
+
 						}
 
 					}
@@ -810,8 +936,9 @@
 						$('.usersfamousteacher').parent().parent().addClass('open');
 						$('.usersfamousteacher').parent().css('display', 'block');
 						$('.usersfamousteacher').addClass('active');
+
 					}else if(route == 'order'){
-						alert(route);
+//						alert(route);
 						if (route == 'remarklist') {
 							$('.orderorder').parent().parent().addClass('open');
 							$('.orderorder').parent().css('display', 'block');

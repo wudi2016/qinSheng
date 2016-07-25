@@ -128,9 +128,11 @@
                                                         <i class="icon-edit bigger-120"></i>
                                                     </a>
 
+                                                    @if($type->id != 1)
                                                     <a href="{{url('/admin/specialCourse/delSpecialType/'.$type->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
                                                         <i class="icon-trash bigger-120"></i>
                                                     </a>
+                                                    @endif
 
                                                 </div>
 

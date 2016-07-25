@@ -33,12 +33,14 @@
 				</div>
 			</div>
 			<div class="video_bar">
-				<div class="video_bar_title">演奏视频</div>
-				<div class="video_bar_title hide" style="color: red; font-weight: bold;" ms-html="'￥' + teacherInfo.extra"></div>
+				<div class="video_bar_title" ms-html="videoType ? '演奏视频' : '点评视频'"></div>
+				<div class="video_bar_title hide" ms-visible='!bought && !videoType' style="color: red; font-weight: bold;" ms-html="'￥' + teacherInfo.extra / 100"></div>
                 @if (Auth::check())
-                    <div class="video_bar_icon" ms-click="popUpSwitch('feedback')"><img src="{{asset('/home/image/lessonComment/commentDetail/editor.png')}}">反馈</div>
+                    <div class="video_bar_icon hide" ms-visible='bought' ms-click="popUpSwitch('feedback')">
+                        <img src="{{asset('/home/image/lessonComment/commentDetail/editor.png')}}">反馈
+                    </div>
                     <div class="video_bar_icon hide" ms-visible="!isFollow" ms-click="followCourse()"><img src="{{asset('/home/image/lessonComment/commentDetail/collection.png')}}">收藏</div>
-                    <div class="video_bar_icon hide" ms-visible="isFollow" ms-click="followCourse()"><img src="{{asset('/home/image/lessonComment/commentDetail/collection_active.png')}}">收藏</div>
+                    <div class="video_bar_icon hide" ms-visible="isFollow" ms-click="followCourse()"><img src="{{asset('/home/image/lessonComment/commentDetail/collection_active.png')}}">已收藏</div>
                 @else
                     <a href="/index/login" class="video_bar_icon"><img src="{{asset('/home/image/lessonComment/commentDetail/editor.png')}}">反馈</a>
                     <a href="/index/login" class="video_bar_icon"><img src="{{asset('/home/image/lessonComment/commentDetail/collection.png')}}">收藏</a>
@@ -61,8 +63,8 @@
 				<a ms-attr-href="/lessonComment/student/[--studentInfo.userId--]" class="palyinfo_detail_text" ms-html="studentInfo.username"></a>
 				<div class="palyinfo_detail_time" ms-html="studentInfo.created_at"></div>
 			</div>
-			<div class="palyinfo_detail_title hide" ms-visible="studentInfo.extra" ms-html="'曲目：' + studentInfo.extra"></div>
-			<div class="palyinfo_detail_description hide" ms-class="fold: !descriptionOpen" ms-visible="studentInfo.message" ms-html="'留言：' + studentInfo.message"></div>
+			<div class="palyinfo_detail_title hide" ms-visible="studentInfo.extra" ms-html="'曲目： ' + studentInfo.extra"></div>
+			<div class="palyinfo_detail_description hide" ms-class="fold: !descriptionOpen" ms-visible="studentInfo.message" ms-html="'留言： ' + studentInfo.message"></div>
             <div class="open hide" ms-visible="!descriptionOpen" ms-click="descriptionSwitch('descriptionOpen', true)" ms-attr-title="studentInfo.message">展开>>></div>
 			<div class="open hide" ms-visible="descriptionOpen" ms-click="descriptionSwitch('descriptionOpen', false)"><<<收起</div>
 
@@ -129,7 +131,7 @@
 					<div class="recommend_detail_teacher" ms-html="'讲师：' + el.teachername"></div>
 					<div class="recommend_detail_learned"><img src="{{asset('/home/image/lessonComment/commentDetail/study.png')}}">[--el.coursePlayView--]人学过</div>
 				</div>
-				<div class="recommend_price" ms-html="'￥ ' + el.coursePrice"></div>
+				<div class="recommend_price" ms-html="'￥ ' + el.coursePrice / 100"></div>
 			</div>
             <div style="width: 100%; height: 200px; line-height: 200px; text-align: center; display: none;" ms-visible="recommendlist.size() < 1">暂无数据</div>
 		</div>
@@ -146,15 +148,15 @@
             </div>
             <div class="buy_course_center">
                 <div class="top" ms-html="'课程名称：' + studentInfo.extra"></div>
-                <div class="center">课程价格：<span ms-html="'￥ ' + teacherInfo.extra + ' 元'"></span></div>
+                <div class="center">课程价格：<span ms-html="'￥ ' + teacherInfo.extra / 100 + ' 元'"></span></div>
                 <div class="bot">
                     <div>支付方式：</div>
                     <div class="aliPay"><input type="radio" ms-duplex-number='payType' value='0'/><span></span></div>
                     <div class="weChat"><input type="radio" ms-duplex-number='payType' value="1"/><span></span></div>
                 </div>
-                <span class="hide" style="color: red; display: block; margin: 5px auto; padding-left: 112px;" ms-visible="payWarning">请选择支付方式</span>
+                <span style="color: red; display: block; margin: 5px auto; padding-left: 112px;" ms-visible="payWarning">请选择支付方式</span>
                 <div class="clear"></div>
-                <div class="pay_btn" ms-click="popUpSwitch('buySuccess')">立即支付</div>
+                <div class="pay_btn" ms-click="pay()">立即支付</div>
             </div>
         </div>
 
@@ -169,18 +171,6 @@
                 <div class="center">支付成功 !</div>
                 <div class="bot">您可以在个人中心查看订单详情</div>
                 <div class="study_btn" ms-click="popUpSwitch(false)">开始学习</div>
-            </div>
-        </div>
-
-        <!-- 资料下载弹出层 -->
-        <div class="data_download hide" ms-popup="popUp" value="downLoad">
-            <div class="data_download_top">
-                <span class="left">资料下载</span>
-                <span class="right" ms-click="popUpSwitch(false)"></span>
-            </div>
-            <div class="data_download_center">
-                <div class="top">本资料暂无预览，如感兴趣可购买课程后下载。</div>
-                <div class="buy_btn">立即购买</div>
             </div>
         </div>
 
@@ -201,9 +191,9 @@
                 </div>
                 <div class="clear"></div>
                 <div class="center">
-                    <div class="question"><span>2</span><span class="last">填写问题描述：</span><span style="color: red" ms-visible="feedBackWarning.content">请填写200字数以内问题描述</span></div>
+                    <div class="question"><span>2</span><span class="last">填写问题描述：</span><span style="color: red" ms-visible="feedBackWarning.content">请填写80字数以内问题描述</span></div>
                     <div class="content">
-                        <textarea placeholder="详细描述一些你遇到的问题或建议" ms-duplex="feedBack.content"></textarea>
+                        <textarea style='border-bottom: 2px solid #ccc;' placeholder="详细描述一些你遇到的问题或建议" ms-duplex="feedBack.content"></textarea>
                     </div>
                 </div>
                 <div class="feedback_center_last">
@@ -246,7 +236,7 @@
         <!--  取消收藏弹出层 -->
         <div class="delete_comment hide" ms-popup="popUp" value="unfollow">
             <div class="top">
-                <span>确认取消关注？</span>
+                <span>确认取消收藏？</span>
             </div>
             <div class="bot">
                 <span class="quit" ms-click="popUpSwitch(false)">取消</span>
@@ -265,9 +255,11 @@
             comment.commentID = {{$commentID}} || null;
             comment.mineID = {{$mine['id']}} || null;
             comment.mineUsername = '{{$mine["username"]}}' || null;
-            comment.mineType = '{{$mine["type"]}}' || null;
+            comment.mineType = parseInt('{{$mine["type"]}}' || null);
 			comment.minePic = '{{$mine["pic"]}}' || null;
             comment.bought = Boolean({{$bought}} || null);
+            if (comment.mineType == 2) comment.bought = true;
+            console.log(comment.bought);
 
             //  获取点评信息
             comment.getData('/lessonComment/getDetailInfo/'+comment.commentID+'/1', 'teacherInfo');
@@ -277,13 +269,31 @@
             comment.getData('/lessonComment/getNewComment', 'recommendlist');
             //  获取评论
             comment.getData('/lessonComment/getApplyComment/'+comment.commentID, 'commentlist');
+            //  观看数递增
+            comment.mineID && comment.getData('/lessonComment/videoIncrement', 'videoIncrement', {table: 'commentcourse', condition: {id: comment.commentID}, field: 'courseView', action: 1}, 'POST');
 
-            comment.$watch('replayInfo.name', function(value) {
-                if (value.length < comment.replayInfo.lengths) comment.replayInfo = {};
+            comment.$watch('replayInfo.name', function(value, oldVlaue) {
+                if ((comment.replayInfo.lengths > 0 && value[comment.replayInfo.lengths - 1] != ' ') || value.length < comment.replayInfo.lengths) {
+                    comment.replayInfo.name = '';
+                    comment.replayInfo.lengths = 0;
+                    return;
+                }
+                if (value.length > (100 + comment.replayInfo.lengths)) {
+                    comment.replayInfo.name = oldVlaue
+                    return;
+                }
             });
 
             comment.$watch('feedBack.*', function(value, oldValue) {
-                if (value != oldValue) comment.feedBackWarning = {type: false, content: false, tel: false};
+                if (value != oldValue) {
+                    comment.feedBackWarning = {type: false, content: false, tel: false}
+                }
+            });
+
+            comment.$watch('payType', function(value) {
+                if ('number' === typeof value) {
+                    comment.payWarning = false
+                }
             });
 
             avalon.scan();

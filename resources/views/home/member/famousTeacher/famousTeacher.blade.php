@@ -103,7 +103,7 @@
                 {{--//点评课程循环开始--}}
                 <div class="right_comment_repeat" ms-repeat="waitCommentList">
                     <!--审核未通过-->
-                    <div ms-if="el.status == 0 && el.applyState == 2  && el.commentState == 0">
+                    <div ms-if="el.commentState == 0">
                         <div class="comment_repeat_img">
                             <a ms-attr-href="'/lessonComment/reUploadComment/'+ el.commentId">
                                 <div class="repeat_img_unchecked">
@@ -114,14 +114,14 @@
 
                         </div>
 
-                        <div class="comment_repeat_title" ms-text="el.commentTitle"></div>
+                        <div class="comment_repeat_title" ms-text="el.applyTitle"></div>
                             <div class="comment_repeat_unchecked"><span ms-text="'点评讲师&nbsp;'+':&nbsp;'+ el.teacherName"></span>
                                 <span ms-text="'发布者&nbsp;'+':&nbsp;'+ el.realname"></span>
                             </div>
                     </div>
 
                     <!--视频转码中-->
-                    <div ms-if="el.status == 0 && el.commentState == 1 && el.low == '' && el.medium == '' && el.high == ''">
+                    <div ms-if="el.commentState == 1 && el.low == null && el.medium == null && el.high == null">
                         <div class="comment_repeat_img">
                             <div class="repeat_img_unchecked">
                                 <div class="comment_video_unchecked" ms-text="'视频转码中'"></div>
@@ -129,14 +129,14 @@
                             </div>
 
                         </div>
-                        <div class="comment_repeat_title" ms-text="el.commentTitle"></div>
+                        <div class="comment_repeat_title" ms-text="el.applyTitle"></div>
                         <div class="comment_repeat_unchecked"><span ms-text="'点评讲师&nbsp;'+':&nbsp;'+ el.teacherName"></span>
                             <span ms-text="'发布者&nbsp;'+':&nbsp;'+ el.realname"></span>
                         </div>
                     </div>
 
                     <!--审核中-->
-                    <div ms-if="el.status == 0 && el.commentState == 1 && el.low != '' && el.medium != '' && el.high != ''">
+                    <div ms-if="el.commentState == 1 && el.low != null && el.medium != null && el.high != null">
                         <div class="comment_repeat_img">
                             <div class="repeat_img_unchecked">
                                 <div class="comment_video_unchecked" ms-text="'视频审核中'"></div>
@@ -144,23 +144,23 @@
                             </div>
 
                         </div>
-                        <div class="comment_repeat_title" ms-text="el.commentTitle"></div>
+                        <div class="comment_repeat_title" ms-text="el.applyTitle"></div>
                         <div class="comment_repeat_unchecked"><span ms-text="'点评讲师&nbsp;'+':&nbsp;'+ el.teacherName"></span>
                             <span ms-text="'发布者&nbsp;'+':&nbsp;'+ el.realname"></span>
                         </div>
                     </div>
 
                     {{--<!--等待点评-->--}}
-                    <div ms-if="el.status == 1 && el.applyState == 2 && el.commentState != 0 && el.commentState != 1 && el.commentState != 2">
+                    <div ms-if="el.commentState != 0 && el.commentState != 1 && el.commentState != 2">
                         <div class="comment_repeat_img">
                             <a ms-attr-href="'/lessonComment/wait/'+ el.applyId">
                                 <div class="repeat_img_unchecked">
                                     <div class="comment_video_unchecked" ms-text="'等待点评'"></div>
-                                    <div class="comment_video_time" ms-text=" '发布时间：'+ el.time"></div>
+                                    <div class="comment_video_time" ms-text=" '发布时间：'+ el.applyTime"></div>
                                 </div>
                             </a>
                         </div>
-                        <div class="comment_repeat_title" ms-text="el.commentTitle"></div>
+                        <div class="comment_repeat_title" ms-text="el.applyTitle"></div>
                         <div class="comment_repeat_unchecked"><span ms-text="'点评讲师&nbsp;'+':&nbsp;'+ el.teacherName"></span>
                             <span ms-text="'发布者&nbsp;'+':&nbsp;'+ el.realname"></span>
                         </div>
@@ -168,19 +168,6 @@
                 </div>
                 {{--//点评课程循环结束--}}
                 <div ms-visible="waitComment" class="warning_msg">暂无待评作品...</div>
-
-                {{--<div class="right_comment_repeat">--}}
-                    {{--<div class="comment_repeat_img">--}}
-                        {{--<div class="repeat_img_unchecked">--}}
-                            {{--<div class="comment_video_unchecked">视频审核未通过</div>--}}
-                            {{--<div class="comment_video_time">发布时间：2016-05-20&nbsp;&nbsp;19:30</div>--}}
-                        {{--</div>--}}
-
-                    {{--</div>--}}
-                    {{--<div class="comment_repeat_title">肖邦第三章</div>--}}
-                    {{--<div class="comment_repeat_unchecked"><span>点评讲师&nbsp;:&nbsp;吴大海</span>--}}
-                        {{--<span>发布者&nbsp;:&nbsp;王小明</span></div>--}}
-                {{--</div>--}}
 
             </div>
             <!--分页-->
@@ -565,11 +552,17 @@
             <div class="height40"></div>
             <div class="height5"></div>
             <div class="center_right_textarea">
-                <span>个人简介</span>
-                <textarea name="intro" id="">{{$data->intro}}</textarea>
-                <span>0/200字</span>
+                <span style="width:147px;float: left">个人简介</span>
+                <div class="center_right_textarea_con">
+                    <div class="center_right_textarea_con_top">
+                        <textarea name="intro" id="center_right_textarea_con_top_text">{{$data->intro}}</textarea>
+                    </div>
+                    <div class="center_right_textarea_con_foot">
+                        <span class="countfont">0</span>/200字&nbsp;
+                    </div>
+                </div>
             </div>
-
+            <div class="clear"></div>
             <div class="height60"></div>
             <div class="height10"></div>
             <div class="height5"></div>

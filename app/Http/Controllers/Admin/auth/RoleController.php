@@ -21,7 +21,7 @@ class RoleController extends Controller
     public function roleList()
     {
         $roleList = DB::table('roles') -> select('id', 'slug', 'created_at') -> where('level', '<=', \Auth::user() -> level()) -> orderBy('id', 'asc') -> paginate(10);
-        return view('admin.auth.role.roleList') -> with( 'roleList', $roleList );
+        return view('admin.auth.role.roleList') -> with('roleList', $roleList);
     }
 
 
@@ -49,8 +49,9 @@ class RoleController extends Controller
         }
         $request['name'] = $request['slug'];
         $request['created_at'] = Carbon::now();
-        $result = DB::table('roles') -> insert($request -> except('_token'));
+        $result = DB::table('roles') -> insertGetId($request -> except('_token'));
         if ($result) {
+            $this -> OperationLog('创建了“'. $request['name'] .'”角色');
             return Redirect() -> to('/admin/auth/roleList') -> with('message', '添加成功');
         } else {
             return Redirect() -> back() -> withInput($request -> except('_token')) -> withErrors('添加失败');
@@ -67,6 +68,7 @@ class RoleController extends Controller
     {
         $result = \DB::table('roles') -> where('id', $roleID) -> delete();
         if ($result) {
+            $this -> OperationLog('删除了角色-'.$roleID);
             return Redirect() -> to('/admin/auth/roleList') -> with('message', '删除成功');
         } else {
             return Redirect() -> to('/admin/auth/roleList') -> with('error', '删除失败');
@@ -100,6 +102,7 @@ class RoleController extends Controller
         $request['name'] = $request['slug'];
         $result = DB::table('roles') -> where('id', $request['id']) -> update($request -> except('_token'));
         if ($result) {
+            $this -> OperationLog('修改了“'. $request['name'] .'”角色');
             return Redirect() -> to('/admin/auth/roleList') -> with('message', '修改成功');
         } else {
             return Redirect() -> back() -> withInput($request -> except('_token')) -> with('error', '修改失败');
@@ -132,6 +135,7 @@ class RoleController extends Controller
         $tableName = intval($type) ? 'role_user' : 'permission_role';
         $result = \DB::table($tableName) -> where('id', $roleID) -> delete();
         if ($result) {
+            $this -> OperationLog('删除了角色用户-'.$roleID);
             return Redirect() -> back() -> with('message', '撤销成功');
         } else {
             return Redirect() -> back() -> with('error', '撤销失败');
@@ -159,10 +163,11 @@ class RoleController extends Controller
     {
         $request['user'] = explode(',', $request['user']);
         foreach ($request['user'] as $key => $value) {
-            $result = DB::table('role_user') -> insert(['role_id' => $request['roleID'], 'user_id' => $value, 'created_at' => Carbon::now()]);
+            $result = DB::table('role_user') -> insertGetId(['role_id' => $request['roleID'], 'user_id' => $value, 'created_at' => Carbon::now()]);
             if (!$result) return Redirect() -> back() -> withInput($request -> except('_token')) -> withErrors('添加失败');
         }
         if ($result) {
+            $this -> OperationLog('添加了“'. implode(', ', $request['user']) .'”角色用户');
             return Redirect() -> to('/admin/auth/checkRoleUser/'.$request['roleID']) -> with('message', '添加成功');
         } else {
             return Redirect() -> back() -> withInput($request -> except('_token')) -> withErrors('添加失败');
@@ -247,10 +252,11 @@ class RoleController extends Controller
     {
         $request['permission'] = explode(',', $request['permission']);
         foreach ($request['permission'] as $key => $value) {
-            $result = DB::table('permission_role') -> insert(['role_id' => $request['roleID'], 'permission_id' => $value, 'created_at' => Carbon::now()]);
+            $result = DB::table('permission_role') -> insertGetId(['role_id' => $request['roleID'], 'permission_id' => $value, 'created_at' => Carbon::now()]);
             if (!$result) return Redirect() -> back() -> withInput($request -> except('_token')) -> withErrors('添加失败');
         }
         if ($result) {
+            $this -> OperationLog('添加了“'. implode(', ', $request['permission']) .'”角色权限');
             return Redirect() -> to('/admin/auth/checkRolePermission/'.$request['roleID']) -> with('message', '添加成功');
         } else {
             return Redirect() -> back() -> withInput($request -> except('_token')) -> withErrors('添加失败');

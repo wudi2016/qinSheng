@@ -104,7 +104,8 @@ class companyUserController extends Controller{
             return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
         }
         $res = DB::table('users')->where('id',$input['id'])->update($input);
-        if($res){
+
+        if($res !== false){
             return redirect('admin/message')->with(['status'=>'编辑成功','redirect'=>'companyUser/companyUserList']);
         }else{
             return redirect()->back()->withInput()->withErrors('编辑失败！');
@@ -187,6 +188,9 @@ class companyUserController extends Controller{
             echo 0;
         }
     }
+
+
+
 
 
 

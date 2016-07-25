@@ -2,7 +2,7 @@ define([], function () {
 
     var games = avalon.define({
         $id: 'games',
-        datas: '',
+        datas: [],
         Msg: false,
         Con: false,
         getdata:function(para){
@@ -23,7 +23,7 @@ define([], function () {
                         }
                     });
                 },
-                pageSize: 3,
+                pageSize: 7,
                 className:"paginationjs-theme-blue",
                 showGoInput: true,
                 showGoButton: true,

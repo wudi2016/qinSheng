@@ -13,20 +13,27 @@ define([], function() {
 				success: function(response) {
 					if (model == 'deleteOrder') {
 						response.type && window.location.reload();
-					};
+					}
 					if (model == 'orderStatus') {
 						if (response.type) {
-							window.location.href = '/lessonComment/buySuccess/'+comment.orderID;
+							switch (response.data.orderType) {
+								case 1:
+									window.location.href = '/lessonComment/buySuccess/'+ comment.orderID;
+									break;
+								case 2:
+									window.location.href = '/lessonComment/detail/'+ response.data.courseId;
+									break;
+							}
 						} else {
 							setTimeout(function() {
 								comment.getData('/lessonComment/orderStatus/'+comment.orderID, 'orderStatus');
 							}, 3000);
 						}
-					};
+					}
 					if (model == 'orderInfo') {
 						response.type && callback(response);
 						return;
-					};
+					}
 					if (response.type) {
 						comment[model] = response.data;
 					}
@@ -58,9 +65,9 @@ define([], function() {
 			};
 			comment.getData('/lessonComment/generateOrder', 'orderInfo', data, 'POST', function(response) {
 				if (comment.payType) {
-					location.href = '/lessonComment/scan/' + response.data;
+					location.href = '/lessonComment/scan/'+ response.data;
 				} else {
-					location.href = '/lessonComment/buySuccess/' + response.data;
+					location.href = '/lessonComment/alipay/'+ response.data +'/lessonComment&buySuccess&'+ response.data;
 				};
 			});
 		}

@@ -12,7 +12,7 @@
 
 		<div class="weixin_scan">
 			<div style="clear: both; height: 100px;"></div>
-			<div class="scan_price">实付金额：<span>{{$orderInfo -> orderPrice}}元</span></div>
+			<div class="scan_price">实付金额：<span>{{$orderInfo -> orderPrice / 100}}元</span></div>
 			<div class="scan_code">
 				{!! \QrCode::encoding('UTF-8') -> size(200) -> generate($url) !!}
 			</div>
@@ -30,9 +30,6 @@
 		require(['lessonComment/buyComment/index'], function (comment) {
 			comment.orderID = {{$orderID}} || null;
 			comment.getData('/lessonComment/orderStatus/'+comment.orderID, 'orderStatus');
-			setTimeout(function() {
-				comment.getData('/lessonComment/getFirst', 'deleteOrder', {data: {id: comment.orderID}, action: 3, table: 'orders'}, 'POST');
-			}, 300000);
             avalon.scan();
 		});
 	</script>

@@ -10,6 +10,7 @@ a{
     /*height:3000px;*/
     height:auto;
     /*background:#F5F5F5; */
+    background: #FFFFFF;
 }
 
 .main_img{
@@ -209,7 +210,7 @@ a{
 /*最新学员*/
 .newstudent{
     width:1200px;
-    height:220px;
+    height:250px;
     margin: 0 auto;
     /*background: #eeeeee;*/
 }
@@ -286,23 +287,25 @@ a{
 .newstudent_img{
     border-radius:50%;
     overflow:hidden;
-    width:81px;
-    height:81px;
+    width:84px;
+    height:84px;
 }
 
 .newstudent_name{
     width:84px;
     height:36px;
+    font-size:14px;
+    text-align: center;
+    color:rgb(34,34,34);
+    font-family:"微软雅黑";
+
     /*background: green;*/
 }
 
-.newstudent_name span{
-    font-size: 18px;
-    margin-left: 16px;
+.newstudent_name div{
     position: relative;
     top:12px;
-    color:rgb(34,34,34);
-    font-family:"微软雅黑";
+    display:block;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 
 

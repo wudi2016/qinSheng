@@ -32,11 +32,11 @@ class SpecialCourseController extends Controller
         $data = $query
             ->leftJoin('users as u','u.id','=','c.teacherId')
             ->where('courseIsDel',0)
-            ->select('c.*','u.username')
+            ->select('c.*','u.realname')
             ->orderBy('id','desc')
             ->paginate(15);
         foreach($data as &$val){
-            $val->coursePrice = $val->coursePrice / 1000;
+            $val->coursePrice = $val->coursePrice / 100;
             $val->courseDiscount = $val->courseDiscount / 1000;
             if($val->courseType){
                 $coursetype = DB::table('coursetype')->where('id',$val->courseType)->first();
@@ -65,7 +65,7 @@ class SpecialCourseController extends Controller
      */
     public function doAddSpecialCourse(specialCourseRequest $request){
         $data = $request->except('_token');
-        $data['coursePrice'] = $request['coursePrice'] * 1000;
+        $data['coursePrice'] = $request['coursePrice'] * 100;
         $data['created_at'] = Carbon::now();
         $data['updated_at'] = Carbon::now();
         if($request['courseType'] == 1){
@@ -104,7 +104,7 @@ class SpecialCourseController extends Controller
         $data = DB::table('course as c')
             ->leftJoin('users as u','c.teacherId','=','u.id')
             ->where('c.id',$id)
-            ->select('c.*','u.username')
+            ->select('c.*','u.realname')
             ->first();
         if($data->courseType){
             $coursetype = DB::table('coursetype')->where('id',$data->courseType)->first();
@@ -112,10 +112,11 @@ class SpecialCourseController extends Controller
         }else{
             $data->typeName = '无促销';
         }
-        $data->coursePrice = $data->coursePrice / 1000;
+        $data->coursePrice = $data->coursePrice / 100;
         $data->courseDiscount = $data->courseDiscount / 1000;
 
         $data->typeNames = DB::table('coursetype')->get();
+        $data->teacherNames = DB::table('users')->where('type',2)->select('id','realname')->get();
         return view('admin.specialCourse.editSpecialCourse',['data'=>$data]);
     }
 
@@ -128,7 +129,7 @@ class SpecialCourseController extends Controller
             return Redirect()->back()->withInput($request->all())->withErrors($validator);
         }
         $data = $request->except('_token');
-        $data['coursePrice'] = $request['coursePrice'] * 1000;
+        $data['coursePrice'] = $request['coursePrice'] * 100;
         $data['updated_at'] = Carbon::now();
         if($request['courseType'] == 1){
             $data['courseDiscount'] = $request['courseDiscount'] * 1000;
@@ -182,7 +183,7 @@ class SpecialCourseController extends Controller
             ->where('c.id',$id)
             ->select('c.*','u.username')
             ->first();
-        $info->coursePrice = $info->coursePrice / 1000;
+        $info->coursePrice = $info->coursePrice / 100;
         $info->courseDiscount = $info->courseDiscount / 1000;
         if($info->courseType){
             $coursetype = DB::table('coursetype')->where('id',$info->courseType)->first();

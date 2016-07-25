@@ -356,7 +356,7 @@
 }
 
 .paginationjs .paginationjs-pages li.paginationjs-next {
-    border-right: 1px solid #aaa \9
+    /*border-right: 1px solid #aaa \9*/
 }
 
 .paginationjs .paginationjs-go-input > input[type=text] {

@@ -4,7 +4,7 @@
  		$id : 'newlist',
  		lujing: '/community/newdetail/',
 
-         newlist :'',
+         newlist :[],
          getData:function(){
              $('#demo').pagination({
                  dataSource: function(done) {

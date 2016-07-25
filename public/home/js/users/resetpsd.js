@@ -66,7 +66,7 @@ function count(){
     var myTime = setInterval(function() {
         countdown--;
         if(countdown == 0){
-            window.location.href = '/';
+            window.location.href = '/index/login';
             clearInterval(myTime);
         }
         console.log(countdown);

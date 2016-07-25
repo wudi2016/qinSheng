@@ -133,7 +133,7 @@ define([], function (){
 		},
 
 		//公司介绍
-		aboutus1 : '',
+		aboutus1 : [],
         getData1:function(){
 
 				 $.ajax({
@@ -149,7 +149,7 @@ define([], function (){
         },
 
 		//联系我们
-		aboutus2 : '',
+		aboutus2 : [],
 		getData2:function(){
 
 			$.ajax({
@@ -165,7 +165,7 @@ define([], function (){
 		},
 
 		//常见问题
-		aboutus3 : '',
+		aboutus3 : [],
 		getData3:function(){
 
 			$.ajax({
@@ -182,7 +182,7 @@ define([], function (){
 
 
 		//用户协议
-		aboutus4 : '',
+		aboutus4 : [],
 		getData4:function(){
 
 			$.ajax({
@@ -199,9 +199,42 @@ define([], function (){
 
 
 		//友情链接
-		aboutus5 : '',
+		aboutus5 : [],
 		linkurl : 'http://',
 		getData5:function(){
+
+			//$('#page').pagination({
+			//	dataSource: function(done) {
+			//		$.ajax({
+			//			type: 'GET',
+			//			url : '/aboutUs/getListfive/',
+			//			dataType : 'json',
+			//			success: function(response) {
+			//				if(response.statuss){
+			//					//console.log(response);
+			//					done(response.data);
+			//				}else{
+            //
+			//				}
+			//			}
+			//		});
+			//	},
+			//	pageSize: 2,
+			//	className:"paginationjs-theme-blue",
+			//	showGoInput: true,
+			//	showGoButton: true,
+			//	callback: function(data) {
+			//		if(data){
+			//			model.aboutus5 = data;
+			//		}
+            //
+			//	}
+			//})
+
+
+
+
+
 
 			$.ajax({
 				url : '/aboutUs/getListfive/' ,
@@ -213,11 +246,13 @@ define([], function (){
 					}
 				},
 			})
+
+
 		},
 
 
 		//意见反馈
-		aboutus6 : '',
+		aboutus6 : [],
 		getData6:function(){
 
 			$.ajax({

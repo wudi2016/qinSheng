@@ -44,6 +44,11 @@ class hotvideoController extends Controller{
     public function addshotvideo(Request $request){
         $input = Input::except('_token');
         $input['created_at'] = Carbon::now();
+        //验证
+        $validate = $this->validator($input);
+        if($validate->fails()){
+            return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
+        }
 //        dd($input);
         if($request->hasFile('cover')){ //判断文件是否存在
             if($request->file('cover')->isValid()){ //判断文件在上传过程中是否出错
@@ -85,6 +90,11 @@ class hotvideoController extends Controller{
     public function editshotvideo(Request $request){
         $input = Input::except('_token');
         $input['created_at'] = Carbon::now();
+        //验证
+        $validate = $this->validator($input);
+        if($validate->fails()){
+            return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
+        }
         if($request->hasFile('cover')){ //判断文件是否存在
             if($request->file('cover')->isValid()){ //判断文件在上传过程中是否出错
                 $name = $request->file('cover')->getClientOriginalName();//获取图片名
@@ -161,6 +171,22 @@ class hotvideoController extends Controller{
                 echo '文件上传出错';
             }
         }
+    }
+
+
+
+    /**
+     * 验证
+     */
+    protected function validator(array $data){
+        $rules = [
+            'coursePath' => 'required',
+        ];
+        $messages = [
+            'coursePath.required' => '请上传视频',
+        ];
+
+        return \Validator::make($data, $rules, $messages);
     }
 
 

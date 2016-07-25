@@ -22,7 +22,7 @@
             </ul><!-- .breadcrumb -->
 
             <div class="nav-search" id="nav-search">
-                <form action="{{url('/admin/order/orderList')}}" method="get" class="form-search">
+                <form action="{{url('/admin/order/orderList/'.$data->status)}}" method="get" class="form-search">
                     <select name="type" id="form-field-1" class="searchtype">
                         <option value="1"  @if($data->type == 1) selected @endif>订单号</option>
                         <option value="2"  @if($data->type == 2) selected @endif>订单名称</option>
@@ -173,6 +173,8 @@
                                                 退款中
                                             @elseif($order->status == 4)
                                                 已退款
+                                            @elseif($order->status == 5)
+                                                未付款
                                             @endif
                                         </td>
 
@@ -196,22 +198,42 @@
                                                 </span>
 
 
-                                                <a href="{{url('/admin/order/delOrder/'.$order->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
+                                                @if($order->status == 3 || $order->status ==4)
+                                                <a href="{{url('/admin/order/refundList/'.$order->orderSn)}}" class="btn btn-xs btn-success">
+                                                    <i class="icon-pencil bigger-120"></i>退款信息
+                                                </a>
+                                                @endif
+
+                                                {{--删除--}}
+                                                <a href="{{url('/admin/order/delOrder/'.$order->id.'/'.$data->status)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
                                                     <i class="icon-trash bigger-120"></i>
                                                 </a>
 
                                                 <div href="" class="btn btn-xs btn-warning" ms-click="commentdetailpop({{$order->id}})">
                                                     <i class="icon-pencil bigger-120"></i>添加备注
                                                 </div>
+
                                                 <a href="{{url('/admin/order/remarkList/'.$order->id)}}" class="btn btn-xs btn-warning">
                                                     <i class=""></i>查看备注
                                                 </a>
-                                                <a href="{{url('/admin/order/editRefundmoney/'.$order->id)}}" class="btn btn-xs btn-info">
-                                                    <i class="icon-pencil bigger-120"></i>应退金额
+
+                                                @if($order->status == 3)
+                                                <a href="{{url('/admin/order/editRefundmoney/'.$order->id.'/'.$data->status)}}" class="btn btn-xs btn-info">
+                                                    <i class="icon-pencil bigger-120"></i>编辑应退金额
                                                 </a>
-                                                <a href="{{url('/admin/order/editRetiredmoney/'.$order->id)}}" class="btn btn-xs btn-success">
-                                                    <i class="icon-pencil bigger-120"></i>已退金额
+                                                @endif
+
+                                                @if($order->status == 3)
+                                                <a href="{{url('/admin/order/editRetiredmoney/'.$order->id.'/'.$data->status)}}" class="btn btn-xs btn-success">
+                                                    <i class="icon-pencil bigger-120"></i>编辑已退金额
                                                 </a>
+                                                @endif
+
+                                                @if($order->status == 3)
+                                                    <a href="{{url('/admin/order/weiXinRefund/'.$order->id)}}" class="btn btn-xs btn-danger">
+                                                        <i class="icon- bigger-120"></i>确认退款
+                                                    </a>
+                                                @endif
                                             </div>
 
                                             <div class="visible-xs visible-sm hidden-md hidden-lg">

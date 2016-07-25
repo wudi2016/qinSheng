@@ -32,6 +32,12 @@ class recommendFamousController extends Controller
             return redirect()->back()->withInput()->withErrors('名师不可重复推荐');
         }
 
+        //判断推荐位是否存在
+        $isexit = DB::table('hotteacher')->where('sort',$request['sort'])->first();
+        if($isexit){
+            DB::table('hotteacher')->where('id',$isexit->id)->update(['sort'=>0]);
+        }
+
         $teachername = DB::table('users')->where('id',$request['teacherId'])->select('realname')->first();
         $data['teacher'] = $teachername->realname;
         $data['created_at'] = Carbon::now();
@@ -52,6 +58,11 @@ class recommendFamousController extends Controller
     }
     public function doEditRecommendFamous(Request $request){
         $data = $request->except('_token');
+        //判断推荐位是否存在
+        $isexit = DB::table('hotteacher')->where('sort',$request['sort'])->first();
+        if($isexit){
+            DB::table('hotteacher')->where('id',$isexit->id)->update(['sort'=>0]);
+        }
         $data['updated_at'] = Carbon::now();
         if(DB::table('hotteacher')->where('id',$request['id'])->update($data)){
             return redirect('admin/message')->with(['status'=>'修改成功','redirect'=>'users/recommendFamousList']);

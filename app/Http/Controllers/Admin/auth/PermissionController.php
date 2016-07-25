@@ -49,8 +49,9 @@ class PermissionController extends Controller
         }
         $request['name'] = $request['slug'];
         $request['created_at'] = Carbon::now();
-        $result = DB::table('permissions') -> insert($request -> except('_token'));
+        $result = DB::table('permissions') -> insertGetId($request -> except('_token'));
         if ($result) {
+            $this -> OperationLog('创建了“'. $request['name'] .'”操作权限');
             return Redirect() -> to('/admin/auth/permissionList') -> with('message', '添加成功');
         } else {
             return Redirect() -> back() -> withInput($request -> except('_token')) -> withErrors('添加失败');
@@ -67,6 +68,7 @@ class PermissionController extends Controller
     {
         $result = \DB::table('permissions') -> where('id', $permissionID) -> delete();
         if ($result) {
+            $this -> OperationLog('删除了操作权限-'.$permissionID);
             return Redirect() -> to('/admin/auth/permissionList') -> with('message', '删除成功');
         } else {
             return Redirect() -> to('/admin/auth/permissionList') -> with('error', '删除失败');
@@ -100,6 +102,7 @@ class PermissionController extends Controller
         $request['name'] = $request['slug'];
         $result = DB::table('permissions') -> where('id', $request['id']) -> update($request -> except('_token'));
         if ($result) {
+            $this -> OperationLog('修改了“'. $request['name'] .'”操作权限');
             return Redirect() -> to('/admin/auth/permissionList') -> with('message', '修改成功');
         } else {
             return Redirect() -> back() -> withInput($request -> except('_token')) -> with('error', '修改失败');

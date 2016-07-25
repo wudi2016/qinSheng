@@ -29,7 +29,7 @@ define([], function () {
 				user.getData(user.videoUrl, key+'Lesson', {userid: user.userID, order: value, type: user.tabStatus, page: user.page[key]}, 'POST');
 			};
 		},
-		getData: function(url, model, data, method) {
+		getData: function(url, model, data, method, callback) {
 			if (model == 'specialLesson' || model == 'commentLesson') user.loading = true;
 			$.ajax({
 				type: method || 'GET',
@@ -41,6 +41,7 @@ define([], function () {
 						user[model] = response.data;
 					}
 					if (model == 'specialCount' || model == 'commentCount') {
+						console.log(response.data);
 						user.videoNum += response.data || 0;
 						user[model] = Math.ceil(user[model]/6);
 						for (var i = 1; i <= user[model]; i++) {
@@ -48,6 +49,7 @@ define([], function () {
 						}
 					}
 					if (model == 'specialLesson' || model == 'commentLesson') user.loading = false;
+					callback && callback(response);
 				},
 				error: function(error) {
 					if (model == 'specialLesson' || model == 'commentLesson') user.loading = false;
@@ -82,13 +84,19 @@ define([], function () {
 			if (user.isFollow) {
 				user.popUp = 'unfollow';
 			} else {
-				user.getData('/lessonComment/getFirst', 'isFollow', {table: 'friends', action: 2, data: {fromUserId: user.mineID, toUserId: user.userID}}, 'POST');
+				user.getData('/lessonComment/getFirst', 'isFollow', {table: 'friends', action: 2, data: {fromUserId: user.mineID, toUserId: user.userID}}, 'POST', function(response) {
+					if (response.type) user.fansNum++;
+				});
 			}
 		},
 		popUp: false,
 		popUpSwitch: function(value, unfollow) {
 			user.popUp = value;
-			unfollow && user.getData('/lessonComment/getFirst', 'isFollow', {table: 'friends', action: 3, data: {fromUserId: user.mineID, toUserId: user.userID}}, 'POST');
+			if (unfollow) {
+				user.getData('/lessonComment/getFirst', 'isFollow', {table: 'friends', action: 3, data: {fromUserId: user.mineID, toUserId: user.userID}}, 'POST', function(response) {
+					if (response.type) user.fansNum--;
+				});
+			}
 		}
 	});
 

@@ -180,16 +180,18 @@ class perSpaceController extends Controller
         if ($type == '1') { // 学员
             $info = DB::table('course as c')->leftJoin('orders as o', 'c.id', '=', 'o.courseId')
                 ->select('c.id', 'c.courseTitle', 'c.coursePic', 'coursePrice', 'c.coursePlayView', 'c.courseDiscount')
-                ->where(['o.userId' => Auth::user()->id, 'o.orderType' => '0', 'c.courseStatus' => '0'])
+                ->where(['o.userId' => Auth::user()->id, 'o.orderType' => 0, 'c.courseStatus' => 0,'o.status' => 2])
                 ->orderBy($order, 'desc')->get();
         } else { // 名师
             $info = DB::table('course')->select('id', 'courseTitle', 'coursePic', 'coursePrice', 'coursePlayView','courseDiscount')->where(['teacherId' => Auth::user()->id, 'courseStatus' => '0'])->orderBy($order, 'desc')->get();
         }
         foreach ($info as $key => $value) {
             if($info[$key]->courseDiscount){
-                $info[$key]->coursePrice = ceil(($info[$key]->courseDiscount/10000)*$info[$key]->coursePrice/1000);
+//                $info[$key]->coursePrice = ceil(($info[$key]->courseDiscount/10000)*$info[$key]->coursePrice/100);
+                $info[$key]->coursePrice = ($info[$key]->courseDiscount/10000)*$info[$key]->coursePrice/100;
             }else{
-                $info[$key]->coursePrice = ceil($info[$key]->coursePrice/1000);
+//                $info[$key]->coursePrice = ceil($info[$key]->coursePrice/100);
+                $info[$key]->coursePrice = $info[$key]->coursePrice/100;
             }
             $info[$key]->classHour = DB::table('coursechapter')->where(['courseId' => $value->id, 'status' => 0])->where('parentId', '<>', '0')->count();
             $info[$key]->coursePlayView = count(DB::table('courseview')->select('courseId','userId','courseType')->where(['courseId' => $value->id, 'courseType' => 0])->distinct()->get());
@@ -208,13 +210,14 @@ class perSpaceController extends Controller
         $info = DB::table('applycourse as a')
             ->leftJoin('orders as o', 'a.orderSn', '=', 'o.orderSn')
             ->leftJoin('commentcourse as c','c.orderSn', '=', 'a.orderSn')
-            ->where(['a.userId' => $request->userId, 'a.courseStatus' => 0])->where('o.orderType', '<>', '0')
+            ->where(['a.userId' => $request->userId, 'a.courseStatus' => 0,'o.status' => 0])->where('o.orderType', '<>', '0')
             ->select('a.id','a.courseTitle','a.coursePic','o.username','o.teacherName','a.coursePlayView','c.coursePrice','a.courseLowPath',
                 'a.courseMediumPath','a.courseHighPath','a.state as applyState','o.status','c.state as commentState','a.created_at')
             ->orderBy($order,'desc')
             ->get();
         foreach ($info as $key => $value) {
-            $info[$key]->coursePrice = ceil($info[$key]->coursePrice/1000);
+//            $info[$key]->coursePrice = ceil($info[$key]->coursePrice/100);
+            $info[$key]->coursePrice = $info[$key]->coursePrice/100;
             $info[$key]->coursePlayView = count(DB::table('courseview')->select('courseId','userId','courseType')->where(['courseId' => $value->id, 'courseType' => 1])->distinct()->get());
         }
         if ($info) {
@@ -234,9 +237,11 @@ class perSpaceController extends Controller
                 if ($value->type == '0') { // 收藏课程为专题课程
                     $course[$key] = DB::table('course')->select('id', 'courseTitle', 'coursePic', 'coursePlayView', 'coursePrice', 'courseDiscount')->where('id', $value->courseId)->first();
                     if($course[$key]->courseDiscount){
-                        $course[$key]->coursePrice = ceil(($course[$key]->courseDiscount/10000)*$course[$key]->coursePrice/1000);
+//                        $course[$key]->coursePrice = ceil(($course[$key]->courseDiscount/10000)*$course[$key]->coursePrice/100);
+                        $course[$key]->coursePrice = ($course[$key]->courseDiscount/10000)*$course[$key]->coursePrice/100;
                     }else{
-                        $course[$key]->coursePrice = ceil($course[$key]->coursePrice/1000);
+//                        $course[$key]->coursePrice = ceil($course[$key]->coursePrice/100);
+                        $course[$key]->coursePrice = $course[$key]->coursePrice/100;
                     }
                     $course[$key]->classHour = DB::table('coursechapter')->where(['courseId' => $course[$key]->id, 'status' => 0])->where('parentId', '<>', '0')->count();
                     $course[$key]->isCourse = 0;
@@ -246,7 +251,8 @@ class perSpaceController extends Controller
 
                 } else if($value->type == '1'){ // 收藏课程为点评课程
                     $course[$key] = DB::table('commentcourse')->select('id', 'courseTitle', 'coursePic', 'coursePlayView', 'coursePrice', 'teachername')->where('id', $value->courseId)->first();
-                    $course[$key]->coursePrice = ceil($course[$key]->coursePrice / 1000);
+//                    $course[$key]->coursePrice = ceil($course[$key]->coursePrice / 100);
+                    $course[$key]->coursePrice = $course[$key]->coursePrice / 100;
                     $course[$key]->isCourse = 1;
                     $course[$key]->href = '/lessonComment/detail/' . $course[$key]->id;
                     $course[$key]->collectId = $value->id;
@@ -283,7 +289,7 @@ class perSpaceController extends Controller
     // 获取全部通知
     public function getNoticeInfo(Request $request)
     {
-        $info = DB::table('usermessage')->where('username',$request->username)->where('type','<>',5)->get();
+        $info = DB::table('usermessage as u')->leftJoin('usermessagetem as t','u.tempId','=','t.id')->select('u.*','t.tempName')->where('u.username',$request->username)->where('u.type','<>',5)->get();
         if($info){
             return response()->json(['data' => $info, 'status' => true]);
         }else{
@@ -485,20 +491,20 @@ class perSpaceController extends Controller
         else
             return false;
         $data = DB::table('orders as o')
-            ->join('users as u','u.id','=','o.teacherId')
-            ->select('o.id','o.userId','o.orderSn','o.userName','o.orderTitle','o.orderPrice','o.payPrice','o.orderType','o.courseId','o.status','o.created_at as payTime','u.realname','u.username')
+            ->leftJoin('users as u','u.id','=','o.teacherId')
+            ->select('o.id','o.userId','o.orderSn','o.userName','o.orderTitle','o.orderPrice','o.payPrice','o.orderType','o.courseId','o.status','o.payTime','u.realname','u.username')
             ->where(['o.userId'=>$id,'o.isDelete'=>0])
             ->orderBy('o.id','desc')
             ->get();
 
-        $seven = Carbon::today()->subDays(7);
+        $seven = Carbon::now()->subDays(7);
         if($data){
             foreach($data as $key=>$value){
-                $data[$key]->orderPrice = ceil($value->orderPrice/1000);
-                $data[$key]->payPrice = ceil($value->payPrice/1000);
+                $data[$key]->orderPrice = ceil($value->orderPrice/100);
+                $data[$key]->payPrice = ceil($value->payPrice/100);
                 $data[$key]->realname || $data[$key]->realname = $data[$key]->username;
                 //0是超过七天，1是不超过7天
-                $data[$key]->seven = ($seven <= $data[$key]->payTime) ? 1 : 0;
+                $data[$key]->seven = $seven <= $data[$key]->payTime ? 1 : 0;
             }
 
 //              dd($data);
@@ -524,13 +530,12 @@ class perSpaceController extends Controller
             return false;
 
         $data = \DB::table('orders as o')
-            ->leftJoin('applycourse as app','app.orderSn','=','o.orderSn')
             ->leftJoin('commentcourse as cs','cs.orderSn','=','o.orderSn')
-            ->join('users as u','u.id','=','o.userId')
-            ->select('o.teacherName','o.status','cs.courseTitle as commentTitle','cs.id as commentId','cs.courseLowPath as low','cs.courseMediumPath as medium','cs.courseHighPath as high','u.realname','cs.state as commentState','app.id as applyId','app.courseTitle as applyTitle','app.created_at as time','app.state as applyState')
-            ->where(['o.teacherId'=>$id,'o.isDelete'=>0,'o.orderType'=>1,'cs.courseStatus'=>0,'cs.courseIsDel'=>0,'app.courseStatus'=>0,'app.courseIsDel'=>0])
-            ->where('cs.state','<>',2)  //点评已完成不在此显示
-            ->orderBy('cs.created_at','desc')
+            ->leftJoin('applycourse as app','app.orderSn','=','o.orderSn')
+            ->leftJoin('users as u','u.id','=','o.userId')
+            ->select('o.teacherName','o.status','app.courseTitle as applyTitle','app.id as applyId','cs.id as commentId','cs.created_at as time','cs.courseLowPath as low','cs.courseMediumPath as medium','cs.courseHighPath as high','cs.state as commentState','u.realname','app.state as applyState','app.created_at as applyTime')
+            ->where(['o.teacherId'=>$id,'o.isDelete'=>0,'o.orderType'=>1,'o.status'=>1,'app.courseStatus'=>0,'app.courseIsDel'=>0,'app.state'=>2])
+            ->orderBy('app.created_at','desc')
             ->get();
 //        dd($data);
         if($data){
@@ -563,7 +568,7 @@ class perSpaceController extends Controller
             ->join('applycourse as app','app.orderSn','=','o.orderSn')
             ->join('users as u','u.id','=','cs.userId')
             ->select('cs.teachername','cs.courseTitle as commentTitle','cs.id as commentId','cs.coursePlayView as view','cs.courseFav as fav','cs.created_at as commentTime','u.realname','cs.state','o.status','app.id as applyId','app.courseTitle as applayTitle','app.created_at as time')
-            ->where(['cs.teacherId'=>$id,'cs.courseStatus'=>0,'o.orderType'=>1,'cs.state'=>2,'cs.courseIsDel'=>0,'o.isDelete'=>0])
+            ->where(['cs.teacherId'=>$id,'cs.courseIsDel'=>0,'cs.courseStatus'=>0,'o.status'=>2,'o.orderType'=>1,'cs.state'=>2,'o.isDelete'=>0])
             ->orderBy($condition,'desc')
             ->get();
 //        dd($data);
@@ -582,7 +587,7 @@ class perSpaceController extends Controller
     public function applyRefund(Request $request)
     {
         $total   = \DB::table('coursechapter')->where(['courseId'=>$request['courseId']])->where('parentId','<>',0)->count() ?: 1;
-        $chapter = \DB::table('courseview')->where(['userId'=>$request['userId'],'courseId'=>$request['courseId'],'courseType'=>0])->count() ?: 1;
+        $chapter = \DB::table('courseview')->where(['userId'=>$request['userId'],'courseId'=>$request['courseId'],'courseType'=>0])->count() ?: 0;
         $price = floor($request['payPrice'] / $total * ($total-$chapter));
         if($total - $chapter >= 0)
             return response()->json(['data'=>$price,'type'=>true]);
@@ -596,11 +601,15 @@ class perSpaceController extends Controller
 
     public function submitApply(Request $request)
     {
-        $input = $request->except('refundableAmount','id');
+
+
+        $input = $request->except('id');
         $input['created_at'] = $input['updated_at']  = Carbon::now();
+        $input['refundAmount'] *= 100;
+//        dd($input);
         $id = \DB::table('refund')->insertGetId($input);
         if($id){
-            \DB::table('orders')->where('id',$request['id'])->update(['refundableAmount'=>$request['refundableAmount'],'status'=>3]);
+            \DB::table('orders')->where('id',$request['id'])->update(['refundableAmount'=>$request['refundAmount']*100,'status'=>3]);
             return response()->json(['type'=>true,'msg'=>'请等待申请结果！']);
         }else {
             return response()->json(['type'=>false,'msg'=>'申请退款失败']);

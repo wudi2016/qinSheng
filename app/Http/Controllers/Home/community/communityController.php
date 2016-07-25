@@ -74,10 +74,11 @@ class communityController extends Controller
      */
     public function getteacher(){
         $getteacher = DB::table('teacher as t')
-                    ->join('users as u','u.id','=','t.parentId')
-                    ->select('t.id','u.username','u.school','t.intro','t.cover','t.parentId')
+                    ->leftjoin('users as u','u.id','=','t.parentId')
+                    ->leftjoin('recteacher as rec','u.id','=','rec.userId')
+                    ->select('rec.id','u.realname','u.school','t.intro','t.cover','t.parentId')
                     ->where('u.type',2)
-                    ->orderBy('firstletter','asc')
+                    ->orderBy('rec.sort','desc')
                     ->limit(5)
                     ->get();
         if($getteacher){
@@ -85,7 +86,7 @@ class communityController extends Controller
                 $data['data'][] = [
                     'id' => $v->id,
                     'userId' => $v->parentId,
-                    'name' => $v->username,
+                    'name' => $v->realname,
                     'school' => $v->school,
                     'intro' => $v->intro,
                     'cover' => $v->cover
@@ -103,7 +104,7 @@ class communityController extends Controller
      * 最新学员数据接口
      */
     public function getstudent(){
-        $getstudent = DB::table('users')->where('type','!=',2)->get();
+        $getstudent = DB::table('users')->where('type','!=',2)->where('type','!=',3)->orderBy('created_at','desc')->get();
         if($getstudent){
             foreach($getstudent as $k => $v){
                 $data['data'][] = [

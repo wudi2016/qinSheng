@@ -117,7 +117,7 @@
                 var pageRange = attributes.pageRange;
                 var totalPage = model.totalPage;
 
-                var rangeStart = currentPage - pageRange;
+                var rangeStart = currentPage - pageRange-1;
                 var rangeEnd = currentPage + pageRange;
 
                 if (rangeEnd > totalPage) {

@@ -24,7 +24,7 @@ class friendlinkController extends Controller
             $query = $query->where('id','like','%'.trim($request['search']).'%');
         }
         if($request->type == 2){
-            $query = $query->where('t','like','%'.trim($request['search']).'%');
+            $query = $query->where('title','like','%'.trim($request['search']).'%');
         }
         if($request->type == 3){
             $query = $query->where('created_at','>=',$request['beginTime'])->where('created_at','<=',$request['endTime']);

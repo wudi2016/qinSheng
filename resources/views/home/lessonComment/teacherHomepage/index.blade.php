@@ -10,7 +10,7 @@
 @section('content')
 	<div class="teacherHomepage" ms-controller="userHomepage">
 		<div class="teacherHomepage_crumbs">
-			<a href="">首页</a> >
+			<a href="/">首页</a> >
 			<a href="">名师介绍</a> >
 			<a href="">名师主页</a> >
 			<a href="">申请点评</a>
@@ -38,9 +38,9 @@
 				@endif
 				<div class="teacherHomepage_introduce_bottom_block" style="margin: 0;">
 					<img src="{{asset('/home/image/lessonComment/teacherHomepage/sex.png')}}" width="100%" height="100%">
-					<div ms-html="userInfo.sex ? '女' : '男'"></div>
+					<div ms-html="userInfo.sex == 2 ? '女' : '男'"></div>
 				</div>
-				<div class="teacherHomepage_introduce_bottom_block">
+				<div class="teacherHomepage_introduce_bottom_block" ms-visible="userInfo.city">
 					<img src="{{asset('/home/image/lessonComment/teacherHomepage/location.png')}}" width="100%" height="100%">
 					<div ms-html="userInfo.city"></div>
 				</div>
@@ -62,7 +62,9 @@
 				<div class="teacherHomepage_detail_content_title">名师介绍</div><br>
 				<div class="teacherHomepage_detail_content_image" style="font-size: 18px; margin-top: 0;"><img ms-attr-src="userInfo.cover" width="100%" height="100%"></div>
 				<div class="teacherHomepage_detail_content_comment">点评费用</div>
-				<div class="teacherHomepage_detail_content_comment" style="margin-bottom: 22px;">￥<span style="color: red;" ms-html="userInfo.price"></span> / 次</div>
+				<div class="teacherHomepage_detail_content_comment hide" ms-visible='userInfo.price' style="margin-bottom: 22px;">
+					￥<span style="color: red;" ms-html="userInfo.price/100"></span> / 次
+				</div>
 				<div class="teacherHomepage_detail_content_comment">点评类型</div>
 				<div class="teacherHomepage_detail_content_comment" style="font-size: 18px; color: rgb(102, 102, 102); margin-bottom: 22px;">
 					<img src="{{asset('/home/image/lessonComment/teacherHomepage/point.png')}}">钢琴演奏
@@ -97,7 +99,7 @@
 							<div class="time"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--el.extra--] 课时</div>
 							<div class="learned"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--el.coursePlayView--] 人学过</div>
 						</div>
-						<div class="price">￥ [--el.coursePrice--]</div>
+						<div class="price" ms-html="'￥ ' + el.coursePrice / 100"></div>
 					</a>
 				</div>
 				<div class="spinner " ms-visible="loading">
@@ -111,11 +113,14 @@
 
 			<div class="teacherHomepage_detail_special hide" ms-visible="tabStatus == 1">
 				<div class="teacherHomepage_detail_content_title">点评课程</div>
+
 				<div class="teacherHomepage_detail_special_order">
 					<span ms-css-color="order.comment == 0 ? '#0593EA' : 'rgb(102, 102, 102)'" ms-click="changeOrder('comment', 0)">最新</span> - 
 					<span ms-css-color="order.comment == 1 ? '#0593EA' : 'rgb(102, 102, 102)'" ms-click="changeOrder('comment', 1)">热门</span>
 				</div>
+
 				<div style="width: 100%; height: 300px; line-height: 300px; text-align: center; display: none;" ms-visible='commentLesson.size() < 1 && !loading'>暂无数据</div>
+
 				<div class="teacherHomepage_detail_video hide" ms-visible="!loading">
 					<a class="teacherHomepage_detail_video_block" ms-repeat="commentLesson" ms-attr-href="'/lessonComment/detail/' + el.id">
 						<img ms-attr-src="el.coursePic">
@@ -124,9 +129,10 @@
 							<div class="time">讲师：[--el.extra--]</div>
 							<div class="learned"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--el.coursePlayView--] 人学过</div>
 						</div>
-						<div class="price">￥ [--el.coursePrice--]</div>
+						<div class="price" ms-html="'￥ ' + el.coursePrice / 100"></div>
 					</a>
 				</div>
+
 				<div class="spinner " ms-visible="loading">
 					<div class="rect1"></div>
 					<div class="rect2"></div>
@@ -181,6 +187,7 @@
 			user.userID = {{$userID}} || null;
 			user.mineID = {{$mineID}} || null;
 			user.videoUrl = '/lessonComment/getTeacherVideo';
+
 			user.tabStatus = 2;
 			//	获取用户信息
 			user.getData('/lessonComment/getTeacherInfo/' + user.userID, 'userInfo');
@@ -189,13 +196,14 @@
 			//	获取专题课程
 			user.getData(user.videoUrl, 'specialLesson', {userid: user.userID, order: user.order.special, type: 0, page: user.page.special}, 'POST');
 			//	获取专题课程总数
-			user.getData('/lessonComment/getTeacherVideoCount', 'specialCount', {userid: user.userID, order: user.order.special, type: 0}, 'POST');
+			user.getData('/lessonComment/getTeacherVideoCount', 'specialCount', {userid: user.userID, type: 0}, 'POST');
 			//	获取点评课程
 			user.getData(user.videoUrl, 'commentLesson', {userid: user.userID, order: user.order.comment, type: 1, page: user.page.comment}, 'POST');
 			//	获取点评课程总数
-			user.getData('/lessonComment/getTeacherVideoCount', 'commentCount', {userid: user.userID, order: user.order.comment, type: 0}, 'POST');
+			user.getData('/lessonComment/getTeacherVideoCount', 'commentCount', {userid: user.userID, type: 1}, 'POST');
 			//	查看是否关注
 			user.mineID && user.getData('/lessonComment/getFirst', 'isFollow', {table: 'friends', action: 1, data: {fromUserId: user.mineID, toUserId: user.userID}}, 'POST');
+
             avalon.scan();
 		});
 	</script>

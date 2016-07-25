@@ -263,7 +263,7 @@ class famousTeacherController extends Controller
             'sex' => 'required',
             'price'=>'required|integer',
             'stock'=>'required|integer',
-            'intro'=>'required'
+            'intro'=>'required|max:120'
 
         ];
 
@@ -282,7 +282,8 @@ class famousTeacherController extends Controller
             'price.integer'=>'价格为整型',
             'stock.required'=>'请输入点评名额',
             'stock.integer'=>'名额为整型',
-            'intro.required'=>'请输入名师介绍'
+            'intro.required'=>'请输入名师介绍',
+            'intro.max'=>'名师介绍不超过120字',
         ];
 
         return \Validator::make($data, $rules, $messages);

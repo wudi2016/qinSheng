@@ -13,7 +13,7 @@
          .paginationjs-prev{
             position: relative;
             top:-110px;
-            left:90px;
+            left:-20px;
             opacity: 0; 
             filter:alpha(opacity=0);
         }
@@ -23,7 +23,7 @@
             float: left;
             position: relative;
             top:-105px;
-            left:1210px;
+            left:1095px;
             opacity: 0;
             filter:alpha(opacity=0);
             z-index:2;
@@ -123,7 +123,7 @@
                     </div>
                     <!-- 文字 -->
                     <div class="new_content_font">
-                        <a ms-href=" theteacherlisturl + el.id ">
+                        <a ms-attr-href=" theteacherlisturl + el.id ">
                             <div ms-html="el.description" ms-newyincang></div>
                         </a>
                     </div>
@@ -145,7 +145,7 @@
             </div>
             <!-- 内容列表 -->
             <div class="newstudent_detail">
-                <div class="newstudent_left "  ms-showhideleft >
+                <div class="newstudent_left"    ms-showhideleft >
                     <div class="newstudent_left_img   "  >
                         <img src="{{url('home/image/community/studentleft.png')}}"  alt="">
                     </div>
@@ -153,27 +153,27 @@
                 <div class="newstudent_detail_content">
                     <!-- 循环 -->
                     <!-- 图片和名字 -->
-                    {{--<div class="newstudent_img_name" ms-repeat="studentlist">--}}
-                        {{--<!-- 图片 -->--}}
-                        {{--<div class="newstudent_img">--}}
-                            {{--<a ms-attr-href="studenthomepage + el.id"><img ms-attr-src="el.pic" alt="" widht="84px" height="84px"/></a>--}}
-                        {{--</div>--}}
-                        {{--<!-- 名字 -->--}}
-                        {{--<div class="newstudent_name">--}}
-                            {{--<a ms-attr-href="studenthomepage + el.id"><span ms-html="el.name"></span></a>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
+                    <div class="newstudent_img_name" ms-repeat="studentlist">
+                        <!-- 图片 -->
+                        <div class="newstudent_img">
+                            <a ms-attr-href="studenthomepage + el.id"><img ms-attr-src="el.pic" alt="" width="84" height="84"/></a>
+                        </div>
+                        <!-- 名字 -->
+                        <div class="newstudent_name"  ms-attr-title="el.name" >
+                            <a ms-attr-href="studenthomepage + el.id"><div ms-html="el.name"></div></a>
+                        </div>
+                    </div>
                 </div>
-                <div class="newstudent_right  "  ms-showhideright >
+                <div class="newstudent_right"  ms-showhideright >
                     <div class="newstudent_right_img  ">
                         <img src="{{url('home/image/community/studentright.png')}}"  alt="">
                     </div>
                 </div>
             </div>
+            <div id="demo" ms-fenye ></div>
 
         </div>
 
-        <div id="demo"></div>
 
         <!-- 最热视频 -->
         <div class="hotvideo">
@@ -192,7 +192,7 @@
                 
                     <div class="newstudent_video" ms-repeat="hotvideo">
                         <div style="overflow: hidden;position: relative;width: 390px;height: 260px;">
-                            <a ms-href="hotvideourl + el.id"><img class="big_img" ms-bigImg ms-attr-src="el.cover" alt="" width="390" height="260"/></a>
+                            <a ms-attr-href="hotvideourl + el.id"><img class="big_img" ms-bigImg ms-attr-src="el.cover" alt="" width="390" height="260"/></a>
                         </div>
 
 
@@ -232,7 +232,7 @@
 
 @section('js')
 
-    {{--<script type="text/javascript" src="{{asset('home/js/community/community.js')}}"></script>--}}
+    <script type="text/javascript" src="{{asset('home/js/community/community.js')}}"></script>
     <script type="text/javascript" src="{{asset('home/js/community/pagination.js')}}"></script>
 
     <script>
@@ -244,46 +244,47 @@
 
 
 
-    <script>
-        function getdata(){
 
-            $('#demo').pagination({
-                dataSource: function(done) {
-                    $.ajax({
-                        type: 'GET',
-                        url: '/community/getstudent/',
-                        dataType : 'json',
-                        success: function(response) {
-                             // console.log(response);
-                            if(response.statuss){
-                                done(response.data);
-                            }
-                        }
-                    });
-                },
-                pageSize: 6,
-                className:"paginationjs-theme-blue",
-                showPageNumbers: false,
-                showNavigator: false,
-                callback: function(data) {
-//                    console.log(data);
-                    if(data){
-                        var str = '';
-                        $.each(data,function(id,info){
-                            str += "<div class=\"newstudent_img_name\"><div class=\"newstudent_img\"><a href=\""+'/lessonComment/student/'+info.id+"\"><img widht='84px' height='84px' src="+info.pic+"></a></div><div class=\"newstudent_name\"><a href=\""+'/lessonComment/student/'+info.id+"\"><span>"+info.name+"</span></a></div></div>";
-                        })
-                        $('.newstudent_detail_content').html(str);
-                    }
+    {{--<script>--}}
+        {{--function getdata(){--}}
 
-                    // console.log(data);
-                }
-            })
-        }
+            {{--$('#demo').pagination({--}}
+                {{--dataSource: function(done) {--}}
+                    {{--$.ajax({--}}
+                        {{--type: 'GET',--}}
+                        {{--url: '/community/getstudent/',--}}
+                        {{--dataType : 'json',--}}
+                        {{--success: function(response) {--}}
+                             {{--// console.log(response);--}}
+                            {{--if(response.statuss){--}}
+                                {{--done(response.data);--}}
+                            {{--}--}}
+                        {{--}--}}
+                    {{--});--}}
+                {{--},--}}
+                {{--pageSize: 6,--}}
+                {{--className:"paginationjs-theme-blue",--}}
+                {{--showPageNumbers: false,--}}
+                {{--showNavigator: false,--}}
+                {{--callback: function(data) {--}}
+{{--//                    console.log(data);--}}
+                    {{--if(data){--}}
+                        {{--var str = '';--}}
+                        {{--$.each(data,function(id,info){--}}
+                            {{--str += "<div class=\"newstudent_img_name\"><div class=\"newstudent_img\"><a href=\""+'/lessonComment/student/'+info.id+"\"><img widht='84px' height='84px' src="+info.pic+"></a></div><div class=\"newstudent_name\"><a href=\""+'/lessonComment/student/'+info.id+"\"><span>"+info.name+"</span></a></div></div>";--}}
+                        {{--})--}}
+                        {{--$('.newstudent_detail_content').html(str);--}}
+                    {{--}--}}
 
-        getdata();
-        
+                    {{--// console.log(data);--}}
+                {{--}--}}
+            {{--})--}}
+        {{--}--}}
 
-    </script>
+        {{--getdata();--}}
+        {{----}}
+
+    {{--</script>--}}
     
 
 

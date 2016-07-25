@@ -40,7 +40,7 @@
                 </div>
             @endif
 
-            <div class="row">
+            <div class="row" ms-controller="specialcommentdetail">
                 <div class="col-xs-12">
                     <!-- PAGE CONTENT BEGINS -->
 
@@ -170,6 +170,55 @@
 
                         <!--审核通过才能编辑价钱-->
                         @if($data->state == 2)
+
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 课程类型 </label>
+
+                                <div class="col-sm-9">
+                                    {{--<input type="text" name="courseType" id="form-field-1" placeholder="课程类型" class="col-xs-10 col-sm-5" value="{{$data->typeName}}" />--}}
+                                    {{--<input type="text" name="" id="form-field-1" placeholder="课程类型" class="col-xs-10 col-sm-5" value="{{$data->courseType}}" />--}}
+                                    <select id="coursetype" class="col-xs-10 col-sm-5" name="courseType" ms-change="typeSelect(this.value,{{$data->coursePrice}})">
+                                        <option value="0">无促销</option>
+                                        @foreach($data->typeNames as $typenames)
+                                            <option value="{{$typenames->id}}" @if($data->courseType == $typenames->id) selected @endif>{{$typenames->typeName}}</option>
+                                        @endforeach
+                                    </select>
+                                    <span class="help-inline col-xs-12 col-sm-7">
+                                        <label class="middle">
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="space-4"></div>
+
+                            <div class="form-group" ms-if="watchSelect">
+                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 折扣 </label>
+
+                                <div class="col-sm-9">
+                                    <select id="zhekou" class="col-xs-10 col-sm-5" name="courseDiscount"  ms-change="discountSelect(this.value,{{$data->coursePrice}})">
+                                        <option value="9" @if($data->courseDiscount == 9) selected @endif>9折</option>
+                                        <option value="8" @if($data->courseDiscount == 8) selected @endif>8折</option>
+                                        <option value="7" @if($data->courseDiscount == 7) selected @endif>7折</option>
+                                        <option value="6" @if($data->courseDiscount == 6) selected @endif>6折</option>
+                                        <option value="5" @if($data->courseDiscount == 5) selected @endif>5折</option>
+                                        <option value="4" @if($data->courseDiscount == 4) selected @endif>4折</option>
+                                        <option value="3" @if($data->courseDiscount == 3) selected @endif>3折</option>
+                                        <option value="2" @if($data->courseDiscount == 2) selected @endif>2折</option>
+                                        <option value="1" @if($data->courseDiscount == 1) selected @endif>1折</option>
+                                    </select>
+                                    <span class="help-inline col-xs-12 col-sm-7">
+                                        <label class="middle">
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="space-4"></div>
+
                             <div class="form-group">
                                 <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 价格 </label>
 
@@ -233,4 +282,9 @@
 @endsection
 @section('js')
     <script type="text/javascript" src="{{ URL::asset('/admin/js/addSubject.js') }}"></script>
+    <script>
+        require(['/specialCourse/editcourse'], function (detail) {
+            avalon.scan();
+        });
+    </script>
 @endsection

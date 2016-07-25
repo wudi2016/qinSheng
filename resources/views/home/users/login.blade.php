@@ -59,7 +59,7 @@
                 <div class="center_con_r_bar">
                     <div class="center_con_r_bar_l"></div>
                     <div class="center_con_r_bar_m">
-                        <button class="tij" type="submit">提交</button>
+                        <button class="tij" type="submit">登录</button>
                     </div>
                 </div>
                 {{--没有账号--}}

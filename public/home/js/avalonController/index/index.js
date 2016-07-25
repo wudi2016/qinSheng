@@ -7,7 +7,7 @@ define([], function () {
     //名师介绍模块
     var teachers  = avalon.define({
         $id: 'teachers',
-        datas: '',
+        datas: [],
         getData:function(){
             $.ajax({
                 type: "get",
@@ -28,7 +28,7 @@ define([], function () {
     //专题课程模块
     var ztlessons  = avalon.define({
         $id: 'ztlessons',
-        datas: '',
+        datas: [],
         getData:function(){
             $.ajax({
                 type: "get",
@@ -49,7 +49,7 @@ define([], function () {
     //点评课程模块
     var dplessons  = avalon.define({
         $id: 'dplessons',
-        datas: '',
+        datas: [],
         getData:function(){
             $.ajax({
                 type: "get",

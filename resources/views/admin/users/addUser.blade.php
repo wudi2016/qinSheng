@@ -229,7 +229,7 @@
 
                             <div class="col-sm-9">
                                 <input type="text" id="form-field-1" name="username" placeholder="Username"
-                                       class="col-xs-10 col-sm-4" value="{{old('username')}}"/><span
+                                       class="col-xs-10 col-sm-4" value="{{old('username')}}" required/><span
                                         style="display: block;height:30px;line-height: 30px;color:brown;"></span>
                             </div>
                         </div>
@@ -262,7 +262,7 @@
 
                             <div class="col-sm-9">
                                 <input type="password" id="form-field-2" name="password" placeholder="Password"
-                                       class="col-xs-10 col-sm-4" value="{{old('password')}}"/>
+                                       class="col-xs-10 col-sm-4" value="{{old('password')}}" required/>
                                 <span style="display: block;height:30px;line-height: 30px;color:red;" name="checkPass">*必填</span>
 											<span class="help-inline col-xs-12 col-sm-7">
 												<span class="middle"></span>
@@ -333,7 +333,7 @@
 
                             <div class="col-sm-9">
 
-                                <select id="change_type_select" class="col-xs-10 col-sm-4" name="type">
+                                <select id="change_type_select" class="col-xs-10 col-sm-4" name="type" required>
                                     <option value="">-请选择-</option>
                                     <option value=" 0">学生</option>
                                     <option value="1">教师</option>

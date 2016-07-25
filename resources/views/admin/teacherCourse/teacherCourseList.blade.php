@@ -102,6 +102,7 @@
                                         <th>ID</th>
                                         <th>订单号</th>
                                         <th>点评视频标题</th>
+                                        <th>课程类型</th>
                                         <th>演奏者</th>
                                         <th>课程</th>
                                         <th>封面图</th>
@@ -114,6 +115,7 @@
                                         <th>课程状态</th>
                                         <th>最近审核时间</th>
                                         <th>审核状态</th>
+                                        <th>折扣</th>
                                         <th>价格</th>
 
                                         <th>操作</th>
@@ -135,6 +137,7 @@
                                         </td>
                                         <td>{{$teaccourse->orderSn}}</td>
                                         <td>{{$teaccourse->courseTitle}}</td>
+                                        <td>{{$teaccourse->typeName}}</td>
                                         <td>{{$teaccourse->username}}</td>
                                         <td>
                                             @if(!$teaccourse->courseLowPath && !$teaccourse->courseMediumPath && !$teaccourse->courseHighPath)
@@ -159,6 +162,14 @@
                                         <td>{{$teaccourse->lastCheckTime}}</td>
                                         <td>
                                             @if($teaccourse->state == 0) 审核未通过 @elseif($teaccourse->state == 1) 审核中 @else 审核通过 @endif
+                                        </td>
+                                        <td>
+                                            @if($teaccourse->courseDiscount != 0)
+                                                {{$teaccourse->courseDiscount}} 折
+                                            @else
+                                                无
+                                            @endif
+
                                         </td>
                                         <td>{{$teaccourse->coursePrice}}</td>
 

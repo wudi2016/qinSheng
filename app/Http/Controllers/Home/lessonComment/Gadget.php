@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use PaasResource;
 use PaasUser;
 use Cache;
-use Primecloud\Weixin\Kernel\WxPayConfig;
+use Primecloud\Pay\Weixin\Kernel\WxPayConfig;
 
 trait Gadget {
 
@@ -88,10 +88,10 @@ trait Gadget {
         $inputObj -> SetSign();
         $inputObj -> SetBody($order -> orderTitle);
         $inputObj -> SetOut_trade_no($order -> orderSn);
-        $inputObj -> SetTotal_fee(intval(ceil($order -> orderPrice * 100)));
+        $inputObj -> SetTotal_fee(intval($order -> orderPrice));
         $inputObj -> SetSpbill_create_ip($_SERVER['REMOTE_ADDR']);
         $inputObj -> SetNotify_url($callback);
-        $inputObj -> SetProduct_id($order -> orderSn);
+        $inputObj -> SetProduct_id($order -> orderType);
         $inputObj -> SetTrade_type('NATIVE');
         return $wxPay -> unifiedOrder($inputObj);
     }

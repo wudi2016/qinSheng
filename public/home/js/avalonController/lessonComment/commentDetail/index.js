@@ -4,6 +4,7 @@ define([], function() {
 		$id: 'commentController',
 		studentInfo: [],
 		teacherInfo: [],
+		bought: false,
 		descriptionOpen: false,
 		descriptionSwitch: function(model, value) {
 			comment[model] = value;
@@ -15,7 +16,9 @@ define([], function() {
 			if (comment.isFollow) {
 				comment.popUp = 'unfollow'
 			} else {
-				comment.getData('/lessonComment/getFirst', 'isFollow', {table: 'collection', action: 2, data: {courseId: comment.commentID, userId: comment.mineID, type: 1}}, 'POST');
+				comment.getData('/lessonComment/getFirst', 'isFollow', {table: 'collection', action: 2, data: {courseId: comment.commentID, userId: comment.mineID, type: 1}}, 'POST', function(response) {
+					comment.getData('/lessonComment/videoIncrement', 'videoIncrement', {table: 'commentcourse', condition: {id: comment.commentID}, field: 'courseFav', action: 1}, 'POST');
+				});
 			}
 		},
 		popUp: false,
@@ -23,7 +26,9 @@ define([], function() {
 			comment.popUp = value;
 			switch (action) {
 				case 'unfollow':
-					comment.getData('/lessonComment/getFirst', 'isFollow', {table: 'collection', action: 3, data: {courseId: comment.commentID, userId: comment.mineID, type: 1}}, 'POST');
+					comment.getData('/lessonComment/getFirst', 'isFollow', {table: 'collection', action: 3, data: {courseId: comment.commentID, userId: comment.mineID, type: 1}}, 'POST', function(response) {
+						comment.getData('/lessonComment/videoIncrement', 'videoIncrement', {table: 'commentcourse', condition: {id: comment.commentID}, field: 'courseFav', action: 0}, 'POST');
+					});
 					break;
 				case 'delComment':
 					comment.getData('/lessonComment/getFirst', 'likes', {table: 'applycoursecomment', action: 3, data: {id: comment.commentlist[comment.deleteIndex].id, fromUserId: comment.mineID}}, 'POST', function(response) {
@@ -61,8 +66,14 @@ define([], function() {
 						callback(response.type)
 						return;
 					};
-					if (response.type) comment[model] = response.data;
-					model == 'teacherInfo' && comment.getData('/lessonComment/getDetailInfo/'+response.data.orderSn+'/0', 'studentInfo');
+					if (response.type) {
+						comment[model] = response.data;
+						model == 'orderInfo' && callback(response);
+						(model == 'isFollow' && callback) && callback(response.data);
+					}
+					if (model == 'teacherInfo') {
+						comment.getData('/lessonComment/getDetailInfo/'+ response.data.orderSn +'/0', 'studentInfo');
+					};
 					model == 'studentInfo' && comment.setVideo(function () {});
 				},
 				error: function(error) {
@@ -108,8 +119,8 @@ define([], function() {
                 type: "mp4"
             });
             typeof callback === 'function' && callback();
-            comment.bought || comment.thePlayer.onTime(function(){
-	            if (comment.thePlayer.getPosition() >= 12) {
+            (!comment.videoType && !comment.bought) && comment.thePlayer.onTime(function(){
+	            if (comment.thePlayer.getPosition() >= 60) {
 	                comment.thePlayer.play(false);
 	                comment.thePlayer.remove();
 	                comment.overtime = true;
@@ -140,7 +151,7 @@ define([], function() {
 		replayInfo: {name: '', lengths: 0},
 		replyWarning: false,
 		replyComment: function(el) {
-			comment.replayInfo = {name: '@'+ el.username +':', parentId: el.id, toUserId: el.fromUserId};
+			comment.replayInfo = {name: '@'+ el.username +'： ', parentId: el.id, toUserId: el.fromUserId, toUserName: el.username, toUserType: el.type};
 			comment.replayInfo.lengths = comment.replayInfo.name.length;
 		},
 		submitComment: function() {
@@ -155,23 +166,31 @@ define([], function() {
 				data.commentContent = data.commentContent.split(/@*:/);
 				data.commentContent.shift();
 				data.commentContent = data.commentContent.join('');
-			};
+			}
+			if (data.commentContent.length > 100) {
+				comment.replyWarning = true;
+				delete data;
+				return false;
+			}
 			comment.getData('/lessonComment/getFirst', 'submitComment', {table: 'applycoursecomment', action: 2, data: data}, 'POST', function(response) {
 				comment.commentlist.unshift({
 					commentContent: data.commentContent,
 					created_at: '一秒前',
-					fromUserId: comment.mineID,
 					id: response,
 					isLike: false,
 					likeNum: 0,
 					likeUser: [],
 					parentId: data.parentId || null,
-					pic: comment.minePic,
 					toUserId: data.toUserId || null,
+					fromUserId: comment.mineID,
+					pic: comment.minePic,
 					type: comment.mineType,
-					username: comment.mineUsername
+					username: comment.mineUsername,
+					toUserName: comment.replayInfo.toUserName,
+					toUserType: comment.replayInfo.toUserType
 				});
-				comment.replayInfo = {}
+				comment.replayInfo.name = '';
+				comment.replayInfo.lengths = 0;
 			});
 		},
 		feedBack: {type: '', content: '', tel: ''},
@@ -183,7 +202,7 @@ define([], function() {
 					return false;
 				};
 			}
-			if (comment.feedBack.content.length > 200) {
+			if (comment.feedBack.content.length > 80) {
 				comment.feedBackWarning.content = true;
 				return false;
 			};
@@ -191,8 +210,32 @@ define([], function() {
 				response ? comment.popUpSwitch('feedbackSuccess') : popUpSwitch(false, 'feedback');
 			});
 		},
-		payType: null,
-		payWarning: false
+		payType: '',
+		payWarning: false,
+		pay: function() {
+			if (comment.payType === '') {
+				comment.payWarning = true;
+				return false;
+			}
+			var data = {
+				payType: comment.payType, 
+				userName: comment.mineUsername, 
+				userId: comment.mineID,
+				teacherId: comment.teacherInfo.teacherId,
+				teacherName: comment.teacherInfo.username,
+				orderType: 2,
+				orderPrice: comment.teacherInfo.extra,
+				orderTitle: '学员'+ comment.mineUsername +'购买'+ comment.studentInfo.extra +'点评课程。',
+				courseId: comment.commentID
+			};
+			comment.getData('/lessonComment/generateOrder', 'orderInfo', data, 'POST', function(response) {
+				if (comment.payType) {
+					location.href = '/lessonComment/scan/'+ response.data;
+				} else {
+					location.href = '/lessonComment/alipay/'+ response.data +'/lessonComment&detail&'+ comment.commentID;
+				};
+			});
+		}
 	});
 
 	return comment;

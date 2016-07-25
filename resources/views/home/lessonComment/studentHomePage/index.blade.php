@@ -37,9 +37,9 @@
 				@endif
 				<div class="teacherHomepage_introduce_bottom_block" style="margin: 0;">
 					<img src="{{asset('/home/image/lessonComment/teacherHomepage/sex.png')}}" width="100%" height="100%">
-					<div ms-html="userInfo.sex ? '女' : '男'"></div>
+					<div ms-html="userInfo.sex == 2 ? '女' : '男'"></div>
 				</div>
-				<div class="teacherHomepage_introduce_bottom_block">
+				<div class="teacherHomepage_introduce_bottom_block" ms-visible='userInfo.city'>
 					<img src="{{asset('/home/image/lessonComment/teacherHomepage/location.png')}}" width="100%" height="100%">
 					<div ms-html="userInfo.city"></div>
 				</div>
@@ -64,14 +64,14 @@
 				</div>
 				<div style="width: 100%; height: 300px; line-height: 300px; text-align: center; display: none;" ms-visible='specialLesson.size() < 1 && !loading'>暂无数据</div>
 				<div class="teacherHomepage_detail_video hide" ms-visible="!loading">
-					<a class="teacherHomepage_detail_video_block" ms-repeat="specialLesson" ms-attr-hrefs="'/lessonSubject/detail/' + el.id">
+					<a class="teacherHomepage_detail_video_block" ms-repeat="specialLesson" ms-attr-href="'/lessonSubject/detail/' + el.id">
 						<img ms-attr-src="el.coursePic">
 						<div class="title" ms-html="el.courseTitle"></div>
 						<div class="detail">
 							<div class="time"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--el.extra--] 课时</div>
 							<div class="learned"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--el.coursePlayView--] 人学过</div>
 						</div>
-						<div class="price" ms-html="'￥ ' + el.payPrice"></div>
+						<div class="price" ms-html="'￥ ' + el.coursePrice / 100"></div>
 					</a>
 				</div>
 				<div class="spinner " ms-visible="loading">
@@ -98,7 +98,7 @@
 							<div class="time">讲师：[--el.extra--]</div>
 							<div class="learned"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--el.coursePlayView--] 人学过</div>
 						</div>
-						<div class="price">￥ [--el.payPrice--]</div>
+						<div class="price" ms-html="'￥ ' + el.coursePrice / 100"></div>
 					</a>
 				</div>
 				<div class="spinner " ms-visible="loading">
@@ -161,11 +161,11 @@
 			//	获取专题课程
 			user.getData(user.videoUrl, 'specialLesson', {userid: user.userID, order: user.order.special, type: 0, page: user.page.special}, 'POST');
 			//	获取专题课程总数
-			user.getData('/lessonComment/getVideoCount', 'specialCount', {userid: user.userID, order: user.order.special, type: 0}, 'POST');
+			user.getData('/lessonComment/getVideoCount', 'specialCount', {userid: user.userID, type: 0}, 'POST');
 			//	获取点评课程
 			user.getData(user.videoUrl, 'commentLesson', {userid: user.userID, order: user.order.comment, type: 1, page: user.page.comment}, 'POST');
 			//	获取点评课程总数
-			user.getData('/lessonComment/getVideoCount', 'commentCount', {userid: user.userID, order: user.order.comment, type: 0}, 'POST');
+			user.getData('/lessonComment/getVideoCount', 'commentCount', {userid: user.userID, type: 1}, 'POST');
 			//	查看是否关注
 			user.mineID && user.getData('/lessonComment/getFirst', 'isFollow', {table: 'friends', action: 1, data: {fromUserId: user.mineID, toUserId: user.userID}}, 'POST');
             avalon.scan();

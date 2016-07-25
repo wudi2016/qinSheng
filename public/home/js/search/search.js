@@ -15,14 +15,20 @@ $('.img_big').live('mouseover',function(){
 $('.img_big').live('mouseout',function(){
     $(this).stop().animate({height: 180, width: 280, left: "0px", top: "0px"}, 'fast');
 })
-//
+$('.morqian').click(function(){
+    $(this).addClass('hide').next().removeClass('hide');
+})
+$('.selOrd').click(function(){
+    $(this).addClass('gl');
+    $(this).siblings().removeClass('gl');
+})
 
-function getdata(para){
+function getdata(para,ord){
     $('#demo').pagination({
         dataSource: function(done) {
             $.ajax({
                 type: 'GET',
-                url: '/index/getCourseaa/'+para,
+                url: '/index/getCourseaa/'+para+'/'+ord,
                 success: function(response) {
                     if(response.status){
                         done(response.data);
@@ -49,7 +55,7 @@ function getdata(para){
     })
 }
 
-function getdatab(para){
+function getdatab(para,ord){
     $('#demob').pagination({
         dataSource: function(done) {
             $.ajax({
@@ -92,12 +98,21 @@ var morecourse = function(para){
 
 }
 
+var ord = 0;
+
 if(searchVal){
-    getdata(searchVal);
-    getdatab(searchVal);
+    getdata(searchVal,ord);
+    getdatab(searchVal,ord);
 }else{
     $('.nofindaa').removeClass('hide');
     $('.nofindbb').removeClass('hide');
 }
 
+var sel = function(type,ord){
+    if(type == 1){
+        getdata(searchVal,ord);
+    }else{
+        getdatab(searchVal,ord);
+    }
+}
 

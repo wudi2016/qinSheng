@@ -1,0 +1,139 @@
+@extends('layouts.layoutAdmin')
+@section('content')
+    <div class="main-content">
+        <div class="breadcrumbs" id="breadcrumbs">
+            <script type="text/javascript">
+                try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+            </script>
+
+            <ul class="breadcrumb">
+                <li>
+                    <i class="icon-home home-icon"></i>
+                    <a href="{{url('/admin/index')}}">首页</a>
+                </li>
+
+                <li>
+                    <a href="{{url('/admin/logs/logList')}}">日志管理</a>
+                </li>
+                <li class="active">日志列表</li>
+            </ul><!-- .breadcrumb -->
+
+            <div class="nav-search" id="nav-search">
+                <form action="" method="get" class="form-search">
+                    <select name="type" id="form-field-1" class="searchtype input-select">
+                        <option value="0" {{$search['type'] == 0 ? 'selected':''}}>用户名</option>
+                        {{--<option value="1" {{$search['type'] == 1 ? 'selected':''}}>时间筛选</option>--}}
+                        <option value="1" {{$search['type'] == 1 ? 'selected':''}}>全部</option>
+                    </select>
+                    <span class="input-icon">
+                        <span style="display: block;" class="input-icon" id="search1">
+                            <input type="text" placeholder="Search ..." style="margin-left:8px" name="search" class="nav-search-input" id="nav-search-input" autocomplete="off" />
+                            <i class="icon-search nav-search-icon" style="margin-left:8px"></i>
+                            <input type="text" style="padding-left:10px; padding-right: 5px;" value="{{$search['time'] ?:''}}" name="time"  class="nav-search-input" placeholder="请选择时间 (可不选)"  value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+                            <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;padding-left: 8px;" type="submit" value="筛选" />
+                        </span>
+                    </span>
+                </form>
+            </div><!-- #nav-search -->
+        </div>
+
+        <div class="page-content">
+            <div class="page-header">
+                <h1>
+                    日志管理
+                    <small>
+                        <i class="icon-double-angle-right"></i>
+                        日志列表
+                    </small>
+                </h1>
+            </div><!-- /.page-header -->
+
+            @if (session('status'))
+                <div class="alert alert-success">
+                    {{ session('status') }}
+                </div>
+            @endif
+
+            @if(count($errors))
+                @if(is_object($errors))
+                    @foreach ($errors->all() as $error)
+                    <div class="alert alert-danger">{{ $error }}</div>
+                    @endforeach
+                @else
+                    <div class="alert alert-danger">{{$errors}}</div>
+                @endif
+
+            @endif
+
+
+            <div class="row">
+
+                <div class="col-xs-12">
+                    <!-- PAGE CONTENT BEGINS -->
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="table-responsive">
+
+                                <table id="sample-table-1" class="table table-striped table-bordered table-hover center">
+                                    <thead>
+                                    <tr>
+                                        <th class="center">日志ID</th>
+                                        <th class="center">用户名</th>
+                                        <th class="center">操作类型</th>
+                                        <th class="center">操作动作</th>
+                                        <th class="center">客户端IP</th>
+                                        <th class="center">创建时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    @foreach($data as $value)
+                                        <tr>
+                                            <td class="center">{{$value->id}}</td>
+                                            <td>{{$value->username}}</td>
+                                            <td>@if($value->type == 0)登录@elseif($value->type == 1)其他所有@endif</td>
+                                            <td>{{$value->action}}</td>
+                                            <td>{{$value->client_ip}}</td>
+                                            <td>{{date('Y-m-d H:i:s',$value->create_at)}}</td>
+                                            <td>
+                                                <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+
+
+                                                    {{--@permission('delete.user')--}}
+                                                    <a href="{{url('admin/logs/deleteLog/'.$tableName.'/'.$value->id.'/'.($search['time']?:''))}}"
+                                                       class="btn btn-xs btn-danger" onclick=" return confirm('确定要删除该日志记录？');">
+                                                        <strong>删除</strong>
+                                                    </a>
+                                                    {{--@endpermission--}}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+
+                                    </tbody>
+                                </table>
+                                {!! $data -> appends( app('request') -> all() ) -> render() !!}
+                                {{--@permission('user.list')--}}
+                                {{--@if(count($excels))--}}
+                                    {{--<form action="{{url('admin/excel/userInfoExport')}}" method="post" style="float: right;margin-top:65px;margin-right:-130px;">--}}
+                                        {{--<input type="submit" class="btn btn-xs btn-info"  value="导出用户信息" style="width:86px; cursor: pointer; margin-top:-87px;margin-right:130px;" />--}}
+                                        {{--{{csrf_field()}}--}}
+                                        {{--<input type="hidden" name="excels" value="{{$excels}}"/>--}}
+                                    {{--</form>--}}
+                                {{--@endif--}}
+                                {{--@endpermission--}}
+                            </div><!-- /.table-responsive -->
+                        </div><!-- /span -->
+                    </div><!-- /row -->
+
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.page-content -->
+    </div><!-- /.main-content -->
+@endsection
+@section('js')
+    <script language="javascript" type="text/javascript" src="{{asset('DatePicker/WdatePicker.js') }}"></script>
+    {{--<script language="javascript" type="text/javascript" src="{{asset('admin/js/searchtype.js') }}"></script>--}}
+@endsection

@@ -2,21 +2,7 @@ define([], function () {
 
 	var teacher = avalon.define({
 		$id: 'teacherHomepage',
-		teacherInfo: {
-			header: '/home/image/layout/default.png',
-			bigImage: '/home/image/lessonComment/teacherHomepage/lingbo.jpg',
-			name: '李明',
-			company: '中央音乐学院',
-			fansNum: 39,
-			videoNum: 12,
-			isFollow: false,
-			location: '北京',
-			sex: 1,
-			create_time: '129',
-			commentPrice: 199.00,
-			isApply: false,
-			introduction: '冯键，男，天津音乐学院钢琴系主任，教授、硕士研究生导师。曾赴德国维尔兹堡音乐大学进修学习。多次应邀担任国内外重大钢琴比赛评委工作，多次赴俄罗斯圣彼得堡担任俄罗斯“大师之路”国际钢琴比赛评委，应邀担任CCTV钢琴小提琴比赛评委，并多次在国内多所艺术院校讲学。在北京大学世纪讲堂与著名小提琴演奏家李传韵同台演出“20世纪华夏经典作品音乐会”，并在中央电视台音乐频道多次播放， 被评为央视2006经典音乐会之一；多次参加天津市“庆七一”、“庆十一”及新年音乐会的演出活动，与著名钢琴家刘诗昆、指挥家谭利华、王钧时、杨力、董俊杰、丁乙留（德国）等及北京交响乐团、天津歌舞剧院民族管弦乐团、天津交响乐团、天津泰达青年交响乐团等合作演出；受北京市委宣传部和北京交响乐团的邀请，赴北京中山音乐堂参加“首都文艺界庆祝十六大召开”及“纪念延安文艺座谈会讲话六十周年”音乐会，受到首都文艺界及观众的好评。'
-		},
+		teacherInfo: [],
 		isFollow: false,
 		fansNum: null,
 		videoNum: null,
@@ -24,22 +10,8 @@ define([], function () {
 		changeTabStatus: function() {
 			teacher.tabStatus != avalon(this).attr('value') ? teacher.tabStatus = avalon(this).attr('value') : false;
 		},
-		specialLesson: [
-			{title: '钢琴演奏基础教程__1', time: 10, learned: 300, price: '500.00', pic: '/home/image/lessonComment/teacherHomepage/lingbo.jpg'},
-			{title: '钢琴演奏基础教程__2', time: 10, learned: 300, price: '500.00', pic: '/home/image/lessonComment/teacherHomepage/lingbo.jpg'},
-			{title: '钢琴演奏基础教程__3', time: 10, learned: 300, price: '500.00', pic: '/home/image/lessonComment/teacherHomepage/lingbo.jpg'},
-			{title: '钢琴演奏基础教程__4', time: 10, learned: 300, price: '500.00', pic: '/home/image/lessonComment/teacherHomepage/lingbo.jpg'},
-			{title: '钢琴演奏基础教程__5', time: 10, learned: 300, price: '500.00', pic: '/home/image/lessonComment/teacherHomepage/lingbo.jpg'},
-			{title: '钢琴演奏基础教程__6', time: 10, learned: 300, price: '500.00', pic: '/home/image/lessonComment/teacherHomepage/lingbo.jpg'}
-		],
-		commentLesson: [
-			{title: '钢琴演奏基础教程__1', learned: 10, tacher: '吴大海', price: '500.00', pic: '/home/image/lessonComment/teacherHomepage/eva.jpg'},
-			{title: '钢琴演奏基础教程__2', learned: 10, tacher: '吴大海', price: '500.00', pic: '/home/image/lessonComment/teacherHomepage/eva.jpg'},
-			{title: '钢琴演奏基础教程__3', learned: 10, tacher: '吴大海', price: '500.00', pic: '/home/image/lessonComment/teacherHomepage/eva.jpg'},
-			{title: '钢琴演奏基础教程__4', learned: 10, tacher: '吴大海', price: '500.00', pic: '/home/image/lessonComment/teacherHomepage/eva.jpg'},
-			{title: '钢琴演奏基础教程__5', learned: 10, tacher: '吴大海', price: '500.00', pic: '/home/image/lessonComment/teacherHomepage/eva.jpg'},
-			{title: '钢琴演奏基础教程__6', learned: 10, tacher: '吴大海', price: '500.00', pic: '/home/image/lessonComment/teacherHomepage/eva.jpg'}
-		],
+		specialLesson: [],
+		commentLesson: [],
 		order: {special: 1, comment: 1},
 		changeOrder: function(key, value) {
 			teacher.order[key] = value;

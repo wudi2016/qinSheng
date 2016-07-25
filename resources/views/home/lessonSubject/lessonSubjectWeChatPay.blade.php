@@ -13,7 +13,7 @@
             <div style="height: 80px;width: 100%"></div>
 
             <div class="we_chat_pay_top">
-                <span>实付金额：</span><span class="price">{{$orderInfo -> orderPrice}}元</span>
+                <span>实付金额：</span><span class="price">{{$orderInfo -> orderPrice / 100}}元</span>
             </div>
             <div style="height: 60px;width: 100%"></div>
             <div class="we_chat_pay_cen">
@@ -29,16 +29,9 @@
 
 @section('js')
     <script>
-        require(['lessonComment/buyComment/index'], function (comment) {
-            comment.orderID = '{{$orderID}}' || null;
-            comment.getData('/lessonComment/orderStatus/' + comment.orderID, 'orderStatus');
-            setTimeout(function () {
-                comment.getData('/lessonComment/getFirst', 'deleteOrder', {
-                    data: {id: comment.orderID},
-                    action: 3,
-                    table: 'orders'
-                }, 'POST');
-            }, 300000);
+        require(['lessonSubject/WeChatPay'], function (wxPay) {
+            wxPay.orderID = '{{$orderID}}' || null;
+            wxPay.getData('/lessonSubject/orderStatus/' + wxPay.orderID, 'orderStatus');
             avalon.scan();
         });
     </script>

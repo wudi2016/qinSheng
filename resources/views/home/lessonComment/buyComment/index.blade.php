@@ -33,7 +33,7 @@
 			<div class="buy_title">订单支付</div>
 			<div class="buy_bottom_money">
 				<div class="buy_bottom_left">订单金额</div>
-				<span class="hide" ms-visible="teacherInfo.price" ms-html="'￥' + teacherInfo.price + '元'"></span>
+				<span class="hide" ms-visible="teacherInfo.price" ms-html="'￥' + teacherInfo.price / 100 + '元'"></span>
 			</div>
 			<div class="buy_bottom_buyway">
 				<div class="buy_bottom_left">订单金额</div>
