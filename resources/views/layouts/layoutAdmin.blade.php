@@ -381,7 +381,7 @@
 
 							</ul>
 						</li>
-
+						@permission('list.notice')
 						<!--通知管理-->
 						<li>
 							<a href="#" class="dropdown-toggle">
@@ -390,7 +390,6 @@
 
 								<b class="arrow icon-angle-down"></b>
 							</a>
-
 							<ul class="submenu">
 								<li class="noticenotice">
 									<a href="{{url('/admin/notice/noticeList')}}">
@@ -398,17 +397,18 @@
 										通知列表
 									</a>
 								</li>
-
+								@permission('list.noticeTem')
 								<li class="noticenoticetem">
 									<a href="{{url('/admin/notice/noticeTemList')}}">
 										<i class="icon-double-angle-right"></i>
 										通知模板
 									</a>
 								</li>
+								@endpermission
 							</ul>
 						</li>
-
-
+						@endpermission
+						@permission('commentReply.list')
 						{{--评论回复管理--}}
 						<li>
 							<a href="#" class="dropdown-toggle">
@@ -436,6 +436,7 @@
 
 							</ul>
 						</li>
+						@endpermission
 
 
 						@permission('collection.list')
@@ -494,7 +495,7 @@
 						@endpermission
 
 
-
+						@permission('contentManager.list')
 						{{--内容管理--}}
 						<li>
 							<a href="#" class="dropdown-toggle">
@@ -536,22 +537,23 @@
 
 
 
-								{{--<li class="contentmanagernews">--}}
-									{{--<a href="{{url('/admin/contentManager/newsList')}}">--}}
-										{{--<i class="icon-double-angle-right"></i>--}}
-										{{--新闻资讯列表--}}
-									{{--</a>--}}
-								{{--</li>--}}
+								<li class="contentmanagernews">
+									<a href="{{url('/admin/contentManager/newsList')}}">
+										<i class="icon-double-angle-right"></i>
+										新闻资讯列表
+									</a>
+								</li>
 
 
 
 							</ul>
 						</li>
+						@endpermission
 
 
 
-
-						<!--关于我们-->
+						@permission('aboutus.list')
+								<!--关于我们-->
 						<li>
 							<a href="#" class="dropdown-toggle">
 								<i class="icon-desktop"></i>
@@ -578,6 +580,7 @@
 
 							</ul>
 						</li>
+						@endpermission
 
 
 
@@ -617,7 +620,7 @@
 
 
 
-						@permission('department.list')
+						@permission('departmentpost.list')
 						<!--部门岗位管理-->
 						<li>
 							<a href="#" class="dropdown-toggle">
@@ -629,12 +632,14 @@
 
 							<ul class="submenu">
 
+
 								<li class="departmentpostdepartment">
 									<a href="{{url('/admin/departmentPost/departmentList')}}">
 										<i class="icon-double-angle-right"></i>
 										部门列表
 									</a>
 								</li>
+
 
 								<li class="departmentpostpost">
 									<a href="{{url('/admin/departmentPost/postList')}}">
@@ -647,6 +652,7 @@
 
 						</li>
 						@endpermission
+
 
 
 						<!--后台日志管理-->

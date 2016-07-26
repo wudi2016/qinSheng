@@ -103,6 +103,7 @@
                                         <th>时长</th>
                                         <th>大小</th>
                                         <th>播放数</th>
+                                        <th>是否试学</th>
                                         <th>状态</th>
                                         <th>创建时间</th>
                                         <th>修改时间</th>
@@ -138,6 +139,11 @@
                                             <td>{{$chapter->courseTime}}</td>
                                             <td>{{$chapter->courseSize}}</td>
                                             <td>{{$chapter->coursePlayView}}</td>
+                                            <td>
+                                                @if($chapter->parentId != 0)
+                                                    {{$chapter->isTrylearn ? '是' : '否'}}
+                                                @endif
+                                            </td>
                                             <td>{{$chapter->status ? '锁定' : '正常'}}</td>
                                             <td>{{$chapter->created_at}}</td>
                                             <td>{{$chapter->updated_at}}</td>

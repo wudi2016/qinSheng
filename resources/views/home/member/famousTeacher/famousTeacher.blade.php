@@ -20,9 +20,11 @@
         <div class="center_left">
             <!--主体左边的上边部分-->
             <div class="center_left_top">
-                <div class="left_top_img">
-                    <img src="{{asset(\Auth::user()->pic)}}" alt="" width="85" height="85">
-                </div>
+                <a ms-attr-href="'/lessonComment/teacher/' + {{\Auth::user()->id}}">
+                    <div class="left_top_img">
+                        <img src="{{asset(\Auth::user()->pic)}}" alt="" width="85" height="85">
+                    </div>
+                </a>
                 <div class="left_top_name">
                     <div class="top_name">{{$data->username}}</div>
                     <div class="height10"></div>
@@ -136,7 +138,7 @@
                     </div>
 
                     <!--审核中-->
-                    <div ms-if="el.commentState == 1 && el.low != null && el.medium != null && el.high != null">
+                    <div ms-if="el.commentState == 1 && (el.low != null || el.medium != null || el.high != null)">
                         <div class="comment_repeat_img">
                             <div class="repeat_img_unchecked">
                                 <div class="comment_video_unchecked" ms-text="'视频审核中'"></div>
@@ -247,8 +249,7 @@
                 {{--//专题课程循环开始--}}
                 <div class="right_comment_repeat" ms-repeat="courseInfo">
                     <div class="comment_repeat_img">
-                        <a ms-attr-href="href + el.id"><img ms-imgBig class="img_big" ms-attr-src="el.coursePic" alt=""
-                                                            width="280" height="180"/></a>
+                        <a ms-attr-href="href + el.id"><img ms-imgBig class="img_big" ms-attr-src="el.coursePic" alt="" width="280" height="180"/></a>
                     </div>
                     <div class="comment_repeat_title" ms-text="el.courseTitle"></div>
                     <div class="comment_repeat_period"><span ms-text="el.classHour + '课时'"></span> <span
@@ -281,8 +282,13 @@
                 <div class="right_notice_repeat" ms-repeat="noticeInfo">
                     <div class="notice_repeat_comment">
                         <!-- 后台发送消息 -->
-                        <div class="repeat_comment_text" ms-if="el.type == '0'">
-                            <span>您上传的点评视频没有通过审核，原因是：</span><span class="span_light" ms-text="el.content"></span>
+                        <div class="repeat_comment_text" ms-if="el.type == 0 && el.actionId">
+                            <!-- 审核未通过 -->
+                            <a ms-attr-href="'/lessonComment/reUpload/' + el.actionId"><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 600px;display: block" ms-text="'上传视频审核未通过，原因：' + el.content" ms-attr-title=""></span></a>
+                        </div>
+                        <div class="repeat_comment_text" ms-if="el.type == 0 && el.tempId != 0">
+                            <!-- 审核未通过 -->
+                            <span ms-text="el.tempName"></span><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 600px;display: block;float: right" ms-text="el.content"></span>
                         </div>
                         <!-- 注册加入消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '1'">
@@ -290,15 +296,15 @@
                         </div>
                         <!-- 本人被点评消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '2'">
-                            <span>李民&nbsp;&nbsp;</span>老师点评了<span>张三丰</span>&nbsp;&nbsp;的作品，<span><a href="">快去看看吧>></a></span>
+                            <span ms-text="el.fromUsername + '&nbsp;&nbsp;'" class="span_light"></span>老师点评了您上传的作品，<span><a class="span_light" ms-attr-href="'/lessonComment/detail/' + el.actionId">快去看看吧 >></a></span>
                         </div>
                         <!-- 本人被关注消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '3'">
-                            <span ms-text="el.fromUsername" class="span_light"></span>&nbsp;&nbsp;<span ms-text="el.content"></span>
+                            <span ms-text="el.fromUsername" class="span_light"></span><a ms-attr-href="'/lessonComment/student/' + el.actionId"><span ms-text="el.content" style="margin-left: 10px;"></span></a>
                         </div>
                         <!-- 关注用户被点评消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '4'">
-                            <span ms-text="el.fromUsername"></span><span ms-text="el.content"></span><span ms-text="username"></span><span ms-text="toUsername"></span>
+                            <span ms-text="el.fromUsername + '&nbsp;&nbsp;'" class="span_light"></span>老师点评了<span ms-text="'&nbsp;'+el.toUsername + '&nbsp;'" class="span_light"></span>的作品，<a class="span_light" ms-attr-href="'/lessonComment/detail/' + el.actionId">快去看看吧 >></a>
                         </div>
                         <div class="repeat_comment_time">
                             <div class="comment_time" ms-text="el.created_at"></div>
@@ -755,6 +761,7 @@
 
 @endsection
 @section('js')
+    <script type="text/javascript" src="{{asset('home/js/games/pagination.js')}}"></script>
     <script type="text/javascript">
         require(['/personCenter/index.js'], function (sideBar) {
             sideBar.mineUsername = '{{$mineUsername}}' || null;
@@ -785,7 +792,17 @@
     <script type="text/javascript" src="{{asset('home/js/personCenter/Jcrop.js')}}"></script>
     <script type="text/javascript" src="{{asset('home/js/personCenter/jquery.uploadify.js')}}"></script>
     <script type="text/javascript" src="{{asset('home/js/personCenter/teacherStudent.js')}}"></script>
-    <script type="text/javascript" src="{{asset('home/js/games/pagination.js')}}"></script>
+    <script>
+        //个人信息字数统计
+        function countfont(){
+            var fontsum =  $('#center_right_textarea_con_top_text').val().length;
+            $('.countfont').html(fontsum);
+        }
+        $('#center_right_textarea_con_top_text').keyup(function(){
+            countfont();
+        })
+        countfont();
+    </script>
 @endsection
 
 

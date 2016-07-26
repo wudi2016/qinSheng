@@ -45,6 +45,7 @@ class collectionController extends Controller{
     public function delcollection($id){
         $res = DB::table('collection')->where('id',$id)->delete();
         if($res){
+            $this -> OperationLog("删除了用户收藏ID为{$id}的信息", 1);
             return redirect('admin/message')->with(['status'=>'删除成功','redirect'=>'collection/collectionList']);
         }else{
             return redirect()->back()->withInput()->withErrors('删除失败！');

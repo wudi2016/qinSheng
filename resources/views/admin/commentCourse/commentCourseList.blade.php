@@ -25,19 +25,20 @@
                 <form action="{{url('/admin/commentCourse/commentCourseList')}}" method="get" class="form-search">
                     <select name="type" id="form-field-1" class="searchtype">
                         <option value="1"  @if($data->type == 1) selected @endif>ID</option>
-                        <option value="2"  @if($data->type == 2) selected @endif>作品名称</option>
-                        <option value="3"  @if($data->type == 3) selected @endif>演奏学员</option>
-                        <option value="4"  @if($data->type == 4) selected @endif>邀评名师</option>
-                        <option value="5"  @if($data->type == 5) selected @endif>时间筛选</option>
+                        <option value="2"  @if($data->type == 2) selected @endif>订单号</option>
+                        <option value="3"  @if($data->type == 3) selected @endif>作品名称</option>
+                        <option value="4"  @if($data->type == 4) selected @endif>演奏学员</option>
+                        <option value="5"  @if($data->type == 5) selected @endif>邀评名师</option>
+                        <option value="6"  @if($data->type == 6) selected @endif>时间筛选</option>
                         <option value="">全部</option>
                     </select>
                     <span class="input-icon">
-                        <span style="@if($data->type != 5) display: block;  @else display: none; @endif" class="input-icon" id="search1">
+                        <span style="@if($data->type != 6) display: block;  @else display: none; @endif" class="input-icon" id="search1">
                             <input type="text" name="search" placeholder="Search ..." class="nav-search-input" value="" id="nav-search-input" autocomplete="off" />
                             <i class="icon-search nav-search-icon"></i>
                             <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;" type="submit" value="筛选" />
                         </span>
-                        <span style="@if($data->type == 5) display: block;  @else display: none; @endif" class="input-icon" id="search2">
+                        <span style="@if($data->type == 6) display: block;  @else display: none; @endif" class="input-icon" id="search2">
                             <input type="text" name="beginTime" id="form-field-1" placeholder="上传开始时间" class="col-xs-10 col-sm-5" value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
                             <input type="text" name="endTime" id="form-field-1" placeholder="上传结束时间" class="col-xs-10 col-sm-5" value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;" />
                             <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;" type="submit" value="筛选" />
@@ -170,7 +171,7 @@
                                                 <span class="btn btn-xs btn-primary" style="position: relative;display: inline-block;">
                                                     <strong>审核状态</strong>
                                                     <span class="icon-caret-down icon-on-right"></span>
-                                                    <select id="selectCheck" class="col-xs-10 col-sm-2" onchange="selectCheck({{$comcourse->id}},this.value,'{{$comcourse->username}}','{{$comcourse->teachername}}','{{$comcourse->teacherPhone}}');" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">
+                                                    <select id="selectCheck" class="col-xs-10 col-sm-2" onchange="selectCheck({{$comcourse->id}},this.value,'{{$comcourse->username}}','{{$comcourse->teachername}}','{{$comcourse->teacherPhone}}','{{$comcourse->orderSn}}');" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">
                                                         <option value="44" selected></option>
                                                         <option value="0" >审核未通过</option>
                                                         <option value="1" >审核中</option>
@@ -256,6 +257,7 @@
                 <div class="content">审核通过!</div>
                 <div class="bottom">
                     <input type="hidden" class="teacherPhone" value="">
+                    <input type="hidden" class="orderSn" value="">
                     <div class="suer_btn" id="suer_btn0">确认</div>
                 </div>
             </div>

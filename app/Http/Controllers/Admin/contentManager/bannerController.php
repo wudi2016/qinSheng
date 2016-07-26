@@ -43,6 +43,11 @@ class bannerController extends Controller{
      */
     public function addsbanner(Request $request){
         $input = Input::except('_token');
+        //验证
+        $validate = $this->validator($input);
+        if($validate->fails()){
+            return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
+        }
         $input['created_at'] = Carbon::now();
         if($request->hasFile('path')){ //判断文件是否存在
             if($request->file('path')->isValid()){ //判断文件在上传过程中是否出错
@@ -54,13 +59,13 @@ class bannerController extends Controller{
                 }else{
                     return redirect()->back()->withInput()->withErrors('文件保存失败');
                 }
-
             }else{
                 return redirect()->back()->withInput()->withErrors('文件在上传过程中出错');
             }
         }
-        $res = DB::table('banner')->insert($input);
+        $res = DB::table('banner')->insertGetId($input);
         if($res){
+            $this -> OperationLog("新增了bannerID为{$res}的信息", 1);
             return redirect('admin/message')->with(['status'=>'添加成功','redirect'=>'contentManager/bannerList']);
         }else{
             return redirect()->back()->withInput()->withErrors('添加失败！');
@@ -84,6 +89,11 @@ class bannerController extends Controller{
     public function editsbanner(Request $request){
         $input = Input::except('_token');
         $input['created_at'] = Carbon::now();
+        //验证
+        $validate = $this->validator($input);
+        if($validate->fails()){
+            return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
+        }
         if($request->hasFile('path')){ //判断文件是否存在
             if($request->file('path')->isValid()){ //判断文件在上传过程中是否出错
                 $name = $request->file('path')->getClientOriginalName();//获取图片名
@@ -101,6 +111,7 @@ class bannerController extends Controller{
         }
         $res = DB::table('banner')->where('id',$input['id'])->update($input);
         if($res){
+            $this -> OperationLog("修改了bannerID为{$request['id']}的信息", 1);
             return redirect('admin/message')->with(['status'=>'编辑成功','redirect'=>'contentManager/bannerList']);
         }else{
             return redirect()->back()->withInput()->withErrors('编辑失败！');
@@ -115,6 +126,7 @@ class bannerController extends Controller{
     public function delbanner($id){
         $res = DB::table('banner')->where('id',$id)->delete();
         if($res){
+            $this -> OperationLog("删除了bannerID为{$id}的信息", 1);
             return redirect('admin/message')->with(['status'=>'删除成功','redirect'=>'contentManager/bannerList']);
         }else{
             return redirect()->back()->withInput()->withErrors('删除失败！');
@@ -130,11 +142,36 @@ class bannerController extends Controller{
         $data['status'] = $request['status'];
         $data = DB::table('banner')->where('id',$request['id'])->update($data);
         if($data){
+            $this -> OperationLog("修改了bannerID为{$request['id']}的状态", 1);
             echo 1;
         }else{
             echo 0;
         }
     }
+
+
+
+
+    /**
+     * 验证
+     */
+    protected function validator(array $data){
+        $rules = [
+            'title' => 'required',
+            'url' => 'required',
+
+        ];
+        $messages = [
+            'title.required' => '请输入标题名称',
+            'url.required'  => '请按要求填写链接'
+        ];
+
+
+        return \Validator::make($data, $rules, $messages);
+    }
+
+
+
 
 
 }

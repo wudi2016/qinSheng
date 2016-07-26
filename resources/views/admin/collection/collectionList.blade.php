@@ -134,7 +134,7 @@
                                                 <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
 
 
-                                                    @permission('delete.collection)
+                                                    @permission('delete.collection')
                                                     <a href="{{url('/admin/collection/delcollection/'.$coll->id)}}" style="width:29px" class="btn btn-xs btn-danger" onclick="return confirm('删除后将无法找回,确定要删除吗?');">
                                                         <i class="icon-trash bigger-120"></i>
                                                     </a>

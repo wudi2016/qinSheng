@@ -2,15 +2,27 @@
 
 namespace App\Http\Controllers\Admin\contentmanager;
 
+use QrCode;
+use PaasUser;
+use PaasResource;
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use DB;
 use Illuminate\Support\Facades\Input;
 use Carbon\Carbon;
+use App\Http\Controllers\Home\lessonComment\Gadget;
+
 
 class hotvideoController extends Controller{
+    use Gadget;
+
+    public static $errMessage;
+
+    public function __construct()
+    {
+//        PaasUser::apply();
+    }
 
     public function hotvideoList(Request $request){
         $query = DB::table('hotvideo');
@@ -25,7 +37,7 @@ class hotvideoController extends Controller{
             $query = $query->where('created_at','>=',$request['beginTime'])->where('created_at','<=',$request['endTime']);
         }
 
-        $data = $query->paginate(10);
+        $data = $query->orderBy('id','desc')->paginate(10);
         return view('admin.contentManager.hotvideo.hotvideoList')->with('hotvideo',$data);
     }
 
@@ -44,12 +56,7 @@ class hotvideoController extends Controller{
     public function addshotvideo(Request $request){
         $input = Input::except('_token');
         $input['created_at'] = Carbon::now();
-        //验证
-        $validate = $this->validator($input);
-        if($validate->fails()){
-            return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
-        }
-//        dd($input);
+        $input['status'] = '0';
         if($request->hasFile('cover')){ //判断文件是否存在
             if($request->file('cover')->isValid()){ //判断文件在上传过程中是否出错
                 $name = $request->file('cover')->getClientOriginalName();//获取图片名
@@ -65,8 +72,14 @@ class hotvideoController extends Controller{
                 return redirect()->back()->withInput()->withErrors('文件在上传过程中出错');
             }
         }
-        $res = DB::table('hotvideo')->insert($input);
+        //验证
+        $validate = $this->validator($input);
+        if($validate->fails()){
+            return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
+        }
+        $res = DB::table('hotvideo')->insertGetId($input);
         if($res){
+            $this -> OperationLog("新增了热门视频ID为{$res}的信息", 1);
             return redirect('admin/message')->with(['status'=>'添加成功','redirect'=>'contentManager/hotvideoList']);
         }else{
             return redirect()->back()->withInput()->withErrors('添加失败！');
@@ -90,11 +103,6 @@ class hotvideoController extends Controller{
     public function editshotvideo(Request $request){
         $input = Input::except('_token');
         $input['created_at'] = Carbon::now();
-        //验证
-        $validate = $this->validator($input);
-        if($validate->fails()){
-            return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
-        }
         if($request->hasFile('cover')){ //判断文件是否存在
             if($request->file('cover')->isValid()){ //判断文件在上传过程中是否出错
                 $name = $request->file('cover')->getClientOriginalName();//获取图片名
@@ -110,8 +118,14 @@ class hotvideoController extends Controller{
                 return redirect()->back()->withInput()->withErrors('文件在上传过程中出错');
             }
         }
+        //验证
+        $validate = $this->validator($input);
+        if($validate->fails()){
+            return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
+        }
         $res = DB::table('hotvideo')->where('id',$input['id'])->update($input);
         if($res){
+            $this -> OperationLog("修改了热门视频ID为{$request['id']}的信息", 1);
             return redirect('admin/message')->with(['status'=>'编辑成功','redirect'=>'contentManager/hotvideoList']);
         }else{
             return redirect()->back()->withInput()->withErrors('编辑失败！');
@@ -130,6 +144,7 @@ class hotvideoController extends Controller{
     public function delhotvideo($id){
         $res = DB::table('hotvideo')->where('id',$id)->delete();
         if($res){
+            $this -> OperationLog("删除了热门视频ID为{$id}的信息", 1);
             return redirect('admin/message')->with(['status'=>'删除成功','redirect'=>'contentManager/hotvideoList']);
         }else{
             return redirect()->back()->withInput()->withErrors('删除失败！');
@@ -145,6 +160,7 @@ class hotvideoController extends Controller{
         $data['status'] = $request['status'];
         $data = DB::table('hotvideo')->where('id',$request['id'])->update($data);
         if($data){
+            $this -> OperationLog("修改了热门视频ID为{$request['id']}的状态", 1);
             echo 1;
         }else{
             echo 0;
@@ -181,9 +197,15 @@ class hotvideoController extends Controller{
     protected function validator(array $data){
         $rules = [
             'coursePath' => 'required',
+            'title' => 'required',
+            'videoIntro' => 'required',
+            'cover' => 'required'
         ];
         $messages = [
             'coursePath.required' => '请上传视频',
+            'title.required' => '请填写标题',
+            'videoIntro.required' => '请填写内容',
+            'cover.required' => '请上传封面'
         ];
 
         return \Validator::make($data, $rules, $messages);

@@ -46,6 +46,7 @@ define(['PrimecloudPaas'], function(PrimecloudPaas) {
             courseid:'',
             title:'',
             parentId:'',
+            isTrylearn:'',
             fileID: null,
             courseLowPath: null,
             courseMediumPath:null,
@@ -125,10 +126,16 @@ define(['PrimecloudPaas'], function(PrimecloudPaas) {
                     upload.endUpload('上传失败请重试');
                 }
             }, function(pos, size){
+                if (Math.ceil(size / 1024 / 1024) > 1000) {
+                    upload.endUpload('上传文件过大');
+                    console.log(Math.ceil(size / 1024 / 1024) + ' MB');
+                    return false;
+                }
                 if (upload.uploadStatus != 2) {
                     upload.endUpload('上传中断');
                     return false;
                 }
+
                 console.log('文件扫描进度： ' + parseInt(pos / size * 100) + '%');
                 upload.progressBar = pos / size * 100 * 0.25;
             });
@@ -168,6 +175,7 @@ define(['PrimecloudPaas'], function(PrimecloudPaas) {
                 });
             }else{
                 if(upload.uploadInfo.selectid == 2){ //选择节
+                    upload.uploadInfo.isTrylearn = $('#istrylearn').val();
                     if(!$('#belong').val()){
                         upload.errormessagebelong = '<span style="color: red;">请选择所属章(如没有请先添加章)</span>';
                         return false;

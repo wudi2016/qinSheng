@@ -179,9 +179,9 @@ define([], function () {
                     detail.popUp = false;
                 }
             }
-            if (value == 'downloadData') {
+            if (value == 'downIt') {
                 detail.popUp = false;
-                window.open(detail.path);
+                window.open(detail.path);return;
             }
             if (value == 'startStudy') {
                 detail.popUp = false;
@@ -326,22 +326,45 @@ define([], function () {
             });
         },
         videoPath: [],
-        changeVideo: function (chapterId, path) {
-            detail.videoType = false;
-            detail.overtime = false;
-            detail.videoPath = {
-                courseHighPath: path,
-                courseMediumPath: path,
-                courseLowPath: path,
-            };
-            detail.setVideo(function () {
-            });
-            if (detail.mineUserId != null) {
-                detail.getData('/lessonSubject/addCourseView', 'POST', {
-                    chapterId: chapterId,
-                    userId: detail.mineUserId,
-                    courseId: detail.detailId
-                }, 'addCourseView');
+        changeVideo: function (chapterId, path, isTryLearn, isBuy, isTeacher) {
+            if(isTeacher || isBuy){
+                detail.videoType = false;
+                detail.overtime = false;
+                detail.videoPath = {
+                    courseHighPath: path,
+                    courseMediumPath: path,
+                    courseLowPath: path,
+                };
+                detail.setVideo(function () {
+                });
+                if (detail.mineUserId != null) {
+                    detail.getData('/lessonSubject/addCourseView', 'POST', {
+                        chapterId: chapterId,
+                        userId: detail.mineUserId,
+                        courseId: detail.detailId
+                    }, 'addCourseView');
+                }
+            }else{
+                if(isTryLearn == '1'){
+                    detail.videoType = false;
+                    detail.overtime = false;
+                    detail.videoPath = {
+                        courseHighPath: path,
+                        courseMediumPath: path,
+                        courseLowPath: path,
+                    };
+                    detail.setVideo(function () {
+                    });
+                    if (detail.mineUserId != null) {
+                        detail.getData('/lessonSubject/addCourseView', 'POST', {
+                            chapterId: chapterId,
+                            userId: detail.mineUserId,
+                            courseId: detail.detailId
+                        }, 'addCourseView');
+                    }
+                }else{
+                    detail.popUp = 'buyCourse';
+                }
             }
         }
     });

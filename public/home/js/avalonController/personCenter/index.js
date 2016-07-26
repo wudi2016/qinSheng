@@ -97,7 +97,7 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
             if(value == 'applyRefund') {
                 sideBar.applyRefund = needId;
                 //console.log(sideBar.applyRefund);
-                if(sideBar.applyRefund.orderType == 0) {
+                if(sideBar.applyRefund.orderType == 1) {
                     //console.log(sideBar.applyRefund);
                     $.ajax ({
                         url      : '/member/applyRefund',
@@ -113,7 +113,8 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
                             }
                         }
                     })
-                }else if (sideBar.applyRefund.orderType == 1 || sideBar.applyRefund.orderType == 2) {
+                }else if (sideBar.applyRefund.orderType == 0 || sideBar.applyRefund.orderType == 2) {
+                    //console.log(sideBar.applyRefund);
                     sideBar.refundableAmount = sideBar.applyRefund.payPrice;
                 }
 
@@ -195,7 +196,6 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
             }
 
             if(value == 'waitComment'){
-
                 waitCommentController.waitCommentController.waitCommentList.length == '0' ? waitCommentController.waitCommentController.getCommentInfo() : waitCommentController.waitCommentController.waitCommentList;
 
             }

@@ -24,7 +24,8 @@ class studentHomepageController extends Controller
         $studentInfo = DB::table('users') -> select('id') -> where(['id' => $studentID]) ->where('type','<>',2) -> first();
         $studentInfo || abort(404);
         $mineID = \Auth::check() ? \Auth::user() -> id : 0;
-        return view('home.lessonComment.studentHomePage.index') -> with('userID', $studentID) -> with('mineID', $mineID);
+        $mineName = \Auth::check() ? \Auth::user() -> username : 0;
+        return view('home.lessonComment.studentHomePage.index') -> with('userID', $studentID) -> with('mineID', $mineID) -> with('mineName', $mineName);
     }
 
 
@@ -104,10 +105,9 @@ class studentHomepageController extends Controller
         $where = ['orders.userId' => $request['userid'], $tableName.'.courseIsDel' => 0, $tableName.'.courseStatus' => 0, 'orders.status' => 2];
 
         $request['type'] && array_push($condition, $tableName.'.teachername as extra');
-        $request['type'] && $where['commentcourse.state'] = 2;
-        $request['type'] || $where['orders.orderType'] = $request['type'];
+        $request['type'] ? $where['commentcourse.state'] = 2 : $where['orders.orderType'] = $request['type'];
 
-        $result = \DB::table('orders') -> join($tableName, 'orders.courseId', '=', $tableName.'.id') -> select($condition) -> where($where) 
+        $result = DB::table('orders') -> join($tableName, 'orders.courseId', '=', $tableName.'.id') -> select($condition) -> where($where) 
                 -> orderBy("{$tableName}.{$order}", "desc") -> skip($this -> getSkip($request['page'], $this -> number)) -> take($this -> number)-> get();
 
         if (!$request['type'] && $result) {
@@ -128,7 +128,7 @@ class studentHomepageController extends Controller
     public function getVideoCount(Request $request)
     {
         $tableName = $request['type'] ? 'commentcourse' : 'course';
-        $where = ['orders.userId' => $request['userid'], $tableName.'.courseStatus' => 0, $tableName.'.courseIsDel' => 0, 'orders.status' => 2];
+        $where = ['orders.userId' => $request['userid'], 'orders.status' => 2, $tableName.'.courseStatus' => 0, $tableName.'.courseIsDel' => 0];
         $request['type'] ? $where['commentcourse.state'] = 2 : $where['orders.orderType'] = $request['type'];
         $result = DB::table('orders') -> join($tableName, 'orders.courseId', '=', $tableName.'.id') -> where($where) -> count();
         return $this -> returnResult($result);

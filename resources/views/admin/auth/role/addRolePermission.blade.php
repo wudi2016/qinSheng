@@ -113,4 +113,4 @@
             avalon.scan();
         });
     </script>
-@endsection
+@endsection`

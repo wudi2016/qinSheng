@@ -71,9 +71,10 @@ class commentDetailController extends Controller
         if ($result) {
             $result -> time = floor((time() - strtotime($result -> created_at)) / 86400) + 1;
             $result -> created_at = explode(' ', $result -> created_at)[0];
-//            $result -> courseLowPath = $this -> getPlayUrl($result -> courseLowPath);
-//            $result -> courseMediumPath = $this -> getPlayUrl($result -> courseMediumPath);
-//            $result -> courseHighPath = $this -> getPlayUrl($result -> courseHighPath);
+            $result -> courseLowPath = $this -> getPlayUrl($result -> courseLowPath);
+            $result -> courseMediumPath = $this -> getPlayUrl($result -> courseMediumPath);
+            $result -> courseHighPath = $this -> getPlayUrl($result -> courseHighPath);
+            $result -> coursePic = $this -> getPlayUrl($result -> coursePic);
         }
         return $this -> returnResult($result);
     }

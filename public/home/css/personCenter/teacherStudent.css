@@ -484,14 +484,16 @@
 .right_changePassword_currentPassword label input {
     font-size: 18px;
     /*padding-left: 16px;*/
+    float:left;
 }
 
 .right_changePassword_currentPassword label span {
-    display: inline-block;
+    display: block;
     width: 85px;
     height: 36px;
     line-height: 36px;
     font-size: 18px;
+    float:left;
 }
 
 .right_changePassword_currentPassword label .msg{
@@ -718,12 +720,12 @@
 }
 .right_order_th .right_order_th_line{
     width:89.7510%;
-    margin-left:84px;
+    margin-left:75px;
 }
 
 .right_order_th .right_order_name {
     float: left;
-    width: 31%;
+    width: 38%;
 }
 
 .right_order_th .right_order_time {
@@ -754,26 +756,26 @@
 .right_order_td .right_order_th_repeat{
     width:89.7510%;
     height:87px;
-    margin-left:84px;
+    margin-left:75px;
     letter-spacing:1px;
     float:left;
 }
 
 .right_order_td .right_order_repeat_name {
     float: left;
-    width: 30%;
+    width: 37%;
 }
 .right_order_repeat_name .repeat_name_content{
-    width:90%;
+    width:100%;
     height:30px;
     overflow: hidden;
     text-overflow:ellipsis;
     white-space:nowrap;
     cursor: pointer;
-    padding-right:20px;
+    /*padding-right:20px;*/
 }
 .right_order_repeat_name .repeat_content_orderno{
-    width:94%;
+    width:100%;
     height:30px;
     font-size:14px;
     color:rgb(153,153,153);

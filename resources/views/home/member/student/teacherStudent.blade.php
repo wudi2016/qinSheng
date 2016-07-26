@@ -145,7 +145,7 @@
                         <div class="height30"></div>
                         <div class="right_order_repeat_name">
                             <div class="repeat_name_content" ms-html="el.orderTitle" ms-attr-title="el.orderTitle"></div>
-                            <div class="repeat_content_orderno" ms-attr-title="el.orderSn">订单编号：[--el.orderSn--]</div>
+                            <div class="repeat_content_orderno" ms-attr-title="el.orderSn">订单号：[--el.orderSn--]</div>
                         </div>
 
                         <div class="right_order_repeat_time">
@@ -172,7 +172,7 @@
                         <div class="height30"></div>
                         <div class="right_order_repeat_name">
                             <div class="repeat_name_content" ms-text="'申请点评-'+el.realname" ms-attr-title="el.orderTitle"></div>
-                            <div class="repeat_content_orderno" ms-attr-title="el.orderSn">订单编号：[--el.orderSn--]</div>
+                            <div class="repeat_content_orderno" ms-attr-title="el.orderSn">订单号：[--el.orderSn--]</div>
                         </div>
 
                         <div class="right_order_repeat_time">
@@ -201,7 +201,7 @@
                         <div class="height30"></div>
                         <div class="right_order_repeat_name">
                             <div class="repeat_name_content" ms-text="el.orderTitle" ms-attr-title="el.orderTitle"></div>
-                            <div class="repeat_content_orderno" ms-attr-title="el.orderSn">订单编号：[--el.orderSn--]</div>
+                            <div class="repeat_content_orderno" ms-attr-title="el.orderSn">订单号：[--el.orderSn--]</div>
                         </div>
 
                         <div class="right_order_repeat_time">
@@ -316,9 +316,13 @@
                 <div class="right_notice_repeat" ms-repeat="noticeInfo">
                     <div class="notice_repeat_comment">
                         <!-- 后台发送消息 -->
-                        <div class="repeat_comment_text" ms-if="el.type == '0'">
-                            <!-- 后台注册加入 -->
-                            <span ms-text="el.tempName"></span><span ms-text="el.content"></span>
+                        <div class="repeat_comment_text" ms-if="el.type == 0 && el.actionId">
+                            <!-- 审核未通过 -->
+                            <a ms-attr-href="'/lessonComment/reUpload/' + el.actionId"><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 600px;display: block" ms-text="'上传视频审核未通过，原因：' + el.content" ms-attr-title=""></span></a>
+                        </div>
+                        <div class="repeat_comment_text" ms-if="el.type == 0 && el.tempId != 0">
+                            <!-- 审核未通过 -->
+                            <span ms-text="el.tempName"></span><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 600px;display: block;float: right" ms-text="el.content"></span>
                         </div>
                         <!-- 注册加入消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '1'">
@@ -326,15 +330,15 @@
                         </div>
                         <!-- 本人被点评消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '2'">
-                            <span>李民&nbsp;&nbsp;</span>老师点评了<span>张三丰</span>&nbsp;&nbsp;的作品，<span><a href="">快去看看吧>></a></span>
+                            <span ms-text="el.fromUsername + '&nbsp;&nbsp;'" class="span_light"></span>老师点评了您上传的作品，<span><a class="span_light" ms-attr-href="'/lessonComment/detail/' + el.actionId">快去看看吧 >></a></span>
                         </div>
                         <!-- 本人被关注消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '3'">
-                            <span ms-text="el.fromUsername" class="span_light"></span>&nbsp;&nbsp;<span ms-text="el.content"></span>
+                            <span ms-text="el.fromUsername" class="span_light"></span><a ms-attr-href="'/lessonComment/student/' + el.actionId"><span ms-text="el.content" style="margin-left: 10px;"></span></a>
                         </div>
                         <!-- 关注用户被点评消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '4'">
-                            <span ms-text="el.fromUsername"></span><span ms-text="el.content"></span><span ms-text="username"></span><span ms-text="toUsername"></span>
+                            <span ms-text="el.fromUsername + '&nbsp;&nbsp;'" class="span_light"></span>老师点评了<span ms-text="'&nbsp;'+el.toUsername + '&nbsp;'" class="span_light"></span>的作品，<a class="span_light" ms-attr-href="'/lessonComment/detail/' + el.actionId">快去看看吧 >></a>
                         </div>
                         <div class="repeat_comment_time">
                             <div class="comment_time" ms-text="el.created_at"></div>
@@ -345,7 +349,8 @@
                 {{--//通知循环结束--}}
                 <div ms-visible="noticeMsg" class="warning_msg">暂无通知消息...</div>
             </div>
-            <div class="pagecon_parent">
+            <div class="clear"></div>
+            <div class="pagecon_parent" style="margin-top:40px;">
                 <div class="pagecon">
                     <div id="page_notice"></div>
                 </div>
@@ -364,12 +369,23 @@
                 {{--//回复循环开始--}}
                 <div class="right_notice_repeat" ms-repeat="commentInfo">
                     <div class="notice_repeat_comment">
-                        <div class="repeat_comment_text">
+                        <div class="repeat_comment_text" ms-if="el.type == '5'">
                             <div style="float: left">
                                 <span class="span_light" ms-text="el.username"></span>
                                 <span>&nbsp;回复了您的评论&nbsp;</span>
                             </div>
-                            <a ms-attr-href="'/lessonSubject/detail/' + el.actionId"><span class="comment_content span_light" ms-attr-title="el.content" ms-text="el.content"></span></a>
+                            <a ms-attr-href="'/lessonSubject/detail/' + el.actionId">
+                                <span class="comment_content span_light" ms-attr-title="el.content" ms-text="el.content"></span>
+                            </a>
+                        </div>
+                        <div class="repeat_comment_text" ms-if="el.type == '6'">
+                            <div style="float: left">
+                                <span class="span_light" ms-text="el.fromUsername"></span>
+                                <span>&nbsp;评论了你的点评作品&nbsp;</span>
+                            </div>
+                            <a ms-attr-href="'/lessonComment/detail/' + el.actionId">
+                                <span class="comment_content span_light" ms-attr-title="el.content" ms-text="el.content"></span>
+                            </a>
                         </div>
                         <div class="repeat_comment_time">
                             <div class="comment_time" ms-text="el.created_at"></div>
@@ -401,37 +417,48 @@
             </div>
 
             {{--//点评课程--}}
-
             <div class="center_right_comment">
                 <div class="right_comment_repeat" ms-repeat="commentCourseInfo">
                     <div class="comment_repeat_img">
                         <!-- 视频审核未通过 -->
-                        <a ms-attr-href="'/lessonComment/upload/' + el.id" ms-if="el.applyState == '0'">
-                        <div class="repeat_img_unchecked">
-                            <div class="comment_video_unchecked">视频审核未通过</div>
-                            <div class="comment_video_time" ms-text="'发布时间：' + el.created_at"></div>
-                        </div>
+                        <a ms-attr-href="'/lessonComment/reUpload/' + el.AId" ms-if="el.orderType == '1' && el.AState == 0">
+                            <div class="repeat_img_unchecked">
+                                <div class="comment_video_unchecked">视频审核未通过</div>
+                                <div class="comment_video_time" ms-text="'发布时间：' + el.ACreated"></div>
+                            </div>
                         </a>
                         <!-- 视频审核中 -->
-                        <div class="repeat_img_unchecked" ms-if="el.applyState == '1'">
+                        <div class="repeat_img_unchecked" ms-if="el.orderType == '1' && el.AState == '1'">
                             <div class="comment_video_unchecked">视频审核中</div>
-                            <div class="comment_video_time" ms-text="'发布时间：' + el.created_at"></div>
+                            <div class="comment_video_time" ms-text="'发布时间：' + el.ACreated"></div>
                         </div>
                         <!-- 视频审核通过 -->
-                        <a ms-attr-href="'/lessonComment/detail/' + el.id"><img ms-if="el.applyState == '2' && el.commentState == '2'" ms-attr-src="el.coursePic" alt="" width="280" height="180" class="img_big" ms-imgBig /></a>
+                        <a ms-attr-href="'/lessonComment/detail/' + el.OCourseId" ms-if="el.orderType == '1' && el.AState == '2' && el.CState == '2'" >
+                            <img ms-attr-src="el.CPic" alt="" width="280" height="180" class="img_big" ms-imgBig />
+                        </a>
+                        <!-- 视频审核通过 -->
+                        <a ms-attr-href="'/lessonComment/detail/' + el.OCourseId" ms-if="el.orderType == '2'">
+                            <img ms-attr-src="el.CPic"  alt="" width="280" height="180" class="img_big" ms-imgBig />
+                        </a>
                         <!-- 视频等待点评中 -->
-                        <div class="repeat_img_unchecked" ms-if="el.applyState == '2' && el.commentState != 2">
-                            <div class="comment_video_unchecked">等待点评</div>
-                            <div class="comment_video_time" ms-text="'发布时间：' + el.created_at"></div>
-                        </div>
+                        <a ms-attr-href="'/lessonComment/wait/' + el.AId" ms-if="el.orderType == '1' && el.AState == '2' && el.CState != 2">
+                            <div class="repeat_img_unchecked">
+                                <div class="comment_video_unchecked">等待点评</div>
+                                <div class="comment_video_time" ms-text="'发布时间：' + el.ACreated"></div>
+                            </div>
+                        </a>
                     </div>
-                    <div class="comment_repeat_title" ms-text="el.courseTitle"></div>
-                    <div class="comment_repeat_name" ms-if="el.applyState == '2' && el.commentState == '2'"><span ms-text="'讲师：' + el.teacherName"></span> <span ms-text="el.coursePlayView + '人学过'"></span></div>
-                    <div class="comment_repeat_unchecked" ms-if="el.commentState != '2'"><span ms-text="'点评讲师：' + el.teacherName"></span><span ms-text="'发布者：' + el.username"></span></div>
-                    <div class="comment_repeat_price" ms-if="el.applyState == '2' && el.commentState == '2'" ms-text="'￥ ' + el.coursePrice"></div>
+                    <div class="comment_repeat_title" ms-text="el.CTitle" ms-if="el.orderType == 2 || (el.orderType == 1 && el.AState == 2 && el.CState == 2)"></div>
+                    <div class="comment_repeat_title" ms-text="el.ATitle" ms-if="el.orderType == '1' && el.CState != 2"></div>
+
+                    <div class="comment_repeat_name" ms-if="el.orderType == '1' && el.AState == '2' && el.CState == '2'"><span ms-text="'讲师：' + el.OTeacherName"></span> <span ms-text="el.CPlayView + '人学过'"></span></div>
+                    <div class="comment_repeat_name" ms-if="el.orderType == '2'"><span ms-text="'讲师：' + el.OTeacherName"></span> <span ms-text="el.CPlayView + '人学过'"></span></div>
+                    <div class="comment_repeat_unchecked"  ms-if="el.orderType == '1' && el.CState != 2"><span ms-text="'点评讲师：' + el.OTeacherName"></span><span ms-text="'发布者：' + el.OUserName"></span></div>
+                    <div class="comment_repeat_price" ms-if="el.orderType == '1' && el.AState == '2' && el.CState == '2'" ms-text="'￥ ' + el.CPrice"></div>
+                    <div class="comment_repeat_price" ms-if="el.orderType == '2'" ms-text="'￥ ' + el.CPrice"></div>
                 </div>
+                <div ms-visible="commentMsg" class="warning_msg">暂无相关课程...</div>
             </div>
-            <div ms-visible="commentMsg" class="warning_msg">暂无相关课程...</div>
             <div class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_course_comment"></div>
@@ -492,7 +519,7 @@
                 </div>
             </div>
             <div class="center_right_comment">
-                {{--//点评课程循环开始--}}
+                {{--//收藏课程循环开始--}}
                 <div class="right_comment_repeat" ms-repeat="collectionInfo">
                     <div class="comment_repeat_img">
                         <a ms-attr-href="el.href">
@@ -503,15 +530,15 @@
                     <div class="comment_repeat_title" ms-text="el.courseTitle"></div>
                     <div class="comment_repeat_period" ms-if="el.isCourse == '0'">
                         <span ms-text="el.classHour + '课时'"></span>
-                        <span ms-html="el.coursePlayView + '学过'"></span>
+                        <span ms-html="el.coursePlayView + '人学过'"></span>
                     </div>
                     <div class="comment_repeat_name" ms-if="el.isCourse == '1'">
                         <span ms-text="'讲师：' + el.teachername"></span>
-                        <span ms-html="el.coursePlayView + '学过'"></span>
+                        <span ms-html="el.coursePlayView + '人学过'"></span>
                     </div>
                     <div class="comment_repeat_price" ms-text="'￥ ' + el.coursePrice"></div>
                 </div>
-                {{--//点评课程循环结束--}}
+                {{--//收藏课程循环结束--}}
                 <div ms-visible="collectionMsg" class="warning_msg">暂无收藏课程...</div>
             </div>
             <div class="pagecon_parent">
@@ -967,6 +994,7 @@
 
 @endsection
 @section('js')
+    <script type="text/javascript" src="{{asset('home/js/games/pagination.js')}}"></script>
 
     <script type="text/javascript">
         require(['/personCenter/index'], function (sideBar) {
@@ -1012,7 +1040,6 @@
 
         });
     </script>
-    <script type="text/javascript" src="{{asset('home/js/games/pagination.js')}}"></script>
 @endsection
 
 

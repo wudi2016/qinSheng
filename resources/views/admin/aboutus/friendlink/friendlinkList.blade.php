@@ -71,9 +71,11 @@
                 </div>
             @endif
 
+            @permission('add.aboutus')
             <a href="{{url('/admin/aboutUs/addfriendlink')}}" class="btn btn-xs btn-info">
             <i class="icon-ok bigger-110">添加</i>
             </a>
+            @endpermission
 
             <div class="row">
                 {{--<div >--}}
@@ -126,16 +128,20 @@
                                             <td>
                                                 <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
 
-
+                                                    @permission('edit.aboutus')
                                                     <a href="{{url('/admin/aboutUs/editfriendlink/'.$link->id)}}" class="btn btn-xs btn-info">
                                                         <i class="icon-edit bigger-120"></i>
                                                     </a>
+                                                    @endpermission
 
+                                                    @permission('delete.aboutus')
                                                     <a href="{{url('/admin/aboutUs/delfriendlink/'.$link->id)}}" style="width:29px" class="btn btn-xs btn-danger" onclick="return confirm('删除后将无法找回,确定要删除吗?');">
                                                         <i class="icon-trash bigger-120"></i>
                                                     </a>
+                                                    @endpermission
 
 
+                                                    @permission('edit.aboutus')
                                                     <span class="btn btn-xs btn-primary" style="position: relative;display: inline-block;">
                                                         <strong>友链状态</strong>
                                                         <span class="icon-caret-down icon-on-right"></span>
@@ -145,6 +151,7 @@
                                                             <option value="1" >禁用</option>
                                                         </select>
                                                     </span>
+                                                    @endpermission
 
 
                                                 </div>

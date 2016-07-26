@@ -55,9 +55,11 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 											break;
 										case 3:
 											upload.uploadInfo.courseHighPath = response.data.data.FileList[i].FileID;
+											upload.uploadInfo.coursePic = response.data.data.FileList[i].Cover;
 											break;
 									}
 								}
+								console.log(upload.uploadInfo);
 							}
 						}
 						if (model == 'finishUpload' || model == 'isReload') {
@@ -94,6 +96,11 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 			}, function(pos, size){
 				if (upload.uploadStatus != 2) {
 					upload.endUpload('上传中断');
+					return false;
+				}
+				if (Math.ceil(size / 1024 / 1024) > 1000) {
+					upload.endUpload('上传文件过大');
+					console.log(Math.ceil(size / 1024 / 1024) + ' MB');
 					return false;
 				}
 				console.log('文件扫描进度： ' + parseInt(pos / size * 100) + '%');

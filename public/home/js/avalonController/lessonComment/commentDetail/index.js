@@ -54,18 +54,14 @@ define([], function() {
 				data: data || {},
 				dataType: "json",
 				success: function(response) {
-					if (model == 'likes') {
-						callback(response.type)
+					if (model == 'likes' || model == 'feedBack') {
+						callback(response.type);
 						return;
-					};
+					}
 					if (model == 'submitComment') {
-						callback(response.data)
+						callback && callback(response.data);
 						return;
-					};
-					if (model == 'feedBack') {
-						callback(response.type)
-						return;
-					};
+					}
 					if (response.type) {
 						comment[model] = response.data;
 						model == 'orderInfo' && callback(response);
@@ -73,7 +69,7 @@ define([], function() {
 					}
 					if (model == 'teacherInfo') {
 						comment.getData('/lessonComment/getDetailInfo/'+ response.data.orderSn +'/0', 'studentInfo');
-					};
+					}
 					model == 'studentInfo' && comment.setVideo(function () {});
 				},
 				error: function(error) {
@@ -151,7 +147,7 @@ define([], function() {
 		replayInfo: {name: '', lengths: 0},
 		replyWarning: false,
 		replyComment: function(el) {
-			comment.replayInfo = {name: '@'+ el.username +'： ', parentId: el.id, toUserId: el.fromUserId, toUserName: el.username, toUserType: el.type};
+			comment.replayInfo = {name: '@'+ el.username +'： ', parentId: el.id, toUserId: el.fromUserId, toUserName: el.username, toUserType: el.type, commentContent: el.commentContent};
 			comment.replayInfo.lengths = comment.replayInfo.name.length;
 		},
 		submitComment: function() {
@@ -163,14 +159,9 @@ define([], function() {
 			if (comment.replayInfo.parentId && comment.replayInfo.toUserId) {
 				data.parentId = comment.replayInfo.parentId;
 				data.toUserId = comment.replayInfo.toUserId;
-				data.commentContent = data.commentContent.split(/@*:/);
+				data.commentContent = data.commentContent.split(/@*： /);
 				data.commentContent.shift();
 				data.commentContent = data.commentContent.join('');
-			}
-			if (data.commentContent.length > 100) {
-				comment.replyWarning = true;
-				delete data;
-				return false;
 			}
 			comment.getData('/lessonComment/getFirst', 'submitComment', {table: 'applycoursecomment', action: 2, data: data}, 'POST', function(response) {
 				comment.commentlist.unshift({
@@ -189,6 +180,19 @@ define([], function() {
 					toUserName: comment.replayInfo.toUserName,
 					toUserType: comment.replayInfo.toUserType
 				});
+				if (comment.replayInfo.toUserName || comment.studentInfo.username != comment.mineUsername) {
+					data = {
+						type: comment.replayInfo.toUserName ? 5 : 6,
+						username: comment.replayInfo.toUserName || comment.studentInfo.username,
+						actionId: comment.commentID,
+						fromUsername: comment.mineUsername,
+						toUsername: comment.replayInfo.toUserName || comment.studentInfo.username,
+						content: comment.replayInfo.commentContent || comment.studentInfo.extra
+					};
+					comment.getData('/lessonComment/getFirst', 'submitComment', {table: 'usermessage', action: 2, data: data}, 'POST');
+				}
+				delete data;
+				comment.replayInfo = {};
 				comment.replayInfo.name = '';
 				comment.replayInfo.lengths = 0;
 			});

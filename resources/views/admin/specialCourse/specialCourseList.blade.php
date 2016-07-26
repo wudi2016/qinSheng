@@ -98,7 +98,7 @@
                                         <th>课程标题</th>
                                         {{--<th>课程描述</th>--}}
                                         <th>课程类型</th>
-                                        <th>视频格式</th>
+                                        {{--<th>视频格式</th>--}}
                                         <th>授课讲师</th>
                                         {{--<th>课程</th>--}}
                                         <th>封面图</th>
@@ -107,7 +107,7 @@
                                         <th>浏览数</th>
                                         <th>观看数</th>
                                         <th>收藏数</th>
-                                        <th>课程公告</th>
+                                        {{--<th>课程公告</th>--}}
                                         <th>课程状态</th>
 
                                         <th>操作</th>
@@ -130,7 +130,7 @@
                                             <td>{{$special->courseTitle}}</td>
                                             {{--<td>{{$special->courseIntro}}</td>--}}
                                             <td>{{$special->typeName}}</td>
-                                            <td>{{$special->courseFormat}}</td>
+                                            {{--<td>{{$special->courseFormat}}</td>--}}
                                             <td>{{$special->realname}}</td>
                                             {{--<td>--}}
                                                 {{--<a href="{{url('/lessonSubject/detail/'.$special->id)}}">查看</a>--}}
@@ -152,7 +152,7 @@
                                             <td>{{$special->courseView}}</td>
                                             <td>{{$special->coursePlayView}}</td>
                                             <td>{{$special->courseFav}}</td>
-                                            <td>{{$special->courseNotice}}</td>
+                                            {{--<td>{{$special->courseNotice}}</td>--}}
                                             <td>{{$special->courseStatus ? '锁定' : '激活'}}</td>
 
                                             <td>

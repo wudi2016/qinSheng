@@ -151,7 +151,9 @@ class buyCommentController extends Controller
                     $result['payPrice'] = $xml['total_fee'];
                     $result['tradeSn'] = $xml['transaction_id'];
                     $result['payTime'] = Carbon::now();
-                    switch ($xml['product_id']) {
+
+                    $order = DB::table('orders') -> select('orderType') -> where('orderSn', $orderSn) -> first();
+                    switch ($order -> orderType) {
                         case 1:
                             $result['status'] = 0;
                             DB::table('teacher') -> join('orders', 'teacher.parentId', '=', 'orders.teacherId') -> where(['orders.orderSn' => $orderSn]) -> decrement('teacher.stock');
@@ -161,16 +163,20 @@ class buyCommentController extends Controller
                             DB::table('commentcourse') -> join('orders', 'commentcourse.id', '=', 'orders.courseId') -> where('orders.orderSn', $orderSn) -> increment('commentcourse.coursePlayView');
                             break;
                     }
+
                     $order = DB::table('orders') -> where('orderSn', $orderSn) -> update($result);
-                    if ($order) echo "SUCCESS";
+                    if ($order) {
+                        echo "SUCCESS";
+                    }
                 } else {
-                    \Log::info(json_encode($xml)." --- 订单支付未成功");
+                    Log::info(json_encode($xml)." --- 订单支付未成功");
                 }
             } else {
-                \Log::info(json_encode($xml)." --- 订单校验失败");
+                Log::info(json_encode($xml)." --- 订单校验失败");
             }
         } catch (\Exception $e) {
-            \Log::info($e -> getMessage()." --- try catch 抛出异常");
+            Log::info($e -> getMessage()." --- try catch 抛出异常");
+            Log::info(json_encode($xml)." --- 异常数据");
         }
     }
 
@@ -226,6 +232,7 @@ class buyCommentController extends Controller
             $result['payPrice'] = Input::get('total_fee') * 100;
             $result['tradeSn'] = Input::get('trade_no');
             $result['payTime'] = Carbon::now();
+
             if (preg_match('/^\/lessonComment\/buySuccess\/[0-9]{1,}/', Input::get('body'))) {
                 $result['status'] = 0;
                 DB::table('teacher') -> join('orders', 'teacher.parentId', '=', 'orders.teacherId') -> where('orders.orderSn', $orderSn) -> decrement('teacher.stock');
@@ -233,6 +240,7 @@ class buyCommentController extends Controller
                 $result['status'] = 2;
                 DB::table('commentcourse') -> join('orders', 'commentcourse.id', '=', 'orders.courseId') -> where('orders.orderSn', $orderSn) -> increment('commentcourse.coursePlayView');
             }
+
             $order = DB::table('orders') -> where('orderSn', $orderSn) -> update($result);
             if ($order) {
                 return redirect() -> to(Input::get('body'));

@@ -15,44 +15,49 @@ define([], function () {
 		videoNum: 0,
 		tabStatus: 0,
 		changeTabStatus: function() {
-			if (user.loading) return false;
-			user.tabStatus != avalon(this).attr('value') ? user.tabStatus = avalon(this).attr('value') : false;
-			user.jump = null;
+			if (!user.loading) {
+				user.tabStatus != avalon(this).attr('value') ? user.tabStatus = avalon(this).attr('value') : false;
+				user.jump = null;
+			}
 		},
 		specialLesson: [],
 		commentLesson: [],
 		order: {special: 0, comment: 0},
 		changeOrder: function(key, value) {
-			if (user.loading) return false;
-			if (user.order[key] != value) {
+			if (!user.loading && user.order[key] != value) {
 				user.order[key] = value;
 				user.getData(user.videoUrl, key+'Lesson', {userid: user.userID, order: value, type: user.tabStatus, page: user.page[key]}, 'POST');
-			};
+			}
 		},
 		getData: function(url, model, data, method, callback) {
-			if (model == 'specialLesson' || model == 'commentLesson') user.loading = true;
+			if (model == 'specialLesson' || model == 'commentLesson') {
+				user.loading = true;
+			}
 			$.ajax({
 				type: method || 'GET',
 				url: url,
 				data: data || {},
-				dataType: "json",
+				dataType: 'json',
 				success: function(response) {
 					if (response.type) {
 						user[model] = response.data;
 					}
 					if (model == 'specialCount' || model == 'commentCount') {
-						console.log(response.data);
 						user.videoNum += response.data || 0;
 						user[model] = Math.ceil(user[model]/6);
 						for (var i = 1; i <= user[model]; i++) {
 							user[model+'Number'].push(i);
 						}
 					}
-					if (model == 'specialLesson' || model == 'commentLesson') user.loading = false;
+					if (model == 'specialLesson' || model == 'commentLesson') {
+						user.loading = false;
+					}
 					callback && callback(response);
 				},
 				error: function(error) {
-					if (model == 'specialLesson' || model == 'commentLesson') user.loading = false;
+					if (model == 'specialLesson' || model == 'commentLesson') {
+						user.loading = false;
+					}
 				}
 			});
 		},
@@ -75,7 +80,9 @@ define([], function () {
 				direction ? ++user.page[model] : --user.page[model];
 			}
 			if (typeof direction === 'number') {
-				if (user.page[model] == direction) return false;
+				if (user.page[model] == direction) {
+					return false;
+				}
 				user.page[model] = direction;
 			}
 			user.getData(user.videoUrl, model+'Lesson', {userid: user.userID, order: user.order[model], type: user.tabStatus, page: user.page[model]}, 'POST');
@@ -85,18 +92,24 @@ define([], function () {
 				user.popUp = 'unfollow';
 			} else {
 				user.getData('/lessonComment/getFirst', 'isFollow', {table: 'friends', action: 2, data: {fromUserId: user.mineID, toUserId: user.userID}}, 'POST', function(response) {
-					if (response.type) user.fansNum++;
+					response.type && user.fansNum++;
+					user.getData('/lessonComment/getFirst', 'submitComment', {table: 'usermessage', action: 2, data: {
+						type: 3,
+						username: user.userInfo.username,
+						actionId: user.mineID,
+						fromUsername: user.mineName,
+						toUsername: user.userInfo.username,
+						content: '刚刚关注了您,点击进入该用户个人公开主页。'
+					}}, 'POST');
 				});
 			}
 		},
 		popUp: false,
 		popUpSwitch: function(value, unfollow) {
 			user.popUp = value;
-			if (unfollow) {
-				user.getData('/lessonComment/getFirst', 'isFollow', {table: 'friends', action: 3, data: {fromUserId: user.mineID, toUserId: user.userID}}, 'POST', function(response) {
-					if (response.type) user.fansNum--;
-				});
-			}
+			unfollow && user.getData('/lessonComment/getFirst', 'isFollow', {table: 'friends', action: 3, data: {fromUserId: user.mineID, toUserId: user.userID}}, 'POST', function(response) {
+				response.type && user.fansNum--;
+			});
 		}
 	});
 

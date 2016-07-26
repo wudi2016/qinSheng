@@ -30,15 +30,18 @@ class commentCourseController extends Controller
             $query = $query->where('a.id','like','%'.trim($request['search']).'%');
         }
         if($request['type'] == 2){
-            $query = $query->where('a.courseTitle','like','%'.trim($request['search']).'%');
+            $query = $query->where('a.orderSn','like','%'.trim($request['search']).'%');
         }
         if($request['type'] == 3){
-            $query = $query->where('u.username','like','%'.trim($request['search']).'%');
+            $query = $query->where('a.courseTitle','like','%'.trim($request['search']).'%');
         }
         if($request['type'] == 4){
+            $query = $query->where('u.username','like','%'.trim($request['search']).'%');
+        }
+        if($request['type'] == 5){
             $query = $query->where('ut.realname','like','%'.trim($request['search']).'%');
         }
-        if($request['type'] == 5){ //上传的起止时间
+        if($request['type'] == 6){ //上传的起止时间
             $query = $query->where('a.created_at','>=',$request['beginTime'])->where('a.created_at','<=',$request['endTime']);
         }
         $data = $query
@@ -57,6 +60,29 @@ class commentCourseController extends Controller
                     $val->courseLowPathurl = Cache::get($val->courseLowPath);
                 }
             }
+            if(!$val->courseLowPath || !$val->courseMediumPath || !$val->courseHighPath){
+                $FileList = $this->transformations($val->fileID);
+                if($FileList['code'] == 200 && $FileList['data']['Waiting'] < 0){
+                    $filelists = $FileList['data']['FileList']; //取出转好的码
+                    $lists = [];
+                    foreach($filelists as $value){
+                        switch($value['Level']){
+                            case 1:
+                                $lists['courseLowPath'] = $value['FileID'];
+                                break;
+                            case 2:
+                                $lists['courseMediumPath'] = $value['FileID'];
+                                break;
+                            case 3:
+                                $lists['courseHighPath'] = $value['FileID'];
+                                break;
+                        }
+                    }
+                    if($lists){
+                        DB::table('applycourse')->where('id',$val->id)->update($lists);
+                    }
+                }
+            }
         }
         $data->type = $request['type'];
 //        dd($data);
@@ -71,10 +97,13 @@ class commentCourseController extends Controller
         $data['lastCheckTime'] = Carbon::now();
         $data = DB::table('applycourse')->where('id',$request['id'])->update($data);
         if($request['state'] == 0){
+//            DB::table('orders')->where('orderSn',$request['orderSn'])->update(['status'=>0]);
             $arr = array('state'=>'0','msg'=>'审核未通过');
         }elseif($request['state'] == 1){
+//            DB::table('orders')->where('orderSn',$request['orderSn'])->update(['status'=>0]);
             $arr = array('state'=>'1','msg'=>'审核中');
         }elseif($request['state'] == 2){
+            DB::table('orders')->where('orderSn',$request['orderSn'])->update(['status'=>1]);
             $arr = array('state'=>'2','msg'=>'审核通过');
         }else{
             $arr = array('state'=>'3','msg'=>'修改失败');
@@ -148,7 +177,14 @@ class commentCourseController extends Controller
      * 删除演奏视频
      */
     public function delCommentCourse($id){
+        $orderSn = DB::table('applycourse')->where('id',$id)->pluck('orderSn');
+        $status = DB::table('orders')->where('orderSn',$orderSn)->pluck('status');
+        if($status != 4){ //只有订单是已退款的才可以删除视频
+            return redirect()->back()->withInput()->withErrors('只有已退款的订单才可以删除');
+        }
         $data = DB::table('applycourse')->where('id',$id)->update(['courseIsDel'=>1]);
+        DB::table('orders')->where('orderSn',$orderSn)->update(['isDelete'=>1]); //已退款时关联删除订单表
+        DB::table('commentcourse')->where('orderSn',$orderSn)->update(['courseIsDel'=>1]); //已退款时关联删除名师点评表
         if($data){
             return redirect('admin/message')->with(['status'=>'演奏视频删除成功','redirect'=>'commentCourse/commentCourseList']);
         }else{
@@ -218,8 +254,11 @@ class commentCourseController extends Controller
     /**
      * 给名师发送短信提示
      */
-    public function sendMessage(Messages $message, $telephone)
+    public function sendMessage(Messages $message, $telephone,$orderSn)
     {
+        //演奏视频通过后将订单表状态改为待点评
+        DB::table('orders')->where('orderSn',$orderSn)->update(['status'=>1]);
+
         $code = '';
         $content = '老师您好,您现有一个新的点评辅导申请,请及时查看【琴晟教育】';
         $message::setInfo($telephone,$content);

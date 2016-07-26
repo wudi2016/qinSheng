@@ -1,10 +1,10 @@
 
 
 //订单状态
-function selectCheck(id,courseStatus){
+function selectCheck(id,courseStatus,orderSn){
     $.ajax({
         type: "get",
-        data:{'id':id,'status':courseStatus},
+        data:{'id':id,'status':courseStatus,'orderSn':orderSn},
         url: "/admin/order/orderState",
 
         dataType: 'json',

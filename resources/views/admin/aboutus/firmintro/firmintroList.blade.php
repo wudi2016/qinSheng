@@ -123,10 +123,11 @@
                                             <td>
                                                 <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
 
-
+                                                    @permission('edit.aboutus')
                                                     <a href="{{url('/admin/aboutUs/editfirmIntro/'.$firm->id)}}" class="btn btn-xs btn-info">
                                                         <i class="icon-edit bigger-120">修改</i>
                                                     </a>
+                                                    @endpermission
 
 
                                                     @if($firm->id <7 )

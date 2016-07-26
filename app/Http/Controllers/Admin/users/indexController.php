@@ -91,6 +91,9 @@ class indexController extends Controller
                 if($user){
                     $data[$key]->userId =$user->id;
                     $data[$key]->name = $user->username;
+                }else{
+                    $data[$key]->userId = null;
+                    $data[$key]->name = null;
                 }
             }else{
                 $data[$key]->userId = null;
@@ -258,9 +261,14 @@ class indexController extends Controller
             if($rec = DB::table('teacher')->where('parentId',$id)->first()){
                 //名师表存在即可删除
                 DB::table('teacher')->where('id',$rec->id)->delete();
-                if(DB::table('hotteacher')->where('teacherId',$rec->id)->first()){
-                    //推荐名师存在，即可删除
-                    DB::table('hotteacher')->where('teacherId',$rec->id)->delete();
+                if(DB::table('hotteacher')->where('teacherId',$id)->first()){
+                    //首页推荐名师存在，即可删除
+                    DB::table('hotteacher')->where('teacherId',$id)->delete();
+                }
+
+                if(DB::table('recteacher')->where('userId',$id)->first()){
+                    //社区推荐名师存在，即可删除
+                    DB::table('recteacher')->where('userId',$id)->delete();
                 }
             }
             $this -> OperationLog("删除了用户ID为{$id}的学员", 1);
@@ -283,6 +291,7 @@ class indexController extends Controller
                     return Redirect::back()->withErrors($validate);
                 }else{
                     //输入信息正确
+                    $input['password'] = bcrypt($input['password']);
                     if(User::where('id','=',$id)->update(['password'=>$input['password']])){
                         $this -> OperationLog("重置了用户ID为{$id}的密码", 1);
                         return redirect('admin/message')->with(['status'=>'重置密码成功','redirect'=>'users/userList']);

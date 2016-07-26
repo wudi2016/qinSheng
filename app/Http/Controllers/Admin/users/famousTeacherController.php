@@ -56,6 +56,9 @@ class famousTeacherController extends Controller
             $search['type'] = 4;
         }
         $data = $query->where('u.type','=',2)->orderBy('u.id','desc')->paginate(10);
+        foreach($data as &$val){
+            $val->price = $val->price / 100;
+        }
 //        dd($data);
         return view('admin.users.famousTeacherList',compact('data','search'));
     }
@@ -100,7 +103,7 @@ class famousTeacherController extends Controller
         //名师初始值
         $famous = [];
         $famous['intro'] = $request->get('intro');
-        $famous['price'] = $request['price'];
+        $famous['price'] = $request['price'] * 100;
         $famous['stock'] = $request['stock'];
         $famous['firstletter'] = $request['firstletter'];
 
@@ -168,6 +171,7 @@ class famousTeacherController extends Controller
         $data->city = DB::table('city')->where(['status'=>0,'provincecode'=>$data->provinceId])->get();
 
         $data->teacherinfo = DB::table('teacher')->where('parentId',$id)->first();
+        $data->teacherinfo->price = $data->teacherinfo->price / 100;
 //        dd($data);
         $letter  = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
         return view('admin.users.editFamousTeacher',compact('data'),['letter'=>$letter]);
@@ -195,7 +199,7 @@ class famousTeacherController extends Controller
             unset($input['pic']);
         }
 
-        $famous['price'] = $request['price'];
+        $famous['price'] = $request['price'] * 100;
         $famous['stock'] = $request['stock'];
         $famous['firstletter'] = $request['firstletter'];
         $famous['intro'] = $request['intro'];

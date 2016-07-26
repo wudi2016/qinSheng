@@ -53,6 +53,7 @@ class applyCommentController extends Controller
 //        $input['updated_at'] = Carbon::now();
         $res = DB::table('applycoursecomment')->where('id',$input['id'])->update($input);
         if($res){
+            $this -> OperationLog("修改了演奏评论ID为{$input['id']}的信息", 1);
             return redirect('admin/message')->with(['status'=>'编辑成功','redirect'=>'commentReply/applyCommentList']);
         }else{
             return redirect()->back()->withInput()->withErrors('编辑失败！');
@@ -66,9 +67,9 @@ class applyCommentController extends Controller
      */
     public function delapplyComment($id){
 
-
         $res = DB::table('applycoursecomment')->where('id',$id)->delete();
         if($res){
+            $this -> OperationLog("删除了演奏评论ID为{$id}的信息", 1);
             return redirect('admin/message')->with(['status'=>'删除成功','redirect'=>'commentReply/applyCommentList']);
         }else{
             return redirect()->back()->withInput()->withErrors('删除失败！');
@@ -87,6 +88,7 @@ class applyCommentController extends Controller
 //        $data['updated_at'] = Carbon::now();
         $data = DB::table('applycoursecomment')->where('id',$request['id'])->update($data);
         if($data){
+            $this -> OperationLog("修改了演奏评论ID为{$request['id']}的状态", 1);
             echo 1;
         }else{
             echo 0;

@@ -64,14 +64,15 @@ class noticeController extends Controller
         $data['type'] = '0';
         if(count($username) == '1'){
             $data['username'] = $username['0'];
-            $result = DB::table('usermessage')->insert($data);
+            $result = DB::table('usermessage')->insertGetId($data);
         }else{
             foreach($username as $value){
                 $data['username'] = $value;
-                $result = DB::table('usermessage')->insert($data);
+                $result = DB::table('usermessage')->insertGetId($data);
             }
         }
         if ($result) {
+            $this -> OperationLog("添加了通知ID为{$result}的信息", 1);
             return redirect('admin/message')->with(['status' => '用户通知发送成功', 'redirect' => 'notice/noticeList']);
         } else {
             return redirect('admin/message')->with(['status' => '用户通知发送失败', 'redirect' => 'notice/noticeList']);
@@ -82,6 +83,7 @@ class noticeController extends Controller
     public function delNotice($id)
     {
         if (DB::table('usermessage')->delete($id)) {
+            $this -> OperationLog("删除了通知ID为{$id}的信息", 1);
             return redirect('admin/message')->with(['status' => '通知消息删除成功', 'redirect' => 'notice/noticeList']);
         } else {
             return redirect('admin/message')->with(['status' => '通知消息删除失败', 'redirect' => 'notice/noticeList']);
@@ -105,6 +107,7 @@ class noticeController extends Controller
         ]);
         $data = $request->except('_token');
         if (DB::table('usermessage')->where('id', $request['id'])->update($data)) {
+            $this -> OperationLog("修改了通知ID为{$request['id']}的信息", 1);
             return redirect('admin/message')->with(['status' => '通知消息编辑成功', 'redirect' => 'notice/noticeList']);
         } else {
             return redirect('admin/message')->with(['status' => '通知消息编辑失败', 'redirect' => 'notice/noticeList']);
@@ -135,7 +138,9 @@ class noticeController extends Controller
             'tempName.required' => '请输入模板名称'
         ]);
         $data = $request->except('_token');
-        if (DB::table('usermessagetem')->insert($data)) {
+        $result = DB::table('usermessagetem')->insertGetId($data);
+        if ($result) {
+            $this -> OperationLog("添加了通知模板ID为{$result}的信息", 1);
             return redirect('admin/message')->with(['status' => '模板名称添加成功', 'redirect' => 'notice/noticeTemList']);
         } else {
             return redirect('admin/message')->with(['status' => '模板名称添加失败', 'redirect' => 'notice/noticeTemList']);
@@ -146,6 +151,7 @@ class noticeController extends Controller
     public function delNoticeTem($id)
     {
         if (DB::table('usermessagetem')->delete($id)) {
+            $this -> OperationLog("删除了通知模板ID为{$id}的信息", 1);
             return redirect('admin/message')->with(['status' => '模板名称删除成功', 'redirect' => 'notice/noticeTemList']);
         } else {
             return redirect('admin/message')->with(['status' => '模板名称删除失败', 'redirect' => 'notice/noticeTemList']);
@@ -171,6 +177,7 @@ class noticeController extends Controller
         ]);
         $data = $request->except('_token');
         if (DB::table('usermessagetem')->where('id', $request['id'])->update($data)) {
+            $this -> OperationLog("修改了通知模板ID为{$request['id']}的信息", 1);
             return redirect('admin/message')->with(['status' => '模板名称编辑成功', 'redirect' => 'notice/noticeTemList']);
         } else {
             return redirect('admin/message')->with(['status' => '模板名称编辑失败', 'redirect' => 'notice/noticeTemList']);

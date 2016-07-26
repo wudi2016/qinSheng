@@ -153,7 +153,9 @@
 		require(['lessonComment/directive', 'lessonComment/studentHomepage/index'], function (directive, user) {
 			user.userID = {{$userID}} || null;
 			user.mineID = {{$mineID}} || null;
+			user.mineName = '{{$mineName}}' || null;
 			user.videoUrl = '/lessonComment/getVideo';
+
 			//	获取用户信息
 			user.getData('/lessonComment/getStuInfo/' + user.userID, 'userInfo');
 			//	获取好友总数
@@ -168,6 +170,7 @@
 			user.getData('/lessonComment/getVideoCount', 'commentCount', {userid: user.userID, type: 1}, 'POST');
 			//	查看是否关注
 			user.mineID && user.getData('/lessonComment/getFirst', 'isFollow', {table: 'friends', action: 1, data: {fromUserId: user.mineID, toUserId: user.userID}}, 'POST');
+
             avalon.scan();
 		});
 	</script>

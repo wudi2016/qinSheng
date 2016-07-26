@@ -52,9 +52,11 @@
 
             <div class="col-xs-12">
                 <!-- PAGE CONTENT BEGINS -->
+                @permission('add.contentManager')
                 <a href="{{url('/admin/contentManager/addrecteacher')}}" class="btn btn-xs btn-info">
                     <i class="icon-ok bigger-110">添加</i>
                 </a>
+                @endpermission
 
                 <div class="row">
                     <div class="col-xs-12">
@@ -84,14 +86,17 @@
                                         <td>
                                             <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
 
-
+                                                @permission('edit.contentManager')
                                                 <a href="{{url('/admin/contentManager/editrecteacher/'.$rec->id)}}" class="btn btn-xs btn-info">
                                                     <i class="icon-edit bigger-120"></i>
                                                 </a>
+                                                @endpermission
 
+                                                @permission('delete.contentManager')
                                                 <a href="{{url('/admin/contentManager/deleterecteacher/'.$rec->id)}}" style="width:29px" class="btn btn-xs btn-danger" onclick="return confirm('删除后将无法找回,确定要删除吗?');">
                                                     <i class="icon-trash bigger-120"></i>
                                                 </a>
+                                                @endpermission
 
 
                                             </div>

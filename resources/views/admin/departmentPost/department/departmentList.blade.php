@@ -73,9 +73,12 @@
 
             <div class="col-xs-12">
                 <!-- PAGE CONTENT BEGINS -->
+                @permission('add.departmentpost')
                 <a href="{{url('/admin/departmentPost/adddepartment')}}" class="btn btn-xs btn-info">
                     <i class="icon-ok bigger-110">添加</i>
                 </a>
+                @endpermission
+
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="table-responsive">
@@ -108,16 +111,19 @@
                                         <td>
                                             <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
 
-
+                                                @permission('edit.departmentpost')
                                                 <a href="{{url('/admin/departmentPost/editdepartment/'.$depart->id)}}" class="btn btn-xs btn-info">
                                                     <i class="icon-edit bigger-120"></i>
                                                 </a>
+                                                @endpermission
 
+                                                @permission('delete.departmentpost')
                                                 <a href="{{url('/admin/departmentPost/deldepartment/'.$depart->id)}}" style="width:29px" class="btn btn-xs btn-danger" onclick="return confirm('删除后将无法找回,确定要删除吗?');">
                                                     <i class="icon-trash bigger-120"></i>
                                                 </a>
+                                                @endpermission
 
-
+                                                @permission('edit.departmentpost')
                                                 <span class="btn btn-xs btn-primary" style="position: relative;display: inline-block;">
                                                     <strong>审核状态</strong>
                                                     <span class="icon-caret-down icon-on-right"></span>
@@ -127,6 +133,7 @@
                                                         <option value="1" >锁定</option>
                                                     </select>
                                                 </span>
+                                                @endpermission
 
 
 

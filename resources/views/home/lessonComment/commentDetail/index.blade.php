@@ -34,7 +34,7 @@
 			</div>
 			<div class="video_bar">
 				<div class="video_bar_title" ms-html="videoType ? '演奏视频' : '点评视频'"></div>
-				<div class="video_bar_title hide" ms-visible='!bought && !videoType' style="color: red; font-weight: bold;" ms-html="'￥' + teacherInfo.extra / 100"></div>
+				<div class="video_bar_title hide" ms-visible='!bought && !videoType' ms-click="popUpSwitch('buyLesson')" style="color: red; font-weight: bold; cursor: pointer;" ms-html="'￥' + teacherInfo.extra / 100"></div>
                 @if (Auth::check())
                     <div class="video_bar_icon hide" ms-visible='bought' ms-click="popUpSwitch('feedback')">
                         <img src="{{asset('/home/image/lessonComment/commentDetail/editor.png')}}">反馈
@@ -59,7 +59,7 @@
 		<div class="palyinfo">
 			<div class="title">演奏信息</div>
 			<div class="palyinfo_detail">
-				<div class="palyinfo_detail_img"><img ms-attr-src="studentInfo.pic" width="100%" height="100%"></div>
+				<a ms-attr-href="/lessonComment/student/[--studentInfo.userId--]" class="palyinfo_detail_img"><img ms-attr-src="studentInfo.pic" width="100%" height="100%"></a>
 				<a ms-attr-href="/lessonComment/student/[--studentInfo.userId--]" class="palyinfo_detail_text" ms-html="studentInfo.username"></a>
 				<div class="palyinfo_detail_time" ms-html="studentInfo.created_at"></div>
 			</div>
@@ -72,12 +72,12 @@
 
 			<div class="title">点评名师</div>
 			<div class="palyinfo_detail">
-				<div class="palyinfo_detail_img"><img ms-attr-src="teacherInfo.pic" width="100%" height="100%"></div>
+				<a ms-attr-href="/lessonComment/teacher/[--teacherInfo.teacherId--]" class="palyinfo_detail_img"><img ms-attr-src="teacherInfo.pic" width="100%" height="100%"></a>
 				<a ms-attr-href="/lessonComment/teacher/[--teacherInfo.teacherId--]" class="palyinfo_detail_text" ms-html="teacherInfo.username"></a>
 				<div class="palyinfo_detail_time" ms-html="teacherInfo.created_at"></div>
 			</div>
             @if (\Auth::check())
-                 <a ms-attr-href="/lessonComment/buy/[--teacherInfo.teacherId--]" class="palyinfo_button">我也要请老师点评</a>
+                 <a ms-attr-href="/lessonComment/teacher/[--teacherInfo.teacherId--]" class="palyinfo_button">我也要请老师点评</a>
             @else 
 			     <a href="/index/login" class="palyinfo_button">我也要请老师点评</a>
             @endif
@@ -249,6 +249,10 @@
 @endsection
 
 @section('js')
+    <script src="http://api.html5media.info/1.1.8/html5media.min.js"></script>
+    <!--[if gt IE 9]>
+       <script src="jwplayerplayer.html5.js" type="text/javascript"></script>  
+    <![endif]-->
     <script type="text/javascript" src="{{asset('home/jplayer/jwplayer.js')}}"></script>
 	<script type="text/javascript">
         require(['lessonComment/directive', 'lessonComment/commentDetail/index'], function (directive, comment) {
@@ -274,6 +278,7 @@
 
             comment.$watch('replayInfo.name', function(value, oldVlaue) {
                 if ((comment.replayInfo.lengths > 0 && value[comment.replayInfo.lengths - 1] != ' ') || value.length < comment.replayInfo.lengths) {
+                    comment.replayInfo = {};
                     comment.replayInfo.name = '';
                     comment.replayInfo.lengths = 0;
                     return;

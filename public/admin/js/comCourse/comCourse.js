@@ -1,12 +1,13 @@
 //审核状态
-function selectCheck(id,checkid,username,teachername,teacherPhone){
+function selectCheck(id,checkid,username,teachername,teacherPhone,orderSn){
     var id = id;
     var stateid = checkid;
     var username = username;
     var teacherPhone = teacherPhone;
+    var orderSn = orderSn;
     $.ajax({
         type: "get",
-        data:{'id':id,'state':stateid},
+        data:{'id':id,'state':stateid,'orderSn':orderSn},
         url: "/admin/commentCourse/commentState",
 
         dataType: 'json',
@@ -23,6 +24,7 @@ function selectCheck(id,checkid,username,teachername,teacherPhone){
             if(res.state == 2){
                 $('#pupUpback1').css({'display':'block'});
                 $('.teacherPhone').val(teacherPhone);
+                $('.orderSn').val(orderSn);
             }
         }
     });
@@ -30,9 +32,10 @@ function selectCheck(id,checkid,username,teachername,teacherPhone){
 
 $('#suer_btn0').click(function(){
     var phone = $('.teacherPhone').val();
+    var orderSn = $('.orderSn').val();
     $.ajax({
         type: "get",
-        url: "/admin/commentCourse/sendMessage/" + phone,
+        url: "/admin/commentCourse/sendMessage/" + phone + '/' + orderSn,
         dataType: 'json',
         success: function (res) {
             if(res == true){

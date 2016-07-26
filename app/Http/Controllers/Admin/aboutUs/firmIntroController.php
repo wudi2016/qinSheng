@@ -36,6 +36,7 @@ class firmIntroController extends Controller{
 //        dd($input);
         $res = DB::table('about')->where('id',$input['id'])->update($input);
         if($res){
+            $this -> OperationLog("修改了公司介绍ID为{$input['id']}的信息", 1);
             return redirect('admin/message')->with(['status'=>'修改成功','redirect'=>'aboutUs/firmIntroList']);
         }else{
             return redirect()->back()->withInput()->withErrors('修改失败！');

@@ -24,7 +24,8 @@ class teacherHomepageController extends Controller
         $teacherInfo = DB::table('users') -> select('id') -> where(['id' => $teacherID, 'type' => 2]) -> first();
         $teacherInfo || abort(404);
         $mineID = \Auth::check() ? \Auth::user() -> id : 0;
-        return view('home.lessonComment.teacherHomepage.index') -> with('userID', $teacherID) -> with('mineID', $mineID);
+        $mineName = \Auth::check() ? \Auth::user() -> username : 0;
+        return view('home.lessonComment.teacherHomepage.index') -> with('userID', $teacherID) -> with('mineID', $mineID) -> with('mineName', $mineName);
     }
 
 
@@ -36,10 +37,10 @@ class teacherHomepageController extends Controller
     public function getTeacherInfo($teacherID)
     {
         $teacherInfo = DB::table('users') 
-                    -> join('teacher', 'users.id', '=', 'teacher.parentId')
-                    -> select('users.id', 'users.username', 'users.sex', 'users.created_at', 'users.type', 'users.cityId', 'users.pic', 'users.company', 
+                     -> join('teacher', 'users.id', '=', 'teacher.parentId')
+                     -> select('users.id', 'users.username', 'users.sex', 'users.created_at', 'users.type', 'users.cityId', 'users.pic', 'users.company', 
                         'teacher.intro', 'teacher.stock', 'teacher.price', 'teacher.cover') 
-                    -> where(['users.id' => $teacherID, 'users.type' => 2]) -> first();
+                     -> where(['users.id' => $teacherID, 'users.type' => 2]) -> first();
         $teacherInfo && $teacherInfo -> created_at = floor((time() - strtotime($teacherInfo -> created_at)) / 86400);
         $teacherInfo -> created_at || $teacherInfo -> created_at = 1;
         $city = DB::table('city') -> select('name') -> where('code', $teacherInfo -> cityId) -> first();
@@ -57,12 +58,14 @@ class teacherHomepageController extends Controller
     {
         sleep(1);
         $tableName = $request['type'] ? 'commentcourse' : 'course';
-        $order = $request['order'] ? 'coursePlayView' : 'id';
-        $condition = ['id', 'coursePrice', 'courseTitle', 'coursePic', 'coursePlayView'];
-        $request['type'] && array_push($condition, 'teachername as extra');
+        $order = $request['order'] ? $tableName.'.coursePlayView' : $tableName.'.id';
 
-        $result = \DB::table($tableName) -> select($condition)
-                -> where(['teacherId' => $request['userid'], $tableName.'.courseIsDel' => 0, $tableName.'.courseStatus' => 0])
+        $condition = [$tableName.'.id', $tableName.'.coursePrice', $tableName.'.courseTitle', $tableName.'.coursePic', $tableName.'.coursePlayView'];
+        $where = ['orders.teacherId' => $request['userid'], 'orders.status' => 2, $tableName.'.courseIsDel' => 0, $tableName.'.courseStatus' => 0];
+        $request['type'] && array_push($condition, $tableName.'.teachername as extra');
+        $request['type'] ? $where['commentcourse.state'] = 2 : $where['orders.orderType'] = $request['type'];
+
+        $result = DB::table('orders') -> join($tableName, 'orders.courseId', '=', $tableName.'.id') -> select($condition) -> where($where)
                 -> orderBy($order, "desc") -> skip($this -> getSkip($request['page'], $this->number)) -> take($this -> number) -> get();
 
         return $this -> returnResult($result);
@@ -78,11 +81,10 @@ class teacherHomepageController extends Controller
     public function getTeacherVideoCount(Request $request)
     {
         $tableName = $request['type'] ? 'commentcourse' : 'course';
-        $where = ['teacherId' => $request['userid'], 'courseStatus' => 0, 'courseIsDel' => 0];
-        $request['type'] && $where['state'] = 2;
-        $result = \DB::table($tableName) -> where($where) -> count();
+        $where = ['orders.teacherId' => $request['userid'], 'orders.status' => 2, $tableName.'.courseStatus' => 0, $tableName.'.courseIsDel' => 0];
+        $request['type'] ? $where['commentcourse.state'] = 2 : $where['orders.orderType'] = $request['type'];
+        $result = DB::table('orders') -> join($tableName, 'orders.courseId', '=', $tableName.'.id') -> where($where) -> count();
         return $this -> returnResult($result);
     }
-
     
 }

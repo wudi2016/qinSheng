@@ -69,6 +69,20 @@ class orderController extends Controller
         $data['status'] = $request['status'];
         $data['updated_at'] = Carbon::now();
         $data = DB::table('orders')->where('id',$request['id'])->update($data);
+        switch($request['status']){
+            case 0: //已付款
+                DB::table('applycourse')->where('orderSn',$request['orderSn'])->update(['state'=>1]);
+                DB::table('commentcourse')->where('orderSn',$request['orderSn'])->update(['state'=>1]);
+                break;
+            case 1: //待点评
+                DB::table('applycourse')->where('orderSn',$request['orderSn'])->update(['state'=>2]);
+                DB::table('commentcourse')->where('orderSn',$request['orderSn'])->update(['state'=>1]);
+                break;
+            case 2: //已完成
+                DB::table('applycourse')->where('orderSn',$request['orderSn'])->update(['state'=>2]);
+                DB::table('commentcourse')->where('orderSn',$request['orderSn'])->update(['state'=>2]);
+                break;
+        }
         if($data){
             echo 1;
         }else{
@@ -80,7 +94,14 @@ class orderController extends Controller
      *删除订单
      */
     public function delOrder($id,$status){
+        $orderSn = DB::table('orders')->where('id',$id)->pluck('orderSn');
+        $status = DB::table('orders')->where('id',$id)->pluck('status');
+        if($status != 4){ //只有订单是已退款的才可以删除订单
+            return redirect()->back()->withInput()->withErrors('只有已退款的订单才可以删除');
+        }
         $data = DB::table('orders')->where('id',$id)->update(['isDelete'=>1]);
+        DB::table('applycourse')->where('orderSn',$orderSn)->update(['courseIsDel'=>1]); //已退款时关联删除演奏视频表
+        DB::table('commentcourse')->where('orderSn',$orderSn)->update(['courseIsDel'=>1]); //已退款时关联删除名师点评表
         if($data){
             return redirect('admin/message')->with(['status'=>'订单删除成功','redirect'=>'order/orderList/'.$status]);
         }else{
@@ -283,7 +304,8 @@ class orderController extends Controller
         $result = $wxPay->refund($wxPayRefund);
 
         if($result['return_code'] == 'SUCCESS'){
-            return redirect('admin/message')->with(['status'=>'退款成功','redirect'=>'order/orderList/3']);
+            DB::table('orders')->where('id',$orderid)->update(['status'=>4]);//如果退款成功将订单状态改为4已退款
+            return redirect('admin/message')->with(['status'=>'退款成功','redirect'=>'order/orderList/4']);
         }else{
             return redirect('admin/message')->with(['status'=>'退款失败','redirect'=>'order/orderList/3']);
         }

@@ -67,11 +67,12 @@ class companyUserController extends Controller{
             $input['password'] = bcrypt($input['password']);
             //销毁upassword字段
             unset($input['upassword']);
-            $res = DB::table('users')->insert($input);
+            $res = DB::table('users')->insertGetId($input);
         }else{
             return redirect()->back()->withInput()->withErrors('与第一次输入的密码不同，请重新输入');
         }
         if($res){
+            $this -> OperationLog("新增了后台用户ID为{$res}的信息", 1);
             return redirect('admin/message')->with(['status'=>'添加成功','redirect'=>'companyUser/companyUserList']);
         }else{
             return redirect()->back()->withInput()->withErrors('添加失败！');
@@ -106,6 +107,7 @@ class companyUserController extends Controller{
         $res = DB::table('users')->where('id',$input['id'])->update($input);
 
         if($res !== false){
+            $this -> OperationLog("修改了后台用户ID为{$request['id']}的信息", 1);
             return redirect('admin/message')->with(['status'=>'编辑成功','redirect'=>'companyUser/companyUserList']);
         }else{
             return redirect()->back()->withInput()->withErrors('编辑失败！');
@@ -121,6 +123,7 @@ class companyUserController extends Controller{
     public function delcompanyUser($id){
         $res = DB::table('users')->where('id',$id)->delete();
         if($res){
+            $this -> OperationLog("删除了后台用户ID为{$id}的信息", 1);
             return redirect('admin/message')->with(['status'=>'删除成功','redirect'=>'companyUser/companyUserList']);
         }else{
             return redirect()->back()->withInput()->withErrors('删除失败！');
@@ -158,6 +161,7 @@ class companyUserController extends Controller{
             return redirect()->back()->withInput()->withErrors('与第一次输入的密码不同，请重新输入');
         }
         if($res){
+            $this -> OperationLog("修改了后台用户ID为{$request['id']}的密码", 1);
             return redirect('admin/message')->with(['status'=>'编辑成功','redirect'=>'companyUser/companyUserList']);
         }else{
             return redirect()->back()->withInput()->withErrors('编辑失败！');
@@ -183,6 +187,7 @@ class companyUserController extends Controller{
         $data['checks'] = $request['status'];
         $data = DB::table('users')->where('id',$request['id'])->update($data);
         if($data){
+            $this -> OperationLog("修改了后台用户ID为{$request['id']}的状态", 1);
             echo 1;
         }else{
             echo 0;

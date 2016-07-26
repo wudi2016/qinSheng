@@ -101,10 +101,10 @@
                             <div class="contain_lessonDetail_bot_left_info_div">
                                 <div class="data" ms-repeat="el.section">
                                     <span class="spot"></span>
-                                    <a href="#changeVideo"><span class="data_content" ms-html="el.title" ms-click="changeVideo(el.id,el.courseLowPath);"></span></a>
-                                    <span ms-if="el.isLearn" class="try">试学</span>
+                                    <a href="#changeVideo"><span class="data_content" ms-html="el.title" ms-click="changeVideo(el.id,el.courseLowPath,el.isTryLearn,detailInfo.isBuy,detailInfo.isTeacher);"></span></a>
+                                    <span ms-if="el.isTryLearn == 1" class="try">试学</span>
                                     <span ms-if="el.isLearn" class="have">已学</span>
-                                    <a href="#changeVideo"><span class="play" ms-click="changeVideo(el.id,el.courseLowPath);"></span></a>
+                                    <a href="#changeVideo"><span class="play" ms-click="changeVideo(el.id,el.courseLowPath,el.isTryLearn,detailInfo.isBuy,detailInfo.isTeacher);"></span></a>
                                 </div>
                             </div>
                         </div>
@@ -300,7 +300,7 @@
             </div>
             <div class="bot">
                 <span class="quit" ms-click="popUpSwitch(false)">取消</span>
-                <span class="sure" ms-click="popUpSwitch('downloadData');">确定</span>
+                <span class="sure" ms-click="popUpSwitch('downIt');">确定</span>
             </div>
         </div>
     </div>

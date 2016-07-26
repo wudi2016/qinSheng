@@ -149,7 +149,7 @@
 
                             <div class="col-sm-9">
                                 <input  type="text"  id="email" name="email" id="form-field-1" placeholder="邮箱" class="col-xs-10 col-sm-5" value="{{old('email')}}" />
-                                    <span class="help-inline col-xs-12 col-sm-7">" />
+                                    {{--<span class="help-inline col-xs-12 col-sm-7">" />--}}
                                     <span class="help-inline col-xs-12 col-sm-7">
                                     <label class="middle">
                                         <span class="lbl"></span>

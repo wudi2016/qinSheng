@@ -61,14 +61,23 @@ define([], function() {
 	avalon.directive('applycomment', {
 		update: function(value) {
 			var element = this.element, className = '.' + avalon(element).attr('class');
-			value && avalon(element).addClass('active');
+			value > 0 && avalon(element).addClass('active');
 			$(className).unbind();
 			$(className).hover(function () {
-				value ? avalon(element).addClass('noFollow') : avalon(element).addClass('isFollow');
-				value || $('.teacherHomepage_detail_content_applyTips').css('display', 'block');
+				if (value > 0) {
+					$(className).addClass('noFollow')
+				} else {
+					$(className).addClass('isFollow');
+					$('.teacherHomepage_detail_content_applyTips').css('display', 'block');
+				}
+
 			}, function () {
-				value ? avalon(element).removeClass('noFollow') : avalon(element).removeClass('isFollow');
-				value || $('.teacherHomepage_detail_content_applyTips').css('display', 'none');
+				if (value > 0) {
+					$(className).removeClass('noFollow')
+				} else {
+					$(className).removeClass('isFollow')
+					$('.teacherHomepage_detail_content_applyTips').css('display', 'none');
+				}
 			});
 		}
 	});

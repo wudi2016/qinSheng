@@ -69,6 +69,23 @@
                             </span>
                             </div>
                         </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否试学 </label>
+
+                                <div class="col-sm-9">
+                                    {{--<input type="hidden" name="parentId" id="form-field-1" placeholder="章节名称" class="col-xs-10 col-sm-5" value="0" />--}}
+                                    <select name="isTrylearn" id="istrylearn" class="col-xs-10 col-sm-5">
+                                        <option value="0" @if($data->isTrylearn == 0) selected @endif>否</option>
+                                        <option value="1" @if($data->isTrylearn == 1) selected @endif>是</option>
+                                    </select>
+                            <span class="help-inline col-xs-12 col-sm-7">
+                                <label class="middle" ms-html="errormessagebelong">
+                                    <span class="lbl"></span>
+                                </label>
+                            </span>
+                                </div>
+                            </div>
                         @endif
 
                         <div class="form-group">
@@ -204,6 +221,7 @@
             upload.uploadInfo.courseLowPath = '{{$data->courseLowPath}}' || null,
             upload.uploadInfo.courseMediumPath = '{{$data->courseMediumPath}}' || null,
             upload.uploadInfo.courseHighPath = '{{$data->courseHighPath}}' || null,
+            upload.uploadInfo.isTrylearn = '{{$data->isTrylearn}}' || null,
 
             avalon.scan();
         });

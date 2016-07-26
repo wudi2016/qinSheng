@@ -12,6 +12,7 @@ use App\Http\Controllers\Home\lessonComment\Gadget;
 use PaasResource;
 use PaasUser;
 use Cache;
+use Messages;
 
 class teacherCourseController extends Controller
 {
@@ -24,25 +25,31 @@ class teacherCourseController extends Controller
      *名师点评列表
      */
     public function teacherCourseList(Request $request){
-        $query = DB::table('commentcourse');
+        $query = DB::table('commentcourse as a');
         if($request['type'] == 1){
-            $query = $query->where('id','like','%'.trim($request['search']).'%');
+            $query = $query->where('a.id','like','%'.trim($request['search']).'%');
         }
         if($request['type'] == 2){
-            $query = $query->where('courseTitle','like','%'.trim($request['search']).'%');
+            $query = $query->where('a.orderSn','like','%'.trim($request['search']).'%');
         }
         if($request['type'] == 3){
-            $query = $query->where('username','like','%'.trim($request['search']).'%');
+            $query = $query->where('a.courseTitle','like','%'.trim($request['search']).'%');
         }
         if($request['type'] == 4){
-            $query = $query->where('teachername','like','%'.trim($request['search']).'%');
+            $query = $query->where('a.username','like','%'.trim($request['search']).'%');
         }
-        if($request['type'] == 5){ //上传的起止时间
+        if($request['type'] == 5){
+            $query = $query->where('a.teachername','like','%'.trim($request['search']).'%');
+        }
+        if($request['type'] == 6){ //上传的起止时间
             $query = $query->where('created_at','>=',$request['beginTime'])->where('created_at','<=',$request['endTime']);
         }
         $data = $query
-            ->where('courseIsDel',0)
-            ->orderBy('id','desc')
+            ->leftJoin('users as u','a.userId','=','u.id')
+            ->leftJoin('users as ut','a.teacherId','=','ut.id')
+            ->where('a.courseIsDel',0)
+            ->select('a.*','u.userName','ut.realname as teacherName','u.phone as studentPhone')
+            ->orderBy('a.id','desc')
             ->paginate(15);
         foreach($data as &$val){
             if($val->courseLowPath){
@@ -53,6 +60,30 @@ class teacherCourseController extends Controller
                     $val->courseLowPathurl = Cache::get($val->courseLowPath);
                 }
             }
+            if(!$val->courseLowPath || !$val->courseMediumPath || !$val->courseHighPath){
+                $FileList = $this->transformations($val->fileID);
+                if($FileList['code'] == 200 && $FileList['data']['Waiting'] < 0){
+                    $filelists = $FileList['data']['FileList']; //取出转好的码
+                    $lists = [];
+                    foreach($filelists as $value){
+                        switch($value['Level']){
+                            case 1:
+                                $lists['courseLowPath'] = $value['FileID'];
+                                break;
+                            case 2:
+                                $lists['courseMediumPath'] = $value['FileID'];
+                                break;
+                            case 3:
+                                $lists['courseHighPath'] = $value['FileID'];
+                                break;
+                        }
+                    }
+                    if($lists){
+                        DB::table('applycourse')->where('id',$val->id)->update($lists);
+                    }
+                }
+            }
+
             $val->coursePrice = $val->coursePrice / 100;
             $val->courseDiscount = $val->courseDiscount / 1000;
             if($val->courseType){
@@ -75,10 +106,13 @@ class teacherCourseController extends Controller
         $data['lastCheckTime'] = Carbon::now();
         $data = DB::table('commentcourse')->where('id',$request['id'])->update($data);
         if($request['state'] == 0){
+            DB::table('orders')->where('orderSn',$request['orderSn'])->update(['status'=>0]);
             $arr = array('state'=>'0','msg'=>'审核未通过');
         }elseif($request['state'] == 1){
+            DB::table('orders')->where('orderSn',$request['orderSn'])->update(['status'=>0]);
             $arr = array('state'=>'1','msg'=>'审核中');
         }elseif($request['state'] == 2){
+            DB::table('orders')->where('orderSn',$request['orderSn'])->update(['status'=>2]);
             $arr = array('state'=>'2','msg'=>'审核通过');
         }else{
             $arr = array('state'=>'3','msg'=>'修改失败');
@@ -183,7 +217,14 @@ class teacherCourseController extends Controller
      *删除名师点评
      */
     public function delTeacherCourse($id){
+        $orderSn = DB::table('commentcourse')->where('id',$id)->pluck('orderSn');
+        $status = DB::table('orders')->where('orderSn',$orderSn)->pluck('status');
+        if($status != 4){ //只有订单是已退款的才可以删除视频
+            return redirect()->back()->withInput()->withErrors('只有已退款的订单才可以删除');
+        }
         $data = DB::table('commentcourse')->where('id',$id)->update(['courseIsDel'=>1]);
+        DB::table('orders')->where('orderSn',$orderSn)->update(['isDelete'=>1]); //已退款时关联删除订单表
+        DB::table('applycourse')->where('orderSn',$orderSn)->update(['courseIsDel'=>1]); //已退款时关联删除演奏视频表
         if($data){
             return redirect('admin/message')->with(['status'=>'点评视频删除成功','redirect'=>'commentCourse/teacherCourseList']);
         }else{
@@ -209,6 +250,46 @@ class teacherCourseController extends Controller
         ];
 
         return \Validator::make($data, $rules, $messages);
+    }
+
+    /**
+     * 名师点评视频审核通过后给学员发送短信提示
+     */
+    public function sendStudentMessage(Messages $message,Request $request){
+        //名师点评视频通过后将订单表状态改为已完成
+        DB::table('orders')->where('orderSn',$request['orderSn'])->update(['status'=>2]);
+
+        //名师视频审核通过后消息中心发送消息
+        $data['actionId'] = $request['actionId'];
+        $data['username'] = $request['username'];
+        $data['type'] = 2;
+        $data['content'] = $request['fromUsername'].'老师点评了您的作品  点击可进入该点评页的详情页';
+        $data['client_ip'] = $_SERVER['REMOTE_ADDR'];
+        $data['fromUsername'] = $request['fromUsername'];
+        $data['toUsername'] = $request['toUsername'];
+        $data['created_at'] = Carbon::now();
+        DB::table('usermessage')->insert($data);
+
+        //给学员的所有粉丝发送消息
+        $fans = DB::table('friends')->where('toUserId',$request['userId'])->get();
+        if($fans){
+            foreach ($fans as $val) {
+                $fansId = $val->fromUserId;//取出粉丝的id
+                $fansname = DB::table('users')->where('id',$val->fromUserId)->where('checks',0)->select('username')->first();//取出粉丝的用户名
+                $data['username'] = $fansname->username;
+                $data['content'] = $request['fromUsername'].'老师点评了'.$request['username'].'的作品 点击可进入该点评视频详情页面';
+                $data['type'] = 4;
+                $data['toUsername'] = $request['username'];
+                DB::table('usermessage')->insert($data);
+            }
+        }
+
+        //名师点评视频审核通过后给学员发送短信提示
+        $code = '';
+        $content = '您申请的点评辅导已得到名师回复，请及时查看【琴晟教育】';
+        $message::setInfo($request['phone'],$content);
+        $result = $message::sendMsg();
+        return $message::response($result,$code);
     }
 
 }

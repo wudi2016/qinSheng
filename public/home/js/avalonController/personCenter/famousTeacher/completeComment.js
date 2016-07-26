@@ -28,7 +28,7 @@ define([], function () {
                         },
                     });
                 },
-                pageSize: 2,
+                pageSize: 6,
                 className: "paginationjs-theme-blue",
                 showGoInput: true,
                 showGoButton: true,

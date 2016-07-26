@@ -320,7 +320,7 @@
 
                             <div class="col-sm-9">
                                 <input class="col-xs-10 col-sm-4" type="text" name="fromyaoqingma" id="form-field-4"
-                                       placeholder="请输入邀请码" value="{{old('fromyaoqingma')}}"/><span
+                                       placeholder="Please input invite code" value="{{old('fromyaoqingma')}}"/><span
                                         style="display: block;height:30px;line-height: 30px;color:brown;"></span>
                                 <div class="space-2"></div>
                             </div>

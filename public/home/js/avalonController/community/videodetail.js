@@ -31,6 +31,7 @@ define([], function () {
                 type: "mp4",
                 image:data[0].cover,
             });
+            //console.log(data);
 
         },
     });

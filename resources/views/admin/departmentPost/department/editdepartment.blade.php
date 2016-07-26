@@ -19,7 +19,7 @@
                 <li>
                     <a href="{{url('/admin/departmentPost/departmentList')}}">部门列表</a>
                 </li>
-                <li class="active">添加</li>
+                <li class="active">修改</li>
             </ul><!-- .breadcrumb -->
         </div>
 
@@ -29,7 +29,7 @@
                     部门列表
                     <small>
                         <i class="icon-double-angle-right"></i>
-                        添加
+                        修改
                     </small>
                 </h1>
             </div><!-- /.page-header -->

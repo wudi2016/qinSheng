@@ -27,7 +27,7 @@ class theteacherController extends Controller
         if($type == '0'){
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->orderBy('t.firstletter','asc')
 //                ->limit(7)
@@ -35,7 +35,7 @@ class theteacherController extends Controller
         }elseif($type == '1') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','A')
                 
@@ -43,7 +43,7 @@ class theteacherController extends Controller
         }elseif($type == '2') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','B')
                 
@@ -51,7 +51,7 @@ class theteacherController extends Controller
         }elseif($type == '3') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','C')
                 
@@ -59,7 +59,7 @@ class theteacherController extends Controller
         }elseif($type == '4') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','D')
                 
@@ -67,7 +67,7 @@ class theteacherController extends Controller
         }elseif($type == '5') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','E')
                 
@@ -75,7 +75,7 @@ class theteacherController extends Controller
         }elseif($type == '6') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','F')
                 
@@ -83,7 +83,7 @@ class theteacherController extends Controller
         }elseif($type == '7') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','G')
                 
@@ -91,7 +91,7 @@ class theteacherController extends Controller
         }elseif($type == '8') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','H')
                 
@@ -99,7 +99,7 @@ class theteacherController extends Controller
         }elseif($type == '9') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','I')
                 
@@ -107,7 +107,7 @@ class theteacherController extends Controller
         }elseif($type == '10') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','J')
                 
@@ -115,7 +115,7 @@ class theteacherController extends Controller
         }elseif($type == '11') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','K')
                 
@@ -123,7 +123,7 @@ class theteacherController extends Controller
         }elseif($type == '12') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','L')
                 
@@ -131,7 +131,7 @@ class theteacherController extends Controller
         }elseif($type == '13') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','M')
                 
@@ -139,7 +139,7 @@ class theteacherController extends Controller
         }elseif($type == '14') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','N')
                 
@@ -147,7 +147,7 @@ class theteacherController extends Controller
         }elseif($type == '15') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','O')
                 
@@ -155,7 +155,7 @@ class theteacherController extends Controller
         }elseif($type == '16') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','P')
                 
@@ -163,7 +163,7 @@ class theteacherController extends Controller
         }elseif($type == '17') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','Q')
                 
@@ -171,7 +171,7 @@ class theteacherController extends Controller
         }elseif($type == '18') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','R')
                 
@@ -179,7 +179,7 @@ class theteacherController extends Controller
         }elseif($type == '19') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','S')
                 
@@ -187,7 +187,7 @@ class theteacherController extends Controller
         }elseif($type == '20') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','T')
                 
@@ -195,7 +195,7 @@ class theteacherController extends Controller
         }elseif($type == '21') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','U')
                 
@@ -203,7 +203,7 @@ class theteacherController extends Controller
         }elseif($type == '22') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','V')
                 
@@ -211,7 +211,7 @@ class theteacherController extends Controller
         }elseif($type == '23') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','W')
                 
@@ -219,7 +219,7 @@ class theteacherController extends Controller
         }elseif($type == '24') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','X')
                 
@@ -227,7 +227,7 @@ class theteacherController extends Controller
         }elseif($type == '25') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','Y')
                 
@@ -235,7 +235,7 @@ class theteacherController extends Controller
         }elseif($type == '26') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u','u.id','=','t.parentId')
-                ->select('t.id','u.school','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
                 ->where('u.type',2)
                 ->where('t.firstletter','=','Z')
                 
@@ -251,7 +251,7 @@ class theteacherController extends Controller
                     'name' => $v->realname,
                     'cover' => $v->cover,
                     'firstletter' => $v->firstletter,
-                    'school' => $v->school,
+                    'school' => $v->company,
                     'intro' => $v->intro,
                     'userId' => $v->parentId
                 ];
@@ -267,3 +267,5 @@ class theteacherController extends Controller
 
 
 }
+
+

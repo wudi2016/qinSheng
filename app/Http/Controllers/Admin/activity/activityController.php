@@ -72,8 +72,8 @@ class activityController extends Controller{
             }
         }
 //        dd($input);
-        $res = DB::table('activity')->insert($input);
-        if($res){
+        if($res = DB::table('activity')->insertGetId($input)){
+            $this -> OperationLog("新增了赛事管理ID为{$res}的信息", 1);
             return redirect('admin/message')->with(['status'=>'添加成功','redirect'=>'activity/activityList']);
         }else{
             return redirect()->back()->withInput()->withErrors('添加失败！');
@@ -113,6 +113,7 @@ class activityController extends Controller{
         }
         $res = DB::table('activity')->where('id',$input['id'])->update($input);
         if($res){
+            $this -> OperationLog("修改了赛事管理ID为{$request['id']}的信息", 1);
             return redirect('admin/message')->with(['status'=>'编辑成功','redirect'=>'activity/activityList']);
         }else{
             return redirect()->back()->withInput()->withErrors('编辑失败！');
@@ -128,6 +129,7 @@ class activityController extends Controller{
     public function delactivity($id){
         $res = DB::table('activity')->where('id',$id)->delete();
         if($res){
+            $this -> OperationLog("删除了赛事管理ID为{$id}的信息", 1);
             return redirect('admin/message')->with(['status'=>'删除成功','redirect'=>'activity/activityList']);
         }else{
             return redirect()->back()->withInput()->withErrors('删除失败！');
@@ -144,6 +146,7 @@ class activityController extends Controller{
         $data['updated_at'] = Carbon::now();
         $data = DB::table('activity')->where('id',$request['id'])->update($data);
         if($data){
+            $this -> OperationLog("修改了赛事管理ID为{$request['id']}的状态", 1);
             echo 1;
         }else{
             echo 0;

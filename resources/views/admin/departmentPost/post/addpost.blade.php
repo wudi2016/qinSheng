@@ -3,7 +3,6 @@
 
 
 
-
     <div class="main-content">
         <div class="breadcrumbs" id="breadcrumbs">
             <script type="text/javascript">
@@ -79,7 +78,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 岗位名称 </label>
 
                             <div class="col-sm-9">
-                                <input  type="text" name="postName" id="form-field-1" placeholder="岗位名称" class="col-xs-10 col-sm-5" value="" />
+                                <input    type="text" id="postName"  name="postName" id="form-field-1" placeholder="岗位名称" class="col-xs-10 col-sm-5" value="" />
                                     <span class="help-inline col-xs-12 col-sm-7">
                                     <label class="middle">
                                         <span class="lbl"></span>
@@ -126,8 +125,6 @@
     <script language="javascript" type="text/javascript" src="{{asset('DatePicker/WdatePicker.js') }}"></script>
     <script language="javascript" type="text/javascript" src="{{asset('admin/js/searchtype.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('/admin/js/addSubject.js') }}"></script>
-
-
 
 
 

@@ -1,10 +1,10 @@
 //审核状态
-function selectCheck(id,checkid,username,teachername){
+function selectCheck(id,checkid,userId,username,teachername,studentPhone,orderSn){
     var id = id;
     var stateid = checkid;
     $.ajax({
         type: "get",
-        data:{'id':id,'state':stateid},
+        data:{'id':id,'state':stateid,'orderSn':orderSn},
         url: "/admin/commentCourse/teacherState",
 
         dataType: 'json',
@@ -20,12 +20,38 @@ function selectCheck(id,checkid,username,teachername){
             }
             if(res.state == 2){
                 $('#pupUpback1').css({'display':'block'});
+                $('.redactionId').val(id);
+                $('.redfromUsername').val(teachername);
+                $('.redusername').val(username);
+                $('.reduserId').val(userId);
+
+                $('.redstudentPhone').val(studentPhone);
+                $('.redorderSn').val(orderSn);
             }
         }
     });
 }
 
 $('#suer_btn0').click(function(){
+    var actionId = $('.redactionId').val();
+    var fromUsername = $('.redfromUsername').val();
+    var userId = $('.reduserId').val();
+    var username = $('.redusername').val();
+    var toUsername = $('.redtoUsername').val();
+    var token = $('.token').val();
+
+    var phone = $('.redstudentPhone').val();
+    var orderSn = $('.redorderSn').val();
+    $.ajax({
+        type: "post",
+        data:{actionId:actionId,fromUsername:fromUsername,userId:userId,username:username,toUsername:toUsername,phone:phone,orderSn:orderSn,_token:token},
+        url: "/admin/commentCourse/sendStudentMessage",
+        dataType: 'json',
+        success: function (res) {
+            if(res == true){
+            }
+        }
+    });
     $('#pupUpback').css({'display':'none'});
     location.reload();
 });

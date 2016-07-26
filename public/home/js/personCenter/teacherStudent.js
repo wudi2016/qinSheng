@@ -380,12 +380,3 @@ $('.txtt').focus(function () {
 //编辑结果显信息提示示框
 window.onload = function(){$(".editResInfo").slideUp(2500)};
 
-//个人信息字数统计
-function countfont(){
-    var fontsum =  $('#center_right_textarea_con_top_text').val().length;
-    $('.countfont').html(fontsum);
-}
-$('#center_right_textarea_con_top_text').keyup(function(){
-    countfont();
-})
-countfont();

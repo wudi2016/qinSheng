@@ -13,6 +13,7 @@ function lookVideo(courseLowPathurl){
     $('#videodetailpupUpback').css('display','block');
 }
 $('.deldetail').click(function(){
+    player('');
     $('#videodetailpupUpback').css('display','none');
 })
 

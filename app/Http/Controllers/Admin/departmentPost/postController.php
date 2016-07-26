@@ -44,13 +44,18 @@ class postController extends Controller{
     /**
      * 添加方法
      */
-    public function addspost(){
+    public function addspost(Request $request){
         $input = Input::except('_token');
         $input['parentId'] = $input['depart'];
         unset($input['depart']);
         $input['created_at'] = Carbon::now();
-        $res = DB::table('post')->insert($input);
-        if($res){
+        //验证
+        $validate = $this->validator($input);
+        if($validate->fails()){
+            return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
+        }
+        if($res = DB::table('post')->insertGetId($input)){
+            $this -> OperationLog("新增了岗位ID为{$res}的信息", 1);
             return redirect('admin/message')->with(['status'=>'添加成功','redirect'=>'departmentPost/postList']);
         }else{
             return redirect()->back()->withInput()->withErrors('添加失败！');
@@ -73,13 +78,19 @@ class postController extends Controller{
     /**
      * 编辑方法
      */
-    public function editspost(){
+    public function editspost(Request $request){
         $input = Input::except('_token');
         $input['parentId'] = $input['depart'];
         unset($input['depart']);
 //        $input['updated_at'] = Carbon::now();
+        //验证
+        $validate = $this->validator($input);
+        if($validate->fails()){
+            return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
+        }
         $res = DB::table('post')->where('id',$input['id'])->update($input);
-        if($res){
+        if($res !==false){
+            $this -> OperationLog("修改了岗位ID为{$request['id']}的信息", 1);
             return redirect('admin/message')->with(['status'=>'更新成功','redirect'=>'departmentPost/postList']);
         }else{
             return redirect()->back()->withInput()->withErrors('更新失败！');
@@ -94,6 +105,7 @@ class postController extends Controller{
     public function delpost($id){
         $res = DB::table('post')->where('id',$id)->delete();
         if($res){
+            $this -> OperationLog("删除了岗位ID为{$id}的信息", 1);
             return redirect('admin/message')->with(['status'=>'删除成功','redirect'=>'departmentPost/postList']);
         }else{
             return redirect()->back()->withInput()->withErrors('删除失败！');
@@ -108,10 +120,28 @@ class postController extends Controller{
         $data['status'] = $request['status'];
         $data = DB::table('post')->where('id',$request['id'])->update($data);
         if($data){
+            $this -> OperationLog("修改了岗位ID为{$request['id']}的状态", 1);
             echo 1;
         }else{
             echo 0;
         }
+    }
+
+
+    /**
+     * 验证
+     */
+    protected function validator(array $data){
+        $rules = [
+            'postName' => 'required',
+            'parentId' => 'required'
+        ];
+        $messages = [
+            'postName.required' => '请输入岗位名称',
+            'parentId.required' =>'请选择部门'
+        ];
+
+        return \Validator::make($data, $rules, $messages);
     }
 
 

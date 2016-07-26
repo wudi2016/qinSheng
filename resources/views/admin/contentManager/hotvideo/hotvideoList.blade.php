@@ -75,9 +75,11 @@
 
             <div class="col-xs-12">
                 <!-- PAGE CONTENT BEGINS -->
+                @permission('add.contentManager')
                 <a href="{{url('/admin/contentManager/addhotvideo')}}" class="btn btn-xs btn-info">
                     <i class="icon-ok bigger-110">添加</i>
                 </a>
+                @endpermission
 
                 <div class="row">
                     <div class="col-xs-12">
@@ -117,16 +119,19 @@
                                         <td>
                                             <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
 
-
+                                                @permission('edit.contentManager')
                                                 <a href="{{url('/admin/contentManager/edithotvideo/'.$video->id)}}" class="btn btn-xs btn-info">
                                                     <i class="icon-edit bigger-120"></i>
                                                 </a>
+                                                @endpermission
 
+                                                @permission('delete.contentManager')
                                                 <a href="{{url('/admin/contentManager/delhotvideo/'.$video->id)}}" style="width:29px" class="btn btn-xs btn-danger" onclick="return confirm('删除后将无法找回,确定要删除吗?');">
                                                     <i class="icon-trash bigger-120"></i>
                                                 </a>
+                                                @endpermission
 
-
+                                                @permission('edit.contentManager')
                                                 <span class="btn btn-xs btn-primary" style="position: relative;display: inline-block;">
                                                     <strong>审核状态</strong>
                                                     <span class="icon-caret-down icon-on-right"></span>
@@ -136,6 +141,7 @@
                                                         <option value="1" >锁定</option>
                                                     </select>
                                                 </span>
+                                                @endpermission
 
 
                                             </div>

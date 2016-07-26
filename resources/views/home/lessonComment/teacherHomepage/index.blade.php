@@ -186,6 +186,7 @@
 		require(['lessonComment/directive', 'lessonComment/studentHomepage/index'], function (directive, user) {
 			user.userID = {{$userID}} || null;
 			user.mineID = {{$mineID}} || null;
+			user.mineName = '{{$mineName}}' || null;
 			user.videoUrl = '/lessonComment/getTeacherVideo';
 
 			user.tabStatus = 2;

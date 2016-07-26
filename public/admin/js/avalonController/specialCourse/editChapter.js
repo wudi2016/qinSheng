@@ -18,6 +18,7 @@ define(['PrimecloudPaas'], function(PrimecloudPaas) {
             selectid:'',
             title:'',
             parentId:'',
+            isTrylearn:'',
             fileID: null,
             courseLowPath: null,
             courseMediumPath:null,
@@ -144,6 +145,7 @@ define(['PrimecloudPaas'], function(PrimecloudPaas) {
                 });
             }else{
                 if(selectid == 2){ //选择节
+                    upload.uploadInfo.isTrylearn = $('#istrylearn').val();
                     if(!$('#belong').val()){
                         upload.errormessagebelong = '<span style="color: red;">请选择所属章</span>';
                         return false;

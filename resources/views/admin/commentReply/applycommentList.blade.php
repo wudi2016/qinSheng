@@ -117,27 +117,19 @@
                                         <td>
                                             <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
 
-
+                                                @permission('edit.commentReply')
                                                 <a href="{{url('/admin/commentReply/editapplyComment/'.$apply->id)}}" class="btn btn-xs btn-info">
                                                     <i class="icon-edit bigger-120"></i>
                                                 </a>
+                                                @endpermission
 
+                                                @permission('delete.commentReply')
                                                 <a href="{{url('/admin/commentReply/delapplyComment/'.$apply->id)}}" style="width:29px" class="btn btn-xs btn-danger" onclick="return confirm('删除后将无法找回,确定要删除吗?');">
                                                     <i class="icon-trash bigger-120"></i>
                                                 </a>
+                                                @endpermission
 
-
-                                                {{--<span class="btn btn-xs btn-inverse" style="position: relative;display: inline-block;">--}}
-                                                    {{--<strong>评论状态</strong>--}}
-                                                    {{--<span class="icon-caret-down icon-on-right"></span>--}}
-                                                    {{--<select id="" class="col-xs-10 col-sm-2" onchange="courseStatus({{$apply->id}},this.value);" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">--}}
-                                                        {{--<option value="10" selected></option>--}}
-                                                        {{--<option value="0" >正常</option>--}}
-                                                        {{--<option value="1" >锁定</option>--}}
-                                                    {{--</select>--}}
-                                                {{--</span>--}}
-
-
+                                                @permission('edit.commentReply')
                                                 <span class="btn btn-xs btn-primary" style="position: relative;display: inline-block;">
                                                     <strong>审核状态</strong>
                                                     <span class="icon-caret-down icon-on-right"></span>
@@ -147,6 +139,7 @@
                                                         <option value="1" >未审核</option>
                                                     </select>
                                                 </span>
+                                                @endpermission
 
 
 

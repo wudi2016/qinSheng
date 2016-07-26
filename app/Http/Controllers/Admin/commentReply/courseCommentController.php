@@ -53,6 +53,7 @@ class courseCommentController extends Controller
         $input['updated_at'] = Carbon::now();
         $res = DB::table('coursecomment')->where('id',$input['id'])->update($input);
         if($res){
+            $this -> OperationLog("修改了课程评论ID为{$input['id']}的信息", 1);
             return redirect('admin/message')->with(['status'=>'编辑成功','redirect'=>'commentReply/courseCommentList']);
         }else{
             return redirect()->back()->withInput()->withErrors('编辑失败！');
@@ -70,6 +71,7 @@ class courseCommentController extends Controller
 
         $res = DB::table('coursecomment')->where('id',$id)->delete();
         if($res){
+            $this -> OperationLog("删除了课程评论ID为{$id}的信息", 1);
             return redirect('admin/message')->with(['status'=>'删除成功','redirect'=>'commentReply/courseCommentList']);
         }else{
             return redirect()->back()->withInput()->withErrors('删除失败！');
@@ -88,6 +90,7 @@ class courseCommentController extends Controller
         $data['updated_at'] = Carbon::now();
         $data = DB::table('coursecomment')->where('id',$request['id'])->update($data);
         if($data){
+            $this -> OperationLog("修改了课程评论ID为{$request['id']}的评论状态", 1);
             echo 1;
         }else{
             echo 0;
@@ -103,6 +106,7 @@ class courseCommentController extends Controller
         $data['updated_at'] = Carbon::now();
         $data = DB::table('coursecomment')->where('id',$request['id'])->update($data);
         if($data){
+            $this -> OperationLog("修改了课程评论ID为{$request['id']}的审核状态", 1);
             echo 1;
         }else{
             echo 0;

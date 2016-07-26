@@ -134,8 +134,8 @@
                                             <td>{{$value->phone}}</td>
                                             <td>@if($value->type == 0)学生@elseif($value->type == 1)教师@else<span style="color:red">名师</span>@endif</td>
                                             <td><img src="{{asset($value->pic)}}" alt="" width="40" height="40"></td>
-                                            <td>{{$value->userId}}</td>
-                                            <td>{{$value->name}}</td>
+                                            <td>{{$value->userId ? $value->userId : ''}}</td>
+                                            <td>{{$value->name ? $value->name : ''}}</td>
                                             <td>{{$value->created_at}}</td>
                                             <td>{{$value->updated_at}}</td>
                                             <td>

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Home\lessonComment;
 use Illuminate\Http\Request;
 use PaasResource;
 use PaasUser;
-use Cache;
 use Primecloud\Pay\Weixin\Kernel\WxPayConfig;
 
 trait Gadget {
@@ -71,6 +70,18 @@ trait Gadget {
         if (!PaasUser::apply()) return Response() -> json(["type" => false, 'status' => '401']);
         $recourse = PaasResource::transformation("?fileid=". $request['fileID']);
         return $this -> returnResult($recourse);
+    }
+
+    /**
+     * pass平台资源转换
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function transformations($fileID)
+    {
+        if (!PaasUser::apply()) return Response() -> json(["type" => false, 'status' => '401']);
+        $recourse = PaasResource::transformation("?fileid=". $fileID);
+        return $recourse;
     }
 
 

@@ -111,25 +111,25 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
 
 
         //个人中心我的关注
-        Route::get('/myFocus','perSpaceController@myFocus');
+        Route::get('/myFocus',['middleware' => 'check','uses'=>'perSpaceController@myFocus']);
 
         //个人中心我的粉丝&&我的好友（暂定 谁关注我就是我的好友）
-        Route::get('/myFriends','perSpaceController@myFriends');
+        Route::get('/myFriends',['middleware' => 'check','uses'=>'perSpaceController@myFriends']);
 
         //学员--我的订单
-        Route::post('/myOrders','perSpaceController@myOrders');
+        Route::post('/myOrders',['middleware' => 'check','uses'=>'perSpaceController@myOrders']);
 
         //名师--待评点评
-        Route::post('/waitComment','perSpaceController@waitComment');
+        Route::post('/waitComment',['middleware' => 'check','uses'=>'perSpaceController@waitComment']);
 
         //名师--点评完成
-        Route::post('/completeComment','perSpaceController@completeComment');
+        Route::post('/completeComment',['middleware' => 'check','uses'=>'perSpaceController@completeComment']);
 
         //我的订单 -- 申请退款页面数据接口
-        Route::post('/applyRefund','perSpaceController@applyRefund');
+        Route::post('/applyRefund',['middleware' => 'check','uses'=>'perSpaceController@applyRefund']);
 
         //我的订单 -- 提交退款申请
-        Route::post('/submitApply','perSpaceController@submitApply');
+        Route::post('/submitApply',['middleware' => 'check','uses'=>'perSpaceController@submitApply']);
 
 
 
@@ -729,7 +729,7 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
         //视频详情
         Route::get('detailCommentCourse/{id}','commentCourseController@detailCommentCourse');
         //审核通过给名师发送短信提示
-        Route::get('sendMessage/{phone}','commentCourseController@sendMessage');
+        Route::get('sendMessage/{phone}/{orderSn}','commentCourseController@sendMessage');
 
 
         //名师点评视频
@@ -745,6 +745,8 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
         Route::post('doEditTeacherCourse','teacherCourseController@doEditTeacherCourse');
         //删除名师点评
         Route::get('delTeacherCourse/{id}','teacherCourseController@delTeacherCourse');
+        //审核通过给学员发送短信提示
+        Route::post('sendStudentMessage','teacherCourseController@sendStudentMessage');
 
 
         //点评视频推荐
@@ -809,31 +811,31 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
 Route::group(['prefix'=>'/commentReply','namespace'=>'commentReply'],function(){
 
     //演奏点评视频评论列表
-    Route::get('applyCommentList','applyCommentController@applyCommentList');
+    Route::get('applyCommentList',['middleware' => 'permission:commentReply.list', 'uses' => 'applyCommentController@applyCommentList']);
     //修改
-    Route::get('editapplyComment/{id}','applyCommentController@editapplyComment');
+    Route::get('editapplyComment/{id}',['middleware' => 'permission:edit.commentReply', 'uses' => 'applyCommentController@editapplyComment']);
     //修改方法
-    Route::post('editsapplyComment','applyCommentController@editsapplyComment');
+    Route::post('editsapplyComment',['middleware' => 'permission:edit.commentReply', 'uses' => 'applyCommentController@editsapplyComment']);
     //删除
-    Route::get('delapplyComment/{id}','applyCommentController@delapplyComment');
+    Route::get('delapplyComment/{id}',['middleware' => 'permission:delete.commentReply', 'uses' => 'applyCommentController@delapplyComment']);
     //课程状态
-    Route::get('applyCommentStatus','applyCommentController@applyCommentStatus');
+    Route::get('applyCommentStatus',['middleware' => 'permission:edit.commentReply', 'uses' => 'applyCommentController@applyCommentStatus']);
     //审核状态
-    Route::get('applyCommentChecks','applyCommentController@applyCommentChecks');
+    Route::get('applyCommentChecks',['middleware' => 'permission:edit.commentReply', 'uses' => 'applyCommentController@applyCommentChecks']);
 
 
     //课程评论列表
-    Route::get('courseCommentList','courseCommentController@courseCommentList');
+    Route::get('courseCommentList',['middleware' => 'permission:commentReply.list', 'uses' => 'courseCommentController@courseCommentList']);
     //修改
-    Route::get('editcourseComment/{id}','courseCommentController@editcourseComment');
+    Route::get('editcourseComment/{id}',['middleware' => 'permission:edit.commentReply', 'uses' => 'courseCommentController@editcourseComment']);
     //修改方法
-    Route::post('editscourseComment','courseCommentController@editscourseComment');
+    Route::post('editscourseComment',['middleware' => 'permission:edit.commentReply', 'uses' => 'courseCommentController@editscourseComment']);
     //删除
-    Route::get('delcourseComment/{id}','courseCommentController@delcourseComment');
+    Route::get('delcourseComment/{id}',['middleware' => 'permission:delete.commentReply', 'uses' => 'courseCommentController@delcourseComment']);
     //课程状态
-    Route::get('courseCommentStatus','courseCommentController@courseCommentStatus');
+    Route::get('courseCommentStatus',['middleware' => 'permission:edit.commentReply', 'uses' => 'courseCommentController@courseCommentStatus']);
     //审核状态
-    Route::get('courseCommentChecks','courseCommentController@courseCommentChecks');
+    Route::get('courseCommentChecks',['middleware' => 'permission:edit.commentReply', 'uses' => 'courseCommentController@courseCommentChecks']);
 
 });
 
@@ -864,70 +866,84 @@ Route::group(['prefix'=>'/collection','namespace'=>'collection'],function(){
 Route::group(['prefix'=>'/contentManager','namespace'=>'contentManager'],function(){
 
     //banner列表
-    Route::get('bannerList','bannerController@bannerList');
+    Route::get('bannerList',['middleware' => 'permission:contentManager.list', 'uses' => 'bannerController@bannerList']);
     //修改
-    Route::get('editbanner/{id}','bannerController@editbanner');
+    Route::get('editbanner/{id}',['middleware' => 'permission:edit.contentManager', 'uses' => 'bannerController@editbanner']);
     //修改方法
-    Route::post('editsbanner','bannerController@editsbanner');
+    Route::post('editsbanner',['middleware' => 'permission:edit.contentManager', 'uses' => 'bannerController@editsbanner']);
     //添加
-    Route::get('addbanner','bannerController@addbanner');
+    Route::get('addbanner',['middleware' => 'permission:add.contentManager', 'uses' => 'bannerController@addbanner']);
     //添加方法
-    Route::post('addsbanner','bannerController@addsbanner');
+    Route::post('addsbanner',['middleware' => 'permission:add.contentManager', 'uses' => 'bannerController@addsbanner']);
     //删除
-    Route::get('delbanner/{id}','bannerController@delbanner');
+    Route::get('delbanner/{id}',['middleware' => 'permission:delete.contentManager', 'uses' => 'bannerController@delbanner']);
     //激活锁定
-    Route::get('bannerStatus','bannerController@bannerStatus');
+    Route::get('bannerStatus',['middleware' => 'permission:edit.contentManager', 'uses' => 'bannerController@bannerStatus']);
 
 
 
     //合作伙伴列表
-    Route::get('partnerList','partnerController@partnerList');
+    Route::get('partnerList',['middleware' => 'permission:contentManager.list', 'uses' => 'partnerController@partnerList']);
     //修改
-    Route::get('editpartner/{id}','partnerController@editpartner');
+    Route::get('editpartner/{id}',['middleware' => 'permission:edit.contentManager', 'uses' => 'partnerController@editpartner']);
     //修改方法
-    Route::post('editspartner','partnerController@editspartner');
+    Route::post('editspartner',['middleware' => 'permission:edit.contentManager', 'uses' => 'partnerController@editspartner']);
     //添加
-    Route::get('addpartner','partnerController@addpartner');
+    Route::get('addpartner',['middleware' => 'permission:add.contentManager', 'uses' => 'partnerController@addpartner']);
     //添加方法
-    Route::post('addspartner','partnerController@addspartner');
+    Route::post('addspartner',['middleware' => 'permission:add.contentManager', 'uses' => 'partnerController@addspartner']);
     //删除
-    Route::get('delpartner/{id}','partnerController@delpartner');
+    Route::get('delpartner/{id}',['middleware' => 'permission:delete.contentManager', 'uses' => 'partnerController@delpartner']);
     //激活锁定
-    Route::get('partnerStatus','partnerController@partnerStatus');
+    Route::get('partnerStatus',['middleware' => 'permission:edit.contentManager', 'uses' => 'partnerController@partnerStatus']);
 
 
     //热门视频列表
-    Route::get('hotvideoList','hotvideoController@hotvideoList');
+    Route::get('hotvideoList',['middleware' => 'permission:contentManager.list', 'uses' => 'hotvideoController@hotvideoList']);
     //修改
-    Route::get('edithotvideo/{id}','hotvideoController@edithotvideo');
+    Route::get('edithotvideo/{id}',['middleware' => 'permission:edit.contentManager', 'uses' => 'hotvideoController@edithotvideo']);
     //修改方法
-    Route::post('editshotvideo','hotvideoController@editshotvideo');
+    Route::post('editshotvideo',['middleware' => 'permission:edit.contentManager', 'uses' => 'hotvideoController@editshotvideo']);
     //添加
-    Route::get('addhotvideo','hotvideoController@addhotvideo');
+    Route::get('addhotvideo',['middleware' => 'permission:add.contentManager', 'uses' => 'hotvideoController@addhotvideo']);
     //添加方法
-    Route::post('addshotvideo','hotvideoController@addshotvideo');
+    Route::post('addshotvideo',['middleware' => 'permission:add.contentManager', 'uses' => 'hotvideoController@addshotvideo']);
     //删除
-    Route::get('delhotvideo/{id}','hotvideoController@delhotvideo');
+    Route::get('delhotvideo/{id}',['middleware' => 'permission:delete.contentManager', 'uses' => 'hotvideoController@delhotvideo']);
     //激活锁定
-    Route::get('hotvideoStatus','hotvideoController@hotvideoStatus');
+    Route::get('hotvideoStatus',['middleware' => 'permission:edit.contentManager', 'uses' => 'hotvideoController@hotvideoStatus']);
     //上传资源
     Route::post('dohotvideo','hotvideoController@dohotvideo');
 
 
     //社区名师推荐
-    Route::get('recteacherList','recteacherController@recteacherList');
+    Route::get('recteacherList',['middleware' => 'permission:contentManager.list', 'uses' => 'recteacherController@recteacherList']);
     //修改
-    Route::get('editrecteacher/{id}','recteacherController@editrecteacher');
+    Route::get('editrecteacher/{id}',['middleware' => 'permission:edit.contentManager', 'uses' => 'recteacherController@editrecteacher']);
     //修改方法
-    Route::post('editsrecteacher','recteacherController@editsrecteacher');
+    Route::post('editsrecteacher',['middleware' => 'permission:edit.contentManager', 'uses' => 'recteacherController@editsrecteacher']);
     //添加
-    Route::get('addrecteacher','recteacherController@addrecteacher');
+    Route::get('addrecteacher',['middleware' => 'permission:add.contentManager', 'uses' => 'recteacherController@addrecteacher']);
     //添加方法
-    Route::post('addsrecteacher','recteacherController@addsrecteacher');
+    Route::post('addsrecteacher',['middleware' => 'permission:add.contentManager', 'uses' => 'recteacherController@addsrecteacher']);
     //删除
-    Route::get('deleterecteacher/{id}','recteacherController@deleterecteacher');
+    Route::get('deleterecteacher/{id}',['middleware' => 'permission:delete.contentManager', 'uses' => 'recteacherController@deleterecteacher']);
 
 
+    //新闻资讯列表
+    Route::get('newsList',['middleware' => 'permission:contentManager.list', 'uses' => 'newsController@newsList']);
+    //修改
+    Route::get('editnews/{id}',['middleware' => 'permission:edit.contentManager', 'uses' => 'newsController@editnews']);
+    //修改方法
+    Route::post('editsnews',['middleware' => 'permission:edit.contentManager', 'uses' => 'newsController@editsnews']);
+    //添加
+    Route::get('addnews',['middleware' => 'permission:add.contentManager', 'uses' => 'newsController@addnews']);
+    //添加方法
+    Route::post('addsnews',['middleware' => 'permission:add.contentManager', 'uses' => 'newsController@addsnews']);
+    //删除
+    Route::get('delnews/{id}',['middleware' => 'permission:delete.contentManager', 'uses' => 'newsController@delnews']);
+    //锁定激活
+    Route::get('newsStatus',['middleware' => 'permission:edit.contentManager', 'uses' => 'newsController@newsStatus']);
 
 });
 
@@ -964,26 +980,26 @@ Route::group(['prefix'=>'/contentManager','namespace'=>'contentManager'],functio
     */
     Route::group(['prefix'=>'/aboutUs','namespace'=>'aboutUs'],function(){
         //公司介绍列表
-        Route::get('firmIntroList','firmIntroController@firmIntroList');
+        Route::get('firmIntroList',['middleware' => 'permission:aboutus.list', 'uses' => 'firmIntroController@firmIntroList']);
         //编辑页面
-        Route::get('editfirmIntro/{id}','firmIntroController@editfirmIntro');
+        Route::get('editfirmIntro/{id}',['middleware' => 'permission:edit.aboutus', 'uses' => 'firmIntroController@editfirmIntro']);
         //编辑方法
-        Route::post('editsfirmIntro','firmIntroController@editsfirmIntro');
+        Route::post('editsfirmIntro',['middleware' => 'permission:edit.aboutus', 'uses' => 'firmIntroController@editsfirmIntro']);
 
         //友情链接列表
-        Route::get('friendlinkList','friendlinkController@friendlinkList');
+        Route::get('friendlinkList',['middleware' => 'permission:aboutus.list', 'uses' => 'friendlinkController@friendlinkList']);
         //编辑页面
-        Route::get('editfriendlink/{id}','friendlinkController@editfriendlink');
+        Route::get('editfriendlink/{id}',['middleware' => 'permission:edit.aboutus', 'uses' => 'friendlinkController@editfriendlink']);
         //编辑方法
-        Route::post('editsfriendlink','friendlinkController@editsfriendlink');
+        Route::post('editsfriendlink',['middleware' => 'permission:edit.aboutus', 'uses' => 'friendlinkController@editsfriendlink']);
         //删除
-        Route::get('delfriendlink/{id}','friendlinkController@delfriendlink');
+        Route::get('delfriendlink/{id}',['middleware' => 'permission:delete.aboutus', 'uses' => 'friendlinkController@delfriendlink']);
         //添加页面
-        Route::get('addfriendlink','friendlinkController@addfriendlink');
+        Route::get('addfriendlink',['middleware' => 'permission:add.aboutus', 'uses' => 'friendlinkController@addfriendlink']);
         //添加方法
-        Route::post('addsfriendlink','friendlinkController@addsfriendlink');
+        Route::post('addsfriendlink',['middleware' => 'permission:add.aboutus', 'uses' => 'friendlinkController@addsfriendlink']);
         //状态
-        Route::get('frinendStatus','friendlinkController@frinendStatus');
+        Route::get('frinendStatus',['middleware' => 'permission:edit.aboutus', 'uses' => 'friendlinkController@frinendStatus']);
 
     });
 
@@ -1029,39 +1045,36 @@ Route::group(['prefix'=>'/contentManager','namespace'=>'contentManager'],functio
   */
     Route::group(['prefix'=>'/departmentPost','namespace'=>'departmentPost'],function(){
 
-        //部门列表
-//        Route::get('departmentList','departmentController@departmentList');
-//        Route::get('departmentList',['uses' => 'departmentController@departmentList']);
-        Route::get('departmentList',['middleware' => 'permission:department.list', 'uses' => 'departmentController@departmentList']);
+        Route::get('departmentList',['middleware' => 'permission:departmentpost.list', 'uses' => 'departmentController@departmentList']);
         //添加
-        Route::get('adddepartment','departmentController@adddepartment');
+        Route::get('adddepartment',['middleware' => 'permission:add.departmentpost', 'uses' => 'departmentController@adddepartment']);
         //添加方法
-        Route::post('addsdepartment','departmentController@addsdepartment');
+        Route::post('addsdepartment',['middleware' => 'permission:add.departmentpost', 'uses' => 'departmentController@addsdepartment']);
         //编辑
-        Route::get('editdepartment/{id}','departmentController@editdepartment');
+        Route::get('editdepartment/{id}',['middleware' => 'permission:edit.departmentpost', 'uses' => 'departmentController@editdepartment']);
         //编辑方法
-        Route::post('editsdepartment','departmentController@editsdepartment');
+        Route::post('editsdepartment',['middleware' => 'permission:edit.departmentpost', 'uses' => 'departmentController@editsdepartment']);
         //删除
-        Route::get('deldepartment/{id}','departmentController@deldepartment');
+        Route::get('deldepartment/{id}',['middleware' => 'permission:delete.departmentpost', 'uses' => 'departmentController@deldepartment']);
         //状态
-        Route::get('departmentStatus','departmentController@departmentStatus');
+        Route::get('departmentStatus',['middleware' => 'permission:edit.departmentpost', 'uses' => 'departmentController@departmentStatus']);
 
 
 
         //岗位列表
-        Route::get('postList',['middleware' => 'permission:post.list','uses' => 'postController@postList']);
+        Route::get('postList',['middleware' => 'permission:departmentpost.list','uses' => 'postController@postList']);
         //添加
-        Route::get('addpost','postController@addpost');
+        Route::get('addpost',['middleware' => 'permission:add.departmentpost', 'uses' => 'postController@addpost']);
         //添加方法
-        Route::post('addspost','postController@addspost');
+        Route::post('addspost',['middleware' => 'permission:add.departmentpost', 'uses' => 'postController@addspost']);
         //编辑
-        Route::get('editpost/{id}','postController@editpost');
+        Route::get('editpost/{id}',['middleware' => 'permission:edit.departmentpost', 'uses' => 'postController@editpost']);
         //编辑方法
-        Route::post('editspost','postController@editspost');
+        Route::post('editspost',['middleware' => 'permission:edit.departmentpost', 'uses' => 'postController@editspost']);
         //删除
-        Route::get('delpost/{id}','postController@delpost');
+        Route::get('delpost/{id}',['middleware' => 'permission:delete.departmentpost', 'uses' => 'postController@delpost']);
         //状态
-        Route::get('postStatus','postController@postStatus');
+        Route::get('postStatus',['middleware' => 'permission:edit.departmentpost', 'uses' => 'postController@postStatus']);
 
     });
 
@@ -1115,30 +1128,30 @@ Route::group(['prefix'=>'/contentManager','namespace'=>'contentManager'],functio
     */
     Route::group(['prefix' => '/notice', 'namespace' => 'notice'], function () {
         // 通知列表
-        Route::get('noticeList','noticeController@noticeList');
+        Route::get('noticeList',['middleware' => 'permission:list.notice', 'uses' => 'noticeController@noticeList']);
         // 发送通知页
-        Route::get('addNotice', 'noticeController@addNotice');
+        Route::get('addNotice', ['middleware' => 'permission:add.notice', 'uses' => 'noticeController@addNotice']);
         // 执行添加通知
-        Route::post('doAddNotice', 'noticeController@doAddNotice');
+        Route::post('doAddNotice',['middleware' => 'permission:add.notice', 'uses' => 'noticeController@doAddNotice']);
         // 删除通知信息
-        Route::get('delNotice/{id}', 'noticeController@delNotice');
+        Route::get('delNotice/{id}',['middleware' => 'permission:del.notice', 'uses' => 'noticeController@delNotice']);
         // 修改通知信息页
-        Route::get('editNotice/{id}', 'noticeController@editNotice');
+        Route::get('editNotice/{id}',['middleware' => 'permission:edit.notice', 'uses' => 'noticeController@editNotice']);
         // 执行修改通知信息
-        Route::post('doEditNotice', 'noticeController@doEditNotice');
+        Route::post('doEditNotice', ['middleware' => 'permission:edit.notice', 'uses' => 'noticeController@doEditNotice']);
 
         // 通知模板列表
-        Route::get('noticeTemList','noticeController@noticeTemList');
+        Route::get('noticeTemList',['middleware' => 'permission:list.noticeTem', 'uses' => 'noticeController@noticeTemList']);
         // 添加通知模板
-        Route::get('addNoticeTem', 'noticeController@addNoticeTem');
+        Route::get('addNoticeTem', ['middleware' => 'permission:add.noticeTem', 'uses' => 'noticeController@addNoticeTem']);
         // 执行添加通知模板
-        Route::post('doAddNoticeTem', 'noticeController@doAddNoticeTem');
+        Route::post('doAddNoticeTem', ['middleware' => 'permission:add.noticeTem', 'uses' => 'noticeController@doAddNoticeTem']);
         // 删除通知模板
-        Route::get('delNoticeTem/{id}','noticeController@delNoticeTem');
+        Route::get('delNoticeTem/{id}',['middleware' => 'permission:del.noticeTem', 'uses' => 'noticeController@delNoticeTem']);
         // 通知模板修改页
-        Route::get('editNoticeTem/{id}','noticeController@editNoticeTem');
+        Route::get('editNoticeTem/{id}',['middleware' => 'permission:edit.noticeTem', 'uses' => 'noticeController@editNoticeTem']);
         // 执行通知模板修改
-        Route::post('doEditNoticeTem', 'noticeController@doEditNoticeTem');
+        Route::post('doEditNoticeTem', ['middleware' => 'permission:edit.noticeTem', 'uses' => 'noticeController@doEditNoticeTem']);
     });
 
     /*

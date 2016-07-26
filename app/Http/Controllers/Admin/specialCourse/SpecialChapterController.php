@@ -53,9 +53,34 @@ class SpecialChapterController extends Controller
                         $val->courseLowPathurl = Cache::get($val->courseLowPath);
                     }
                 }
+
+                if(!$val->courseLowPath || !$val->courseMediumPath || !$val->courseHighPath){
+                    $FileList = $this->transformations($val->fileID);
+//                    dd($FileList);
+                    if($FileList['code'] == 200 && $FileList['data']['Waiting'] < 0){
+                        $filelists = $FileList['data']['FileList']; //取出转好的码
+                        $lists = [];
+                        foreach($filelists as $value){
+                            switch($value['Level']){
+                                case 1:
+                                   $lists['courseLowPath'] = $value['FileID'];
+                                    break;
+                                case 2:
+                                    $lists['courseMediumPath'] = $value['FileID'];
+                                    break;
+                                case 3:
+                                    $lists['courseHighPath'] = $value['FileID'];
+                                    break;
+                            }
+                        }
+                        if($lists){
+                            $lists['status'] = 0;
+                            DB::table('coursechapter')->where('id',$val->id)->update($lists);
+                        }
+                    }
+                }
             }
         }
-//        dd($data);
         $data->type = $request['type'];
         $data->courseId = $id;
         return view('admin/specialCourse/specialChapterList',['data'=>$data]);
@@ -106,6 +131,7 @@ class SpecialChapterController extends Controller
             $data['title'] = $request['title'];
             $data['fileID'] = $request['fileID'];
             $data['parentId'] = $request['parentId'];
+            $data['isTrylearn'] = $request['isTrylearn'];
             if($request['courseLowPath']){
                 $data['courseLowPath'] = $request['courseLowPath'];
             }
@@ -150,6 +176,7 @@ class SpecialChapterController extends Controller
         if($request['selectid'] == 2){
             $data['title'] = $request['title'];
             $data['fileID'] = $request['fileID'];
+            $data['isTrylearn'] = $request['isTrylearn'];
             if($request['courseLowPath']){
                 $data['courseLowPath'] = $request['courseLowPath'];
             }

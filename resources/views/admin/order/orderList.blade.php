@@ -187,7 +187,7 @@
                                                 <span class="btn btn-xs btn-primary" style="position: relative;display: inline-block;">
                                                     <strong>订单状态</strong>
                                                     <span class="icon-caret-down icon-on-right"></span>
-                                                    <select id="selectCheck" class="col-xs-10 col-sm-2" onchange="selectCheck({{$order->id}},this.value);" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">
+                                                    <select id="selectCheck" class="col-xs-10 col-sm-2" onchange="selectCheck({{$order->id}},this.value,'{{$order->orderSn}}');" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">
                                                         <option value="44" selected></option>
                                                         <option value="0" >已付款</option>
                                                         <option value="1" >待点评</option>
@@ -204,11 +204,6 @@
                                                 </a>
                                                 @endif
 
-                                                {{--删除--}}
-                                                <a href="{{url('/admin/order/delOrder/'.$order->id.'/'.$data->status)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
-                                                    <i class="icon-trash bigger-120"></i>
-                                                </a>
-
                                                 <div href="" class="btn btn-xs btn-warning" ms-click="commentdetailpop({{$order->id}})">
                                                     <i class="icon-pencil bigger-120"></i>添加备注
                                                 </div>
@@ -216,6 +211,14 @@
                                                 <a href="{{url('/admin/order/remarkList/'.$order->id)}}" class="btn btn-xs btn-warning">
                                                     <i class=""></i>查看备注
                                                 </a>
+
+                                                {{--只有已退款的订单才可以删除--}}
+                                                @if($order->status ==4)
+                                                    {{--删除--}}
+                                                    <a href="{{url('/admin/order/delOrder/'.$order->id.'/'.$data->status)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
+                                                        <i class="icon-trash bigger-120"></i>
+                                                    </a>
+                                                @endif
 
                                                 @if($order->status == 3)
                                                 <a href="{{url('/admin/order/editRefundmoney/'.$order->id.'/'.$data->status)}}" class="btn btn-xs btn-info">

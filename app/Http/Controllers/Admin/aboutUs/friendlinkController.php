@@ -64,8 +64,8 @@ class friendlinkController extends Controller
                 return redirect()->back()->withInput()->withErrors('文件在上传过程中出错');
             }
         }
-        $res = DB::table('link')->insert($input);
-        if($res){
+        if($res = DB::table('link')->insertGetId($input)){
+            $this -> OperationLog("新增了友情链接ID为{$res}的学员", 1);
             return redirect('admin/message')->with(['status'=>'添加成功','redirect'=>'aboutUs/friendlinkList']);
         }else{
             return redirect()->back()->withInput()->withErrors('添加失败！');
@@ -108,6 +108,7 @@ class friendlinkController extends Controller
 //        dd($input);
         $res = DB::table('link')->where('id',$input['id'])->update($input);
         if($res){
+            $this -> OperationLog("修改了友情链接ID为{$input['id']}的信息", 1);
             return redirect('admin/message')->with(['status'=>'编辑成功','redirect'=>'aboutUs/friendlinkList']);
         }else{
             return redirect()->back()->withInput()->withErrors('编辑失败！');
@@ -121,6 +122,7 @@ class friendlinkController extends Controller
     public function delfriendlink($id){
         $res = DB::table('link')->where('id',$id)->delete();
         if($res){
+            $this -> OperationLog("删除了友情链接ID为{$id}的信息", 1);
             return redirect('admin/message')->with(['status'=>'删除成功','redirect'=>'aboutUs/friendlinkList']);
         }else{
             return redirect()->back()->withInput()->withErrors('删除失败！');
@@ -136,6 +138,7 @@ class friendlinkController extends Controller
         $data['created_at'] = Carbon::now();
         $data = DB::table('link')->where('id',$request['id'])->update($data);
         if($data){
+            $this -> OperationLog("更改了友情链接ID为{$request['id']}的状态", 1);
             echo 1;
         }else{
             echo 0;

@@ -76,7 +76,7 @@ class communityController extends Controller
         $getteacher = DB::table('teacher as t')
                     ->leftjoin('users as u','u.id','=','t.parentId')
                     ->leftjoin('recteacher as rec','u.id','=','rec.userId')
-                    ->select('rec.id','u.realname','u.school','t.intro','t.cover','t.parentId')
+                    ->select('rec.id','u.realname','u.company','t.intro','t.cover','t.parentId')
                     ->where('u.type',2)
                     ->orderBy('rec.sort','desc')
                     ->limit(5)
@@ -87,7 +87,7 @@ class communityController extends Controller
                     'id' => $v->id,
                     'userId' => $v->parentId,
                     'name' => $v->realname,
-                    'school' => $v->school,
+                    'school' => $v->company,
                     'intro' => $v->intro,
                     'cover' => $v->cover
                 ];
