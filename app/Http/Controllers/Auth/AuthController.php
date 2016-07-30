@@ -113,11 +113,11 @@ class AuthController extends Controller
 
     public function adminLogin(Request $request)
     {
-        if (Auth::attempt(['username' => $request -> username, 'password' => $request -> password, 'type' => 3])) {
+        if (Auth::attempt(['username' => $request -> username, 'password' => $request -> password, 'type' => 3,'checks'=>0])) {
             $this -> OperationLog('登陆了后台', 0);
             return redirect() -> intended('admin/index');
         } else {
-            return redirect('admin/login') -> withErrors('账号或密码错误!');
+            return redirect('admin/login') -> withErrors('账号或密码错误,如都不是请联系管理员!');
         }
     }
 }

@@ -32,11 +32,22 @@ class activityController extends Controller{
             $query = $query->where('status',3);
         }
         if($request->type == 5){
-            $query = $query->where('beginTime','>=',$request['beginTime'])->where('endTime','<=',$request['endTime']);
+            $query = $query->where('id','like','%'.trim($request['search']).'%');
+        }
+        if($request->type == 6){
+            $query = $query->where('title','like','%'.trim($request['search']).'%');
+        }
+        if($request['beginTime']){ //上传的起止时间
+            $query = $query->where('beginTime','>=',$request['beginTime']);
+        }
+        if($request['endTime']){ //上传的起止时间
+            $query = $query->where('endTime','<=',$request['endTime']);
         }
 
     	$data = $query->orderBy('id','desc')->paginate(10);
-
+        $data->type = $request['type'];
+        $data->beginTime = $request['beginTime'];
+        $data->endTime = $request['endTime'];
         return view('admin.activity.activityList')->with('activity',$data);
     }
 
@@ -56,6 +67,11 @@ class activityController extends Controller{
         $input = Input::except('_token');
         $input['created_at'] = Carbon::now();
         $input['updated_at'] = Carbon::now();
+        //验证
+        $validate = $this->validator($input);
+        if($validate->fails()){
+            return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
+        }
         if($request->hasFile('path')){ //判断文件是否存在
             if($request->file('path')->isValid()){ //判断文件在上传过程中是否出错
                 $name = $request->file('path')->getClientOriginalName();//获取图片名
@@ -96,6 +112,10 @@ class activityController extends Controller{
     public function editsactivity(Request $request){
         $input = Input::except('_token');
         $input['updated_at'] = Carbon::now();
+        $validate = $this->validator($input);
+        if($validate->fails()){
+            return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
+        }
         if($request->hasFile('path')){ //判断文件是否存在
             if($request->file('path')->isValid()){ //判断文件在上传过程中是否出错
                 $name = $request->file('path')->getClientOriginalName();//获取图片名
@@ -165,6 +185,31 @@ class activityController extends Controller{
             $filepath = 'admin/image/activity/'.$newName;
             return $filepath;
         }
+    }
+
+
+
+    /**
+     * 验证(添加)
+     */
+    protected function validator(array $data){
+        $rules = [
+            'title' => 'required',
+            'url' => 'required',
+            'activityRrom' => 'required',
+            'beginTime' => 'required',
+            'endTime' => 'required'
+        ];
+        $messages = [
+            'title.required' => '请输入标题名称',
+            'url.required'  => '请按要求填写链接',
+            'activityRrom.required' => '请填写举办方名称',
+            'beginTime.required' => '请填写活动开始时间',
+            'endTime.required' => '请填写活动介绍时间'
+        ];
+
+
+        return \Validator::make($data, $rules, $messages);
     }
 
 

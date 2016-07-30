@@ -17,26 +17,28 @@ class collectionController extends Controller{
                 ->leftjoin('commentcourse as com','col.courseId','=','com.id')
                 ->leftjoin('users as u','u.id','=','col.userId')
                 ->select('col.id','col.type','c.courseTitle','u.username','com.courseTitle as Title','col.created_at');
-//        if($request->type == 1){
-//            $query = $query->where('col.type',0);
-//        }
-//        if($request->type == 2){
-//            $query = $query->where('col.type',1);
-//        }
-        if($request->type == 3){
+
+
+        if($request->type == 1){
             $query = $query->where('c.courseTitle','like','%'.trim($request['search']).'%');
         }
-        if($request->type == 4){
+        if($request->type == 2){
             $query = $query->where('com.courseTitle','like','%'.trim($request['search']).'%');
         }
-        if($request->type == 5){
+        if($request->type == 3){
             $query = $query->where('u.username','like','%'.trim($request['search']).'%');
         }
-        if($request->type == 6){
-            $query = $query->where('col.created_at','>=',$request['beginTime'])->where('col.created_at','<=',$request['endTime']);
+        if($request['beginTime']){ //上传的起止时间
+            $query = $query->where('col.created_at','>=',$request['beginTime']);
         }
-        $data = $query->paginate(10);
+        if($request['endTime']){ //上传的起止时间
+            $query = $query->where('col.created_at','<=',$request['endTime']);
+        }
 
+        $data = $query->orderBy('id','desc')->paginate(10);
+        $data->type = $request['type'];
+        $data->beginTime = $request['beginTime'];
+        $data->endTime = $request['endTime'];
        return view('admin.collection.collectionList')->with('collection',$data);
     }
 

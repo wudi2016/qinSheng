@@ -25,11 +25,17 @@ class newsController extends Controller{
         if($request->type == 2){
             $query = $query->where('title','like','%'.trim($request['search']).'%');
         }
-        if($request->type == 3){
-            $query = $query->where('created_at','>=',$request['beginTime'])->where('created_at','<=',$request['endTime']);
+        if($request['beginTime']){ //上传的起止时间
+            $query = $query->where('acc.created_at','>=',$request['beginTime']);
+        }
+        if($request['endTime']){ //上传的起止时间
+            $query = $query->where('acc.created_at','<=',$request['endTime']);
         }
 
-        $data = $query->paginate(10);
+        $data = $query->orderBy('id','desc')->paginate(10);
+        $data->type = $request['type'];
+        $data->beginTime = $request['beginTime'];
+        $data->endTime = $request['endTime'];
         return view('admin.contentManager.news.newsList')->with('news',$data);
     }
 
@@ -50,6 +56,16 @@ class newsController extends Controller{
     public function addsnews(Request $request){
         $input = Input::except('_token');
         $input['created_at'] = Carbon::now();
+        //判断推荐位是否存在
+        $isexit = DB::table('news')->where('sort',$request['sort'])->first();
+        if($isexit){
+            DB::table('news')->where('id',$isexit->id)->update(['sort'=>0]);
+        }
+        //验证
+        $validate = $this->validator($input);
+        if($validate->fails()){
+            return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
+        }
 //        dd($input);
         $res = DB::table('news')->insertGetId($input);
         if($res){
@@ -78,7 +94,16 @@ class newsController extends Controller{
     public function editsnews(Request $request){
         $input = Input::except('_token');
         $input['created_at'] = Carbon::now();
-
+        //判断推荐位是否存在
+        $isexit = DB::table('news')->where('sort',$request['sort'])->first();
+        if($isexit){
+            DB::table('news')->where('id',$isexit->id)->update(['sort'=>0]);
+        }
+        //验证
+        $validate = $this->validator_edit($input);
+        if($validate->fails()){
+            return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
+        }
         $res = DB::table('news')->where('id',$input['id'])->update($input);
         if($res){
             $this -> OperationLog("修改了新闻资讯ID为{$request['id']}的信息", 1);
@@ -132,6 +157,22 @@ class newsController extends Controller{
         ];
         $messages = [
             'title.required' => '请输入标题名称',
+            'content.required'  => '请输入内容',
+            'description.required' => '请输入新闻描述'
+        ];
+
+
+        return \Validator::make($data, $rules, $messages);
+    }
+
+
+
+    protected function validator_edit(array $data){
+        $rules = [
+            'content' => 'required',
+            'description' => 'required'
+        ];
+        $messages = [
             'content.required'  => '请输入内容',
             'description.required' => '请输入新闻描述'
         ];

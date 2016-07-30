@@ -1,22 +1,15 @@
 @extends('layouts.layoutAdmin')
-
 @section('css')
     <style>
         .user_list {
             float: left;
             margin-right: 20px;
         }
-
     </style>
 @endsection
-
 @section('content')
     <div class="main-content" ms-controller='addRoleUser'>
         <div class="breadcrumbs" id="breadcrumbs">
-            <script type="text/javascript">
-                try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
-            </script>
-
             <ul class="breadcrumb">
                 <li>
                     <i class="icon-home home-icon"></i>
@@ -25,7 +18,7 @@
 
                 <li>
                     <a href="{{url('/admin/auth/roleList')}}">权限管理</a>
-                    
+
                 </li>
                 <li class="active">
                     <a href="{{url('/admin/auth/checkRoleUser/'.$roleID)}}">查看角色用户</a>
@@ -113,4 +106,4 @@
             avalon.scan();
         });
     </script>
-@endsection`
+@endsection

@@ -63,7 +63,7 @@ option = {
         data: []
     },
     yAxis: {
-        name:'人数'
+        name:'订单数'
     },
     series: [{
         name: '订单数',

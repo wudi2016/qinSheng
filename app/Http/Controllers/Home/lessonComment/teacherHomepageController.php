@@ -56,19 +56,28 @@ class teacherHomepageController extends Controller
      */
     public function getTeacherVideo(Request $request)
     {
-        sleep(1);
         $tableName = $request['type'] ? 'commentcourse' : 'course';
         $order = $request['order'] ? $tableName.'.coursePlayView' : $tableName.'.id';
 
         $condition = [$tableName.'.id', $tableName.'.coursePrice', $tableName.'.courseTitle', $tableName.'.coursePic', $tableName.'.coursePlayView'];
-        $where = ['orders.teacherId' => $request['userid'], 'orders.status' => 2, $tableName.'.courseIsDel' => 0, $tableName.'.courseStatus' => 0];
-        $request['type'] && array_push($condition, $tableName.'.teachername as extra');
-        $request['type'] ? $where['commentcourse.state'] = 2 : $where['orders.orderType'] = $request['type'];
+        $where = [$tableName.'.courseIsDel' => 0, $tableName.'.courseStatus' => 0];
 
-        $result = DB::table('orders') -> join($tableName, 'orders.courseId', '=', $tableName.'.id') -> select($condition) -> where($where)
-                -> orderBy($order, "desc") -> skip($this -> getSkip($request['page'], $this->number)) -> take($this -> number) -> get();
+		if ($request['type']) {
+			array_push($condition, $tableName.'.teachername as extra');
+			$where = array_merge($where, ['orders.teacherId' => $request['userid'], 'orders.status' => 2, 'orders.orderType' => 1, 'commentcourse.state' => 2]);
+			$result = DB::table('orders') -> join($tableName, 'orders.courseId', '=', $tableName.'.id') -> select($condition) -> where($where)
+					-> orderBy($order, "desc") -> skip($this -> getSkip($request['page'], $this->number)) -> take($this -> number) -> get();
+		} else {
+			$where[$tableName.'.teacherId'] = $request['userid'];
+			$result = DB::table($tableName) -> select($condition) -> where($where) -> orderBy($order, "desc") -> skip($this -> getSkip($request['page'], $this->number)) -> take($this -> number) -> get();
+			if ($result) {
+				foreach ($result as $key => $value) {
+					$result[$key] -> extra = DB::table('coursechapter') -> where('courseId', $result[$key] -> id) -> count();
+				}
+			}
+		}
 
-        return $this -> returnResult($result);
+		return $this -> returnResult($result);
     }
 
 
@@ -81,9 +90,16 @@ class teacherHomepageController extends Controller
     public function getTeacherVideoCount(Request $request)
     {
         $tableName = $request['type'] ? 'commentcourse' : 'course';
-        $where = ['orders.teacherId' => $request['userid'], 'orders.status' => 2, $tableName.'.courseStatus' => 0, $tableName.'.courseIsDel' => 0];
-        $request['type'] ? $where['commentcourse.state'] = 2 : $where['orders.orderType'] = $request['type'];
-        $result = DB::table('orders') -> join($tableName, 'orders.courseId', '=', $tableName.'.id') -> where($where) -> count();
+        $where = [$tableName.'.courseStatus' => 0, $tableName.'.courseIsDel' => 0];
+
+		if ($request['type']) {
+			$where = array_merge($where, ['orders.teacherId' => $request['userid'], 'orders.status' => 2, 'orders.orderType' => 1, 'commentcourse.state' => 2]);
+			$result = DB::table('orders') -> join($tableName, 'orders.courseId', '=', $tableName.'.id') -> where($where) -> count();
+		} else {
+			$where[$tableName.'.teacherId'] = $request['userid'];
+			$result = DB::table($tableName) -> where($where) -> count();
+		}
+
         return $this -> returnResult($result);
     }
     

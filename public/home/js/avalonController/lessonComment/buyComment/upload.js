@@ -80,9 +80,10 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 		fileMD5: null,
 		paas: null,
 		uploadResource: function(value) {
-			upload.paas = upload.paas || new PrimecloudPaas();
+			upload.paas = new PrimecloudPaas();
 			upload.uploadStatus = 2;
 			upload.uploadTip = '';
+			upload.uploadInfo.fileID = null;
 			upload.paas.MD5(upload.file, function(result){
 				if (result) {
 					upload.fileName = upload.paas.splitFileName(value);
@@ -94,13 +95,13 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 					upload.endUpload('上传失败请重试');
 				}
 			}, function(pos, size){
-				if (upload.uploadStatus != 2) {
-					upload.endUpload('上传中断');
-					return false;
-				}
 				if (Math.ceil(size / 1024 / 1024) > 1000) {
 					upload.endUpload('上传文件过大');
 					console.log(Math.ceil(size / 1024 / 1024) + ' MB');
+					return false;
+				}
+				if (upload.uploadStatus != 2) {
+					upload.endUpload('上传中断');
 					return false;
 				}
 				console.log('文件扫描进度： ' + parseInt(pos / size * 100) + '%');
@@ -108,7 +109,11 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 			});
 		},
 		endUpload: function(tip) {
-			upload.paas.endUpload();
+			if (upload.paas) {
+				upload.paas.endUpload();
+				upload.paas.endMD5();
+				upload.paas = null;
+			}
 			upload.progressBar = 0;
 			upload.uploadStatus = 3;
 			upload.uploadTip = tip || '';

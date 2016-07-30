@@ -4,7 +4,7 @@ avalon.directive('theteacheryincang', {
         $('.content_introduce div').each(function(){
              //var bbb = $(this).html().length;
              //alert(bbb);
-            var maxwidth=40;
+            var maxwidth=70;
             if($(this).html().length>maxwidth){
                 $($(this)).html($($(this)).html().substring(0,maxwidth));
                 $($(this)).html($($(this)).html()+'…');
@@ -65,39 +65,23 @@ avalon.directive('bigimg', {
 
 
 
-//avalon.directive('fenye',{
-//    update: function (value) {
-//        $('.paginationjs-pages').mouseover(function(){
-//            console.log(true);
-//        })
-//    }
-//});
-
-
-
 
 //鼠标悬浮显示(最新学员)
-// avalon.directive('showhideleft',{
-//     update: function (value){
-//         $('.newstudent_left').mouseover(function(){
-//             $('.newstudent_left_img').removeClass('hide');
-//         })
-//         $('.newstudent_left').mouseout(function(){
-//             $('.newstudent_left_img').addClass('hide');
-//         })
-//     }
-// });
-//
-// avalon.directive('showhideright',{
-//     update: function (value){
-//         $('.newstudent_right').mouseover(function(){
-//             $('.newstudent_right_img').removeClass('hide');
-//         })
-//         $('.newstudent_right').mouseout(function(){
-//             $('.newstudent_right_img').addClass('hide');
-//         })
-//     }
-// });
+ avalon.directive('showhideleft',{
+     update: function (value){
+         $('.newstudent').mouseover(function(){
+             $('.newstudent_left_img').removeClass('hide');
+             $('.newstudent_right_img').removeClass('hide');
+
+         })
+         $('.newstudent').mouseout(function(){
+             $('.newstudent_left_img').addClass('hide');
+             $('.newstudent_right_img').addClass('hide');
+
+         })
+     }
+ });
+
 
 
 
@@ -194,7 +178,9 @@ define([],function(){
 
         //最热视频
         hotvideo :[],
+        Yes: false,
         gethotData:function(){
+            model.Yes = false;
             $.ajax({
                 url : '/community/gethotvideo/',
                 type : 'get',
@@ -202,6 +188,7 @@ define([],function(){
                 success: function(response){
                     if(response.statuss){
                         model.hotvideo = response.data;
+                        model.Yes = true;
                     }
                 },
             })

@@ -27,7 +27,7 @@
 					<div ms-slectfile='file'>本地上传</div>
 					<div>请上传不超过1GB大小的视频文件</div>
 				</div>
-				<div class="add_video_tip" style="display: none;" ms-visible="uploadStatus == 1">(支持mp4、fiv、avi、rmvb、wmv、mkv格式上传)</div>
+				<div class="add_video_tip" style="display: none;" ms-visible="uploadStatus == 1">(支持mp4、flv、avi、rmvb、wmv、mkv格式上传)</div>
 				<div class="add_video_loading" style="display: none;" ms-visible="uploadStatus == 2">
 					<div class="progress_bar">
 						<div ms-css-width="[--progressBar--]%"></div>

@@ -17,7 +17,7 @@ class recteacherController extends Controller{
      * 列表
      */
     public function recteacherList(){
-        $data = DB::table('recteacher as rec')->orderBy('sort','asc')->get();
+        $data = DB::table('recteacher as rec')->orderBy('sort','asc')->orderBy('id','desc')->get();
         return view('admin.contentManager.recteacher.recteacherList')->with('recteacher',$data);
     }
 
@@ -43,6 +43,13 @@ class recteacherController extends Controller{
             return redirect()->back()->withInput()->withErrors('名师不可重复推荐');
         }
         $input['created_at'] = Carbon::now();
+
+        //判断推荐位是否存在
+        $isexit = DB::table('recteacher')->where('sort',$request['sort'])->first();
+        if($isexit){
+            DB::table('recteacher')->where('id',$isexit->id)->update(['sort'=>0]);
+        }
+
         $teachername = DB::table('users')->where('id',$request['userId'])->select('realname')->first();
         $input['name'] = $teachername->realname;
         $count = DB::table('recteacher')->count();
@@ -76,6 +83,11 @@ class recteacherController extends Controller{
     public function editsrecteacher(Request $request){
         $input = Input::except('_token');
         $input['updated_at'] = Carbon::now();
+        //判断推荐位是否存在
+        $isexit = DB::table('recteacher')->where('sort',$request['sort'])->first();
+        if($isexit){
+            DB::table('recteacher')->where('id',$isexit->id)->update(['sort'=>0]);
+        }
         $res = DB::table('recteacher')->where('id',$input['id'])->update($input);
         if($res){
             $this -> OperationLog("修改了社区名师推荐ID为{$request['id']}的信息", 1);

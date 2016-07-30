@@ -74,7 +74,7 @@
     text-align: center;
     height: 60px;
     line-height: 60px;
-    font-size: 18px;
+    font-size: 16px;
     font-family: 微软雅黑;
 }
 
@@ -120,6 +120,13 @@
     height: 180px;
     position: relative;
     /*background: url("./img/2.jpg") no-repeat;*/
+    overflow: hidden;
+}
+.contain_lesson_center_data_info_top_no {
+    width: 280px;
+    height: 180px;
+    position: relative;
+    background-color: white;
     overflow: hidden;
 }
 

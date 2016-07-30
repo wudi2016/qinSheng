@@ -24,7 +24,8 @@ class postController extends Controller{
             $query = $query->where('p.postName','like','%'.trim($request['search']).'%');
         }
 
-        $data = $query->paginate(10);
+        $data = $query->orderBy('id','desc')->paginate(10);
+        $data->type = $request['type'];
 
         return view('admin.departmentPost.post.postList')->with('post',$data);
     }

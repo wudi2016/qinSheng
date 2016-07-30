@@ -36,7 +36,8 @@ class SpecialTypeController extends Controller
             'typeName.max'=>'课程类型长度不超过5'
         ]);
         $data = $request->except('_token');
-        if(DB::table('coursetype')->where('id',$request['id'])->insert($data)){
+        if($id = DB::table('coursetype')->where('id',$request['id'])->insertGetId($data)){
+            $this -> OperationLog('添加了id为'.$id.'的课程类型');
             return redirect('admin/message')->with(['status'=>'课程类型添加成功','redirect'=>'specialCourse/specialTypeList']);
         }else{
             return redirect('admin/message')->with(['status'=>'课程类型添加失败','redirect'=>'specialCourse/specialTypeList']);
@@ -63,6 +64,7 @@ class SpecialTypeController extends Controller
         ]);
         $data = $request->except('_token');
         if(DB::table('coursetype')->where('id',$request['id'])->update($data)){
+            $this -> OperationLog('修改了id为'.$request['id'].'的课程类型');
             return redirect('admin/message')->with(['status'=>'课程类型编辑成功','redirect'=>'specialCourse/specialTypeList']);
         }else{
             return redirect('admin/message')->with(['status'=>'课程类型编辑失败','redirect'=>'specialCourse/specialTypeList']);
@@ -74,6 +76,7 @@ class SpecialTypeController extends Controller
      */
     public function delSpecialType($id){
         if(DB::table('coursetype')->where('id',$id)->delete()){
+            $this -> OperationLog('删除了id为'.$id.'的课程类型');
             return redirect('admin/message')->with(['status'=>'课程类型删除成功','redirect'=>'specialCourse/specialTypeList']);
         }else{
             return redirect('admin/message')->with(['status'=>'课程类型删除失败','redirect'=>'specialCourse/specialTypeList']);

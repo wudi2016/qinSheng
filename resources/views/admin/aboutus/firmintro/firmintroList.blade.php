@@ -96,7 +96,6 @@
                                         <th>id</th>
                                         <th>标题</th>
                                         <th>内容详情</th>
-                                        <th>状态</th>
                                         <th>创建时间</th>
                                         <th>更新时间</th>
                                         <th>操作</th>
@@ -111,13 +110,13 @@
                                             <td class="firmcontent">{{$firm->content}}</td>
                                             {{--<td>{{$firm->logo}}</td>--}}
                                             {{--<td> <img src="{{asset($firm->logo)}}" alt="" width="60" height="40" > </td>--}}
-                                            <td>
-                                                @if($firm->status == 0)
-                                                    激活
-                                                @elseif($firm->status == 1)
-                                                    禁用
-                                                @endif
-                                            </td>
+                                            {{--<td>--}}
+                                                {{--@if($firm->status == 0)--}}
+                                                    {{--激活--}}
+                                                {{--@elseif($firm->status == 1)--}}
+                                                    {{--禁用--}}
+                                                {{--@endif--}}
+                                            {{--</td>--}}
                                             <td>{{$firm->created_at}}</td>
                                             <td>{{$firm->updated_at}}</td>
                                             <td>

@@ -28,22 +28,42 @@ function getdata(para,ord){
         dataSource: function(done) {
             $.ajax({
                 type: 'GET',
-                url: '/index/getCourseaa/'+para+'/'+ord,
+                url: '/index/getCourseaa/'+para+'/'+this.pageNumber+'/'+this.pageSize+'/'+ord,
                 success: function(response) {
                     if(response.status){
-                        done(response.data);
+                        var format = [];
+
+                        format['data'] = response.data;
+                        format['totalNumber'] = response.count;
+                        done(format);
+                        // done(response.data);
                     }else{
-                        $('.nofindaa').removeClass('hide');
+                        // $('.nofindaa').removeClass('hide');
+                        $('.con_con_top_a').addClass('hide');
+
                     }
                 }
             });
         },
+        getData: function(pageNumber,pageSize) {
+            var self = this;
+            $.ajax({
+                type: 'GET',
+                url: '/index/getCourseaa/'+para+'/'+pageNumber+'/'+pageSize+'/'+ord,
+                success: function(response) {
+                    self.callback(response.data);
+                }
+            });
+        },
         pageSize: 8,
+        pageNumber :1,
+        totalNumber :1,
         className:"paginationjs-theme-blue",
         showGoInput: true,
         showGoButton: true,
         callback: function(data) {
             if(data){
+
                 var str = '';
                 $.each(data,function(id,info){
                     str += "<a href='/lessonSubject/detail/"+info.id+"'><div class=\"recommend_con_con_li\" > " + "<div class=\"contain_lesson_center_data_info_top\">" + " <img src=\""+info.img+"\" width=\"280\" height=\"180\" class=\"img_big\"/> " + "</div> " + "<div class=\"contain_lesson_center_data_info_bot\">" + "<span class=\"top\">"+info.title+"</span> " + "<div class=\"center\"> " + "<span class=\"left classes\">"+info.counttime+"课时</span>" + "<span class=\"right study\">"+info.countpeople+"人学过</span> " + "</div> " + "<span class=\"bot\">￥"+info.price+"</span> " + "</div>" + "</div></a>";
@@ -60,17 +80,35 @@ function getdatab(para,ord){
         dataSource: function(done) {
             $.ajax({
                 type: 'GET',
-                url: '/index/getCoursebb/'+para,
+                url: '/index/getCoursebb/'+para+'/'+this.pageNumber+'/'+this.pageSize+'/'+ord,
                 success: function(response) {
                     if(response.status){
-                        done(response.data);
+                        var format = [];
+                        format['data'] = response.data;
+                        format['totalNumber'] = response.count;
+                        done(format);
+                        // done(response.data);
                     }else{
-                        $('.nofindbb').removeClass('hide');
+                        // $('.nofindbb').removeClass('hide');
+                        $('.con_con_top_b').addClass('hide');
                     }
+
+                }
+            });
+        },
+        getData: function(pageNumber,pageSize) {
+            var self = this;
+            $.ajax({
+                type: 'GET',
+                url: '/index/getCoursebb/'+para+'/'+pageNumber+'/'+pageSize+'/'+ord,
+                success: function(response) {
+                    self.callback(response.data);
                 }
             });
         },
         pageSize: 8,
+        pageNumber :1,
+        totalNumber :1,
         className:"paginationjs-theme-blue",
         showGoInput: true,
         showGoButton: true,
@@ -104,8 +142,9 @@ if(searchVal){
     getdata(searchVal,ord);
     getdatab(searchVal,ord);
 }else{
-    $('.nofindaa').removeClass('hide');
+    // $('.nofindaa').removeClass('hide');
     $('.nofindbb').removeClass('hide');
+    $('.con_con_top').addClass('hide');
 }
 
 var sel = function(type,ord){

@@ -17,6 +17,14 @@ class SpecialCourseController extends Controller
      */
     public function specialCourseList(Request $request){
         $query = DB::table('course as c');
+
+        if($request['beginTime']){ //上传的起止时间
+            $query = $query->where('c.created_at','>=',$request['beginTime']);
+        }
+        if($request['endTime']){ //上传的起止时间
+            $query = $query->where('c.created_at','<=',$request['endTime']);
+        }
+
         if($request['type'] == 1){
             $query = $query->where('c.id','like','%'.trim($request['search']).'%');
         }
@@ -26,9 +34,7 @@ class SpecialCourseController extends Controller
         if($request['type'] == 3){
             $query = $query->where('u.username','like','%'.trim($request['search']).'%');
         }
-        if($request['type'] == 4){ //上传的起止时间
-            $query = $query->where('c.created_at','>=',$request['beginTime'])->where('c.created_at','<=',$request['endTime']);
-        }
+
         $data = $query
             ->leftJoin('users as u','u.id','=','c.teacherId')
             ->where('courseIsDel',0)
@@ -46,6 +52,8 @@ class SpecialCourseController extends Controller
             }
         }
         $data->type = $request['type'];
+        $data->beginTime = $request['beginTime'];
+        $data->endTime = $request['endTime'];
 //        dd($data);
         return view('admin.specialCourse.specialCourseList',['data'=>$data]);
     }
@@ -90,7 +98,8 @@ class SpecialCourseController extends Controller
         }else{
             return redirect()->back()->withInput()->withErrors('请上传专题课程封面图');
         }
-        if(DB::table('course')->insert($data)){
+        if($id = DB::table('course')->insertGetId($data)){
+            $this -> OperationLog('添加了id为'.$id.'的专题课程');
             return redirect('admin/message')->with(['status'=>'专题课程添加成功','redirect'=>'specialCourse/specialCourseList']);
         }else{
             return redirect()->back()->withInput()->withErrors('专题课程添加失败');
@@ -153,6 +162,7 @@ class SpecialCourseController extends Controller
             }
         }
         if(DB::table('course')->where('id',$request['id'])->update($data)){
+            $this -> OperationLog('修改了id为'.$request['id'].'的专题课程');
             return redirect('admin/message')->with(['status'=>'专题课程修改成功','redirect'=>'specialCourse/specialCourseList']);
         }else{
             return redirect()->back()->withInput()->withErrors('专题课程修改失败');
@@ -206,6 +216,7 @@ class SpecialCourseController extends Controller
     public function delSpecialCourse($id){
         $data = DB::table('course')->where('id',$id)->update(['courseIsDel'=>1]);
         if($data){
+            $this -> OperationLog('删除了id为'.$id.'的专题课程');
             return redirect('admin/message')->with(['status'=>'专题课程删除成功','redirect'=>'specialCourse/specialCourseList']);
         }else{
             return redirect('admin/message')->with(['status'=>'专题课程删除失败','redirect'=>'specialCourse/specialCourseList']);
@@ -220,6 +231,7 @@ class SpecialCourseController extends Controller
             'courseView' => 'integer',
             'coursePlayView' => 'integer',
             'courseFav' => 'integer',
+            'courseStudyNum'=>'integer'
 
         ];
 
@@ -227,6 +239,7 @@ class SpecialCourseController extends Controller
             'courseView.integer' => '浏览数必须是整型',
             'coursePlayView.integer' => '观看数必须是整型',
             'courseFav.integer' => '收藏数必须是整型',
+            'courseStudyNum.integer' => '学习数必须是整型',
         ];
 
         return \Validator::make($data, $rules, $messages);

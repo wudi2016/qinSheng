@@ -16,12 +16,9 @@ define('LARAVEL_START', microtime(true));
 
 require __DIR__.'/../vendor/autoload.php';
 
-/*  Workbench  */
-if (is_dir($workbench = __DIR__.'/../workbench'))
-{
+if (is_dir($workbench = __DIR__.'/../workbench')) {
     Xtwoend\Workbench\Starter::start($workbench);
 }
-/*  Workbench  */
 
 /*
 |--------------------------------------------------------------------------

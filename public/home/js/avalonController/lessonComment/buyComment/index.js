@@ -11,17 +11,14 @@ define([], function() {
 				data: data,
 				dataType: "json",
 				success: function(response) {
-					if (model == 'deleteOrder') {
-						response.type && window.location.reload();
-					}
 					if (model == 'orderStatus') {
 						if (response.type) {
-							switch (response.data.orderType) {
+							switch (parseInt(response.data.orderType)) {
 								case 1:
-									window.location.href = '/lessonComment/buySuccess/'+ comment.orderID;
+									window.location.href = '/lessonComment/buySuccess/' + comment.orderID;
 									break;
 								case 2:
-									window.location.href = '/lessonComment/detail/'+ response.data.courseId;
+									window.location.href = '/lessonComment/detail/' + response.data.courseId;
 									break;
 							}
 						} else {

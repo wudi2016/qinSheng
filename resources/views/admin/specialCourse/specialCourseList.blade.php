@@ -23,23 +23,22 @@
 
             <div class="nav-search" id="nav-search">
                 <form action="{{url('/admin/specialCourse/specialCourseList')}}" method="get" class="form-search">
+                    <span style=""  class="searchtype" iid="form-field-1">
+                        <input type="text" name="beginTime" id="form-field-1" placeholder="开始时间" class="col-xs-10 col-sm-5" value="{{$data->beginTime}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;background:url('{{asset("admin/image/2.png")}}') no-repeat;background-position:right;"/>&nbsp;&nbsp;
+                        <input type="text" name="endTime" id="form-field-1" placeholder="结束时间" class="col-xs-10 col-sm-5" value="{{$data->endTime}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;margin-left:10px;background:url('{{asset("admin/image/2.png")}}') no-repeat;background-position:right;"/>
+                    </span>
+
                     <select name="type" id="form-field-1" class="searchtype">
+                        <option value="">--请选择--</option>
                         <option value="1" @if($data->type == 1) selected @endif>ID</option>
                         <option value="2" @if($data->type == 2) selected @endif>课程名称</option>
                         <option value="3" @if($data->type == 3) selected @endif>授课讲师</option>
-                        <option value="4" @if($data->type == 4) selected @endif>时间筛选</option>
-                        <option value="">全部</option>
+                        <option value="" id="allSearch">全部</option>
                     </select>
                     <span class="input-icon">
-                        <span style="@if($data->type != 4) display: block;  @else display: none; @endif" class="input-icon" id="search1">
+                        <span style="" class="input-icon" id="search1">
                             <input type="text" name="search" placeholder="Search ..." class="nav-search-input" value="" id="nav-search-input" autocomplete="off" />
-                            <i class="icon-search nav-search-icon"></i>
-                            <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;" type="submit" value="筛选" />
-                        </span>
-                        <span style="@if($data->type == 4) display: block;  @else display: none; @endif" class="input-icon" id="search2">
-                            <input type="text" name="beginTime" id="form-field-1" placeholder="上传开始时间" class="col-xs-10 col-sm-5" value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
-                            <input type="text" name="endTime" id="form-field-1" placeholder="上传结束时间" class="col-xs-10 col-sm-5" value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;" />
-                            <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;" type="submit" value="筛选" />
+                            <input style="background: #6FB3E0;width:50px;height:28px ;border:0;color:#fff;padding-left: 5px;" type="submit" value="搜索" />
                         </span>
                     </span>
                 </form>
@@ -106,6 +105,8 @@
                                         <th>价格</th>
                                         <th>浏览数</th>
                                         <th>观看数</th>
+                                        <th>学习数(true)</th>
+                                        <th>学习数</th>
                                         <th>收藏数</th>
                                         {{--<th>课程公告</th>--}}
                                         <th>课程状态</th>
@@ -151,6 +152,8 @@
                                             <td>{{$special->coursePrice}}</td>
                                             <td>{{$special->courseView}}</td>
                                             <td>{{$special->coursePlayView}}</td>
+                                            <td>{{$special->completecount}}</td>
+                                            <td>{{$special->courseStudyNum}}</td>
                                             <td>{{$special->courseFav}}</td>
                                             {{--<td>{{$special->courseNotice}}</td>--}}
                                             <td>{{$special->courseStatus ? '锁定' : '激活'}}</td>
@@ -189,9 +192,15 @@
                                                         <i class="icon-flag bigger-120"></i>
                                                     </div>
 
-                                                    <a href="{{url('/admin/specialCourse/delSpecialCourse/'.$special->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
-                                                        <i class="icon-trash bigger-120"></i>
-                                                    </a>
+                                                    @if($special->courseStatus == 0)
+                                                        <a href="{{url('/admin/specialCourse/delSpecialCourse/'.$special->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
+                                                            <i class="icon-trash bigger-120"></i>
+                                                        </a>
+                                                    @else
+                                                        <div class="btn btn-xs btn-">
+                                                            <i class="icon-trash bigger-120"></i>
+                                                        </div>
+                                                    @endif
 
                                                 </div>
 
@@ -268,10 +277,10 @@
                         <input type="text" readonly placeholder="" ms-duplex="info.typeName">
                     </div>
 
-                    <div class="form-group">
-                        <lable class="labtitle">视频格式:</lable>
-                        <input type="text" readonly placeholder="" ms-duplex="info.courseFormat">
-                    </div>
+                    {{--<div class="form-group">--}}
+                        {{--<lable class="labtitle">视频格式:</lable>--}}
+                        {{--<input type="text" readonly placeholder="" ms-duplex="info.courseFormat">--}}
+                    {{--</div>--}}
 
                     <div class="form-group">
                         <lable class="labtitle">讲师:</lable>
@@ -302,6 +311,16 @@
                     <div class="form-group">
                         <lable class="labtitle">观看数:</lable>
                         <input type="text" readonly placeholder="" ms-duplex="info.coursePlayView">
+                    </div>
+
+                    <div class="form-group">
+                        <lable class="labtitle">学习数(true):</lable>
+                        <input type="text" readonly placeholder="" ms-duplex="info.completecount">
+                    </div>
+
+                    <div class="form-group">
+                        <lable class="labtitle">学习数:</lable>
+                        <input type="text" readonly placeholder="" ms-duplex="info.courseStudyNum">
                     </div>
 
                     <div class="form-group">

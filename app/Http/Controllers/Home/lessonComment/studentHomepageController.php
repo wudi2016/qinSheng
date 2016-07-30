@@ -97,7 +97,6 @@ class studentHomepageController extends Controller
      */
     public function getVideo(Request $request)
     {
-        sleep(1);
         $tableName = $request['type'] ? 'commentcourse' : 'course';
         $order = $request['order'] ? 'coursePlayView' : 'created_at';
 

@@ -21,22 +21,38 @@ $('.selOrd').click(function(){
     $(this).siblings().removeClass('gl');
 })
 
-function getdatab(para,order){
+function getdatab(para,ord){
     $('#demob').pagination({
         dataSource: function(done) {
             $.ajax({
                 type: 'GET',
-                url: '/index/getCoursebb/'+para+"/"+order,
+                url: '/index/getCoursebb/'+para+'/'+this.pageNumber+'/'+this.pageSize+'/'+ord,
                 success: function(response) {
                     if(response.status){
-                        done(response.data);
+                        var format = [];
+                        format['data'] = response.data;
+                        format['totalNumber'] = response.count;
+                        done(format);
+                        // done(response.data);
                     }else{
                         $('.nofindbb').removeClass('hide');
                     }
                 }
             });
         },
+        getData: function(pageNumber,pageSize) {
+            var self = this;
+            $.ajax({
+                type: 'GET',
+                url: '/index/getCoursebb/'+para+'/'+pageNumber+'/'+pageSize+'/'+ord,
+                success: function(response) {
+                    self.callback(response.data);
+                }
+            });
+        },
         pageSize: 8,
+        pageNumber :1,
+        totalNumber :1,
         className:"paginationjs-theme-blue",
         showGoInput: true,
         showGoButton: true,

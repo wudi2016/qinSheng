@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
+use DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,15 +19,19 @@ class indexController extends Controller
     {
         //定义搜索初值
         $search = [];
+        $search['type'] = '';
+        $search['beginTime'] = '';
+        $search['endTime'] = '';
+
         //搜索
         $query = \DB::table('users as u')
             ->where('u.type','<>',2)
             ->where('u.type','<>',3)
             ->orderBy('u.id','desc');
         //用户名
-        if($request->type == 0){
+        if($request->type == 8){
             $query = $query->where('u.username','like','%'.trim($request->search).'%');
-            $search['type'] = 0;
+            $search['type'] = 8;
         }
         //姓名
         if($request->type == 1){
@@ -50,16 +54,18 @@ class indexController extends Controller
             $search['type'] = 4;
         }
         //时间筛选
-        if($request->type == 6){
-            if($request->beginTime){
-                $query = $query->where('u.created_at','>=',trim($request->beginTime));
-            }
 
-            if($request->endTime){
-                $query = $query->where('u.created_at','<=',trim($request->endTime));
-            }
-            $search['type'] = 6;
+        if($request->beginTime){
+            $query = $query->where('u.created_at','>=',trim($request->beginTime));
+            $search['beginTime'] = $request->beginTime;
         }
+
+        if($request->endTime){
+            $query = $query->where('u.created_at','<=',trim($request->endTime));
+            $search['endTime'] = $request->endTime;
+        }
+
+
         //全部
         if($request->type == 7){
             $query = $query;
@@ -73,6 +79,9 @@ class indexController extends Controller
                 if($user){
                     $excels[$key]->userId =$user->id;
                     $excels[$key]->name = $user->username;
+                }else{
+                    $excels[$key]->userId = null;
+                    $excels[$key]->name = null;
                 }
             }else{
                 $excels[$key]->userId = null;
@@ -239,7 +248,6 @@ class indexController extends Controller
         if(!$input['pic']){
             unset($input['pic']);
         }
-
         if(FALSE !== DB::table('users')->where(['id'=>$id])->update($input)){
             $this -> OperationLog("修改了用户ID为{$id}的信息", 1);
             return redirect('admin/message')->with(['status'=>'修改用户信息成功','redirect'=>'users/userList']);
@@ -257,8 +265,8 @@ class indexController extends Controller
     public function delete($id)
     {
         //删除用户
-        if(DB::table('users')->delete($id)){
-            if($rec = DB::table('teacher')->where('parentId',$id)->first()){
+        if(\DB::table('users')->delete($id)){
+            if($rec = \DB::table('teacher')->where('parentId',$id)->first()){
                 //名师表存在即可删除
                 DB::table('teacher')->where('id',$rec->id)->delete();
                 if(DB::table('hotteacher')->where('teacherId',$id)->first()){
@@ -333,7 +341,6 @@ class indexController extends Controller
     {
         $rules = [
             'username' => 'required|min:4|max:16',
-            'realname' => 'required',
             'password' => 'sometimes|required|min:6|max:16',
             'phone' => 'required|digits:11',
             'sex' => 'required',

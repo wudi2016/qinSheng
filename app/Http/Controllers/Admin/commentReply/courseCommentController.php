@@ -22,15 +22,22 @@ class courseCommentController extends Controller
                 ->select('cou.id','cou.parentId','cou.commentContent','c.courseTitle','cou.username','cou.tousername','cou.checks','cou.status','cou.created_at','cou.updated_at');
 
         if($request->type == 1){
-            $query = $query->where('cou.username','like','%'.trim($request['search']).'%');
+            $query = $query->where('cou.id','like','%'.trim($request['search']).'%');
         }
         if($request->type == 2){
-            $query = $query->where('cou.created_at','>=',$request['beginTime'])->where('cou.created_at','<=',$request['endTime']);
+            $query = $query->where('cou.username','like','%'.trim($request['search']).'%');
+        }
+        if($request['beginTime']){ //上传的起止时间
+            $query = $query->where('cou.created_at','>=',$request['beginTime']);
+        }
+        if($request['endTime']){ //上传的起止时间
+            $query = $query->where('cou.created_at','<=',$request['endTime']);
         }
 
-
         $data = $query->orderBy('id','desc')->paginate(10);
-
+        $data->type = $request['type'];
+        $data->beginTime = $request['beginTime'];
+        $data->endTime = $request['endTime'];
         return view('admin.commentReply.courseCommentList')->with('data',$data);
     }
 
@@ -111,6 +118,20 @@ class courseCommentController extends Controller
         }else{
             echo 0;
         }
+    }
+
+
+
+    /**
+     * 查看详情
+     */
+    public function lookcourseComment($id){
+        $res = DB::table('coursecomment as cou')
+            ->leftjoin('course as c','c.id','=','cou.courseId')
+            ->select('cou.id','cou.parentId','cou.commentContent','c.courseTitle','cou.username','cou.tousername','cou.checks','cou.status','cou.created_at','cou.updated_at')
+            ->where('cou.id',$id)
+            ->first();
+        return view('admin.commentReply.lookcourseComment')->with('data',$res);
     }
 
 

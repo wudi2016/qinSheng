@@ -106,7 +106,7 @@ $(function(){
     //删除收藏--完成
     $('.right_count_right div .count_right_store').click(function(){
         $(this).css('display','none').siblings().css('display','inline-block');
-        if($(this).html() !== '完成'){
+        if($(this).hasClass('deleteImg')){
             $(".comment_repeat_img span").css('display','block');
         }else{
             $(".comment_repeat_img span").css('display','none');
@@ -288,6 +288,7 @@ $(".province").select2({
 });
 
 var getCity = function(code){
+    $('.city').prepend('<option selected="selected">市</option>');
     $(".city").select2({
         ajax: {
             url: "/index/getCity/"+code,

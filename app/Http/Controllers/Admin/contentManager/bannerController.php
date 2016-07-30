@@ -21,11 +21,18 @@ class bannerController extends Controller{
         if($request->type == 2){
             $query = $query->where('title','like','%'.trim($request['search']).'%');
         }
-        if($request->type == 3){
-            $query = $query->where('created_at','>=',$request['beginTime'])->where('created_at','<=',$request['endTime']);
+
+        if($request['beginTime']){ //上传的起止时间
+            $query = $query->where('created_at','>=',$request['beginTime']);
+        }
+        if($request['endTime']){ //上传的起止时间
+            $query = $query->where('created_at','<=',$request['endTime']);
         }
 
-        $data = $query->paginate(10);
+        $data = $query->orderBy('id','desc')->paginate(10);
+        $data->type = $request['type'];
+        $data->beginTime = $request['beginTime'];
+        $data->endTime = $request['endTime'];
         return view('admin.contentManager.banner.bannerList')->with('banner',$data);
     }
 
@@ -43,11 +50,6 @@ class bannerController extends Controller{
      */
     public function addsbanner(Request $request){
         $input = Input::except('_token');
-        //验证
-        $validate = $this->validator($input);
-        if($validate->fails()){
-            return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
-        }
         $input['created_at'] = Carbon::now();
         if($request->hasFile('path')){ //判断文件是否存在
             if($request->file('path')->isValid()){ //判断文件在上传过程中是否出错
@@ -62,6 +64,11 @@ class bannerController extends Controller{
             }else{
                 return redirect()->back()->withInput()->withErrors('文件在上传过程中出错');
             }
+        }
+        //验证
+        $validate = $this->validator($input);
+        if($validate->fails()){
+            return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
         }
         $res = DB::table('banner')->insertGetId($input);
         if($res){
@@ -90,7 +97,7 @@ class bannerController extends Controller{
         $input = Input::except('_token');
         $input['created_at'] = Carbon::now();
         //验证
-        $validate = $this->validator($input);
+        $validate = $this->validator_edit($input);
         if($validate->fails()){
             return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
         }
@@ -153,17 +160,18 @@ class bannerController extends Controller{
 
 
     /**
-     * 验证
+     * 验证(添加)
      */
     protected function validator(array $data){
         $rules = [
             'title' => 'required',
             'url' => 'required',
-
+            'path' => 'required'
         ];
         $messages = [
             'title.required' => '请输入标题名称',
-            'url.required'  => '请按要求填写链接'
+            'url.required'  => '请按要求填写链接',
+            'path.required' => '请上传图片'
         ];
 
 
@@ -171,6 +179,22 @@ class bannerController extends Controller{
     }
 
 
+    /**
+     * 验证(修改)
+     */
+    protected function validator_edit(array $data){
+        $rules = [
+            'title' => 'required',
+            'url' => 'required',
+        ];
+        $messages = [
+            'title.required' => '请输入标题名称',
+            'url.required'  => '请按要求填写链接',
+        ];
+
+
+        return \Validator::make($data, $rules, $messages);
+    }
 
 
 

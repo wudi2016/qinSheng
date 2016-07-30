@@ -35,10 +35,11 @@
                     </small>
                 </h1>
             </div><!-- /.page-header -->
-            <a href="{{url('/admin/notice/addNoticeTem')}}" class="btn btn-xs btn-info">
-                <i class="icon-ok bigger-110">添加</i>
-            </a>
-
+            @permission('add.noticeTem')
+                <a href="{{url('/admin/notice/addNoticeTem')}}" class="btn btn-xs btn-info">
+                    <i class="icon-ok bigger-110">添加</i>
+                </a>
+            @endpermission
             <div class="row">
 
                 <div class="col-xs-12">
@@ -70,14 +71,18 @@
                                         <td>{{$type->tempName}}</td>
                                         <td>
                                             <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
-                                                <a href="{{url('/admin/notice/editNoticeTem/'.$type->id)}}"
-                                                   class="btn btn-xs btn-info">
-                                                    <i class="icon-edit bigger-120"></i>
-                                                </a>
-                                                <a href="{{url('/admin/notice/delNoticeTem/'.$type->id)}}"
-                                                   class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
-                                                    <i class="icon-trash bigger-120"></i>
-                                                </a>
+                                                @permission('edit.noticeTem')
+                                                    <a href="{{url('/admin/notice/editNoticeTem/'.$type->id)}}"
+                                                       class="btn btn-xs btn-info">
+                                                        <i class="icon-edit bigger-120"></i>
+                                                    </a>
+                                                @endpermission
+                                                @permission('del.noticeTem')
+                                                    <a href="{{url('/admin/notice/delNoticeTem/'.$type->id)}}"
+                                                       class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
+                                                        <i class="icon-trash bigger-120"></i>
+                                                    </a>
+                                                @endpermission
                                             </div>
                                         </td>
                                     </tr>

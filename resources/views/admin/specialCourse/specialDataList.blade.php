@@ -23,24 +23,24 @@
 
             <div class="nav-search" id="nav-search">
                 <form action="{{url('/admin/specialCourse/dataList/'.$data->courseId)}}" method="get" class="form-search">
+                    <span style=""  class="searchtype" iid="form-field-1">
+                        <input type="text" name="beginTime" id="form-field-1" placeholder="开始时间" class="col-xs-10 col-sm-5" value="{{$data->beginTime}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;background:url('{{asset("admin/image/2.png")}}') no-repeat;background-position:right;"/>&nbsp;&nbsp;
+                        <input type="text" name="endTime" id="form-field-1" placeholder="结束时间" class="col-xs-10 col-sm-5" value="{{$data->endTime}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;margin-left:10px;background:url('{{asset("admin/image/2.png")}}') no-repeat;background-position:right;"/>
+                    </span>
+
                     <select name="type" id="form-field-1" class="searchtype">
+                        <option value="">--请选择--</option>
                         <option value="1" @if($data->type == 1) selected @endif>ID</option>
                         <option value="2" @if($data->type == 2) selected @endif>资料名称</option>
-                        <option value="3" @if($data->type == 3) selected @endif>时间筛选</option>
                         <option value="">全部</option>
                     </select>
                     <span class="input-icon">
-                        <span style="@if($data->type != 3) display: block;  @else display: none; @endif" class="input-icon" id="search1">
+                        <span style="" class="input-icon" id="search1">
                             <input type="text" name="search" placeholder="Search ..." class="nav-search-input" value="" id="nav-search-input" autocomplete="off" />
-                            <i class="icon-search nav-search-icon"></i>
-                            <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;" type="submit" value="筛选" />
-                        </span>
-                        <span style="@if($data->type == 3) display: block;  @else display: none; @endif" class="input-icon" id="search2">
-                            <input type="text" name="beginTime" id="form-field-1" placeholder="上传开始时间" class="col-xs-10 col-sm-5" value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
-                            <input type="text" name="endTime" id="form-field-1" placeholder="上传结束时间" class="col-xs-10 col-sm-5" value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;" />
-                            <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;" type="submit" value="筛选" />
+                            <input style="background: #6FB3E0;width:50px;height:28px ;border:0;color:#fff;padding-left: 5px;" type="submit" value="搜索" />
                         </span>
                     </span>
+
                 </form>
             </div><!-- #nav-search -->
         </div>
@@ -76,7 +76,7 @@
                 <i class="icon-ok bigger-110">添加</i>
             </a>
 
-            <div class="row">
+            <div class="row" ms-controller="data">
 
                 <div class="col-xs-12">
                     <!-- PAGE CONTENT BEGINS -->
@@ -120,7 +120,12 @@
                                             </td>
                                             <td>{{$coursedata->dataName}}</td>
                                             <td>
-                                                <a href="{{url('/lessonSubject/detail/'.$data->courseId)}}">查看</a>
+                                                <a href="{{asset($coursedata->dataPath)}}"  download="{{$coursedata->dataName}}"><img src="{{asset('admin/image/download.png')}}" /></a>
+                                                &nbsp;&nbsp;
+                                                @if($coursedata->format == 'jpg' || $coursedata->format == 'png' || $coursedata->format == 'gif')
+                                                <span onclick="lookVideo('{{asset($coursedata->dataPath)}}')" style="color: #00a0e9;cursor:pointer;">查看</span>
+                                                @endif
+
                                             </td>
                                             <td>{{$coursedata->status ? '锁定' : '激活'}}</td>
                                             <td>{{$coursedata->created_at}}</td>
@@ -201,6 +206,19 @@
             </div><!-- /.row -->
         </div><!-- /.page-content -->
 
+        <!--弹窗显示详情-->
+        <div id="videodetailpupUpback" class="videodetailpupUpback" ms-click="bakPop">
+            <div class="videopopup1" style="width: 650px;height: 400px; margin-top: -200px;">
+                <div class="videodetailtopbaner">
+                    <div class="detailtitle" style="width: 600px;padding-left: 40px;"></div>
+                    <div class="deldetail" style="float: right"></div>
+                </div>
+                <div class="">
+                    <img src="" alt="" id="detailimg" style="width: 650px;height:360px;border-radius: 0px 0px 10px 10px;">
+                </div>
+            </div>
+        </div>
+
     </div><!-- /.main-content -->
 
 @endsection
@@ -208,6 +226,18 @@
     <script language="javascript" type="text/javascript" src="{{asset('DatePicker/WdatePicker.js') }}"></script>
     <script language="javascript" type="text/javascript" src="{{asset('admin/js/searchtype.js') }}"></script>
     <script language="javascript" type="text/javascript" src="{{asset('admin/js/specialCourse/specialChapter.js') }}"></script>
+
+    <script>
+        function lookVideo(dataPath){
+//            console.log(dataPath);
+            $('#detailimg').attr('src',dataPath);
+            $('#videodetailpupUpback').css('display','block');
+        }
+        $('.deldetail').click(function(){
+            $('#videodetailpupUpback').css('display','none');
+        })
+    </script>
+
 
 
 @endsection

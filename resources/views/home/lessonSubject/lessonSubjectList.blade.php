@@ -29,8 +29,10 @@
             <div class="contain_lesson_center_data" ms-visible="changeOption == 'subject'">
                 <a ms-attr-href="detail + el.id" ms-repeat="subjectInfo">
                     <div class="contain_lesson_center_data_info">
-                        <div class="contain_lesson_center_data_info_top">
+                        <div class="contain_lesson_center_data_info_top" ms-if="el.coursePic">
                             <img ms-attr-src="el.coursePic" ms-imgBig width="280" height="180" class="img_big"/>
+                        </div>
+                        <div class="contain_lesson_center_data_info_top_no" ms-if="!el.coursePic">
                         </div>
                         <div class="contain_lesson_center_data_info_bot">
                             <span class="top" ms-html="el.courseTitle"></span>
@@ -51,8 +53,10 @@
             <div class="contain_lesson_center_data_comment hide" ms-visible="changeOption == 'comment'">
                 <div class="contain_lesson_center_data_info" ms-repeat="commentInfo">
                     <a ms-attr-href="commentDetail + el.id">
-                        <div class="contain_lesson_center_data_info_top">
+                        <div class="contain_lesson_center_data_info_top" ms-if="el.coursePic">
                             <img ms-attr-src="el.coursePic" ms-imgBig width="280" height="180" class="img_big"/>
+                        </div>
+                        <div class="contain_lesson_center_data_info_top_no" ms-if="!el.coursePic">
                         </div>
                         <div class="contain_lesson_center_data_info_bot">
                             <span class="top" ms-html="el.courseTitle"></span>

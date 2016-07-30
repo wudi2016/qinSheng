@@ -48,15 +48,16 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">真实姓名：</label>
+                                @if($data->type == 1)
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label no-padding-right" for="form-field-1">真实姓名：</label>
 
-                                    <div class="col-sm-9">
-                                        <input type="text" id="form-field-1" readonly placeholder="realname" class="col-xs-10 col-sm-5"
-                                               value="{{$data->realname}}"/>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="form-field-1" readonly placeholder="realname" class="col-xs-10 col-sm-5"
+                                                   value="{{$data->realname}}"/>
+                                        </div>
                                     </div>
-                                </div>
-
+                                @endif
                                 {{--<div class="form-group">--}}
                                     {{--<label class="col-sm-3 control-label no-padding-right" for="form-field-1">邮箱：</label>--}}
 
@@ -109,7 +110,7 @@
                                     <label class="col-sm-3 control-label no-padding-right" for="form-field-1">用户身份：</label>
 
                                     <div class="col-sm-9">
-                                        <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-5" value="{{$data->type?'教师学员':'学生学员' }}"/>
+                                        <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-5" value="@if($data->type == 0) 学生学员 @elseif($data->type == 1) 教师学员 @else 名师 @endif "/>
                                     </div>
                                 </div>
 
@@ -139,13 +140,13 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label no-padding-right" for="form-field-1">毕业院校：</label>
+                                    {{--<div class="form-group">--}}
+                                        {{--<label class="col-sm-3 control-label no-padding-right" for="form-field-1">毕业院校：</label>--}}
 
-                                        <div class="col-sm-9">
-                                            <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-5" value="{{$data->school}}"/>
-                                        </div>
-                                    </div>
+                                        {{--<div class="col-sm-9">--}}
+                                            {{--<input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-5" value="{{$data->school}}"/>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label no-padding-right" for="form-field-1">名师介绍：</label>

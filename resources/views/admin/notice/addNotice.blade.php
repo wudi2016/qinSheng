@@ -84,12 +84,12 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 选择模板 </label>
                             <div class="col-sm-9">
-                                <select id="studentTem" class="col-xs-6 col-sm-5" name="tempId">
+                                <select id="studentTem" class="col-xs-6 col-sm-5" name="stuTempId">
                                     @foreach($studentTem as $value)
                                         <option value="{{$value -> id}}" style="text-indent: 10px;">{{$value->tempName}}</option>
                                     @endforeach
                                 </select>
-                                <select id="teacherTem" class="col-xs-6 col-sm-5 hide" name="tempId">
+                                <select id="teacherTem" class="col-xs-6 col-sm-5 hide" name="teaTempId">
                                     @foreach($teacherTem as $value)
                                         <option value="{{$value -> id}}" style="text-indent: 10px;">{{$value->tempName}}</option>
                                     @endforeach
@@ -121,6 +121,7 @@
                             </div>
                         </div>
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="userType" value="0"/>
                     </form>
                 </div>
             </div>
@@ -135,12 +136,15 @@
                 if(obj == '0'){
                     $("div[name='student']").removeClass('hide').siblings('div').addClass('hide');
                     $('#studentTem').removeClass('hide').siblings('select').addClass('hide');
+                    $("input[name='userType']").val('0');
                 }else if(obj == '1'){
                     $("div[name='teacher']").removeClass('hide').siblings('div').addClass('hide');
                     $('#studentTem').removeClass('hide').siblings('select').addClass('hide');
+                    $("input[name='userType']").val('0');
                 }else{
                     $("div[name='famous']").removeClass('hide').siblings('div').addClass('hide');
                     $('#teacherTem').removeClass('hide').siblings('select').addClass('hide');
+                    $("input[name='userType']").val('1');
                 }
             })
         })

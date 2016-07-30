@@ -21,10 +21,11 @@
             <div class="nav-search" id="nav-search">
                 <form action="" method="get" class="form-search">
                     <select name="type" id="form-field-1" class="searchtype">
-                        <option value="1">姓名</option>
-                        <option value="2">部门</option>
-                        <option value="3">岗位</option>
-                        <option value="4">全部</option>
+                        <option value="">--请选择--</option>
+                        <option value="1" @if($company->type == 1) selected @endif>姓名</option>
+                        <option value="2" @if($company->type == 2) selected @endif>部门</option>
+                        <option value="3" @if($company->type == 3) selected @endif>岗位</option>
+                        <option value="">全部</option>
                     </select>
 
                      <span class="input-icon">
@@ -33,12 +34,6 @@
                             <i class="icon-search nav-search-icon"></i>
                             <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;padding-left: 8px;" type="submit" value="筛选" />
                         </span>
-                        <span style="display: none;" class="input-icon" id="search2">
-                            <input type="text" style="padding-left:5px; padding-right: 5px;" name="beginTime" id="form-field-1" placeholder="开始时间" class="col-xs-10 col-sm-5" value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
-                            <input type="text" style="padding-left:5px;padding-right: 5px;" name="endTime" id="form-field-1" placeholder="线束时间" class="col-xs-10 col-sm-5" value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;" />
-                            <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;padding-left: 0;padding-right: 0;" type="submit" value="筛选" />
-                        </span>
-                    </span>
                     </span>
                 </form>
             </div><!-- #nav-search -->

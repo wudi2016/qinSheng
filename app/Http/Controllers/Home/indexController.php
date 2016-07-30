@@ -19,8 +19,8 @@ class indexController extends Controller
      */
     public function index()
     {
-        $banners = DB::table('banner')->select('path','url')->get();
-        $frids   = DB::table('partner')->select('title','path','url')->get();
+        $banners = DB::table('banner')->where('status',0)->select('path','url')->get();
+        $frids   = DB::table('partner')->select('title','path','url')->where('status',0)->get();
         return view('home.index',compact('banners','frids'));
     }
 
@@ -37,7 +37,7 @@ class indexController extends Controller
             ->leftJoin('teacher', 'teacher.parentId', '=', 'users.id')
             ->select('users.id as id', 'users.realname as name', 'users.company as org','teacher.cover as img','teacher.intro as info')
             ->where('users.checks',0)
-            ->orderBy('hotteacher.sort', 'desc')
+            ->orderBy('hotteacher.sort', 'asc')
             ->skip(0)->take(6)
             ->get();
         
@@ -69,7 +69,7 @@ class indexController extends Controller
             ->leftJoin('course', 'course.id', '=', 'hotcourse.courseId')
             ->select('course.id as id', 'course.coursePic as img', 'course.courseTitle as title','course.coursePlayView as countpeople','course.coursePrice as price','course.courseType as courseType','course.courseDiscount as courseDiscount')
             ->where('course.courseStatus',0)
-            ->orderBy('hotcourse.sort', 'desc')
+            ->orderBy('hotcourse.sort', 'asc')
             ->skip(0)->take(8)
             ->get();
 
@@ -110,7 +110,7 @@ class indexController extends Controller
             ->select('commentcourse.id as id', 'commentcourse.coursePic as img', 'commentcourse.courseTitle as title','commentcourse.teachername as teacher','commentcourse.coursePlayView as countpeople','commentcourse.coursePrice as price','commentcourse.courseType as courseType','commentcourse.courseDiscount as courseDiscount')
             ->where('commentcourse.state',2)
             ->where('commentcourse.courseStatus',0)
-            ->orderBy('hotreviewcourse.sort', 'desc')
+            ->orderBy('hotreviewcourse.sort', 'asc')
             ->skip(0)->take(8)
             ->get();
 
@@ -463,11 +463,16 @@ class indexController extends Controller
      *
      * @return json
      */
-    public function getgames($type)
+    public function getgames($type,$pageNumber,$pageSize)
     {
+        $skip = ($pageNumber-1) * $pageSize;
         $data = DB::table('activity')->select('id','path as img','title','beginTime as starttime','endTime as endtime','activityRrom as org','url')
             ->where('status',$type)
+            ->skip($skip)->take($pageSize)
             ->get();
+        $count = DB::table('activity')->select('id')
+            ->where('status',$type)
+            ->count();
 //        $data1 = [
 //            [
 //                'id'    =>'1',
@@ -481,8 +486,9 @@ class indexController extends Controller
 
 //        return response()->json($data);
 
+
         if($data){
-            return response()->json(['status'=>true,'data'=>$data]);
+            return response()->json(['status'=>true,'data'=>$data,'count'=>$count]);
         }else{
             return response()->json(['status'=>false,]);
         }
@@ -523,13 +529,20 @@ class indexController extends Controller
      *
      * @return json
      */
-    public function getCourseaa($search,$order = 0)
+    public function getCourseaa($search,$pageNumber,$pageSize,$order = 0)
     {
+        $skip = ($pageNumber-1) * $pageSize;
+        $count = DB::table('course')
+            ->select('id')
+            ->where('courseTitle','like','%'.$search.'%')
+            ->where('courseStatus',0)
+            ->count();
         if($order == 0){
             $data = DB::table('course')
                 ->select('id as id', 'coursePic as img', 'courseTitle as title','coursePlayView as countpeople','coursePrice as price')
                 ->where('courseTitle','like','%'.$search.'%')
                 ->where('courseStatus',0)
+                ->skip($skip)->take($pageSize)
                 ->get();
         }elseif($order == 1){
             $data = DB::table('course')
@@ -537,6 +550,7 @@ class indexController extends Controller
                 ->where('courseTitle','like','%'.$search.'%')
                 ->where('courseStatus',0)
                 ->orderBy('created_at', 'desc')
+                ->skip($skip)->take($pageSize)
                 ->get();
         }else{
             $data = DB::table('course')
@@ -544,6 +558,7 @@ class indexController extends Controller
                 ->where('courseTitle','like','%'.$search.'%')
                 ->where('courseStatus',0)
                 ->orderBy('coursePlayView', 'desc')
+                ->skip($skip)->take($pageSize)
                 ->get();
         }
 
@@ -556,7 +571,7 @@ class indexController extends Controller
         }
 
         if($data){
-            return response()->json(['status'=>true,'data'=>$data]);
+            return response()->json(['status'=>true,'data'=>$data,'count'=>$count]);
         }else{
             return response()->json(['status'=>false,]);
         }
@@ -567,14 +582,22 @@ class indexController extends Controller
      *
      * @return json
      */
-    public function getCoursebb($search,$order = 0)
+    public function getCoursebb($search,$pageNumber,$pageSize,$order = 0)
     {
+        $skip = ($pageNumber-1) * $pageSize;
+        $count = DB::table('commentcourse')
+            ->select('id')
+            ->where('courseTitle','like','%'.$search.'%')
+            ->where('state',2)
+            ->where('courseStatus',0)
+            ->count();
         if($order == 0){
             $data = DB::table('commentcourse')
                 ->select('id', 'coursePic as img', 'courseTitle as title','teachername as teacher','coursePlayView as countpeople','coursePrice as price')
                 ->where('courseTitle','like','%'.$search.'%')
                 ->where('state',2)
                 ->where('courseStatus',0)
+                ->skip($skip)->take($pageSize)
                 ->get();
         }elseif($order == 1){
             $data = DB::table('commentcourse')
@@ -583,6 +606,7 @@ class indexController extends Controller
                 ->where('state',2)
                 ->where('courseStatus',0)
                 ->orderBy('created_at', 'desc')
+                ->skip($skip)->take($pageSize)
                 ->get();
         }else{
             $data = DB::table('commentcourse')
@@ -591,6 +615,7 @@ class indexController extends Controller
                 ->where('state',2)
                 ->where('courseStatus',0)
                 ->orderBy('coursePlayView', 'desc')
+                ->skip($skip)->take($pageSize)
                 ->get();
         }
 
@@ -601,7 +626,7 @@ class indexController extends Controller
         }
 
         if($data){
-            return response()->json(['status'=>true,'data'=>$data]);
+            return response()->json(['status'=>true,'data'=>$data,'count'=>$count]);
         }else{
             return response()->json(['status'=>false,]);
         }

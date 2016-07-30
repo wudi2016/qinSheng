@@ -120,16 +120,22 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 排序位置 </label>
 
                             <div class="col-sm-9">
-                                <input  type="text" name="sort" id="form-field-1" placeholder="排序位置" class="col-xs-10 col-sm-5" value="{{$data->sort}}" />
-                                    <span class="help-inline col-xs-12 col-sm-7">
-                                    <label class="middle">
-                                        <span class="lbl"></span>
-                                    </label>
-                                </span>
+                                <select name="sort" id="form-field-1" class="col-xs-10 col-sm-5">
+                                    <option value="1" @if($data->sort == 1) selected @endif>1</option>
+                                    <option value="2" @if($data->sort == 2) selected @endif>2</option>
+                                    <option value="3" @if($data->sort == 3) selected @endif>3</option>
+                                    <option value="4" @if($data->sort == 4) selected @endif>4</option>
+                                    <option value="5" @if($data->sort == 5) selected @endif>5</option>
+                                    <option value="6" @if($data->sort == 6) selected @endif>6</option>
+                                    <option value="7" @if($data->sort == 7) selected @endif>7</option>
+                                    <option value="8" @if($data->sort == 8) selected @endif>8</option>
+                                    <option value="9" @if($data->sort == 9) selected @endif>9</option>
+                                    <option value="10" @if($data->sort == 10) selected @endif>10</option>
+                                </select>
+
                             </div>
                         </div>
 
-                        <div class="space-4"></div>
 
 
 

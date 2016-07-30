@@ -26,6 +26,12 @@ class teacherCourseController extends Controller
      */
     public function teacherCourseList(Request $request){
         $query = DB::table('commentcourse as a');
+        if($request['beginTime']){ //上传的起止时间
+            $query = $query->where('a.created_at','>=',$request['beginTime']);
+        }
+        if($request['endTime']){ //上传的起止时间
+            $query = $query->where('a.created_at','<=',$request['endTime']);
+        }
         if($request['type'] == 1){
             $query = $query->where('a.id','like','%'.trim($request['search']).'%');
         }
@@ -39,16 +45,14 @@ class teacherCourseController extends Controller
             $query = $query->where('a.username','like','%'.trim($request['search']).'%');
         }
         if($request['type'] == 5){
-            $query = $query->where('a.teachername','like','%'.trim($request['search']).'%');
+            $query = $query->where('ut.realname','like','%'.trim($request['search']).'%');
         }
-        if($request['type'] == 6){ //上传的起止时间
-            $query = $query->where('created_at','>=',$request['beginTime'])->where('created_at','<=',$request['endTime']);
-        }
+
         $data = $query
             ->leftJoin('users as u','a.userId','=','u.id')
             ->leftJoin('users as ut','a.teacherId','=','ut.id')
             ->where('a.courseIsDel',0)
-            ->select('a.*','u.userName','ut.realname as teacherName','u.phone as studentPhone')
+            ->select('a.*','u.userName','ut.realname as teacherName','ut.username as teacherusername','u.phone as studentPhone')
             ->orderBy('a.id','desc')
             ->paginate(15);
         foreach($data as &$val){
@@ -60,6 +64,16 @@ class teacherCourseController extends Controller
                     $val->courseLowPathurl = Cache::get($val->courseLowPath);
                 }
             }
+
+            if($val->coursePic){
+                if(!Cache::get($val->coursePic)){
+                    $val->coursePic = $this->getPlayUrl(($val->coursePic));
+                    Cache::put($val->coursePic,$val->coursePic,1800);
+                }else{
+                    $val->coursePic = Cache::get($val->coursePic);
+                }
+            }
+
             if(!$val->courseLowPath || !$val->courseMediumPath || !$val->courseHighPath){
                 $FileList = $this->transformations($val->fileID);
                 if($FileList['code'] == 200 && $FileList['data']['Waiting'] < 0){
@@ -69,12 +83,15 @@ class teacherCourseController extends Controller
                         switch($value['Level']){
                             case 1:
                                 $lists['courseLowPath'] = $value['FileID'];
+                                $lists['coursePic'] = $value['Cover'];
                                 break;
                             case 2:
                                 $lists['courseMediumPath'] = $value['FileID'];
+                                $lists['coursePic'] = $value['Cover'];
                                 break;
                             case 3:
                                 $lists['courseHighPath'] = $value['FileID'];
+                                $lists['coursePic'] = $value['Cover'];
                                 break;
                         }
                     }
@@ -94,6 +111,8 @@ class teacherCourseController extends Controller
             }
         }
         $data->type = $request['type'];
+        $data->beginTime = $request['beginTime'];
+        $data->endTime = $request['endTime'];
 //        dd($data);
         return view('admin.teacherCourse.teacherCourseList',['data'=>$data]);
     }
@@ -105,11 +124,12 @@ class teacherCourseController extends Controller
         $data['state'] = $request['state'];
         $data['lastCheckTime'] = Carbon::now();
         $data = DB::table('commentcourse')->where('id',$request['id'])->update($data);
+        $this -> OperationLog('修改了id为'.$request['id'].'点评视频的审核状态');
         if($request['state'] == 0){
-            DB::table('orders')->where('orderSn',$request['orderSn'])->update(['status'=>0]);
+            DB::table('orders')->where('orderSn',$request['orderSn'])->update(['status'=>1]);
             $arr = array('state'=>'0','msg'=>'审核未通过');
         }elseif($request['state'] == 1){
-            DB::table('orders')->where('orderSn',$request['orderSn'])->update(['status'=>0]);
+            DB::table('orders')->where('orderSn',$request['orderSn'])->update(['status'=>1]);
             $arr = array('state'=>'1','msg'=>'审核中');
         }elseif($request['state'] == 2){
             DB::table('orders')->where('orderSn',$request['orderSn'])->update(['status'=>2]);
@@ -207,6 +227,7 @@ class teacherCourseController extends Controller
             }
         }
         if(DB::table('commentcourse')->where('id',$request['id'])->update($data)){
+            $this -> OperationLog('修改了id为'.$request['id'].'的点评视频信息');
             return redirect('admin/message')->with(['status'=>'点评视频修改成功','redirect'=>'commentCourse/teacherCourseList']);
         }else{
             return redirect()->back()->withInput()->withErrors('点评视频修改失败');
@@ -226,6 +247,7 @@ class teacherCourseController extends Controller
         DB::table('orders')->where('orderSn',$orderSn)->update(['isDelete'=>1]); //已退款时关联删除订单表
         DB::table('applycourse')->where('orderSn',$orderSn)->update(['courseIsDel'=>1]); //已退款时关联删除演奏视频表
         if($data){
+            $this -> OperationLog('删除了id为'.$id.'的点评视频');
             return redirect('admin/message')->with(['status'=>'点评视频删除成功','redirect'=>'commentCourse/teacherCourseList']);
         }else{
             return redirect('admin/message')->with(['status'=>'点评视频删除失败','redirect'=>'commentCourse/teacherCourseList']);

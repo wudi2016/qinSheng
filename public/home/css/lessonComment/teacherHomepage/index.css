@@ -321,9 +321,16 @@
 	margin: 0px;
 }
 
-.teacherHomepage_detail_video_block img {
+.teacherHomepage_detail_video_block .img {
 	width: 100%;
 	height: 182px;
+}
+
+.img_big {
+	position: absolute;
+	left: 0;
+	top: 0;
+	cursor: pointer;
 }
 
 .teacherHomepage_detail_video_block .title {

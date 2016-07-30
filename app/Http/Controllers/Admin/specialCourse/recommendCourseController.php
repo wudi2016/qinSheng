@@ -46,7 +46,8 @@ class recommendCourseController extends Controller
         $data['courseName'] = $courseTitle->courseTitle;
         $data['created_at'] = Carbon::now();
         $data['updated_at'] = Carbon::now();
-        if(DB::table('hotcourse')->insert($data)){
+        if($id = DB::table('hotcourse')->insertGetId($data)){
+            $this -> OperationLog('添加了id为'.$id.'的专题课程推荐');
             return redirect('admin/message')->with(['status'=>'课程推荐成功','redirect'=>'specialCourse/recommendSpecialCourseList']);
         }else{
             return redirect('admin/message')->with(['status'=>'课程推荐失败','redirect'=>'specialCourse/recommendSpecialCourseList']);
@@ -73,6 +74,7 @@ class recommendCourseController extends Controller
         }
         $data['updated_at'] = Carbon::now();
         if(DB::table('hotcourse')->where('id',$request['id'])->update($data)){
+            $this -> OperationLog('修改了id为'.$request['id'].'的专题课程推荐');
             return redirect('admin/message')->with(['status'=>'课程推荐修改成功','redirect'=>'specialCourse/recommendSpecialCourseList']);
         }else{
             return redirect('admin/message')->with(['status'=>'课程推荐修改失败','redirect'=>'specialCourse/recommendSpecialCourseList']);
@@ -84,6 +86,7 @@ class recommendCourseController extends Controller
      */
     public function delRecommendSpecialCourse($id){
         if(DB::table('hotcourse')->where('id',$id)->delete()){
+            $this -> OperationLog('删除了id为'.$id.'的专题课程推荐');
             return redirect('admin/message')->with(['status'=>'删除成功','redirect'=>'specialCourse/recommendSpecialCourseList']);
         }else{
             return redirect('admin/message')->with(['status'=>'删除失败','redirect'=>'specialCourse/recommendSpecialCourseList']);

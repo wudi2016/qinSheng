@@ -92,7 +92,7 @@ class firmintroController extends Controller{
 
     //友情链接
     public function getListfive(){
-        $link = DB::table('link')->get();
+        $link = DB::table('link')->where('status',0)->orderBy('id','asc')->get();
         if($link){
             foreach($link as $k => $v){
                 $data['data'][] = [

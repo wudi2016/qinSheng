@@ -9,6 +9,7 @@ a{
 	width:100%;
 	/*height:2200px;*/
 	height:auto;
+	background: #FFFFFF;
 }
 /*主体div*/
 .main{
@@ -55,15 +56,16 @@ a{
 }
 /*字母排序*/
 .orderletter{
-	width:1000px;
-	height:20px;
+	width:1200px;
+	height:22px;
 	font-family:"微软雅黑";
 }
 .orderletter div{
-	width:27px;
+	width:40px;
 	float: left;
 	/*color:rgb(34,34,34);*/
 	font-size:20px;
+	text-align: right;
 	cursor:pointer;
 }
 
@@ -125,23 +127,23 @@ a{
 /*姓名*/
 .content_name{
 	width:860px;
-	height:80px;
+	height:60px;
 }
 .content_name div{
 	color:rgb(34,34,34);
 	font-size:20px;
 	font-family:"微软雅黑";
-	padding-top: 27px;
+	padding-top: 17px;
 }
 
 /*学校*/
 .content_school{
 	width:860px;
-	height:60px;
+	height:50px;
 }
 .content_school div{
 	color:rgb(34,34,34);
-	font-size:20px;
+	font-size:18px;
 	font-family:"微软雅黑";
 	padding-top: 12px;
 }
@@ -149,11 +151,11 @@ a{
 /*介绍*/
 .content_introduce{
 	width:860px;
-	height:60px;
+	height:90px;
 }
 .content_introduce div{
 	color:rgb(153,153,153);
-	font-size:18px;
+	font-size:16px;
 	font-family:"微软雅黑";
 	line-height:30px;
 	/*display:block;*/

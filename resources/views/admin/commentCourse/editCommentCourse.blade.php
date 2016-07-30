@@ -76,34 +76,34 @@
 
                         <div class="space-4"></div>
 
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 封面图 </label>
+                        {{--<div class="form-group">--}}
+                            {{--<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 封面图 </label>--}}
 
-                            <div class="col-sm-9">
-                                <img src="{{asset($data->coursePic)}}" id="uploadPreview" class="col-xs-10 col-sm-5" onerror="this.src='/admin/image/back.png'"/>
-                            <span class="help-inline col-xs-12 col-sm-7">
-                                <label class="middle">
-                                    <span class="lbl"></span>
-                                </label>
-                            </span>
-                            </div>
-                        </div>
+                            {{--<div class="col-sm-9">--}}
+                                {{--<img src="{{asset($data->coursePic)}}" id="uploadPreview" class="col-xs-10 col-sm-5" onerror="this.src='/admin/image/back.png'"/>--}}
+                            {{--<span class="help-inline col-xs-12 col-sm-7">--}}
+                                {{--<label class="middle">--}}
+                                    {{--<span class="lbl"></span>--}}
+                                {{--</label>--}}
+                            {{--</span>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
 
-                        <div class="space-4"></div>
+                        {{--<div class="space-4"></div>--}}
 
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1">  </label>
+                        {{--<div class="form-group">--}}
+                            {{--<label class="col-sm-3 control-label no-padding-right" for="form-field-1">  </label>--}}
 
-                            <div class="col-sm-9">
-                                <input type="file" id="uploadImage" name="coursePic" onchange="loadImageFile();" style="width:170px;height:40px;position: absolute;top: 0px;opacity: 0;"/>
-                                <div class="second_file"><img src="/admin/image//1.png"/></div>
-                            <span class="help-inline col-xs-12 col-sm-7">
-                                <label class="middle">
-                                    <span class="lbl"></span>
-                                </label>
-                            </span>
-                            </div>
-                        </div>
+                            {{--<div class="col-sm-9">--}}
+                                {{--<input type="file" id="uploadImage" name="coursePic" onchange="loadImageFile();" style="width:170px;height:40px;position: absolute;top: 0px;opacity: 0;"/>--}}
+                                {{--<div class="second_file"><img src="/admin/image//1.png"/></div>--}}
+                            {{--<span class="help-inline col-xs-12 col-sm-7">--}}
+                                {{--<label class="middle">--}}
+                                    {{--<span class="lbl"></span>--}}
+                                {{--</label>--}}
+                            {{--</span>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
 
 
                         <div class="space-4"></div>

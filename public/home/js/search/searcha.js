@@ -27,17 +27,34 @@ function getdata(para,ord){
         dataSource: function(done) {
             $.ajax({
                 type: 'GET',
-                url: '/index/getCourseaa/'+para+"/"+ord,
+                url: '/index/getCourseaa/'+para+'/'+this.pageNumber+'/'+this.pageSize+'/'+ord,
                 success: function(response) {
                     if(response.status){
-                        done(response.data);
+                        var format = [];
+
+                        format['data'] = response.data;
+                        format['totalNumber'] = response.count;
+                        done(format);
+                        // done(response.data);
                     }else{
                         $('.nofindaa').removeClass('hide');
                     }
                 }
             });
         },
+        getData: function(pageNumber,pageSize) {
+            var self = this;
+            $.ajax({
+                type: 'GET',
+                url: '/index/getCourseaa/'+para+'/'+pageNumber+'/'+pageSize+'/'+ord,
+                success: function(response) {
+                    self.callback(response.data);
+                }
+            });
+        },
         pageSize: 8,
+        pageNumber :1,
+        totalNumber :1,
         className:"paginationjs-theme-blue",
         showGoInput: true,
         showGoButton: true,

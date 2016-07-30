@@ -35,9 +35,17 @@ class companyUserController extends Controller{
         if($request->type == 3){
             $query = $query->where('p.postName','like','%'.trim($request['search']).'%');
         }
+        if($request['beginTime']){ //上传的起止时间
+            $query = $query->where('acc.created_at','>=',$request['beginTime']);
+        }
+        if($request['endTime']){ //上传的起止时间
+            $query = $query->where('acc.created_at','<=',$request['endTime']);
+        }
 
-        $data = $query->paginate(10);
-
+        $data = $query->orderBy('id','desc')->paginate(10);
+        $data->type = $request['type'];
+        $data->beginTime = $request['beginTime'];
+        $data->endTime = $request['endTime'];
         return view('admin.companyUser.companyUserList')->with('company',$data);
     }
 

@@ -26,7 +26,6 @@ class specialCourseRequest extends Request
         return [
             'courseTitle'=>'required',
             'courseIntro'=>'required',
-            'courseNotice'=>'required',
             'coursePrice'=>'required|numeric'
         ];
     }
@@ -35,7 +34,6 @@ class specialCourseRequest extends Request
         return [
             'courseTitle.required'=>'请输入标题',
             'courseIntro.required'=>'请输入描述',
-            'courseNotice.required'=>'请输入公告',
             'coursePrice.required'=>'请输入课程价格',
 //            'coursePrice.integer'=>'课程价格必须是整型'
             'coursePrice.integer'=>'课程价格必须是数字'

@@ -12,10 +12,14 @@ define([], function () {
                 dataSource: function(done) {
                     $.ajax({
                         type: 'GET',
-                        url: '/index/getgames/'+para,
+                        url: '/index/getgames/'+para+'/'+this.pageNumber+'/'+this.pageSize,
                         success: function(response) {
                             if(response.status){
-                                done(response.data);
+                                var format = [];
+                                format['data'] = response.data;
+                                format['totalNumber'] = response.count;
+                                done(format);
+                                // done(response.data);
                                 games.Con = true;
                             }else{
                                 games.Msg = true;
@@ -23,7 +27,19 @@ define([], function () {
                         }
                     });
                 },
+                getData: function(pageNumber,pageSize) {
+                    var self = this;
+                    $.ajax({
+                        type: 'GET',
+                        url: '/index/getgames/'+para+'/'+pageNumber+'/'+pageSize,
+                        success: function(response) {
+                            self.callback(response.data);
+                        }
+                    });
+                },
                 pageSize: 7,
+                pageNumber :1,
+                totalNumber :1,
                 className:"paginationjs-theme-blue",
                 showGoInput: true,
                 showGoButton: true,

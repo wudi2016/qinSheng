@@ -25,6 +25,14 @@ class SpecialChapterController extends Controller
      */
     public function specialChapterList(Request $request,$id){
         $query = DB::table('coursechapter as ch');
+
+        if($request['beginTime']){ //上传的起止时间
+            $query = $query->where('ch.created_at','>=',$request['beginTime']);
+        }
+        if($request['endTime']){ //上传的起止时间
+            $query = $query->where('ch.created_at','<=',$request['endTime']);
+        }
+
         if($request['type'] == 1){
             $query = $query->where('ch.id','like','%'.trim($request['search']).'%');
         }
@@ -34,9 +42,7 @@ class SpecialChapterController extends Controller
         if($request['type'] == 3){
             $query = $query->where('ch.title','like','%'.trim($request['search']).'%');
         }
-        if($request['type'] == 4){ //上传的起止时间
-            $query = $query->where('ch.created_at','>=',$request['beginTime'])->where('ch.created_at','<=',$request['endTime']);
-        }
+
         $data = $query
             ->leftJoin('course as c','ch.courseId','=','c.id')
             ->select('ch.*','c.courseTitle')
@@ -54,9 +60,19 @@ class SpecialChapterController extends Controller
                     }
                 }
 
+                if($val->coursePic){
+                    if(!Cache::get($val->coursePic)){
+                        $val->coursePic = $this->getPlayUrl(($val->coursePic));
+                        Cache::put($val->coursePic,$val->coursePic,1800);
+                    }else{
+                        $val->coursePic = Cache::get($val->coursePic);
+                    }
+                }
+
                 if(!$val->courseLowPath || !$val->courseMediumPath || !$val->courseHighPath){
+//                    dump($val->fileID);
                     $FileList = $this->transformations($val->fileID);
-//                    dd($FileList);
+//                    dump($FileList);
                     if($FileList['code'] == 200 && $FileList['data']['Waiting'] < 0){
                         $filelists = $FileList['data']['FileList']; //取出转好的码
                         $lists = [];
@@ -64,12 +80,15 @@ class SpecialChapterController extends Controller
                             switch($value['Level']){
                                 case 1:
                                    $lists['courseLowPath'] = $value['FileID'];
+                                    $lists['coursePic'] = $value['Cover'];
                                     break;
                                 case 2:
                                     $lists['courseMediumPath'] = $value['FileID'];
+                                    $lists['coursePic'] = $value['Cover'];
                                     break;
                                 case 3:
                                     $lists['courseHighPath'] = $value['FileID'];
+                                    $lists['coursePic'] = $value['Cover'];
                                     break;
                             }
                         }
@@ -82,7 +101,10 @@ class SpecialChapterController extends Controller
             }
         }
         $data->type = $request['type'];
+        $data->beginTime = $request['beginTime'];
+        $data->endTime = $request['endTime'];
         $data->courseId = $id;
+//        dd($data);
         return view('admin/specialCourse/specialChapterList',['data'=>$data]);
     }
 
@@ -146,10 +168,11 @@ class SpecialChapterController extends Controller
                 $data['status'] = 1;
             }
         }
-        $data['created_at'] = Carbon::now();
-        $data['updated_at'] = Carbon::now();
+        $data['created_at'] = date('Y-m-d H:i:s',time());
+        $data['updated_at'] = date('Y-m-d H:i:s',time());
 
-        if(DB::table('coursechapter')->insert($data)){
+        if($id = DB::table('coursechapter')->insertGetId($data)){
+            $this -> OperationLog('添加了id为'.$id.'的课程章节');
             echo 1;
         }else{
             echo 0;
@@ -195,6 +218,7 @@ class SpecialChapterController extends Controller
         }
         $data['updated_at'] = Carbon::now();
         if(DB::table('coursechapter')->where('id',$request['id'])->update($data)){
+            $this -> OperationLog('修改了id为'.$request['id'].'的课程章节');
             echo 1;
         }else{
             echo 0;
@@ -207,6 +231,7 @@ class SpecialChapterController extends Controller
      */
     public function delSpecialChapter($courseid,$id){
         if(DB::table('coursechapter')->where('id',$id)->delete()){
+            $this -> OperationLog('删除了id为'.$id.'的课程章节');
             return redirect('admin/message')->with(['status'=>'课程章节删除成功','redirect'=>'specialCourse/specialChapterList/'.$courseid]);
         }else{
             return redirect('admin/message')->with(['status'=>'课程章节删除失败','redirect'=>'specialCourse/specialChapterList/'.$courseid]);

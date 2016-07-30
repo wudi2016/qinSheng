@@ -16,31 +16,31 @@
                 </li>
 
                 <li>
-                    <a href="{{url('/admin/order/orderList')}}">订单管理</a>
+                    <a href="{{url('/admin/order/orderList/5')}}">订单管理</a>
                 </li>
                 <li class="active">订单列表</li>
             </ul><!-- .breadcrumb -->
 
             <div class="nav-search" id="nav-search">
                 <form action="{{url('/admin/order/orderList/'.$data->status)}}" method="get" class="form-search">
+
+                    <span style=""  class="searchtype" id="form-field-1">
+                        <input type="text" name="beginTime" id="form-field-1" placeholder="开始时间" class="col-xs-10 col-sm-5" value="{{$data->beginTime}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;background:url('{{asset("admin/image/2.png")}}') no-repeat;background-position:right;"/>&nbsp;&nbsp;
+                        <input type="text" name="endTime" id="form-field-1" placeholder="结束时间" class="col-xs-10 col-sm-5" value="{{$data->endTime}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;margin-left:10px;background:url('{{asset("admin/image/2.png")}}') no-repeat;background-position:right;"/>
+                    </span>
+
                     <select name="type" id="form-field-1" class="searchtype">
+                        <option value="">--请选择--</option>
                         <option value="1"  @if($data->type == 1) selected @endif>订单号</option>
                         <option value="2"  @if($data->type == 2) selected @endif>订单名称</option>
                         <option value="3"  @if($data->type == 3) selected @endif>购买用户ID</option>
                         <option value="4"  @if($data->type == 4) selected @endif>购买用户</option>
-                        <option value="5"  @if($data->type == 5) selected @endif>时间筛选</option>
                         <option value="">全部</option>
                     </select>
                     <span class="input-icon">
-                        <span style="@if($data->type != 5) display: block;  @else display: none; @endif" class="input-icon" id="search1">
+                        <span style="" class="input-icon" id="search1">
                             <input type="text" name="search" placeholder="Search ..." class="nav-search-input" value="" id="nav-search-input" autocomplete="off" />
-                            <i class="icon-search nav-search-icon"></i>
-                            <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;" type="submit" value="筛选" />
-                        </span>
-                        <span style="@if($data->type == 5) display: block;  @else display: none; @endif" class="input-icon" id="search2">
-                            <input type="text" name="beginTime" id="form-field-1" placeholder="开始时间" class="col-xs-10 col-sm-5" value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
-                            <input type="text" name="endTime" id="form-field-1" placeholder="结束时间" class="col-xs-10 col-sm-5" value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;" />
-                            <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;" type="submit" value="筛选" />
+                            <input style="background: #6FB3E0;width:50px;height:28px ;border:0;color:#fff;padding-left: 5px;" type="submit" value="搜索" />
                         </span>
                     </span>
                 </form>
@@ -53,9 +53,29 @@
                     订单列表
                     <small>
                         <i class="icon-double-angle-right"></i>
-                        订单列表
+                        @if($data->status == 5)
+                            未付款订单列表
+                        @elseif($data->status == 0)
+                            已付款订单列表
+                        @elseif($data->status == 1)
+                            待点评订单列表
+                        @elseif($data->status == 2)
+                            已完成订单列表
+                        @elseif($data->status == 3)
+                            退款中订单列表
+                        @elseif($data->status == 4)
+                            已退款订单列表
+                        @endif
                     </small>
+
+                    @if($data->status == 5)
+                    <a href="{{url('/admin/order/deleteOrders')}}" class="btn btn-xs btn-info" onclick="return confirm('确定要清除垃圾订单吗?');" style="float: right;margin-right: 50px;">
+                        清除垃圾订单
+                    </a>
+                    @endif
+
                 </h1>
+
             </div><!-- /.page-header -->
 
             @if (session('status'))
@@ -74,16 +94,8 @@
                 </div>
             @endif
 
-            <div class="row">
-                {{--<div >--}}
-                    {{--<br>--}}
-                    {{--<form action="" method="get" >--}}
-                        {{--<input type="text" name="beginTime" id="form-field-1" placeholder="开始时间" class="col-xs-10 col-sm-5" value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="background:url('{{asset("/admin/image/2.png")}}') no-repeat;background-position:right;width:170px;" />--}}
-                        {{--<input type="text" name="beginTime" id="form-field-1" placeholder="结束时间" class="col-xs-10 col-sm-5" value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="background:url('{{asset("/admin/image/2.png")}}') no-repeat;background-position:right;width:170px;margin-left: 10px;" />--}}
-                        {{--<input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;margin-left: 10px;" type="submit" value="筛选" />--}}
-                    {{--</form>--}}
-                {{--</div>--}}
 
+            <div class="row">
                 <div class="col-xs-12">
                     <!-- PAGE CONTENT BEGINS -->
 
@@ -115,6 +127,7 @@
                                         <th>应退金额</th>
                                         <th>已退金额</th>
                                         <th>付款时间</th>
+                                        <th>创建时间</th>
                                         <th>订单状态</th>
                                         <th>操作</th>
                                     </tr>
@@ -162,6 +175,7 @@
                                         <td>{{$order->refundableAmount}}</td>
                                         <td>{{$order->refundAmount}}</td>
                                         <td>{{$order->payTime}}</td>
+                                        <td>{{$order->created_at}}</td>
                                         <td>
                                             @if($order->status == 0)
                                                 已付款
@@ -199,7 +213,7 @@
 
 
                                                 @if($order->status == 3 || $order->status ==4)
-                                                <a href="{{url('/admin/order/refundList/'.$order->orderSn)}}" class="btn btn-xs btn-success">
+                                                <a href="{{url('/admin/order/refundList/'.$order->orderSn.'/'.$data->status)}}" class="btn btn-xs btn-success">
                                                     <i class="icon-pencil bigger-120"></i>退款信息
                                                 </a>
                                                 @endif
@@ -208,7 +222,7 @@
                                                     <i class="icon-pencil bigger-120"></i>添加备注
                                                 </div>
 
-                                                <a href="{{url('/admin/order/remarkList/'.$order->id)}}" class="btn btn-xs btn-warning">
+                                                <a href="{{url('/admin/order/remarkList/'.$order->id).'/'.$data->status}}" class="btn btn-xs btn-warning">
                                                     <i class=""></i>查看备注
                                                 </a>
 
@@ -233,9 +247,18 @@
                                                 @endif
 
                                                 @if($order->status == 3)
-                                                    <a href="{{url('/admin/order/weiXinRefund/'.$order->id)}}" class="btn btn-xs btn-danger">
-                                                        <i class="icon- bigger-120"></i>确认退款
-                                                    </a>
+                                                    {{--支付宝支付--}}
+                                                    @if($order->payType == 0)
+                                                        <a href="{{url('/admin/order/alipayRefund/'.$order->id)}}" class="btn btn-xs btn-danger">
+                                                            <i class="icon- bigger-120"></i>确认退款
+                                                        </a>
+                                                    {{--微信支付--}}
+                                                    @elseif($order->payType == 1)
+                                                        <a href="{{url('/admin/order/weiXinRefund/'.$order->id)}}" class="btn btn-xs btn-danger">
+                                                            <i class="icon- bigger-120"></i>确认退款
+                                                        </a>
+                                                    @endif
+
                                                 @endif
                                             </div>
 

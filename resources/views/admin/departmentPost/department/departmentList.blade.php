@@ -21,8 +21,8 @@
             <div class="nav-search" id="nav-search">
                 <form action="" method="get" class="form-search">
                     <select name="type" id="form-field-1" class="searchtype">
-                        <option value="1">部门</option>
-                        <option value="2">全部</option>
+                        <option value="1" @if($department->type == 1) selected @endif>部门</option>
+                        <option value="">全部</option>
                     </select>
 
                      <span class="input-icon">

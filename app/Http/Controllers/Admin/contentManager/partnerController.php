@@ -22,12 +22,17 @@ class partnerController extends Controller{
         if($request->type == 2){
             $query = $query->where('title','like','%'.trim($request['search']).'%');
         }
-        if($request->type == 3){
-            $query = $query->where('created_at','>=',$request['beginTime'])->where('created_at','<=',$request['endTime']);
+
+        if($request['beginTime']){ //上传的起止时间
+            $query = $query->where('created_at','>=',$request['beginTime']);
         }
-
-        $data = $query->paginate(10);
-
+        if($request['endTime']){ //上传的起止时间
+            $query = $query->where('created_at','<=',$request['endTime']);
+        }
+        $data = $query->orderBy('id','desc')->paginate(10);
+        $data->type = $request['type'];
+        $data->beginTime = $request['beginTime'];
+        $data->endTime = $request['endTime'];
         return view('admin.contentManager.partner.partnerList')->with('partner',$data);
     }
 
@@ -47,17 +52,12 @@ class partnerController extends Controller{
     public function addspartner(Request $request){
         $input = Input::except('_token');
         $input['created_at'] = Carbon::now();
-        //验证
-        $validate = $this->validator($input);
-        if($validate->fails()){
-            return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
-        }
         if($request->hasFile('path')){ //判断文件是否存在
             if($request->file('path')->isValid()){ //判断文件在上传过程中是否出错
                 $name = $request->file('path')->getClientOriginalName();//获取图片名
                 $entension = $request->file('path')->getClientOriginalExtension();//上传文件的后缀
                 $newname = md5(date('path'.$name)).'.'.$entension;//拼接新的图片名
-                if($request->file('path')->move('./admin/image/\contentManager/partner',$newname)){
+                if($request->file('path')->move('./admin/image/contentManager/partner',$newname)){
                     $input['path'] = '/admin/image/contentManager/partner/'.$newname;
                 }else{
                     return redirect()->back()->withInput()->withErrors('文件保存失败');
@@ -66,6 +66,16 @@ class partnerController extends Controller{
             }else{
                 return redirect()->back()->withInput()->withErrors('文件在上传过程中出错');
             }
+        }
+        //判断推荐位是否存在
+        $isexit = DB::table('partner')->where('postion',$request['postion'])->first();
+        if($isexit){
+            DB::table('partner')->where('id',$isexit->id)->update(['postion'=>0]);
+        }
+        //验证
+        $validate = $this->validator($input);
+        if($validate->fails()){
+            return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
         }
         $res = DB::table('partner')->insertGetId($input);
         if($res){
@@ -93,8 +103,13 @@ class partnerController extends Controller{
     public function editspartner(Request $request){
         $input = Input::except('_token');
         $input['created_at'] = Carbon::now();
+        //判断推荐位是否存在
+        $isexit = DB::table('partner')->where('postion',$request['postion'])->first();
+        if($isexit){
+            DB::table('partner')->where('id',$isexit->id)->update(['postion'=>0]);
+        }
         //验证
-        $validate = $this->validator($input);
+        $validate = $this->validator_edit($input);
         if($validate->fails()){
             return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
         }
@@ -103,7 +118,7 @@ class partnerController extends Controller{
                 $name = $request->file('path')->getClientOriginalName();//获取图片名
                 $entension = $request->file('path')->getClientOriginalExtension();//上传文件的后缀
                 $newname = md5(date('path'.$name)).'.'.$entension;//拼接新的图片名
-                if($request->file('path')->move('./admin/image/\contentManager/partner',$newname)){
+                if($request->file('path')->move('./admin/image/contentManager/partner',$newname)){
                     $input['path'] = '/admin/image/contentManager/partner/'.$newname;
                 }else{
                     return redirect()->back()->withInput()->withErrors('文件保存失败');
@@ -163,11 +178,27 @@ class partnerController extends Controller{
         $rules = [
             'title' => 'required',
             'url' => 'required',
-
+            'path' => 'required'
         ];
         $messages = [
             'title.required' => '请输入标题名称',
-            'url.required'  => '请按要求填写链接'
+            'url.required'  => '请按要求填写链接',
+            'path.required' => '请上传图片'
+        ];
+
+
+        return \Validator::make($data, $rules, $messages);
+    }
+
+
+    protected function validator_edit(array $data){
+        $rules = [
+            'title' => 'required',
+            'url' => 'required',
+        ];
+        $messages = [
+            'title.required' => '请输入标题名称',
+            'url.required'  => '请按要求填写链接',
         ];
 
 

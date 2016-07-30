@@ -27,7 +27,7 @@
 					<div ms-slectfile='file'>本地上传</div>
 					<div>请上传不超过1GB大小的视频文件</div>
 				</div>
-				<div class="add_video_tip" style="display: none;" ms-visible="uploadStatus == 1">(支持mp4、fiv、avi、rmvb、wmv、mkv格式上传)</div>
+				<div class="add_video_tip" style="display: none;" ms-visible="uploadStatus == 1">(支持mp4、flv、avi、rmvb、wmv、mkv格式上传)</div>
 				<div class="add_video_loading" style="display: none;" ms-visible="uploadStatus == 2">
 					<div class="progress_bar">
 						<div ms-css-width="[--progressBar--]%"></div>
@@ -75,12 +75,16 @@
 			upload.applyID = {{$applyID}} || null;
 			upload.uploadInfo.courseTitle = '{{$courseTitle}}' || null;
 			upload.uploadInfo.message = '{{$message}}' || null;
+			
 			upload.titleLength = upload.uploadInfo.courseTitle.length;
 			upload.messageLength = upload.uploadInfo.message.length;
 			upload.temp = {
 				courseTitle: upload.uploadInfo.courseTitle,
 				message: upload.uploadInfo.message
 			};
+
+			upload.messageID = {{$messageID}} || null;
+			upload.messageID && upload.getData('/lessonComment/getFirst', 'deleteMessage', {action: 3, table: 'usermessage', data: {id: upload.messageID}}, 'POST');
 
 			upload.$watch('uploadInfo.courseTitle', function(value, oldValue) {
                 if (value.length > 20) upload.uploadInfo.courseTitle = oldValue;

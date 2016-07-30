@@ -37,7 +37,7 @@
             <div class="center_con_r_bar">
                 <div class="center_con_r_bar_ll">当前等级</div>
                 <div class="center_con_r_bar_m">
-                    <select name="type" name="pianoGrade"  class="js-example-basic-single">
+                    <select name="pianoGrade"  class="js-example-basic-single">
                         <option selected="selected">等级</option>
                         <option value="钢琴一级">钢琴一级</option>
                         <option value="钢琴二级">钢琴二级</option>

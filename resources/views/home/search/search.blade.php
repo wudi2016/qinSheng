@@ -11,8 +11,8 @@
             border:none;
             height: 50px;
             line-height:50px;
-            font-weight: bold;
-            font-size:20px;
+            /*font-weight: bold;*/
+            font-size:18px;
             text-indent:20px;
         }
 
@@ -28,7 +28,7 @@
             height:48px;
             line-height:48px;
             font-size:20px;
-            font-weight:bold;
+            /*font-weight:bold;*/
 
         }
 
@@ -92,7 +92,7 @@
         <div style="height:40px;"></div>
         {{--专题课程--}}
         <div class="con_con aa">
-            <div class="con_con_top">
+            <div class="con_con_top con_con_top_a">
                 <div class="con_con_top_l">和<span class="gl">{{$searchInfo}}</span>有关专题课程</div>
                 <div class="con_con_top_r"><span class="gl morqian" onclick="morecourse(1)">更多</span><span class="morhou hide"><span class="selOrd" onclick="sel(1,1)">最新</span> - <span class="selOrd" onclick="sel(1,2)">热门</span></span>  &nbsp;&nbsp;</div>
             </div>
@@ -121,14 +121,14 @@
 
                 {{--无结果--}}
                 <div class="clear"></div>
-                <div class="serno nofindaa hide">
-                    没有相关内容，换个搜索条件吧
-                </div>
+                {{--<div class="serno nofindaa hide">--}}
+                    {{--没有相关内容，换个搜索条件吧--}}
+                {{--</div>--}}
             </div>
         </div>
         {{--点评课程--}}
         <div class="con_con bb">
-            <div class="con_con_top">
+            <div class="con_con_top con_con_top_b">
                 <div class="con_con_top_l">和<span class="gl">{{$searchInfo}}</span>有关点评课程</div>
                 <div class="con_con_top_r"><span class="gl morqian" onclick="morecourse(2)">更多</span> <span class="morhou hide"><span class="selOrd" onclick="sel(2,1)">最新</span> - <span class="selOrd" onclick="sel(2,2)">热门</span></span>&nbsp;&nbsp;</div>
             </div>
@@ -159,10 +159,13 @@
 
                 {{--无结果--}}
                 <div class="clear"></div>
-                <div class="serno nofindbb hide">
-                    没有相关内容，换个搜索条件吧
-                </div>
+                {{--<div class="serno nofindbb hide">--}}
+                    {{--没有相关内容，换个搜索条件吧--}}
+                {{--</div>--}}
             </div>
+        </div>
+        <div class="serno nofindbb hide">
+            没有相关内容，换个搜索条件吧
         </div>
         <div class="clear"></div>
     </div>

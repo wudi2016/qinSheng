@@ -39,6 +39,8 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
         applyRefund  : {},
         refundContent: '',
         refundType   : '',
+        noReadNotice : false,
+        noReadComment : false,
         selectChange : function(a){
             sideBar.refundType = a
 
@@ -179,9 +181,13 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
             }
             if(value == 'wholeNotice'){
                 notice.notice.noticeInfo.length == '0' ? notice.notice.getNoticeInfo(sideBar.mineUsername) : notice.notice.noticeInfo;
+                notice.notice.isRead ? notice.notice.changeNoticeStatus() : '';
+                notice.notice.isRead ? sideBar.findHaveNotice() : '';
             }
             if(value == 'commentAnswer'){
                 comment.comment.commentInfo.length == '0' ? comment.comment.getCommentInfo(sideBar.mineUsername) : comment.comment.commentInfo;
+                comment.comment.isRead ? comment.comment.changeNoticeStatus() : '';
+                comment.comment.isRead ? sideBar.findHaveNotice() : '';
             }
             if(value == 'myFocus'){
                     myFocusTeacher.myFocusTeacher.myFocusList.length == '0' ? myFocusTeacher.myFocusTeacher.getMyFocusInfo() : myFocusTeacher.myFocusTeacher.myFocusList;
@@ -203,8 +209,6 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
             if(value == 'sureComment'){
                 completeCommentController.completeCommentController.completeCommentList.length == '0' ? completeCommentController.completeCommentController.getCompleteCommentInfo(type) : completeCommentController.completeCommentController.completeCommentList;
             }
-
-
             sideBar.tabStatus = value;
         },
         //修改
@@ -333,6 +337,27 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
                     }
                 }, 1000);
             }
+        },
+        findHaveNotice : function(){
+            $.ajax({
+                url : '/member/findHaveNotice',
+                type : 'POST',
+                data : {username : sideBar.mineUsername},
+                dataType : 'json',
+                success : function(response){
+                    if(response.status == 1){// 通知消息 评论回复消息
+                        sideBar.noReadNotice = true;
+                        sideBar.noReadComment = true;
+                    }else if(response.status == 2){// 通知消息
+                        sideBar.noReadNotice = true;
+                    }else if(response.status == 3){// 评论回复消息
+                        sideBar.noReadComment = true;
+                    }else{
+                        sideBar.noReadNotice = false;
+                        sideBar.noReadComment = false;
+                    }
+                }
+            })
         }
     });
 

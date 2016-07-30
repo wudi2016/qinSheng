@@ -22,8 +22,8 @@
                 <form action="{{url('/admin/notice/noticeList')}}" method="get" class="form-search">
                     <select name="type" id="form-field-1" class="searchtype">
                         <option value="1">ID</option>
-                        <option value="2">来自前台</option>
-                        <option value="3">来自后台</option>
+                        <option value="2">系统自动发送消息</option>
+                        <option value="3">管理员手动发送消息</option>
                         <option value="4">用户账号</option>
                         <option value="">全部</option>
                     </select>
@@ -61,9 +61,11 @@
                     </ul>
                 </div>
             @endif
+            @permission('add.notice')
             <a href="{{url('/admin/notice/addNotice')}}" class="btn btn-xs btn-info">
                 <i class="icon-ok bigger-110">添加</i>
             </a>
+            @endpermission
             <div class="row">
                 <div class="col-xs-12">
                     <!-- PAGE CONTENT BEGINS -->
@@ -88,10 +90,10 @@
                                         <tr>
                                             <td><a href="#">{{$type -> id}}</a></td>
                                             <td>
-                                                @if ($type -> tempId == '')
-                                                    来自前台
+                                                @if ($type -> tempId == 0)
+                                                    系统自动发送消息
                                                 @else
-                                                    来自后台
+                                                    管理员手动通知消息
                                                 @endif
                                             </td>
                                             <td>{{$type -> username}}</td>
@@ -102,17 +104,23 @@
                                             <td>
                                                 <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
                                                     @if ($type -> tempId == '')
-                                                        <a onclick="alert('来自前台消息,不可编辑');" class="btn btn-xs btn-info">
-                                                            <i class="icon-edit bigger-120"></i>
-                                                        </a>
+                                                        @permission('edit.notice')
+                                                            <a onclick="alert('系统自动发送消息,不可编辑');" class="btn btn-xs btn-info">
+                                                                <i class="icon-edit bigger-120"></i>
+                                                            </a>
+                                                        @endpermission
                                                     @else
-                                                        <a href="{{url('/admin/notice/editNotice/'. $type->id)}}" class="btn btn-xs btn-info">
-                                                            <i class="icon-edit bigger-120"></i>
-                                                        </a>
+                                                        @permission('edit.notice')
+                                                            <a href="{{url('/admin/notice/editNotice/'. $type->id)}}" class="btn btn-xs btn-info">
+                                                                <i class="icon-edit bigger-120"></i>
+                                                            </a>
+                                                        @endpermission
                                                     @endif
-                                                    <a href="{{url('/admin/notice/delNotice/'. $type->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
-                                                        <i class="icon-trash bigger-120"></i>
-                                                    </a>
+                                                    @permission('del.notice')
+                                                        <a href="{{url('/admin/notice/delNotice/'. $type->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
+                                                            <i class="icon-trash bigger-120"></i>
+                                                        </a>
+                                                    @endpermission
                                                 </div>
                                             </td>
                                         </tr>

@@ -564,7 +564,7 @@
                     var obj = $(this);
                     var username = obj.val();
 
-                    if(!username.match(/^[\u4E00-\u9FA5A-Za-z0-9_]{4,16}$/)){
+                    if(!username.match(/^[\u4E00-\u9FA5A-Za-z0-9_]{2,16}$/)){
                         //格式错误
                         obj.next('span').html('* 4—16位字母(不区分大小写)汉字/数字/下划线');
                         checkUsername = false;

@@ -26,10 +26,16 @@ class friendlinkController extends Controller
         if($request->type == 2){
             $query = $query->where('title','like','%'.trim($request['search']).'%');
         }
-        if($request->type == 3){
-            $query = $query->where('created_at','>=',$request['beginTime'])->where('created_at','<=',$request['endTime']);
+        if($request['beginTime']){ //上传的起止时间
+            $query = $query->where('created_at','>=',$request['beginTime']);
         }
-        $data = $query->get();
+        if($request['endTime']){ //上传的起止时间
+            $query = $query->where('created_at','<=',$request['endTime']);
+        }
+        $data = $query->orderBy('id','desc')->paginate(10);
+        $data->type = $request['type'];
+        $data->beginTime = $request['beginTime'];
+        $data->endTime = $request['endTime'];
         return view('admin.aboutus.friendlink.friendlinkList')->with('links',$data);
     }
 
@@ -64,6 +70,11 @@ class friendlinkController extends Controller
                 return redirect()->back()->withInput()->withErrors('文件在上传过程中出错');
             }
         }
+        //验证
+        $validate = $this->validator($input);
+        if($validate->fails()){
+            return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
+        }
         if($res = DB::table('link')->insertGetId($input)){
             $this -> OperationLog("新增了友情链接ID为{$res}的学员", 1);
             return redirect('admin/message')->with(['status'=>'添加成功','redirect'=>'aboutUs/friendlinkList']);
@@ -90,6 +101,11 @@ class friendlinkController extends Controller
     public function editsfriendlink(Request $request){
         $input = Input::except('_token');
         $input['created_at'] = Carbon::now();
+        //验证
+        $validate = $this->validator_edit($input);
+        if($validate->fails()){
+            return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
+        }
         if($request->hasFile('path')){ //判断文件是否存在
             if($request->file('path')->isValid()){ //判断文件在上传过程中是否出错
                 $name = $request->file('path')->getClientOriginalName();//获取图片名
@@ -144,6 +160,46 @@ class friendlinkController extends Controller
             echo 0;
         }
     }
+
+
+
+    /**
+     * 验证
+     */
+    protected function validator(array $data){
+        $rules = [
+            'title' => 'required',
+            'url' => 'required',
+            'path' => 'required'
+        ];
+        $messages = [
+            'title.required' => '请输入标题名称',
+            'url.required'  => '请按要求填写链接',
+            'path.required' => '请上传图片'
+        ];
+
+
+        return \Validator::make($data, $rules, $messages);
+    }
+
+
+    /**
+     * 验证(修改)
+     */
+    protected function validator_edit(array $data){
+        $rules = [
+            'title' => 'required',
+            'url' => 'required',
+        ];
+        $messages = [
+            'title.required' => '请输入标题名称',
+            'url.required'  => '请按要求填写链接',
+        ];
+
+
+        return \Validator::make($data, $rules, $messages);
+    }
+
 
 
 }

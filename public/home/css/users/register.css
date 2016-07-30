@@ -59,6 +59,8 @@ body{
 }
 .teacher_con_top_l hr{
     border-top:3px solid #E5E5E5;
+    border-left:none;
+
 }
 .teacher_con_top_r{
     width:400px;
@@ -69,6 +71,8 @@ body{
 
 .teacher_con_top_r hr{
     border-top:3px solid #E5E5E5;
+    border-left:none;
+
 }
 .teacher_con_top_t{
     width:400px;

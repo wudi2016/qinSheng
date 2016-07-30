@@ -25,7 +25,7 @@ class communityController extends Controller
      * 社区首页新闻数据接口
      */
     public function getlist(){
-        $getlist = DB::table('news')->orderBy('sort','desc')->limit(10)->get();
+        $getlist = DB::table('news')->orderBy('sort','asc')->where('status',0)->limit(10)->get();
         if($getlist){
             foreach ($getlist as $k => $v) {
                 //只保留 年月日
@@ -49,7 +49,7 @@ class communityController extends Controller
      * 最热视频数据接口
      */
     public function gethotvideo(){
-        $gethotvideo = DB::table('hotvideo')->orderBy('sort','asc')->limit(6)->get();
+        $gethotvideo = DB::table('hotvideo')->orderBy('sort','asc')->where('status',0)->limit(6)->get();
         if($gethotvideo){
             foreach ($gethotvideo as $k => $v) {
                 $data['data'][] = [
@@ -104,7 +104,7 @@ class communityController extends Controller
      * 最新学员数据接口
      */
     public function getstudent(){
-        $getstudent = DB::table('users')->where('type','!=',2)->where('type','!=',3)->orderBy('created_at','desc')->get();
+        $getstudent = DB::table('users')->where('type','!=',2)->where('type','!=',3)->where('checks',0)->orderBy('created_at','desc')->get();
         if($getstudent){
             foreach($getstudent as $k => $v){
                 $data['data'][] = [

@@ -103,7 +103,7 @@
                                         <th>订单号</th>
                                         <th>演奏视频标题</th>
                                         <th>演奏者</th>
-                                        <th>课程</th>
+                                        {{--<th>课程</th>--}}
                                         <th>封面图</th>
                                         {{--<th>高清</th>--}}
                                         {{--<th>超清</th>--}}
@@ -135,9 +135,9 @@
                                         <td>{{$comcourse->orderSn}}</td>
                                         <td>{{$comcourse->courseTitle}}</td>
                                         <td>{{$comcourse->username}}</td>
-                                        <td>
-                                            <a href="{{$comcourse->courseLowPath}}">查看</a>
-                                        </td>
+                                        {{--<td>--}}
+                                            {{--<a href="{{$comcourse->courseLowPath}}">查看</a>--}}
+                                        {{--</td>--}}
                                         <td>
                                             {{--<a id="example2-2" href="{{asset($comcourse->coursePic)}}">查看--}}
                                                 <img src="{{asset($comcourse->coursePic)}}" alt="" width="50px" height="50px">

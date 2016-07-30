@@ -88,20 +88,34 @@
 
 
 
+                        {{--<div class="form-group">--}}
+                            {{--<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 排序位置 </label>--}}
+
+                            {{--<div class="col-sm-9">--}}
+                                {{--<input  type="text" name="postion" id="form-field-1" placeholder="排序位置" class="col-xs-10 col-sm-5" value="" />--}}
+                                    {{--<span class="help-inline col-xs-12 col-sm-7">--}}
+                                    {{--<label class="middle">--}}
+                                        {{--<span class="lbl"></span>--}}
+                                    {{--</label>--}}
+                                {{--</span>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+
+                        {{--<div class="space-4"></div>--}}
+
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 排序位置 </label>
-
                             <div class="col-sm-9">
-                                <input  type="text" name="postion" id="form-field-1" placeholder="排序位置" class="col-xs-10 col-sm-5" value="" />
-                                    <span class="help-inline col-xs-12 col-sm-7">
-                                    <label class="middle">
-                                        <span class="lbl"></span>
-                                    </label>
-                                </span>
+                                <select name="postion" id="form-field-1" class="col-xs-10 col-sm-5">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
+
                             </div>
                         </div>
-
-                        <div class="space-4"></div>
 
 
 

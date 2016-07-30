@@ -21,7 +21,7 @@ class hotvideoController extends Controller{
 
     public function __construct()
     {
-//        PaasUser::apply();
+        PaasUser::apply();
     }
 
     public function hotvideoList(Request $request){
@@ -33,11 +33,18 @@ class hotvideoController extends Controller{
         if($request->type == 2){
             $query = $query->where('title','like','%'.trim($request['search']).'%');
         }
-        if($request->type == 3){
-            $query = $query->where('created_at','>=',$request['beginTime'])->where('created_at','<=',$request['endTime']);
+        if($request['beginTime']){ //上传的起止时间
+            $query = $query->where('created_at','>=',$request['beginTime']);
+        }
+        if($request['endTime']){ //上传的起止时间
+            $query = $query->where('created_at','<=',$request['endTime']);
         }
 
+
         $data = $query->orderBy('id','desc')->paginate(10);
+        $data->type = $request['type'];
+        $data->beginTime = $request['beginTime'];
+        $data->endTime = $request['endTime'];
         return view('admin.contentManager.hotvideo.hotvideoList')->with('hotvideo',$data);
     }
 
@@ -57,6 +64,12 @@ class hotvideoController extends Controller{
         $input = Input::except('_token');
         $input['created_at'] = Carbon::now();
         $input['status'] = '0';
+
+        //判断推荐位是否存在
+        $isexit = DB::table('hotvideo')->where('sort',$request['sort'])->first();
+        if($isexit){
+            DB::table('hotvideo')->where('id',$isexit->id)->update(['sort'=>0]);
+        }
         if($request->hasFile('cover')){ //判断文件是否存在
             if($request->file('cover')->isValid()){ //判断文件在上传过程中是否出错
                 $name = $request->file('cover')->getClientOriginalName();//获取图片名
@@ -103,6 +116,11 @@ class hotvideoController extends Controller{
     public function editshotvideo(Request $request){
         $input = Input::except('_token');
         $input['created_at'] = Carbon::now();
+        //判断推荐位是否存在
+        $isexit = DB::table('hotvideo')->where('sort',$request['sort'])->first();
+        if($isexit){
+            DB::table('hotvideo')->where('id',$isexit->id)->update(['sort'=>0]);
+        }
         if($request->hasFile('cover')){ //判断文件是否存在
             if($request->file('cover')->isValid()){ //判断文件在上传过程中是否出错
                 $name = $request->file('cover')->getClientOriginalName();//获取图片名
@@ -119,7 +137,7 @@ class hotvideoController extends Controller{
             }
         }
         //验证
-        $validate = $this->validator($input);
+        $validate = $this->validator_edit($input);
         if($validate->fails()){
             return Redirect() -> back() -> withInput( $request -> all() ) -> withErrors( $validate );
         }
@@ -211,6 +229,26 @@ class hotvideoController extends Controller{
         return \Validator::make($data, $rules, $messages);
     }
 
+
+    /**
+     * 验证修改
+     */
+    protected function validator_edit(array $data){
+        $rules = [
+            'coursePath' => 'required',
+            'title' => 'required',
+            'videoIntro' => 'required',
+//            'cover' => 'required'
+        ];
+        $messages = [
+            'coursePath.required' => '请上传视频',
+            'title.required' => '请填写标题',
+            'videoIntro.required' => '请填写内容',
+//            'cover.required' => '请上传封面'
+        ];
+
+        return \Validator::make($data, $rules, $messages);
+    }
 
 
 

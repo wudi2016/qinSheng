@@ -14,6 +14,7 @@ use Primecloud\Pay\Weixin\Kernel\WxPayApi;
 use Primecloud\Pay\Weixin\Kernel\WxPayDataBase;
 use Primecloud\Pay\Weixin\Kernel\WxPayRefund;
 
+
 class orderController extends Controller
 {
     /**
@@ -22,6 +23,12 @@ class orderController extends Controller
     public function orderList(Request $request,$status){
 //        dd($status);
         $query = DB::table('orders');
+        if($request['beginTime']){ //上传的起止时间
+            $query = $query->where('created_at','>=',$request['beginTime']);
+        }
+        if($request['endTime']){ //上传的起止时间
+            $query = $query->where('created_at','<=',$request['endTime']);
+        }
         if($request['type'] == 1){
             $query = $query->where('orderSn','like','%'.trim($request['search']).'%');
         }
@@ -34,9 +41,7 @@ class orderController extends Controller
         if($request['type'] == 4){
             $query = $query->where('userName','like','%'.trim($request['search']).'%');
         }
-        if($request['type'] == 5){ //上传的起止时间
-            $query = $query->where('payTime','>=',$request['beginTime'])->where('payTime','<=',$request['endTime']);
-        }
+
         $data = $query
             ->where('isDelete',0)
             ->where('status',$status)
@@ -58,6 +63,8 @@ class orderController extends Controller
         }
 
         $data->type = $request['type'];
+        $data->beginTime = $request['beginTime'];
+        $data->endTime = $request['endTime'];
         $data->status = $status;
         return view('admin.order.orderList',['data'=>$data,'excel'=>$excel]);
     }
@@ -69,6 +76,7 @@ class orderController extends Controller
         $data['status'] = $request['status'];
         $data['updated_at'] = Carbon::now();
         $data = DB::table('orders')->where('id',$request['id'])->update($data);
+        $this -> OperationLog('修改了id为'.$request['id'].'的订单状态');
         switch($request['status']){
             case 0: //已付款
                 DB::table('applycourse')->where('orderSn',$request['orderSn'])->update(['state'=>1]);
@@ -103,6 +111,7 @@ class orderController extends Controller
         DB::table('applycourse')->where('orderSn',$orderSn)->update(['courseIsDel'=>1]); //已退款时关联删除演奏视频表
         DB::table('commentcourse')->where('orderSn',$orderSn)->update(['courseIsDel'=>1]); //已退款时关联删除名师点评表
         if($data){
+            $this -> OperationLog('删除了id为'.$id.'的订单');
             return redirect('admin/message')->with(['status'=>'订单删除成功','redirect'=>'order/orderList/'.$status]);
         }else{
             return redirect('admin/message')->with(['status'=>'订单删除失败','redirect'=>'order/orderList/'.$status]);
@@ -110,12 +119,30 @@ class orderController extends Controller
     }
 
     /**
+     *清除垃圾订单
+     */
+    public function deleteOrders(){
+        $data = DB::table('orders')->where(['status'=>5,'isDelete'=>0])->get();
+        foreach($data as &$val){
+            if($val->created_at < Carbon::now()->subDay(1)){ //如果未付款订单超过一天则删除 subDay(1) 一天前
+                DB::table('orders')->where('id',$val->id)->delete();
+                $this -> OperationLog('清除了垃圾订单');
+            }
+        }
+        return redirect()->back()->withInput()->with(['status'=>'垃圾订单已清除']);
+    }
+
+
+
+
+    /**
      *订单备注
      */
     public function remark(Request $request){
         $data = $request->all();
         $data['created_at'] = Carbon::now();
-        if(DB::table('remarks')->insert($data)){
+        if($id = DB::table('remarks')->insertGetId($data)){
+            $this -> OperationLog('添加了id为'.$id.'的订单备注');
             $state['state'] = 1;
         }else{
             $state['state'] = 0;
@@ -143,6 +170,7 @@ class orderController extends Controller
         $data = $request->except('_token');
         $data['updated_at'] = Carbon::now();
         if(DB::table('orders')->where('id',$request['id'])->update($data)){
+            $this -> OperationLog('修改了id为'.$request['id'].'的订单应退金额');
             return redirect('admin/message')->with(['status'=>'成功','redirect'=>'order/orderList/'.$request['status']]);
         }else{
             return redirect('admin/message')->with(['status'=>'失败','redirect'=>'order/orderList/'.$request['status']]);
@@ -170,6 +198,7 @@ class orderController extends Controller
         $data = $request->except('_token');
         $data['updated_at'] = Carbon::now();
         if(DB::table('orders')->where('id',$request['id'])->update($data)){
+            $this -> OperationLog('修改了id为'.$request['id'].'的订单已退金额');
             return redirect('admin/message')->with(['status'=>'成功','redirect'=>'order/orderList/'.$request['status']]);
         }else{
             return redirect('admin/message')->with(['status'=>'失败','redirect'=>'order/orderList/'.$request['status']]);
@@ -193,6 +222,7 @@ class orderController extends Controller
      */
     public function delRemark($orderid,$id){
         if(DB::table('remarks')->where('id',$id)->delete()){
+            $this -> OperationLog('删除了id为'.$id.'的订单备注');
             return redirect('admin/message')->with(['status'=>'备注删除成功','redirect'=>'order/remarkList/'.$orderid]);
         }else{
             return redirect('admin/message')->with(['status'=>'备注删除失败','redirect'=>'order/remarkList/'.$orderid]);
@@ -255,6 +285,7 @@ class orderController extends Controller
     public function delRefund($orderSn,$id){
         $data = DB::table('refund')->where('id',$id)->delete();
         if($data){
+            $this -> OperationLog('删除了id为'.$id.'的订单退款信息');
             return redirect('admin/message')->with(['status'=>'退款删除成功','redirect'=>'order/refundList/'.$orderSn]);
         }else{
             return redirect('admin/message')->with(['status'=>'退款删除失败','redirect'=>'order/refundList/'.$orderSn]);
@@ -305,11 +336,19 @@ class orderController extends Controller
 
         if($result['return_code'] == 'SUCCESS'){
             DB::table('orders')->where('id',$orderid)->update(['status'=>4]);//如果退款成功将订单状态改为4已退款
+            $this -> OperationLog('id为'.$orderid.'的订单确认了退款');
             return redirect('admin/message')->with(['status'=>'退款成功','redirect'=>'order/orderList/4']);
         }else{
             return redirect('admin/message')->with(['status'=>'退款失败','redirect'=>'order/orderList/3']);
         }
 //        dd($result);
+    }
+
+    /**
+     *支付宝确认退款
+     */
+    public function alipayRefund(){
+        $alipay = app('alipay.web');
     }
 
 }

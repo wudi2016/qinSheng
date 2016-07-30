@@ -107,11 +107,27 @@ define([], function() {
 				$('#fileObject').bind('change', function() {
 					vmodel.file = document.getElementById('fileObject').files[0];
 					document.getElementById('fileDiv').innerHTML = '';
-					vmodel.uploadResource($(this).val());
+					var suffix = $(this).val().substring($(this).val().lastIndexOf('.') + 1);
+					suffix.match(/(mp4|flv|avi|rmvb|wmv|mkv)/i) ? vmodel.uploadResource($(this).val()) : vmodel.endUpload('文件格式不正确');
 					return;
 				});
 				$('#fileObject').click();
 			});
 		}
+	});
+
+	avalon.directive('imgbig', {
+	    update: function (value) {
+	        var element = this.element;
+	        var w1 = element.width;
+	        var h1 = element.height;
+	        var w2 = w1 + 40;
+	        var h2 = h1 + 40;
+	        $('.img_big').hover(function () {
+	            $(this).stop().animate({height: h2, width: w2, left: "-20px", top: "-20px"}, 'fast');
+	        }, function () {
+	            $(this).stop().animate({height: h1, width: w1, left: "0px", top: "0px"}, 'fast');
+	        })
+	    }
 	});
 });

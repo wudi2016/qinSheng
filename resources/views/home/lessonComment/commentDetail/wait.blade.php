@@ -34,7 +34,7 @@
 		<div class="palyinfo">
 			<div class="title">演奏信息</div>
 			<div class="palyinfo_detail">
-				<div class="palyinfo_detail_img"><img ms-attr-src="studentInfo.pic" width="100%" height="100%"></div>
+				<a ms-attr-href="/lessonComment/student/[--studentInfo.userId--]" class="palyinfo_detail_img"><img ms-attr-src="studentInfo.pic" width="100%" height="100%"></a>
 				<a ms-attr-href="/lessonComment/student/[--studentInfo.userId--]" class="palyinfo_detail_text" ms-html="studentInfo.username"></a>
 				<div class="palyinfo_detail_time" ms-html="studentInfo.created_at"></div>
 			</div>

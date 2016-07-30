@@ -16,6 +16,12 @@ class SpecialFeedbackController extends Controller
      */
     public function specialFeedbackList(Request $request){
         $query = DB::table('coursefeedback as f');
+        if($request['beginTime']){ //上传的起止时间
+            $query = $query->where('f.created_at','>=',$request['beginTime']);
+        }
+        if($request['endTime']){ //上传的起止时间
+            $query = $query->where('f.created_at','<=',$request['endTime']);
+        }
         if($request['type'] == 1){
             $query = $query->where('f.id','like','%'.trim($request['search']).'%');
         }
@@ -25,15 +31,14 @@ class SpecialFeedbackController extends Controller
         if($request['type'] == 3){
             $query = $query->where('f.backType','like','%'.trim($request['search']).'%');
         }
-        if($request['type'] == 4){ //上传的起止时间
-            $query = $query->where('f.created_at','>=',$request['beginTime'])->where('f.created_at','<=',$request['endTime']);
-        }
         $data = $query
             ->leftJoin('course as c','f.courseId','=','c.id')
             ->select('f.*','c.courseTitle')
             ->orderBy('f.id','desc')
             ->paginate(15);
         $data->type = $request['type'];
+        $data->beginTime = $request['beginTime'];
+        $data->endTime = $request['endTime'];
         return view('admin.specialCourse.specialFeedbackList',['data'=>$data]);
 
     }
@@ -57,6 +62,7 @@ class SpecialFeedbackController extends Controller
     public function delSpecialFeedback($id){
         $data = DB::table('coursefeedback')->where('id',$id)->delete();
         if($data){
+            $this -> OperationLog('删除了id为'.$id.'的专题课程意见反馈');
             return redirect('admin/message')->with(['status'=>'意见反馈删除成功','redirect'=>'specialCourse/specialFeedbackList']);
         }else{
             return redirect('admin/message')->with(['status'=>'意见反馈删除失败','redirect'=>'specialCourse/specialFeedbackList']);

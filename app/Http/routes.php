@@ -62,7 +62,7 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
 
 
         //获取赛事接口
-        Route::get('/getgames/{type}', 'indexController@getgames');
+        Route::get('/getgames/{type}/{pageNumber}/{pageSize}', 'indexController@getgames');
         //名师介绍接口
         Route::get('/getteachers', 'indexController@getteachers');
         //专题课程接口
@@ -86,9 +86,9 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         //修改密码接口
         Route::post('/resetPassword', 'indexController@resetPassword');
         //搜索专题课程接口
-        Route::get('/getCourseaa/{search}/{ordder?}', 'indexController@getCourseaa');
+        Route::get('/getCourseaa/{search}/{pageNumber}/{pageSize}/{ordder?}', 'indexController@getCourseaa');
         //搜索点评课程接口
-        Route::get('/getCoursebb/{search}/{ordder?}', 'indexController@getCoursebb');
+        Route::get('/getCoursebb/{search}/{pageNumber}/{pageSize}/{ordder?}', 'indexController@getCoursebb');
 
     });
 
@@ -150,6 +150,10 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         Route::post('/getNoticeInfo','perSpaceController@getNoticeInfo');
         // 个人中心 删除通知
         Route::post('/deleteNotice','perSpaceController@deleteNotice');
+        // 个人中心 更改通知状态
+        Route::get('/changeNoticeStatus/{type}','perSpaceController@changeNoticeStatus');
+        // 个人中心 查看是否有通知消息
+        Route::post('/findHaveNotice','perSpaceController@findHaveNotice');
         // 个人中心 评论回复
         Route::post('/getCommentInfo', 'perSpaceController@getCommentInfo');
         // 个人中心 评论删除
@@ -247,9 +251,9 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
 
         // =============== return data ================
         // 专题课程列表页 规则排序 数据接口
-        Route::get('/getList/{type}', 'lessonSubjectController@getList');
+        Route::get('/getList/{type}/{pageNumber}/{pageSize}', 'lessonSubjectController@getList');
         // 点评课程列表页 规则排序 数据接口
-        Route::get('/getCommentList/{type}', 'lessonSubjectController@getCommentList');
+        Route::get('/getCommentList/{type}/{pageNumber}/{pageSize}', 'lessonSubjectController@getCommentList');
         // 专题课程详细页 数据接口
         Route::get('/getDetail/{id}', 'lessonSubjectController@getDetail');
         // 讲师信息 数据接口
@@ -268,6 +272,8 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         Route::post('/publishFeedBack', 'lessonSubjectController@publishFeedBack');
         // 增加课程观看数
         Route::post('/addCourseView', 'lessonSubjectController@addCourseView');
+        // 增加课程观看完成数
+        Route::post('/addCompleteCount','lessonSubjectController@addCompleteCount');
 
         // 添加订单接口
         Route::post('/addOrder', 'lessonSubjectController@addOrder');
@@ -341,11 +347,11 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         //  递增视频观看数
         Route::post('/videoIncrement', ['middleware' => 'check', 'uses' => 'commentDetailController@videoIncrement']);
         //  待点评详情
-        Route::get('/wait/{commentID}', ['middleware' => 'check', 'uses' => 'commentDetailController@wait']);
+        Route::get('/wait/{commentID}/{messageID?}', ['middleware' => 'check', 'uses' => 'commentDetailController@wait']);
         //  上传点评视频
         Route::get('/upload/{orderSn}', ['middleware' => 'check', 'uses' => 'commentDetailController@uploadComment']);
         //  审核未通过重新上传视频
-        Route::get('/reUploadComment/{commentID}', ['middleware' => 'check', 'uses' => 'commentDetailController@reUploadComment']);
+        Route::get('/reUploadComment/{commentID}/{messageID?}', ['middleware' => 'check', 'uses' => 'commentDetailController@reUploadComment']);
         //  完成点评视频上传
         Route::post('/finishComment', ['middleware' => 'check', 'uses' => 'commentDetailController@finishComment']);
 
@@ -366,7 +372,7 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         //  上传视频
         Route::get('/buy/upload/{orderID}', ['middleware' => 'check', 'uses' => 'buyCommentController@upload']);
         //	审核未通过重新上传视频
-        Route::get('/reUpload/{applyID}', ['middleware' => 'check', 'uses' => 'buyCommentController@reUpload']);
+        Route::get('/reUpload/{applyID}/{messageID?}', ['middleware' => 'check', 'uses' => 'buyCommentController@reUpload']);
         //  完成上传
         Route::post('/finishUpload', ['middleware' => 'check', 'uses' => 'buyCommentController@finishUpload']);
         
@@ -521,7 +527,7 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
         //用户列表
         Route::get('/userList', ['middleware' => 'permission:user.list', 'uses' =>'indexController@index']);
         //查看详情
-        Route::get('/show/{id}', ['middleware' => 'permission:user.list', 'uses' =>'indexController@show']);
+        Route::get('/show/{id}/{status?}', ['middleware' => 'permission:user.list', 'uses' =>'indexController@show']);
         //添加用户
         Route::get('/addUser',['middleware' => 'permission:add.user', 'uses' =>'indexController@create']);
         //添加用户
@@ -533,15 +539,15 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
         //删除用户
         Route::get('delUser/{id}',['middleware' => 'permission:delete.user', 'uses' =>'indexController@delete']);
         //重置密码
-        Route::any('resetPass/{id}',['middleware' => 'permission:resetPass.user', 'uses' =>'indexController@resetPass']);
+        Route::any('resetPass/{id}/{status?}',['middleware' => 'permission:resetPass.user', 'uses' =>'indexController@resetPass']);
         //更改用户状态
         Route::post('changeStatus',['middleware' => 'permission:changeStatus.user', 'uses' =>'indexController@changeStatus']);
 
 
         //我的关注friendsController
-        Route::get('focusList/{id}',['middleware' => 'permission:user.list', 'uses' =>'friendsController@focusList']);
+        Route::get('focusList/{id}/{status?}',['middleware' => 'permission:user.list', 'uses' =>'friendsController@focusList']);
         //我的好友
-        Route::get('friendsList/{id}',['middleware' => 'permission:user.list', 'uses' =>'friendsController@friendsList']);
+        Route::get('friendsList/{id}/{status?}',['middleware' => 'permission:user.list', 'uses' =>'friendsController@friendsList']);
         //我的关注删除
         Route::get('delFocus/{userId}/{id}',['middleware' => 'permission:delete.user', 'uses' =>'friendsController@delete']);
         //我的好友删除
@@ -729,7 +735,7 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
         //视频详情
         Route::get('detailCommentCourse/{id}','commentCourseController@detailCommentCourse');
         //审核通过给名师发送短信提示
-        Route::get('sendMessage/{phone}/{orderSn}','commentCourseController@sendMessage');
+        Route::post('sendMessage','commentCourseController@sendMessage');
 
 
         //名师点评视频
@@ -786,13 +792,15 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
         //执行确认已退金额
         Route::post('doRetiredmoney','orderController@doRetiredmoney');
         //备注列表
-        Route::get('remarkList/{id}','orderController@remarkList');
+        Route::get('remarkList/{id}/{status?}','orderController@remarkList');
         //删除备注
         Route::get('delRemark/{orderid}/{id}','orderController@delRemark');
+        //清除垃圾订单
+        Route::get('deleteOrders','orderController@deleteOrders');
 
 
         //退款列表
-        Route::get('refundList/{orderSn}','orderController@refundList');
+        Route::get('refundList/{orderSn}/{status?}','orderController@refundList');
         //退款状态
         Route::get('refundState','orderController@refundState');
         //删除退款
@@ -822,6 +830,8 @@ Route::group(['prefix'=>'/commentReply','namespace'=>'commentReply'],function(){
     Route::get('applyCommentStatus',['middleware' => 'permission:edit.commentReply', 'uses' => 'applyCommentController@applyCommentStatus']);
     //审核状态
     Route::get('applyCommentChecks',['middleware' => 'permission:edit.commentReply', 'uses' => 'applyCommentController@applyCommentChecks']);
+    //查看详情
+    Route::get('lookapplyComment/{id}',['middleware' => 'permission:edit.commentReply', 'uses' => 'applyCommentController@lookapplyComment']);
 
 
     //课程评论列表
@@ -836,6 +846,8 @@ Route::group(['prefix'=>'/commentReply','namespace'=>'commentReply'],function(){
     Route::get('courseCommentStatus',['middleware' => 'permission:edit.commentReply', 'uses' => 'courseCommentController@courseCommentStatus']);
     //审核状态
     Route::get('courseCommentChecks',['middleware' => 'permission:edit.commentReply', 'uses' => 'courseCommentController@courseCommentChecks']);
+    //查看详情
+    Route::get('lookcourseComment/{id}',['middleware' => 'permission:edit.commentReply', 'uses' => 'courseCommentController@lookcourseComment']);
 
 });
 
@@ -1118,6 +1130,9 @@ Route::group(['prefix'=>'/contentManager','namespace'=>'contentManager'],functio
         Route::get('editRecycleOrder/{id}','RecycleCourseController@editRecycleOrder');
         //彻底删除
         Route::get('delRecycleOrder/{id}','RecycleCourseController@delRecycleOrder');
+
+        //清空回收站
+        Route::get('deleteRecycle','RecycleCourseController@deleteRecycle');
     });
 
 
@@ -1163,9 +1178,9 @@ Route::group(['prefix'=>'/contentManager','namespace'=>'contentManager'],functio
     Route::group(['prefix'=>'/logs','namespace'=>'logs'],function(){
 
         //后台日志管理列表
-        Route::get('logList','indexController@logList');
+        Route::get('logList', ['middleware' => 'permission:logs.list', 'uses' => 'indexController@logList']);
         //日志删除
-        Route::get('deleteLog/{tableName}/{id}/{time?}','indexController@destroy');
+        Route::get('deleteLog/{tableName}/{id}/{time?}', ['middleware' => 'permission:delete.log', 'uses' => 'indexController@destroy']);
 
     });
 

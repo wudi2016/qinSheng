@@ -13,7 +13,7 @@
         <div class="banner">
             <ul>
                 @foreach ($banners as $banner)
-                <li><a href="{{url('http://'.$banner->url)}}" target="_blank"><img style="width: 100%;min-height: 410px;" src="{{asset($banner->path)}}" /></a></li>
+                <li><a href="{{url('http://'.$banner->url)}}" target="_blank"><img style="width: 100%;min-height: 656px;" src="{{asset($banner->path)}}" /></a></li>
                 @endforeach
 
                 {{--<li><a href=""><img style="width: 100%;" src="{{asset('home/image/index/banner.png')}}" /></a></li>--}}

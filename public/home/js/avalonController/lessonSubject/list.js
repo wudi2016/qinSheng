@@ -42,20 +42,35 @@ define([], function () {
                 dataSource: function (done) {
                     $.ajax({
                         type: 'GET',
-                        url: '/lessonSubject/getList/' + type,
+                        url: '/lessonSubject/getList/' + type + '/' + this.pageNumber + '/' + this.pageSize,
                         dataType: "json",
                         success: function (response) {
                             if (response.status) {
-                                done(response.data);
+                                var format = [];
+                                format['data'] = response.data;
+                                format['totalNumber'] = response.count;
+                                done(format);
                             }
-                        },
+                        }
+                    });
+                },
+                getData: function(pageNumber,pageSize) {
+                    var self = this;
+                    $.ajax({
+                        type: 'GET',
+                        url: '/lessonSubject/getList/' + type + '/' + pageNumber + '/' + pageSize,
+                        success: function(response) {
+                            self.callback(response.data);
+                        }
                     });
                 },
                 pageSize: 16,
-                className: "paginationjs-theme-blue",
+                pageNumber :1,
+                totalNumber :1,
+                className:"paginationjs-theme-blue",
                 showGoInput: true,
                 showGoButton: true,
-                callback: function (data) {
+                callback: function(data) {
                     if (data) {
                         list.subjectInfo = data;
                     }
@@ -67,21 +82,36 @@ define([], function () {
                 dataSource: function (done) {
                     $.ajax({
                         type: 'GET',
-                        url: '/lessonSubject/getCommentList/' + type,
+                        url: '/lessonSubject/getCommentList/' + type + '/' + this.pageNumber + '/' + this.pageSize,
                         dataType: "json",
                         success: function (response) {
                             if (response.status) {
-                                done(response.data);
+                                var format = [];
+                                format['data'] = response.data;
+                                format['totalNumber'] = response.count;
+                                done(format);
                             }
-                        },
+                        }
+                    });
+                },
+                getData: function(pageNumber,pageSize) {
+                    var self = this;
+                    $.ajax({
+                        type: 'GET',
+                        url: '/lessonSubject/getCommentList/' + type + '/' + pageNumber + '/' + pageSize,
+                        success: function(response) {
+                            self.callback(response.data);
+                        }
                     });
                 },
                 pageSize: 16,
-                className: "paginationjs-theme-blue",
+                pageNumber :1,
+                totalNumber :1,
+                className:"paginationjs-theme-blue",
                 showGoInput: true,
                 showGoButton: true,
-                callback: function (data) {
-                    if (data) {
+                callback: function(data) {
+                    if(data){
                         list.commentInfo = data;
                     }
                 }

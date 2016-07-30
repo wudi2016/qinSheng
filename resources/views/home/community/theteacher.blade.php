@@ -10,6 +10,8 @@
 
 @section('content')
 
+	<div class="background">
+
 
 
 		<div style="height:20px"></div>
@@ -29,6 +31,7 @@
 
 			<!-- 排序字母 -->
 			<div class="orderletter">
+				<div ms-click="tabs(27)" class="tabss">全部</div>
 				<div ms-click="tabs(1)" class="a" >A</div>
 				<div ms-click="tabs(2)" class="b">B</div>
 				<div ms-click="tabs(3)" class="c">C</div>
@@ -114,6 +117,7 @@
 
 		</div>
 
+	</div>
 @endsection
 
 @section('js')

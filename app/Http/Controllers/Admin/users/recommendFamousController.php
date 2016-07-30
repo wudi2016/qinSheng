@@ -43,6 +43,7 @@ class recommendFamousController extends Controller
         $data['created_at'] = Carbon::now();
         $data['updated_at'] = Carbon::now();
         if(DB::table('hotteacher')->insert($data)){
+            $this -> OperationLog('添加了id为'.$request['teacherId'].'的名师推荐');
             return redirect('admin/message')->with(['status'=>'名师推荐成功','redirect'=>'users/recommendFamousList']);
         }else{
             return redirect('admin/message')->with(['status'=>'名师推荐失败','redirect'=>'users/recommendFamousList']);
@@ -65,6 +66,7 @@ class recommendFamousController extends Controller
         }
         $data['updated_at'] = Carbon::now();
         if(DB::table('hotteacher')->where('id',$request['id'])->update($data)){
+            $this -> OperationLog('修改了id为'.$request['id'].'的名师推荐');
             return redirect('admin/message')->with(['status'=>'修改成功','redirect'=>'users/recommendFamousList']);
         }else{
             return redirect('admin/message')->with(['status'=>'修改失败','redirect'=>'users/recommendFamousList']);
@@ -76,6 +78,7 @@ class recommendFamousController extends Controller
      */
     public function delRecommendFamous($id){
         if(DB::table('hotteacher')->where('id',$id)->delete()){
+            $this -> OperationLog('删除了id为'.$id.'的名师推荐');
             return redirect('admin/message')->with(['status'=>'删除成功','redirect'=>'users/recommendFamousList']);
         }else{
             return redirect('admin/message')->with(['status'=>'删除失败','redirect'=>'users/recommendFamousList']);

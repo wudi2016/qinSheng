@@ -33,37 +33,48 @@ define([], function () {
         changeSwitch: function (value) {
             detail.changeOption = value;
             if (value == 'comment') {
-                detail.commentInfo.length == 0 ? detail.getCommentInfo(detail.detailId) : detail.commentInfo;
+                detail.commentInfo.length === 0 ? detail.getCommentInfo(detail.detailId) : detail.commentInfo;
             }
             else if (value == 'dataDownload') {
-                detail.dataDownload.length == 0 ? detail.getDataDownload(detail.detailId) : detail.dataDownload;
+                detail.dataDownload.length === 0 ? detail.getDataDownload(detail.detailId) : detail.dataDownload;
             }
         },
+        haveCourse : true,
         downloadMsg: false, commentMsg: false,
         getData: function (url, type, data, model, callback) {
             $.ajax({
                 url: url, type: type || 'GET', data: data || {}, dataType: 'json',
                 success: function (response) {
                     if (model == 'result') {
-                        callback(response.status)
+                        callback(response.status);
                         return;
                     }
                     if (model == 'submitComment') {
-                        callback(response.data)
+                        callback(response.data);
                         return;
                     }
                     if (model == 'orderInfo') {
                         response.status && callback(response);
                         return;
                     }
-                    ;
+                    if(model == 'addCompleteCount'){
+                        return;
+                    }
                     if (response.status) {
                         detail[model] = response.data;
                     } else {
                         if (model == 'commentInfo') detail.commentMsg = true;
                         if (model == 'dataDownload') detail.downloadMsg = true;
                     }
-                    model == 'detailInfo' && detail.setVideo(function () {});
+                    if(model == 'detailInfo'){
+                        if(response.status){
+                            detail[model] = response.data;
+                        }else{
+                            detail.haveCourse = false;
+                        }
+                    }
+
+                    model == 'detailInfo' && detail.setVideo(function () {detail.getData('/lessonSubject/addCompleteCount', 'POST', {id: detail.detailId}, 'addCompleteCount');});
                 }, error: function (error) {
                 }
             })
@@ -158,8 +169,8 @@ define([], function () {
             detail[model] = value;
         },
         // 弹窗处理
-        popUp: false,
-        popUpSwitch: function (value, id, path, name) {
+        popUp: false,path : '', dataName : '',
+        popUpSwitch: function (value, id, path, name, isTeacher) {
             if (id == 'delComment') {
                 detail.getData('/lessonSubject/deleteComment', 'POST', {
                     id: detail.commentInfo[detail.deleteIndex].id,
@@ -171,17 +182,14 @@ define([], function () {
                 });
             }
             if (value == 'dataDownload') {
-                if (id) {
+                if (id || isTeacher) {
                     detail.popUp = 'downloadData';
                     detail.path = path;
+                    detail.dataName = name;
                     return;
                 } else {
                     detail.popUp = false;
                 }
-            }
-            if (value == 'downIt') {
-                detail.popUp = false;
-                window.open(detail.path);return;
             }
             if (value == 'startStudy') {
                 detail.popUp = false;
@@ -280,11 +288,11 @@ define([], function () {
 
         },
         overtime: false,
+        noresourse : false,
         thePlayer: {},
         videoType: true,
         setVideo: function (callback) {
             var model = detail.videoType ? 'detailInfo' : 'videoPath';
-
             detail.thePlayer = jwplayer('mediaplayer').setup({
                 flashplayer: 'jwplayer/jwplayer.flash.swf',
                 playlist: [{
@@ -317,6 +325,15 @@ define([], function () {
                 type: "mp4"
             });
             typeof callback === 'function' && callback();
+            if(detail.detailInfo.isTryLearn || detail.detailInfo.isTeacher || detail.detailInfo.isBuy){ // 是名师或者已购买
+                if(!detail[model].courseHighPath && !detail[model].courseMediumPath && !detail[model].courseLowPath){ // 视频都不可观看
+                    detail.thePlayer.remove();
+                    detail.noresourse = true;
+                }
+            }else{
+                detail.thePlayer.remove();
+                detail.overtime = true;
+            }
             detail.thePlayer.onTime(function () {
                 //if (detail.thePlayer.getPosition() >= 30) {
                 //    detail.thePlayer.play(false);
@@ -326,16 +343,20 @@ define([], function () {
             });
         },
         videoPath: [],
-        changeVideo: function (chapterId, path, isTryLearn, isBuy, isTeacher) {
+        changeVideo: function (chapterId, path, isTryLearn, isBuy, isTeacher,coursePic) {
             if(isTeacher || isBuy){
                 detail.videoType = false;
                 detail.overtime = false;
                 detail.videoPath = {
+                    coursePic : coursePic,
                     courseHighPath: path,
                     courseMediumPath: path,
                     courseLowPath: path,
                 };
                 detail.setVideo(function () {
+                    detail.noresourse = false;
+                    detail.thePlayer.play(true);
+                    detail.getData('/lessonSubject/addCompleteCount', 'POST', {id: detail.detailId}, 'addCompleteCount');
                 });
                 if (detail.mineUserId != null) {
                     detail.getData('/lessonSubject/addCourseView', 'POST', {
@@ -349,11 +370,15 @@ define([], function () {
                     detail.videoType = false;
                     detail.overtime = false;
                     detail.videoPath = {
+                        coursePic : coursePic,
                         courseHighPath: path,
                         courseMediumPath: path,
                         courseLowPath: path,
                     };
                     detail.setVideo(function () {
+                        detail.noresourse = false;
+                        detail.thePlayer.play(true);
+                        detail.getData('/lessonSubject/addCompleteCount', 'POST', {id: detail.detailId}, 'addCompleteCount');
                     });
                     if (detail.mineUserId != null) {
                         detail.getData('/lessonSubject/addCourseView', 'POST', {
@@ -363,7 +388,11 @@ define([], function () {
                         }, 'addCourseView');
                     }
                 }else{
-                    detail.popUp = 'buyCourse';
+                    if(detail.mineUserId){
+                        detail.popUp = 'buyCourse';
+                    }else{
+                        location.href = '/index/login';
+                    }
                 }
             }
         }

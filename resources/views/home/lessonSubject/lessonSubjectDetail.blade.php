@@ -17,7 +17,7 @@
                 <a ms-attr-href="pageInfo.course">课程</a> >
                 <a ms-attr-href="pageInfo.lessonSubject">专题课程</a> > 课程详情
             </div>
-            <div class="contain_lessonDetail_top_video">
+            <div class="contain_lessonDetail_top_video" ms-if="haveCourse">
                 <div class="contain_lessonDetail_top_video_left">
                     {{--<img ms-attr-src="pageInfo.video"/>--}}
                     <div class="video_block" style="height: 515px;">
@@ -27,13 +27,21 @@
                             <div class="overtime_detail">
                                 <img class="palyinfo_detail_img" style="margin-top: 7px;" src="/home/image/lessonComment/commentDetail/download_warning.png">
                                 <div class="palyinfo_detail_text">尊敬的用户：</div>
-                                <div class="palyinfo_detail_text">试看已结束，请购买观看完整课程。</div>
+                                <div class="palyinfo_detail_text">该课程无试学课程，请购买观看课程。</div>
                             </div>
                             @if (Auth::check())
                                 <a class="comment_button" style="margin: 30px auto 0; float: none; background: #1588E5; color: white; cursor: pointer; display: block;" ms-click="popUpSwitch('buyCourse')">立即购买</a>
                             @else
                                 <a href="/index/login" class="overtime_tologin"><img src="{{asset('/home/image/lessonComment/commentDetail/gologin.png')}}" width="100%" height="100%"></a>
                             @endif
+                        </div>
+                        <div class="overtime hide" ms-visible="noresourse" style="height: 515px;">
+                            <div style="clear: both; height: 170px;"></div>
+                            <div class="overtime_detail">
+                                <img class="palyinfo_detail_img" style="margin-top: 7px;" src="/home/image/lessonComment/commentDetail/download_warning.png">
+                                <div class="palyinfo_detail_text">尊敬的用户：</div>
+                                <div class="palyinfo_detail_text">该视频出现了问题，暂时不能观看。</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -49,7 +57,7 @@
                             <span class="third">立即学习</span>
                         @else
                             <span class="first" ms-click="popUpSwitch('buyCourse')" ms-visible="!detailInfo.isBuy">立即购买</span>
-                            <span class="second" ms-visible="!detailInfo.isBuy">立即试学</span>
+                            <span class="second" ms-visible="!detailInfo.isBuy && detailInfo.isTryLearn">立即试学</span>
                             <span class="third" ms-visible="detailInfo.isBuy">立即学习</span>
                         @endif
                     </div>
@@ -72,7 +80,7 @@
             </div>
         </div>
 
-        <div class="contain_lessonDetail_bot">
+        <div class="contain_lessonDetail_bot" ms-if="haveCourse">
             <div class="contain_lessonDetail_bot_left">
                 <!-- 选项卡切换 -->
                 <div class="contain_lessonDetail_bot_left_tip">
@@ -101,10 +109,10 @@
                             <div class="contain_lessonDetail_bot_left_info_div">
                                 <div class="data" ms-repeat="el.section">
                                     <span class="spot"></span>
-                                    <a href="#changeVideo"><span class="data_content" ms-html="el.title" ms-click="changeVideo(el.id,el.courseLowPath,el.isTryLearn,detailInfo.isBuy,detailInfo.isTeacher);"></span></a>
+                                    <a href="#changeVideo"><span class="data_content" ms-html="el.title" ms-click="changeVideo(el.id,el.courseLowPath,el.isTryLearn,detailInfo.isBuy,detailInfo.isTeacher,el.coursePic);"></span></a>
                                     <span ms-if="el.isTryLearn == 1" class="try">试学</span>
                                     <span ms-if="el.isLearn" class="have">已学</span>
-                                    <a href="#changeVideo"><span class="play" ms-click="changeVideo(el.id,el.courseLowPath,el.isTryLearn,detailInfo.isBuy,detailInfo.isTeacher);"></span></a>
+                                    <a href="#changeVideo"><span class="play" ms-click="changeVideo(el.id,el.courseLowPath,el.isTryLearn,detailInfo.isBuy,detailInfo.isTeacher,el.coursePic);"></span></a>
                                 </div>
                             </div>
                         </div>
@@ -154,7 +162,7 @@
                             <div style="width: 100%;height: 5px"></div>
                             <div class="contain_lessonDetail_bot_left_info_div">
                                 <div class="data" ms-repeat="dataDownload">
-                                    <span class="spot"></span><span class="data_download_content" ms-html="el.dataName" ms-click="popUpSwitch('dataDownload',detailInfo.isBuy,el.dataPath,el.dataName);"></span>
+                                    <span class="spot"></span><span class="data_download_content" ms-html="el.dataName" ms-click="popUpSwitch('dataDownload',detailInfo.isBuy,el.dataPath,el.dataName,detailInfo.isTeacher);"></span>
                                 </div>
                             </div>
                         </div>
@@ -171,7 +179,7 @@
                     </div>
                     <div class="desc">
                         <a ms-attr-href="'/lessonComment/teacher/' + teacherInfo.id"><span class="name" ms-html="teacherInfo.realname"></span></a>
-                        <span class="school" ms-html="teacherInfo.school"></span>
+                        <span class="school" ms-html="teacherInfo.company"></span>
                     </div>
                     <div class="clear"></div>
                     <span class="content" ms-html="teacherInfo.intro"></span>
@@ -300,7 +308,12 @@
             </div>
             <div class="bot">
                 <span class="quit" ms-click="popUpSwitch(false)">取消</span>
-                <span class="sure" ms-click="popUpSwitch('downIt');">确定</span>
+                <a class="sure" ms-attr-href="path" ms-attr-download="dataName" ms-click="popUpSwitch(false)">确定</a>
+            </div>
+        </div>
+        <div class="no_course" ms-if="!haveCourse">
+            <div>该课程已下架，
+                <a href="/lessonSubject/list/1">点击返回</a>
             </div>
         </div>
     </div>

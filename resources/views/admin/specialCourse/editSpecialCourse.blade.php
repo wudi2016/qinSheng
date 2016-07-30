@@ -262,43 +262,58 @@
                         </div>
                         {{--@endif--}}
 
+                        {{--<div class="space-4"></div>--}}
+
+                        {{--<div class="form-group">--}}
+                            {{--<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 浏览数 </label>--}}
+
+                            {{--<div class="col-sm-9">--}}
+                                {{--<input type="text" name="courseView" id="form-field-1" placeholder="浏览数" class="col-xs-10 col-sm-5" value="{{$data->courseView}}" />--}}
+                            {{--<span class="help-inline col-xs-12 col-sm-7">--}}
+                                {{--<label class="middle">--}}
+                                    {{--<span class="lbl"></span>--}}
+                                {{--</label>--}}
+                            {{--</span>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+
+                        {{--<div class="space-4"></div>--}}
+
+                        {{--<div class="form-group">--}}
+                            {{--<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 观看数 </label>--}}
+
+                            {{--<div class="col-sm-9">--}}
+                                {{--<input type="text" name="coursePlayView" id="form-field-1" placeholder="观看数" class="col-xs-10 col-sm-5" value="{{$data->coursePlayView}}" />--}}
+                            {{--<span class="help-inline col-xs-12 col-sm-7">--}}
+                                {{--<label class="middle">--}}
+                                    {{--<span class="lbl"></span>--}}
+                                {{--</label>--}}
+                            {{--</span>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+
+                        {{--<div class="space-4"></div>--}}
+
+                        {{--<div class="form-group">--}}
+                            {{--<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 收藏数 </label>--}}
+
+                            {{--<div class="col-sm-9">--}}
+                                {{--<input type="text" name="courseFav" id="form-field-1" placeholder="收藏数" class="col-xs-10 col-sm-5" value="{{$data->courseFav}}" />--}}
+                            {{--<span class="help-inline col-xs-12 col-sm-7">--}}
+                                {{--<label class="middle">--}}
+                                    {{--<span class="lbl"></span>--}}
+                                {{--</label>--}}
+                            {{--</span>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+
                         <div class="space-4"></div>
 
                         <div class="form-group">
-                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 浏览数 </label>
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 学习数 </label>
 
                             <div class="col-sm-9">
-                                <input type="text" name="courseView" id="form-field-1" placeholder="浏览数" class="col-xs-10 col-sm-5" value="{{$data->courseView}}" />
-                            <span class="help-inline col-xs-12 col-sm-7">
-                                <label class="middle">
-                                    <span class="lbl"></span>
-                                </label>
-                            </span>
-                            </div>
-                        </div>
-
-                        <div class="space-4"></div>
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 观看数 </label>
-
-                            <div class="col-sm-9">
-                                <input type="text" name="coursePlayView" id="form-field-1" placeholder="观看数" class="col-xs-10 col-sm-5" value="{{$data->coursePlayView}}" />
-                            <span class="help-inline col-xs-12 col-sm-7">
-                                <label class="middle">
-                                    <span class="lbl"></span>
-                                </label>
-                            </span>
-                            </div>
-                        </div>
-
-                        <div class="space-4"></div>
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 收藏数 </label>
-
-                            <div class="col-sm-9">
-                                <input type="text" name="courseFav" id="form-field-1" placeholder="收藏数" class="col-xs-10 col-sm-5" value="{{$data->courseFav}}" />
+                                <input type="text" name="courseStudyNum" id="form-field-1" placeholder="学习数" class="col-xs-10 col-sm-5" value="{{$data->courseStudyNum}}" />
                             <span class="help-inline col-xs-12 col-sm-7">
                                 <label class="middle">
                                     <span class="lbl"></span>

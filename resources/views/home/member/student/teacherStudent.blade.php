@@ -1,6 +1,7 @@
 @extends('layouts.layoutHome')
 
-@section('title', '教师学员个人中心')
+@section('title', '学员个人中心')
+
 
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{asset('home/css/personCenter/select2.css')}}">
@@ -69,8 +70,8 @@
                 <div class="height5"></div>
                 <div class="account_manger">我的通知</div>
                 <div class="height5"></div>
-                <span class="span_hover"></span><div name='wholeNotice'  class="account_common" ms-click="changeTab('wholeNotice')">全部通知</div>
-                <span class="span_hover"></span><div name='commentAnswer'  class="account_common" ms-click="changeTab('commentAnswer')">评论回复</div>
+                <span class="span_hover"></span><div name='wholeNotice' class="account_common" ms-click="changeTab('wholeNotice')"><b ms-visible="noReadNotice" class="isRead hide"></b>全部通知</div>
+                <span class="span_hover"></span><div name='commentAnswer' class="account_common" ms-click="changeTab('commentAnswer')"><b ms-visible="noReadComment" class="isRead hide"></b>评论回复</div>
 
 
                 <!--课程管理-->
@@ -318,11 +319,12 @@
                         <!-- 后台发送消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == 0 && el.actionId">
                             <!-- 审核未通过 -->
-                            <a ms-attr-href="'/lessonComment/reUpload/' + el.actionId"><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 600px;display: block" ms-text="'上传视频审核未通过，原因：' + el.content" ms-attr-title=""></span></a>
+                            <a ms-attr-href="'/lessonComment/reUpload/' + el.actionId + '/' + el.id"><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 600px;display: block" ms-text="'上传视频审核未通过，原因：' + el.content" ms-attr-title=""></span></a>
                         </div>
                         <div class="repeat_comment_text" ms-if="el.type == 0 && el.tempId != 0">
                             <!-- 审核未通过 -->
-                            <span ms-text="el.tempName"></span><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 600px;display: block;float: right" ms-text="el.content"></span>
+                            <span class="span_light" ms-text="el.tempName" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 150px;display: block;float: left;" ms-attr-title="el.tempName"></span>
+                            <span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 400px;display: block;float: left;" ms-text="el.content" ms-attr-title="el.content"></span>
                         </div>
                         <!-- 注册加入消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '1'">
@@ -333,8 +335,11 @@
                             <span ms-text="el.fromUsername + '&nbsp;&nbsp;'" class="span_light"></span>老师点评了您上传的作品，<span><a class="span_light" ms-attr-href="'/lessonComment/detail/' + el.actionId">快去看看吧 >></a></span>
                         </div>
                         <!-- 本人被关注消息 -->
-                        <div class="repeat_comment_text" ms-if="el.type == '3'">
+                        <div class="repeat_comment_text" ms-if="el.type == '3' && el.userType != '2'">
                             <span ms-text="el.fromUsername" class="span_light"></span><a ms-attr-href="'/lessonComment/student/' + el.actionId"><span ms-text="el.content" style="margin-left: 10px;"></span></a>
+                        </div>
+                        <div class="repeat_comment_text" ms-if="el.type == '3' && el.userType == '2'">
+                            <span ms-text="el.fromUsername" class="span_light"></span><a ms-attr-href="'/lessonComment/teacher/' + el.actionId"><span ms-text="el.content" style="margin-left: 10px;"></span></a>
                         </div>
                         <!-- 关注用户被点评消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '4'">
@@ -371,10 +376,13 @@
                     <div class="notice_repeat_comment">
                         <div class="repeat_comment_text" ms-if="el.type == '5'">
                             <div style="float: left">
-                                <span class="span_light" ms-text="el.username"></span>
+                                <span class="span_light" ms-text="el.fromUsername"></span>
                                 <span>&nbsp;回复了您的评论&nbsp;</span>
                             </div>
-                            <a ms-attr-href="'/lessonSubject/detail/' + el.actionId">
+                            <a ms-attr-href="'/lessonSubject/detail/' + el.actionId" ms-if="el.courseType == 0">
+                                <span class="comment_content span_light" ms-attr-title="el.content" ms-text="el.content"></span>
+                            </a>
+                            <a ms-attr-href="'/lessonComment/detail/' + el.actionId" ms-if="el.courseType == 1">
                                 <span class="comment_content span_light" ms-attr-title="el.content" ms-text="el.content"></span>
                             </a>
                         </div>
@@ -421,7 +429,7 @@
                 <div class="right_comment_repeat" ms-repeat="commentCourseInfo">
                     <div class="comment_repeat_img">
                         <!-- 视频审核未通过 -->
-                        <a ms-attr-href="'/lessonComment/reUpload/' + el.AId" ms-if="el.orderType == '1' && el.AState == 0">
+                        <a ms-attr-href="'/lessonComment/reUpload/' + el.AId + '/' + el.messageID" ms-if="el.orderType == '1' && el.AState == 0">
                             <div class="repeat_img_unchecked">
                                 <div class="comment_video_unchecked">视频审核未通过</div>
                                 <div class="comment_video_time" ms-text="'发布时间：' + el.ACreated"></div>
@@ -509,11 +517,11 @@
                 <div class="center_right_information">收藏课程</div>
                 <div class="center_right_count">
                     <div class="right_count_left">共&nbsp;<span ms-text="total"></span>&nbsp;个视频</div>
-                    <div class="right_count_right">
+                    <div class="right_count_right" ms-if="collectionInfo.size() > 0">
                         {{--<span ms-click="getCollectionInfo(1);">最新</span>&nbsp;-&nbsp;<span class="count_right_hot" ms-click="getCollectionInfo(2);">热门</span>--}}
                         <div>
-                            <div class="count_right_store">删除收藏</div>
-                            <div class="count_right_store" style="display: none">完成</div>
+                            <div class="count_right_store deleteImg"><img src="{{asset('home/image/personCenter/deleteStore.png')}}"/></div>
+                            <div class="count_right_store" style="display: none"><img src="{{asset('home/image/personCenter/success.png')}}"/></div>
                         </div>
                     </div>
                 </div>
@@ -1022,7 +1030,7 @@
 
                 }
             });
-
+            sideBar.findHaveNotice();
             avalon.scan();
         });
     </script>

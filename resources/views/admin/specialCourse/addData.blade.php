@@ -114,6 +114,9 @@
         var addMsg = function(){
             $('.uploadarea_bar_r_msg').html('课程资料上传成功!');
         }
+        var addErrormeg = function(){
+            $('.uploadarea_bar_r_msg').html('课程资料格式不正确');
+        }
 
         $('#file_upload').uploadify({
             'swf'      : '/admin/image/uploadify.swf',
@@ -125,9 +128,16 @@
                 '_token' : '{{csrf_token()}}'
             },
             'onUploadSuccess' : function(file, data, response) {
+                console.log(file);
+                console.log(data);
+                console.log(response);
                 evaluatPic = '<input type="hidden" name="dataPath" value="'+data+'">';
                 $('#uploadurl').html(evaluatPic);
                 if(data){
+                    if(data == '文件格式不正确'){
+                        setTimeout('addErrormeg()',2000);
+                        return false;
+                    }
                     setTimeout('addMsg()',4000);
                 }
             }

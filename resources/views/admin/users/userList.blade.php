@@ -18,31 +18,38 @@
                 <li class="active">用户管理列表</li>
             </ul><!-- .breadcrumb -->
 
-            <div class="nav-search" id="nav-search">
+            <div class="nav-search" id="nav-search" style="width:770px;">
                 <form action="" method="get" class="form-search">
-                    <select name="type" id="form-field-1" class="searchtype input-select">
-                        <option value="0" {{$search['type'] == 0 ? 'selected':''}}>用户名</option>
+                    <input type="text" style="width:180px;padding-left:5px; padding-right: 5px;background:#fff url('/admin/image/2.png') no-repeat 153px 3px" name="beginTime"  placeholder="开始时间" class="col-xs-10 col-sm-5" value="{{$search['beginTime'] ? $search['beginTime'] : ''}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+                    <input type="text" style="width:180px;padding-left:5px;padding-right: 5px;margin-left:5px;background:#fff url('/admin/image/2.png') no-repeat 153px 3px" name="endTime"  placeholder="线束时间" class="col-xs-10 col-sm-5" value="{{$search['endTime'] ? $search['endTime'] : ''}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;" />
+
+                    <select name="type" id="form-field-1" class="searchtype input-select" style="margin-left:5px;">
+                        <option value=""{{$search['type'] == '' ? 'selected':''}}>-请选择-</option>
+                        <option value="8" {{$search['type'] == 8 ? 'selected':''}}>用户名</option>
                         <option value="1" {{$search['type'] == 1 ? 'selected':''}}>姓名</option>
                         <option value="2" {{$search['type'] == 2 ? 'selected':''}}>手机号</option>
                         <option value="3" style="color:red" {{$search['type'] == 3 ? 'selected':''}}>学生学员</option>
                         <option value="4" style="color:red" {{$search['type'] == 4 ? 'selected':''}}>教师学员</option>
-                        {{--<option value="5" style="color:red" {{$search['type'] == 5 ? 'selected':''}}>名师</option>--}}
-                        <option value="6" {{$search['type'] == 6 ? 'selected':''}}>时间筛选</option>
                         <option value="7" {{$search['type'] == 7 ? 'selected':''}}>全部</option>
                     </select>
                     <span class="input-icon">
                         <span style="display: block;" class="input-icon" id="search1">
-                            <input type="text" placeholder="Search ..." name="search" class="nav-search-input" id="nav-search-input" autocomplete="off" />
+                            <input type="text" placeholder="请输入..." name="search" class="nav-search-input" id="nav-search-input" autocomplete="off" />
                             <i class="icon-search nav-search-icon"></i>
-                            <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;padding-left: 8px;" type="submit" value="筛选" />
-                        </span>
-                        <span style="display: none;" class="input-icon" id="search2">
-                            <input type="text" style="padding-left:5px; padding-right: 5px;" name="beginTime" id="form-field-1" placeholder="开始时间" class="col-xs-10 col-sm-5" value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
-                            <input type="text" style="padding-left:5px;padding-right: 5px;" name="endTime" id="form-field-1" placeholder="线束时间" class="col-xs-10 col-sm-5" value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;" />
-                            <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;padding-left: 0;padding-right: 0;" type="submit" value="筛选" />
+                            <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;padding-left: 8px;" type="submit" value="搜索" />
                         </span>
                     </span>
                 </form>
+
+                @permission('user.list')
+                @if(count($excels))
+                    <form action="{{url('admin/excel/userInfoExport')}}" method="post" style="float:right;display: inline-block">
+                        <input type="submit" class="btn btn-xs btn-info"  value="下载Excel" style="width:86px;height:28px; cursor: pointer; margin-top:-58px;" />
+                        {{csrf_field()}}
+                        <input type="hidden" name="excels" value="{{$excels}}"/>
+                    </form>
+                @endif
+                @endpermission
             </div><!-- #nav-search -->
         </div>
 
@@ -129,7 +136,7 @@
                                     @foreach($data as $value)
                                         <tr>
                                             <td class="center">{{$value->id}}</td>
-                                            <td><a href="{{url('admin/users/show/'.$value->id)}}">{{$value->username}}</a></td>
+                                            <td><a href="{{url('admin/users/show/'.$value->id).'/u1'}}">{{$value->username}}</a></td>
                                             <td id="checks{{$value->id}}">@if($value->checks == 0)激活@elseif($value->checks == 1)<span style=" color:red">禁用</span>@endif</td>
                                             <td>{{$value->phone}}</td>
                                             <td>@if($value->type == 0)学生@elseif($value->type == 1)教师@else<span style="color:red">名师</span>@endif</td>
@@ -155,14 +162,14 @@
                                                     @endpermission
 
                                                     @permission('resetPass.user')
-                                                    <a href="{{url('admin/users/resetPass/'.$value->id)}}"
+                                                    <a href="{{url('admin/users/resetPass/'.$value->id.'/u1')}}"
                                                        class="btn btn-xs btn-inverse" name="reset-pass">
                                                         <strong>重置密码</strong>
                                                     </a>
                                                     @endpermission
 
                                                     @permission('user.list')
-                                                    <a href="{{url('admin/users/show/'.$value->id)}}"
+                                                    <a href="{{url('admin/users/show/'.$value->id).'/u1'}}"
                                                        class="btn btn-xs btn-success" name="person-detail">
                                                         <strong>查看详情</strong>
                                                     </a>
@@ -179,14 +186,14 @@
                                                     @endpermission
 
                                                     @permission('user.list')
-                                                    <a href="{{url('admin/users/focusList/'.$value->id)}}"
+                                                    <a href="{{url('admin/users/focusList/'.$value->id).'/u1'}}"
                                                        class="btn btn-xs btn-inverse">
                                                         <strong>关注</strong>
                                                     </a>
                                                     @endpermission
 
                                                     @permission('user.list')
-                                                    <a href="{{url('admin/users/friendsList/'.$value->id)}}"
+                                                    <a href="{{url('admin/users/friendsList/'.$value->id).'/u1'}}"
                                                        class="btn btn-xs btn-inverse">
                                                         <strong>好友</strong>
                                                     </a>
@@ -199,15 +206,15 @@
                                     </tbody>
                                 </table>
                                 {!! $data -> appends( app('request') -> all() ) -> render() !!}
-                                @permission('user.list')
-                                    @if(count($excels))
-                                        <form action="{{url('admin/excel/userInfoExport')}}" method="post" style="float: right;margin-top:65px;margin-right:-130px;">
-                                            <input type="submit" class="btn btn-xs btn-info"  value="导出用户信息" style="width:86px; cursor: pointer; margin-top:-87px;margin-right:130px;" />
-                                            {{csrf_field()}}
-                                            <input type="hidden" name="excels" value="{{$excels}}"/>
-                                        </form>
-                                    @endif
-                                @endpermission
+                                {{--@permission('user.list')--}}
+                                    {{--@if(count($excels))--}}
+                                        {{--<form action="{{url('admin/excel/userInfoExport')}}" method="post" style="float: right;margin-top:65px;margin-right:-130px;">--}}
+                                            {{--<input type="submit" class="btn btn-xs btn-info"  value="导出用户信息" style="width:86px; cursor: pointer; margin-top:-87px;margin-right:130px;" />--}}
+                                            {{--{{csrf_field()}}--}}
+                                            {{--<input type="hidden" name="excels" value="{{$excels}}"/>--}}
+                                        {{--</form>--}}
+                                    {{--@endif--}}
+                                {{--@endpermission--}}
                             </div><!-- /.table-responsive -->
                         </div><!-- /span -->
                     </div><!-- /row -->

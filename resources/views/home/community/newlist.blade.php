@@ -9,48 +9,53 @@
 
 @section('content')
 
-	<div style="height:15px"></div>
+	<div class="background">
 
-	<!-- 主体 -->
-	<div class="main" ms-controller="newlist">
-		<!-- 面包屑导航 -->
-		<div class="crumbs">
-			<a href="{{asset('/community')}}">社区</a><span>></span><a href="#">新闻资讯</a>
-		</div>
-		<div style="height:12px"></div>
-		<!-- 列表 -->
-		<div class="list">
 
-			<!-- 每一行 -->
 
-			<div class="list_line" ms-repeat="newlist" >
-				<div class="title_time">
-					<div class="title">
-						<a ms-attr-href="lujing + el.id" ms-html="el.description" >  </a>
-					</div>
-					<div class="time" ms-html="el.time">
+		<div style="height:15px"></div>
 
+		<!-- 主体 -->
+		<div class="main" ms-controller="newlist">
+			<!-- 面包屑导航 -->
+			<div class="crumbs">
+				<a href="{{asset('/community')}}">社区</a><span>></span><a href="#">新闻资讯</a>
+			</div>
+			<div style="height:12px"></div>
+			<!-- 列表 -->
+			<div class="list">
+
+				<!-- 每一行 -->
+
+				<div class="list_line" ms-repeat="newlist" >
+					<div class="title_time">
+						<div class="title">
+							<a ms-attr-href="lujing + el.id" ms-html="el.description" >  </a>
+						</div>
+						<div class="time" ms-html="el.time">
+
+						</div>
 					</div>
 				</div>
+
+
+
+
+
 			</div>
-
-
-			
-
 
 		</div>
 
-	</div>
+		<div style="height:175px">
+			<div style="height:50px;"></div>
+			<div style="width:1200px;height:30px;margin: 0 auto">
+				<div id="demo"></div>
+			</div>
+			<div style="height:100px;">
+			</div>
+		</div>
 
-	<div style="height:175px">
-		<div style="height:50px;"></div>
-        <div style="width:1200px;height:30px;margin: 0 auto">
-            <div id="demo"></div>
-        </div>
-        <div style="height:100px;">
-        </div>
 	</div>
-
 
 @endsection
 

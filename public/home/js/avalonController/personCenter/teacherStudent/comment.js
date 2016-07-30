@@ -6,6 +6,7 @@ define([], function () {
         $id: 'commentController',
         commentInfo: [],
         answerMsg : false,
+        isRead : true,
         getCommentInfo: function (username) {
             $('#page_comment').pagination({
                 dataSource: function (done) {
@@ -33,6 +34,18 @@ define([], function () {
                         comment.commentInfo = data;
                     }
 
+                }
+            })
+        },
+        changeNoticeStatus: function(){
+            $.ajax({
+                url: '/member/changeNoticeStatus/1',
+                type : 'GET',
+                dataType : 'json',
+                success : function(response){
+                    if(response){
+                        comment.isRead = false;
+                    }
                 }
             })
         }

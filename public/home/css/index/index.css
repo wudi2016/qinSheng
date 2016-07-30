@@ -99,6 +99,7 @@
 }
 .teacher_con_top_l hr{
 	border-top:3px solid #E5E5E5;
+	border-left:none;
 }
 .teacher_con_top_r{
 	width:400px;
@@ -109,6 +110,7 @@
 
 .teacher_con_top_r hr{
 	border-top:3px solid #E5E5E5;
+	border-left:none;
 }
 .teacher_con_top_t{
 	width:400px;
@@ -364,7 +366,7 @@
 	float: left;
 	position: relative;
 	top:-286px;
-	left:218px;
+	left:230px;
 }
 
 /*-----------轮播图----------*/

@@ -20,23 +20,22 @@
 
             <div class="nav-search" id="nav-search">
                 <form action="" method="get" class="form-search">
-                    <select name="type" id="form-field-1" class="searchtype input-select">
-                        <option value="0" {{$search['type'] == 0 ? 'selected':''}}>用户名</option>
-                        <option value="1" {{$search['type'] == 1 ? 'selected':''}}>姓名</option>
-                        <option value="2" {{$search['type'] == 2 ? 'selected':''}}>手机号</option>
-                        <option value="3" {{$search['type'] == 3 ? 'selected':''}}>时间筛选</option>
-                        <option value="4" {{$search['type'] == 4 ? 'selected':''}}>全部</option>
+                    <span style=""  class="searchtype" iid="form-field-1">
+                        <input type="text" name="beginTime" id="form-field-1" placeholder="开始时间" class="col-xs-10 col-sm-5" value="{{$data->beginTime}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;background:url('{{asset("admin/image/2.png")}}') no-repeat;background-position:right;"/>&nbsp;&nbsp;
+                        <input type="text" name="endTime" id="form-field-1" placeholder="结束时间" class="col-xs-10 col-sm-5" value="{{$data->endTime}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;margin-left:10px;background:url('{{asset("admin/image/2.png")}}') no-repeat;background-position:right;"/>
+                    </span>
+
+                    <select name="type" id="form-field-1" class="searchtype">
+                        <option value="">--请选择--</option>
+                        <option value="1" {{$data->type == 0 ? 'selected':''}}>用户名</option>
+                        <option value="2" {{$data->type == 1 ? 'selected':''}}>姓名</option>
+                        <option value="3" {{$data->type == 2 ? 'selected':''}}>手机号</option>
+                        <option value="">全部</option>
                     </select>
                     <span class="input-icon">
-                        <span style="display: block;" class="input-icon" id="search1">
-                            <input type="text" placeholder="Search ..." name="search" class="nav-search-input" id="nav-search-input" autocomplete="off" />
-                            <i class="icon-search nav-search-icon"></i>
-                            <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;padding-left: 8px;" type="submit" value="筛选" />
-                        </span>
-                        <span style="display: none;" class="input-icon" id="search2">
-                            <input type="text" style="padding-left:5px; padding-right: 5px;" name="beginTime" id="form-field-1" placeholder="开始时间" class="col-xs-10 col-sm-5" value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
-                            <input type="text" style="padding-left:5px;padding-right: 5px;" name="endTime" id="form-field-1" placeholder="线束时间" class="col-xs-10 col-sm-5" value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;" />
-                            <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;padding-left: 0;padding-right: 0;" type="submit" value="筛选" />
+                        <span style="" class="input-icon" id="search1">
+                            <input type="text" name="search" placeholder="Search ..." class="nav-search-input" value="" id="nav-search-input" autocomplete="off" />
+                            <input style="background: #6FB3E0;width:50px;height:28px ;border:0;color:#fff;padding-left: 5px;" type="submit" value="搜索" />
                         </span>
                     </span>
                 </form>

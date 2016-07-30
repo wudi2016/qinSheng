@@ -100,7 +100,9 @@
 
 			<div class="comment_list" ms-repeat="commentlist">
 				<div style="display: table-cell;">
-					<img ms-attr-src="el.pic">
+                    <a ms-attr-href="/lessonComment/[--el.type == 2 ? 'teacher' : 'student'--]/[--el.fromUserId--]">
+					   <img ms-attr-src="el.pic">
+                    </a>
                     <a ms-attr-href="/lessonComment/[--el.type == 2 ? 'teacher' : 'student'--]/[--el.fromUserId--]" class="username" ms-html="el.username"></a>
 					<div class="time" ms-html="el.created_at"></div>
 
@@ -125,14 +127,14 @@
 
 		<div class="recommend">
 			<div class="title">最新点评推荐</div>
-			<div class="recommend_list" ms-repeat="recommendlist">
-				<a ms-attr-href="/lessonComment/detail/[--el.id--]" class="recommend_title" ms-html="el.courseTitle"></a>
+			<a class="recommend_list" ms-repeat="recommendlist" ms-attr-href="/lessonComment/detail/[--el.id--]" style='text-decoration: none;'>
+				<div class="recommend_title" ms-html="el.courseTitle"></div>
 				<div class="recommend_detail">
 					<div class="recommend_detail_teacher" ms-html="'讲师：' + el.teachername"></div>
 					<div class="recommend_detail_learned"><img src="{{asset('/home/image/lessonComment/commentDetail/study.png')}}">[--el.coursePlayView--]人学过</div>
 				</div>
 				<div class="recommend_price" ms-html="'￥ ' + el.coursePrice / 100"></div>
-			</div>
+			</a>
             <div style="width: 100%; height: 200px; line-height: 200px; text-align: center; display: none;" ms-visible="recommendlist.size() < 1">暂无数据</div>
 		</div>
 

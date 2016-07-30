@@ -6,6 +6,7 @@ define([], function () {
         $id: 'noticeController',
         noticeInfo: [],
         noticeMsg : false,
+        isRead : true,
         getNoticeInfo: function (username) {
             $('#page_notice').pagination({
                 dataSource: function (done) {
@@ -33,6 +34,18 @@ define([], function () {
                         notice.noticeInfo = data;
                     }
 
+                }
+            })
+        },
+        changeNoticeStatus: function(){
+            $.ajax({
+                url: '/member/changeNoticeStatus/0',
+                type : 'GET',
+                dataType : 'json',
+                success : function(response){
+                    if(response){
+                        notice.isRead = false;
+                    }
                 }
             })
         }

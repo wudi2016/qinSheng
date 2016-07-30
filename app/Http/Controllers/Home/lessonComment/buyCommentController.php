@@ -37,9 +37,9 @@ class buyCommentController extends Controller
      */
     public function index($teacherID)
     {
-        $result = DB::table('teacher') -> select('stock') -> where(['parentId' => $teacherID]) -> where('stock', '>', 0) -> first();
+        $result = DB::table('teacher')->select('stock')->where(['parentId' => $teacherID])->where('stock', '>', 0)->first();
         $result || abort(404);
-        return view('home.lessonComment.buyComment.index') -> with('teacherID', $teacherID) -> with('stock', $result -> stock);
+        return view('home.lessonComment.buyComment.index')->with('teacherID', $teacherID)->with('stock', $result->stock);
     }
 
 
@@ -50,11 +50,11 @@ class buyCommentController extends Controller
      */
     public function scan(WxPayApi $wxPay, WxPayDataBase $wxBase, WxPayUnifiedOrder $inputObj, $orderID)
     {
-        $result = DB::table('orders') -> select('orderPrice', 'orderTitle', 'orderSn', 'id', 'orderType') -> where(['id' => $orderID, 'userId' => \Auth::user() -> id, 'isDelete' => 0, 'status' => 5]) -> first();
+        $result = DB::table('orders')->select('orderPrice', 'orderTitle', 'orderSn', 'id', 'orderType')->where(['id' => $orderID, 'userId' => \Auth::user()->id, 'isDelete' => 0, 'status' => 5])->first();
         $result || abort(404);
-        $code_url = $this -> makeUnifiedOrder($wxPay, $inputObj, $wxBase, $result, 'http://qinsheng.zuren8.com/lessonComment/wxPayCallback');
+        $code_url = $this->makeUnifiedOrder($wxPay, $inputObj, $wxBase, $result, 'http://qinsheng.zuren8.com/lessonComment/wxPayCallback');
         empty($code_url['code_url']) && abort(404);
-        return view('home.lessonComment.buyComment.scan') -> with('orderID', $orderID) -> with('orderInfo', $result) -> with('url', $code_url['code_url']);
+        return view('home.lessonComment.buyComment.scan')->with('orderID', $orderID)->with('orderInfo', $result)->with('url', $code_url['code_url']);
     }
 
 
@@ -65,8 +65,9 @@ class buyCommentController extends Controller
      */
     public function buySuccess($orderID)
     {
-        DB::table('orders') -> where(['id' => $orderID, 'userId' => \Auth::user() -> id, 'status' => 0, 'isDelete' => 0]) -> first() || abort(404);
-        return view('home.lessonComment.buyComment.buySuccess') -> with('orderID', $orderID);
+        $result = DB::table('orders')->where(['id' => $orderID, 'userId' => \Auth::user()->id, 'status' => 0, 'isDelete' => 0])->first();
+        $result || abort(404);
+        return view('home.lessonComment.buyComment.buySuccess')->with('orderID', $orderID);
     }
 
 
@@ -78,9 +79,9 @@ class buyCommentController extends Controller
     public function upload($orderID)
     {
         PaasUser::apply();
-        $result = DB::table('orders') -> select('id', 'orderSn', 'teacherId') -> where(['id' => $orderID, 'userId' => \Auth::user() -> id, 'status' => 0]) -> first();
+        $result = DB::table('orders')->select('id', 'orderSn', 'teacherId')->where(['id' => $orderID, 'userId' => \Auth::user()->id, 'status' => 0])->first();
         $result || abort(404);
-        return view('home.lessonComment.buyComment.upload') -> with('info', $result) -> with('mineID', \Auth::user() -> id);
+        return view('home.lessonComment.buyComment.upload')->with('info', $result)->with('mineID', \Auth::user()->id);
     }
 
 
@@ -89,14 +90,15 @@ class buyCommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function reUpload($applyID)
+    public function reUpload($applyID, $messageID = null)
     {
         PaasUser::apply();
-        $result = DB::table('applycourse') -> select('id', 'courseTitle', 'message') 
-                -> where(['id' => $applyID, 'userId' => \Auth::user() -> id, 'state' => 0, 'courseStatus' => 0, 'courseIsDel' => 0]) -> first();
+        $result = DB::table('applycourse')->select('id', 'courseTitle', 'message')
+            ->where(['id' => $applyID, 'userId' => \Auth::user()->id, 'state' => 0, 'courseStatus' => 0, 'courseIsDel' => 0])->first();
         $result || abort(404);
-        return view('home.lessonComment.buyComment.reUpload') -> with('applyID', $result -> id) 
-               -> with('courseTitle', $result -> courseTitle) -> with('message', $result -> message) -> with('mineID', \Auth::user() -> id);
+        $messageID || $messageID = 0;
+        return view('home.lessonComment.buyComment.reUpload')->with('applyID', $result->id)
+            ->with('courseTitle', $result->courseTitle)->with('message', $result->message)->with('mineID', \Auth::user()->id)->with('messageID', $messageID);
     }
 
 
@@ -107,15 +109,15 @@ class buyCommentController extends Controller
      */
     public function generateOrder(Request $request)
     {
-        $request['orderSn'] = date('Ymd', time()).uniqid();
+        $request['orderSn'] = date('Ymd', time()) . uniqid();
         $request['created_at'] = Carbon::now();
         $request['updated_at'] = Carbon::now();
-        $result = DB::table('orders') -> insertGetId($request -> all());
-        return $this -> returnResult($result);
+        $result = DB::table('orders')->insertGetId($request->all());
+        return $this->returnResult($result);
     }
 
 
-     /**
+    /**
      * 完成上传
      *
      * @return \Illuminate\Http\Response
@@ -128,10 +130,10 @@ class buyCommentController extends Controller
         $data['state'] = 1;
         $data['courseTitle'] = str_replace(' ', '', $data['courseTitle']);
         $data['message'] = str_replace(' ', '', $data['message']);
-        $result = DB::table('applycourse') -> insertGetId($data);
-        if (!$result) return $this -> returnResult(false);
-        DB::table('orders') -> where('id', $request['orderID']) -> update(['status' => 1]) || $result = !(DB::table('applycourse') -> where('id', $result) -> delete());
-        return $this -> returnResult($result);
+        $result = DB::table('applycourse')->insertGetId($data);
+        if (!$result) return $this->returnResult(false);
+        DB::table('orders')->where('id', $request['orderID'])->update(['status' => 1]) || $result = !(DB::table('applycourse')->where('id', $result)->delete());
+        return $this->returnResult($result);
     }
 
 
@@ -152,31 +154,32 @@ class buyCommentController extends Controller
                     $result['tradeSn'] = $xml['transaction_id'];
                     $result['payTime'] = Carbon::now();
 
-                    $order = DB::table('orders') -> select('orderType') -> where('orderSn', $orderSn) -> first();
-                    switch ($order -> orderType) {
+                    $order = DB::table('orders')->select('orderType')->where('orderSn', $orderSn)->first();
+                    switch ($order->orderType) {
                         case 1:
                             $result['status'] = 0;
-                            DB::table('teacher') -> join('orders', 'teacher.parentId', '=', 'orders.teacherId') -> where(['orders.orderSn' => $orderSn]) -> decrement('teacher.stock');
+                            DB::table('teacher')->join('orders', 'teacher.parentId', '=', 'orders.teacherId')->where(['orders.orderSn' => $orderSn])->decrement('teacher.stock');
                             break;
                         case 2:
                             $result['status'] = 2;
                             DB::table('commentcourse') -> join('orders', 'commentcourse.id', '=', 'orders.courseId') -> where('orders.orderSn', $orderSn) -> increment('commentcourse.coursePlayView');
+							DB::table('commentcourse') -> join('orders', 'commentcourse.id', '=', 'orders.courseId') -> where('orders.orderSn', $orderSn) -> increment('commentcourse.courseStudyNum');
                             break;
                     }
 
-                    $order = DB::table('orders') -> where('orderSn', $orderSn) -> update($result);
+                    $order = DB::table('orders')->where('orderSn', $orderSn)->update($result);
                     if ($order) {
                         echo "SUCCESS";
                     }
                 } else {
-                    Log::info(json_encode($xml)." --- 订单支付未成功");
+                    Log::info(json_encode($xml) . " --- 订单支付未成功");
                 }
             } else {
-                Log::info(json_encode($xml)." --- 订单校验失败");
+                Log::info(json_encode($xml) . " --- 订单校验失败");
             }
         } catch (\Exception $e) {
-            Log::info($e -> getMessage()." --- try catch 抛出异常");
-            Log::info(json_encode($xml)." --- 异常数据");
+            Log::info($e->getMessage() . " --- try catch 抛出异常");
+            Log::info(json_encode($xml) . " --- 异常数据");
         }
     }
 
@@ -188,8 +191,8 @@ class buyCommentController extends Controller
      */
     public function orderStatus($orderID)
     {
-        $result = DB::table('orders') -> select('id', 'orderType', 'courseId') -> where('status', '!=', 5) -> where(['id' => $orderID, 'userId' => \Auth::user() -> id, 'isDelete' => 0]) -> first();
-        return $this -> returnResult($result);
+        $result = DB::table('orders')->select('id', 'orderType', 'courseId')->where('status', '!=', 5)->where(['id' => $orderID, 'userId' => \Auth::user()->id, 'isDelete' => 0])->first();
+        return $this->returnResult($result);
     }
 
 
@@ -200,7 +203,7 @@ class buyCommentController extends Controller
      */
     public function alipayAsyncCallback()
     {
-        if (! app('alipay.web') -> verify()) {
+        if (!app('alipay.web')->verify()) {
             Log::info('支付宝异步校验失败 ', [
                 'data' => json_encode(Input::all())
             ]);
@@ -220,7 +223,7 @@ class buyCommentController extends Controller
      */
     public function alipaySyncCallback()
     {
-        if (! app('alipay.web') -> verify()) {
+        if (!app('alipay.web')->verify()) {
             Log::info('支付宝同步校验失败 ', [
                 'data' => Request::getQueryString()
             ]);
@@ -239,11 +242,12 @@ class buyCommentController extends Controller
             } else if (preg_match('/^\/lessonComment\/detail\/[0-9]{1,}/', Input::get('body'))) {
                 $result['status'] = 2;
                 DB::table('commentcourse') -> join('orders', 'commentcourse.id', '=', 'orders.courseId') -> where('orders.orderSn', $orderSn) -> increment('commentcourse.coursePlayView');
+                DB::table('commentcourse') -> join('orders', 'commentcourse.id', '=', 'orders.courseId') -> where('orders.orderSn', $orderSn) -> increment('commentcourse.courseStudyNum');
             }
 
-            $order = DB::table('orders') -> where('orderSn', $orderSn) -> update($result);
+            $order = DB::table('orders')->where('orderSn', $orderSn)->update($result);
             if ($order) {
-                return redirect() -> to(Input::get('body'));
+                return redirect()->to(Input::get('body'));
             } else {
                 abort(404);
             }
@@ -258,15 +262,15 @@ class buyCommentController extends Controller
      */
     public function alipay($orderID, $callback)
     {
-        $result = DB::table('orders') -> select('orderPrice', 'orderTitle', 'orderSn', 'id') -> where(['id' => $orderID, 'userId' => \Auth::user() -> id, 'isDelete' => 0, 'status' => 5]) -> first();
+        $result = DB::table('orders')->select('orderPrice', 'orderTitle', 'orderSn', 'id')->where(['id' => $orderID, 'userId' => \Auth::user()->id, 'isDelete' => 0, 'status' => 5])->first();
         $result || abort(404);
-        $callback = '/'.str_replace('&', '/', $callback);
+        $callback = '/' . str_replace('&', '/', $callback);
         $alipay = app('alipay.web');
-        $alipay -> setOutTradeNo($result -> orderSn);
-        $alipay -> setTotalFee($result -> orderPrice / 100);
-        $alipay -> setSubject($result -> orderTitle);
-        $alipay -> setBody($callback);
-        $alipay -> setQrPayMode('4');
-        return redirect() -> to($alipay -> getPayLink());
+        $alipay->setOutTradeNo($result->orderSn);
+        $alipay->setTotalFee($result->orderPrice / 100);
+        $alipay->setSubject($result->orderTitle);
+        $alipay->setBody($callback);
+        $alipay->setQrPayMode('4');
+        return redirect()->to($alipay->getPayLink());
     }
 }

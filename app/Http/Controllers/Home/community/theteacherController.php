@@ -240,7 +240,15 @@ class theteacherController extends Controller
                 ->where('t.firstletter','=','Z')
                 
                 ->get();
+        }elseif($type == '27') {
+            $gettheteacher = DB::table('teacher as t')
+                ->join('users as u','u.id','=','t.parentId')
+                ->select('t.id','u.company','u.realname','t.intro','t.firstletter','t.cover','t.parentId')
+                ->where('u.type',2)
+                ->orderBy('t.firstletter','asc')
+                ->get();
         }
+
 
 
 

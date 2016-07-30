@@ -28,6 +28,7 @@ class noticeController extends Controller
             $query = $query->where('m.username','like','%'.trim($request['search']).'%');
         }
         $data = $query->leftJoin('usermessagetem as t','m.tempId','=','t.id')->select('m.*','t.tempName')->orderBy('m.id', 'desc')->paginate(15);
+
         return view('admin.notice.noticeList', ['data' => $data]);
     }
 
@@ -48,16 +49,23 @@ class noticeController extends Controller
         $this->validate($request, [
             'pointAt' => 'required',
             'username' => 'required',
-            'tempId' => 'required',
             'content' => 'required'
         ], [
             'type.required' => '请选择针对对象',
             'username.required' => '请选择接收消息的用户',
-            'tempId.required' => '请选择模板名称',
             'content.required' => '请输入通知内容'
         ]);
+        dd($request->all());
         $username = $request->username;
-        $data = $request->except('_token','pointAt','username');
+        $userType = $request->userType;
+        $stuTempId = $request->stuTempId;
+        $teaTempId = $request->teaTempId;
+        $data = $request->except('_token','pointAt','username','userType','stuTempId','teaTempId');
+        if($userType == 0){
+            $data['tempId'] = $stuTempId;
+        }else{
+            $data['tempId'] = $teaTempId;
+        }
         $data['fromUsername'] = Auth::user()->username;
         $data['created_at'] = Carbon::now();
         $data['client_ip'] = $_SERVER['REMOTE_ADDR'];

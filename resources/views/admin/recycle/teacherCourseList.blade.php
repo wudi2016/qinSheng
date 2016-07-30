@@ -103,7 +103,7 @@
                                         <th>订单号</th>
                                         <th>点评视频标题</th>
                                         <th>演奏者</th>
-                                        <th>课程</th>
+                                        {{--<th>课程</th>--}}
                                         <th>封面图</th>
                                         {{--<th>高清</th>--}}
                                         {{--<th>超清</th>--}}
@@ -136,9 +136,9 @@
                                         <td>{{$teaccourse->orderSn}}</td>
                                         <td>{{$teaccourse->courseTitle}}</td>
                                         <td>{{$teaccourse->username}}</td>
-                                        <td>
-                                            <a href="{{$teaccourse->courseLowPath}}">查看</a>
-                                        </td>
+                                        {{--<td>--}}
+                                            {{--<a href="{{$teaccourse->courseLowPath}}">查看</a>--}}
+                                        {{--</td>--}}
                                         <td>
                                             {{--<a id="example2-2" href="{{asset($comcourse->coursePic)}}">查看--}}
                                                 <img src="{{asset($teaccourse->coursePic)}}" alt="" width="50px" height="50px">

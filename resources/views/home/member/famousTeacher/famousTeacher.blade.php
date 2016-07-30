@@ -52,7 +52,7 @@
                 <div class="account_manger">我的通知</div>
                 <div class="height5"></div>
                 <span class="span_hover"></span>
-                <div class="account_common" name="wholeNotice" ms-click="changeTab('wholeNotice')">全部通知</div>
+                <div class="account_common" name="wholeNotice" ms-click="changeTab('wholeNotice')"><b ms-visible="noReadNotice" class="isRead hide"></b>全部通知</div>
 
                 <!--课程管理-->
                 <div class="height5"></div>
@@ -107,7 +107,7 @@
                     <!--审核未通过-->
                     <div ms-if="el.commentState == 0">
                         <div class="comment_repeat_img">
-                            <a ms-attr-href="'/lessonComment/reUploadComment/'+ el.commentId">
+                            <a ms-attr-href="'/lessonComment/reUploadComment/'+ el.commentId + '/' + el.messageId">
                                 <div class="repeat_img_unchecked">
                                     <div class="comment_video_unchecked" ms-text="'视频审核未通过'"></div>
                                     <div class="comment_video_time" ms-text=" '发布时间：'+ el.time"></div>
@@ -117,28 +117,13 @@
                         </div>
 
                         <div class="comment_repeat_title" ms-text="el.applyTitle"></div>
-                            <div class="comment_repeat_unchecked"><span ms-text="'点评讲师&nbsp;'+':&nbsp;'+ el.teacherName"></span>
-                                <span ms-text="'发布者&nbsp;'+':&nbsp;'+ el.realname"></span>
-                            </div>
-                    </div>
-
-                    <!--视频转码中-->
-                    <div ms-if="el.commentState == 1 && el.low == null && el.medium == null && el.high == null">
-                        <div class="comment_repeat_img">
-                            <div class="repeat_img_unchecked">
-                                <div class="comment_video_unchecked" ms-text="'视频转码中'"></div>
-                                <div class="comment_video_time" ms-text=" '发布时间：'+ el.time"></div>
-                            </div>
-
-                        </div>
-                        <div class="comment_repeat_title" ms-text="el.applyTitle"></div>
-                        <div class="comment_repeat_unchecked"><span ms-text="'点评讲师&nbsp;'+':&nbsp;'+ el.teacherName"></span>
-                            <span ms-text="'发布者&nbsp;'+':&nbsp;'+ el.realname"></span>
+                        <div class="comment_repeat_unchecked"><span ms-text="'点评讲师'+' : '+ el.teacherName"></span>
+                            <span ms-text="'发布者'+' : '+ el.username"></span>
                         </div>
                     </div>
 
                     <!--审核中-->
-                    <div ms-if="el.commentState == 1 && (el.low != null || el.medium != null || el.high != null)">
+                    <div ms-if="el.commentState == 1">
                         <div class="comment_repeat_img">
                             <div class="repeat_img_unchecked">
                                 <div class="comment_video_unchecked" ms-text="'视频审核中'"></div>
@@ -147,8 +132,8 @@
 
                         </div>
                         <div class="comment_repeat_title" ms-text="el.applyTitle"></div>
-                        <div class="comment_repeat_unchecked"><span ms-text="'点评讲师&nbsp;'+':&nbsp;'+ el.teacherName"></span>
-                            <span ms-text="'发布者&nbsp;'+':&nbsp;'+ el.realname"></span>
+                        <div class="comment_repeat_unchecked"><span ms-text="'点评讲师'+' : '+ el.teacherName"></span>
+                            <span ms-text="'发布者'+' : '+ el.username"></span>
                         </div>
                     </div>
 
@@ -163,8 +148,8 @@
                             </a>
                         </div>
                         <div class="comment_repeat_title" ms-text="el.applyTitle"></div>
-                        <div class="comment_repeat_unchecked"><span ms-text="'点评讲师&nbsp;'+':&nbsp;'+ el.teacherName"></span>
-                            <span ms-text="'发布者&nbsp;'+':&nbsp;'+ el.realname"></span>
+                        <div class="comment_repeat_unchecked"><span ms-text="'点评讲师'+' : '+ el.teacherName"></span>
+                            <span ms-text="'发布者'+' : '+ el.username"></span>
                         </div>
                     </div>
                 </div>
@@ -208,8 +193,8 @@
                     </div>
                     <div class="comment_repeat_title" ms-html="el.commentTitle"></div>
                     <div class="comment_repeat_unchecked unchecked_diff">
-                        <span ms-text="'点评讲师&nbsp;'+':&nbsp;'+ el.teachername"></span>
-                        <span class="unchecked_span" ms-text="'发布者&nbsp;'+':&nbsp;'+ el.realname"></span>
+                        <span ms-text="'点评讲师'+' : '+ el.teachername"></span>
+                        <span class="unchecked_span" ms-text="'发布者 '+' : '+ el.username"></span>
                     </div>
                     <div class="comment_repeat_leader">
                         <span ms-html="el.view + ' 人'"></span>
@@ -284,11 +269,12 @@
                         <!-- 后台发送消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == 0 && el.actionId">
                             <!-- 审核未通过 -->
-                            <a ms-attr-href="'/lessonComment/reUpload/' + el.actionId"><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 600px;display: block" ms-text="'上传视频审核未通过，原因：' + el.content" ms-attr-title=""></span></a>
+                            <a ms-attr-href="'/lessonComment/reUploadComment/' + el.actionId + '/' + el.id"><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 600px;display: block" ms-text="'上传视频审核未通过，原因：' + el.content" ms-attr-title=""></span></a>
                         </div>
                         <div class="repeat_comment_text" ms-if="el.type == 0 && el.tempId != 0">
                             <!-- 审核未通过 -->
-                            <span ms-text="el.tempName"></span><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 600px;display: block;float: right" ms-text="el.content"></span>
+                            <span class="span_light" ms-text="el.tempName" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 150px;display: block;float: left;" ms-attr-title="el.tempName"></span>
+                            <span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 400px;display: block;float: left;" ms-text="el.content" ms-attr-title="el.content"></span>
                         </div>
                         <!-- 注册加入消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '1'">
@@ -306,9 +292,13 @@
                         <div class="repeat_comment_text" ms-if="el.type == '4'">
                             <span ms-text="el.fromUsername + '&nbsp;&nbsp;'" class="span_light"></span>老师点评了<span ms-text="'&nbsp;'+el.toUsername + '&nbsp;'" class="span_light"></span>的作品，<a class="span_light" ms-attr-href="'/lessonComment/detail/' + el.actionId">快去看看吧 >></a>
                         </div>
+                        <!-- 关注用户被点评消息 -->
+                        <div class="repeat_comment_text" ms-if="el.type == '7'">
+                            <span>学员&nbsp;&nbsp;</span><span ms-text="el.fromUsername + '&nbsp;&nbsp;'" class="span_light"></span>向您发起点评邀请，<a class="span_light" ms-attr-href="'/lessonComment/wait/' + el.actionId + '/' + el.id">快去看看吧 >></a>
+                        </div>
                         <div class="repeat_comment_time">
                             <div class="comment_time" ms-text="el.created_at"></div>
-                            <div class="comment_delete" ms-click="popUpSwitch('deleteNotice',$index)"><a href="#">删除</a></div>
+                            <div class="comment_delete" ms-click="popUpSwitch('deleteNotice',el.id)"><a href="#">删除</a></div>
                         </div>
                     </div>
                 </div>
@@ -323,11 +313,12 @@
                     </div>
                     <div class="bot">
                         <span class="quit" ms-click="popUpSwitch(false)">取消</span>
-                        <span class="sure" ms-click="deleteNotice(false)">确定</span>
+                        <span class="sure" ms-click="popUpSwitch('sureNotice')">确定</span>
                     </div>
                 </div>
             </div>
-            <div class="pagecon_parent">
+            <div class="clear"></div>
+            <div class="pagecon_parent" style="margin-top:40px;">
                 <div class="pagecon">
                     <div id="page_notice"></div>
                 </div>
@@ -342,11 +333,11 @@
                 <div class="center_right_information">收藏课程</div>
                 <div class="center_right_count">
                     <div class="right_count_left">共<span ms-html="'&nbsp;' + total + '&nbsp;'"></span>个视频</div>
-                    <div class="right_count_right">
+                    <div class="right_count_right" ms-if="collectionInfo.size() > 0">
                         {{--<span ms-click="getCollectionInfo(1);">最新</span>&nbsp;-&nbsp;<span class="count_right_hot" ms-click="getCollectionInfo(2);">热门</span>--}}
                         <div>
-                            <div class="count_right_store">删除收藏</div>
-                            <div class="count_right_store" style="display: none">完成</div>
+                            <div class="count_right_store deleteImg"><img src="{{asset('home/image/personCenter/deleteStore.png')}}"/></div>
+                            <div class="count_right_store" style="display: none"><img src="{{asset('home/image/personCenter/success.png')}}"/></div>
                         </div>
                     </div>
                 </div>
@@ -785,7 +776,7 @@
                     }
                 }
             });
-
+            sideBar.findHaveNotice();
             avalon.scan();
         });
     </script>

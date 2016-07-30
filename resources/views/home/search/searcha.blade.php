@@ -11,8 +11,8 @@
             border:none;
             height: 50px;
             line-height:50px;
-            font-weight: bold;
-            font-size:20px;
+            /*font-weight: bold;*/
+            font-size:18px;
             text-indent:20px;
         }
 
@@ -28,7 +28,7 @@
             height:48px;
             line-height:48px;
             font-size:20px;
-            font-weight:bold;
+            /*font-weight:bold;*/
 
         }
 

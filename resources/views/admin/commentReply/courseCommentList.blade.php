@@ -20,10 +20,17 @@
 
             <div class="nav-search" id="nav-search">
                 <form action="" method="get" class="form-search">
+
+                     <span style=""  class="searchtype" iid="form-field-1">
+                        <input type="text" name="beginTime" id="form-field-1" placeholder="开始时间" class="col-xs-10 col-sm-5" value="{{$data->beginTime}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;background:url('{{asset("admin/image/2.png")}}') no-repeat;background-position:right;"/>&nbsp;&nbsp;
+                        <input type="text" name="endTime" id="form-field-1" placeholder="结束时间" class="col-xs-10 col-sm-5" value="{{$data->endTime}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;margin-left:10px;background:url('{{asset("admin/image/2.png")}}') no-repeat;background-position:right;"/>
+                    </span>
+
                     <select name="type" id="form-field-1" class="searchtype">
-                        <option value="1">用户名</option>
-                        <option value="2">时间筛选</option>
-                        <option value="3">全部</option>
+                        <option value="">--请选择--</option>
+                        <option value="1" @if($data->type == 1) selected @endif >ID</option>
+                        <option value="2" @if($data->type == 2) selected @endif>用户名</option>
+                        <option value="">全部</option>
                     </select>
 
                      <span class="input-icon">
@@ -32,15 +39,10 @@
                             <i class="icon-search nav-search-icon"></i>
                             <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;padding-left: 8px;" type="submit" value="筛选" />
                         </span>
-                        <span style="display: none;" class="input-icon" id="search2">
-                            <input type="text" style="padding-left:5px; padding-right: 5px;" name="beginTime" id="form-field-1" placeholder="开始时间" class="col-xs-10 col-sm-5" value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
-                            <input type="text" style="padding-left:5px;padding-right: 5px;" name="endTime" id="form-field-1" placeholder="线束时间" class="col-xs-10 col-sm-5" value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;" />
-                            <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;padding-left: 0;padding-right: 0;" type="submit" value="筛选" />
-                        </span>
-                    </span>
                     </span>
                 </form>
             </div><!-- #nav-search -->
+
         </div>
 
         <div class="page-content">
@@ -137,15 +139,15 @@
                                                 @endpermission
 
                                                 @permission('edit.commentReply')
-                                                <span class="btn btn-xs btn-inverse" style="position: relative;display: inline-block;">
-                                                    <strong>评论状态</strong>
-                                                    <span class="icon-caret-down icon-on-right"></span>
-                                                    <select id="" class="col-xs-10 col-sm-2" onchange="courseStatus({{$course->id}},this.value);" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">
-                                                            <option value="10" selected></option>
-                                                            <option value="0" >正常</option>
-                                                            <option value="1" >锁定</option>
-                                                    </select>
-                                                </span>
+                                                {{--<span class="btn btn-xs btn-inverse" style="position: relative;display: inline-block;">--}}
+                                                    {{--<strong>评论状态</strong>--}}
+                                                    {{--<span class="icon-caret-down icon-on-right"></span>--}}
+                                                    {{--<select id="" class="col-xs-10 col-sm-2" onchange="courseStatus({{$course->id}},this.value);" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">--}}
+                                                            {{--<option value="10" selected></option>--}}
+                                                            {{--<option value="0" >正常</option>--}}
+                                                            {{--<option value="1" >锁定</option>--}}
+                                                    {{--</select>--}}
+                                                {{--</span>--}}
 
 
 
@@ -161,6 +163,10 @@
                                                 </span>
                                                 @endpermission
 
+
+                                                <a href="{{url('/admin/commentReply/lookcourseComment/'.$course->id)}}"  class="btn btn-xs btn-success">
+                                                    <i class="icon-ok bigger-80">查看</i>
+                                                </a>
 
 
 

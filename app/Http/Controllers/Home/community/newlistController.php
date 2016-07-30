@@ -23,7 +23,7 @@ class newlistController extends Controller
 
     //新闻列表数据接口
     public function getnewlist(){
-        $getnewlist = DB::table('news')->orderBy('created_at','desc')->get();
+        $getnewlist = DB::table('news')->orderBy('sort','asc')->where('status',0)->get();
         if($getnewlist){
             foreach ($getnewlist as $k => $v) {
                 //只保留 年月日

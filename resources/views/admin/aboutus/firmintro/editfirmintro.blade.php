@@ -100,17 +100,17 @@
 
 
 
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 状态 </label>
+                        {{--<div class="form-group">--}}
+                            {{--<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 状态 </label>--}}
 
-                            <div class="col-sm-9">
+                            {{--<div class="col-sm-9">--}}
                                 {{--<input type="text" id="form-field-1" placeholder="教研组状态" class="col-xs-10 col-sm-5" value="" />--}}
-                                <select id="form-field-2" class="col-xs-10 col-sm-5" name="status">
-                                    <option value="0">正常</option>
-                                    <option value="1">锁定</option>
-                                </select>
-                            </div>
-                        </div>
+                                {{--<select id="form-field-2" class="col-xs-10 col-sm-5" name="status">--}}
+                                    {{--<option value="0">正常</option>--}}
+                                    {{--<option value="1">锁定</option>--}}
+                                {{--</select>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
 
 
 

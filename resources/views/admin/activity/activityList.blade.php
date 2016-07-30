@@ -20,13 +20,21 @@
 
             <div class="nav-search" id="nav-search">
                 <form action="" method="get" class="form-search">
-                    <select name="type" id="form-field-1" class="searchtype">     
-                        <option value="1">未上线</option>
-                        <option value="2">进行中</option>
-                        <option value="3">未开始</option>
-                        <option value="4">已结束</option>
-                        <option value="5">时间筛选</option>
-                        <option value="6">全部</option>
+
+                     <span style=""  class="searchtype" iid="form-field-1">
+                        <input type="text" name="beginTime" id="form-field-1" placeholder="开始时间" class="col-xs-10 col-sm-5" value="{{$activity->beginTime}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;background:url('{{asset("admin/image/2.png")}}') no-repeat;background-position:right;"/>&nbsp;&nbsp;
+                        <input type="text" name="endTime" id="form-field-1" placeholder="结束时间" class="col-xs-10 col-sm-5" value="{{$activity->endTime}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;margin-left:10px;background:url('{{asset("admin/image/2.png")}}') no-repeat;background-position:right;"/>
+                     </span>
+
+                    <select name="type" id="form-field-1" class="searchtype">
+                        <option value="">--请选择--</option>
+                        <option value="5" @if($activity->type == 5) selected @endif>ID</option>
+                        <option value="6" @if($activity->type == 6) selected @endif>活动名称</option>
+                        <option value="1" @if($activity->type == 1) selected @endif>未上线</option>
+                        <option value="2" @if($activity->type == 2) selected @endif>进行中</option>
+                        <option value="3" @if($activity->type == 3) selected @endif>未开始</option>
+                        <option value="4" @if($activity->type == 4) selected @endif>已结束</option>
+                        <option value="">全部</option>
                     </select>
                     
                      <span class="input-icon">
@@ -35,13 +43,8 @@
                             <i class="icon-search nav-search-icon"></i>
                             <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;padding-left: 8px;" type="submit" value="筛选" />
                         </span>
-                        <span style="display: none;" class="input-icon" id="search2">
-                            <input type="text" style="padding-left:5px; padding-right: 5px;" name="beginTime" id="form-field-1" placeholder="开始时间" class="col-xs-10 col-sm-5" value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
-                            <input type="text" style="padding-left:5px;padding-right: 5px;" name="endTime" id="form-field-1" placeholder="线束时间" class="col-xs-10 col-sm-5" value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;" />
-                            <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;padding-left: 0;padding-right: 0;" type="submit" value="筛选" />
-                        </span>
                     </span>
-                    </span>
+
                 </form>
             </div><!-- #nav-search -->
         </div>
@@ -77,6 +80,11 @@
 
                 <div class="col-xs-12">
                     <!-- PAGE CONTENT BEGINS -->
+                    @permission('add.activity')
+                    <a href="{{url('/admin/activity/addactivity')}}" class="btn btn-xs btn-info">
+                        <i class="icon-ok bigger-110">添加</i>
+                    </a>
+                    @endpermission
 
                     <div class="row">
                         <div class="col-xs-12">
@@ -152,8 +160,8 @@
                                                             <option value="11" selected></option>
                                                             <option value="0" >未上线</option>
                                                             <option value="1" >进行中</option>
-                                                            <option value="1" >未开始</option>
-                                                            <option value="1" >已结束</option>
+                                                            <option value="2" >未开始</option>
+                                                            <option value="3" >已结束</option>
                                                         </select>
                                                     </span>
                                                     @endpermission

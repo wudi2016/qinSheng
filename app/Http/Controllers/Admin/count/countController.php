@@ -15,15 +15,17 @@ class countController extends Controller
      */
     public function specialCountList(Request $request){
         $query = DB::table('course');
+        if($request['beginTime']){ //上传的起止时间
+            $query = $query->where('created_at','>=',$request['beginTime']);
+        }
+        if($request['endTime']){ //上传的起止时间
+            $query = $query->where('created_at','<=',$request['endTime']);
+        }
         if($request['type'] == 1){
             $query = $query->where('id','like','%'.trim($request['search']).'%');
         }
         if($request['type'] == 2){
             $query = $query->where('courseTitle','like','%'.trim($request['search']).'%');
-        }
-
-        if($request['type'] == 3){ //上传的起止时间
-            $query = $query->where('created_at','>=',$request['beginTime'])->where('created_at','<=',$request['endTime']);
         }
 
         $excel = $query
@@ -65,6 +67,8 @@ class countController extends Controller
         }
         $excel = json_encode($excel);
         $data->type = $request['type'];
+        $data->beginTime = $request['beginTime'];
+        $data->endTime = $request['endTime'];
         return view('admin/count/specialCountList',['data'=>$data,'excel'=>$excel]);
     }
 }

@@ -51,7 +51,7 @@ class userCountController extends Controller
             $start = date('Y-m-d 00:00:00',strtotime($i.' days '.$firstday));
             $end = date('Y-m-d H:i:s',(strtotime($start) + 86400));
             if($orders == 'orders'){
-                $count[] = DB::table('orders')->whereBetween('created_at',[$start,$end])->count();
+                $count[] = DB::table('orders')->whereBetween('created_at',[$start,$end])->where('isDelete',0)->whereIn('status',[0,1,2,3,4])->count();
             }else{
                 $count[] = DB::table('users')->whereIn('type',[0,1])->whereBetween('created_at',[$start,$end])->count();
             }

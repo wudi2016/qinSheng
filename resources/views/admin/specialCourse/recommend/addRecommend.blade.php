@@ -13,19 +13,19 @@
                 </li>
 
                 <li>
-                    <a href="{{url('/admin/commentCourse/commentCourseList')}}">点评管理</a>
+                    <a href="{{url('/admin/specialCourse/specialCourseList')}}">课程管理</a>
                 </li>
-                <li class="active">添加点评视频推荐</li>
+                <li class="active">添加专题课程推荐</li>
             </ul><!-- .breadcrumb -->
         </div>
 
         <div class="page-content">
             <div class="page-header">
                 <h1>
-                    添加点评视频推荐
+                    添加专题课程推荐
                     <small>
                         <i class="icon-double-angle-right"></i>
-                        添加点评视频推荐
+                        添加专题课程推荐
                     </small>
                 </h1>
             </div><!-- /.page-header -->

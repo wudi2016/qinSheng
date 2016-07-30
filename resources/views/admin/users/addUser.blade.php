@@ -234,15 +234,6 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label no-padding-right" for="form-field-6">姓名</label>
-
-                            <div class="col-sm-9">
-                                <input type="text" id="form-field-6" name="realname" placeholder="Realname"
-                                       class="col-xs-10 col-sm-4"
-                                       value="{{old('realname')}}"/>
-                            </div>
-                        </div>
 
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-6">性别</label>
@@ -342,6 +333,18 @@
                             <span class="help-inline col-xs-12 col-sm-7">
                                 <span class="middle"></span>
                             </span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group hide hide_teacher">
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-6">真实姓名</label>
+
+                            <div class="col-sm-9">
+                                <input type="text" id="form-field-6" name="realname" placeholder="Realname"
+                                       class="col-xs-10 col-sm-4"
+                                       value="{{old('realname')}}"/><span
+                                        style="display: block;height:30px;line-height: 30px;color:brown;"></span>
                             </div>
                         </div>
 
@@ -523,12 +526,13 @@
         <script type="text/javascript">
 
             //初始化验证变量
-            var checkUsername =false;
-            var checkPhone =false;
+            var checkUsername = false;
+            var checkPhone    = false;
+            var checkRealname = false;
 
             //onSubmit
             function postcheck(){
-                if(checkPhone && checkUsername){
+                if(checkPhone && checkUsername && checkRealname){
                     return true;
                 }else{
                     review();
@@ -539,6 +543,7 @@
             function review(){
                 $("input[name='username']").trigger('blur');
                 $("input[name='phone']").trigger('blur');
+                $("input[name='realname']").trigger('blur');
             }
 
 
@@ -593,7 +598,25 @@
                             }
                         })
                     }
+                })
 
+                //验证用户名唯一
+                $("input[name='realname']").blur(function () {
+                    var obj = $(this);
+                    var realname = obj.val();
+
+                    if($('.hide_teacher').css('display') != 'none'){
+                        if(!realname.match(/^[\u4E00-\u9FA5A-Za-z0-9_]{2,16}$/)){
+                            //格式错误
+                            obj.next('span').html('* 2—16位字母(不区分大小写)汉字/数字/下划线');
+                            checkRealname = false;
+                            return false;
+                        }else{//
+                            checkRealname = true;
+                        }
+                    }else{
+                        checkRealname = true;
+                    }
 
                 })
 

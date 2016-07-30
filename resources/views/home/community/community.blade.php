@@ -145,9 +145,10 @@
             </div>
             <!-- 内容列表 -->
             <div class="newstudent_detail">
+                {{--上一页--}}
                 <div class="newstudent_left"    ms-showhideleft >
-                    <div class="newstudent_left_img   "  >
-                        <img src="{{url('home/image/community/studentleft.png')}}"  alt="">
+                    <div class="newstudent_left_img  hide"  >
+                        <img src="{{url('home/image/community/36.png')}}"  alt="">
                     </div>
                 </div>
                 <div class="newstudent_detail_content">
@@ -164,9 +165,10 @@
                         </div>
                     </div>
                 </div>
+                {{--下一页--}}
                 <div class="newstudent_right"  ms-showhideright >
-                    <div class="newstudent_right_img  ">
-                        <img src="{{url('home/image/community/studentright.png')}}"  alt="">
+                    <div class="newstudent_right_img hide ">
+                        <img src="{{url('home/image/community/37.png')}}"  alt="">
                     </div>
                 </div>
             </div>
@@ -176,7 +178,7 @@
 
 
         <!-- 最热视频 -->
-        <div class="hotvideo">
+        <div class="hotvideo" ms-if-loop="Yes">
             <!-- 标题 -->
             <div class="newstudent_title">
                 <div>
@@ -185,35 +187,22 @@
             </div>
             <div style="height:30px"></div>
 
-
             <!-- 图片 -->
             <div class="first_child">
                 <!-- 循环 -->
-                
                     <div class="newstudent_video" ms-repeat="hotvideo">
                         <div style="overflow: hidden;position: relative;width: 390px;height: 260px;">
                             <a ms-attr-href="hotvideourl + el.id"><img class="big_img" ms-bigImg ms-attr-src="el.cover" alt="" width="390" height="260"/></a>
                         </div>
-
-
                         <!-- 遮罩层 -->
                         <div class="zhezhao">
                             <span ms-html="el.title"></span>
                         </div>
-                        <!-- 弹出层 -->
-                        {{--<div class="tanchuceng" style="display:none;">--}}
-                            {{--<a ms-href="hotvideourl + el.id">--}}
-                                {{--<div class="tanchuceng_font">--}}
-                                    {{--<span ms-html="el.content"></span>--}}
-                                {{--</div>--}}
-                            {{--</a>--}}
-                        {{--</div>--}}
                     </div>
-                
             </div>
 
-
         </div>
+
 
         <div style="height:175px">
             
@@ -236,7 +225,8 @@
     <script type="text/javascript" src="{{asset('home/js/community/pagination.js')}}"></script>
 
     <script>
-        require(['/community/community.js'], function ($) {
+        require(['/community/community.js'], function (model) {
+
 
             avalon.scan();
         });

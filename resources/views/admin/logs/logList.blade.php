@@ -101,12 +101,12 @@
                                                 <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
 
 
-                                                    {{--@permission('delete.user')--}}
+                                                    @permission('delete.log')
                                                     <a href="{{url('admin/logs/deleteLog/'.$tableName.'/'.$value->id.'/'.($search['time']?:''))}}"
                                                        class="btn btn-xs btn-danger" onclick=" return confirm('确定要删除该日志记录？');">
                                                         <strong>删除</strong>
                                                     </a>
-                                                    {{--@endpermission--}}
+                                                    @endpermission
                                                 </div>
                                             </td>
                                         </tr>

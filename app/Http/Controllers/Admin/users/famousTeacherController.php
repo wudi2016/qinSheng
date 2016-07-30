@@ -28,37 +28,31 @@ class famousTeacherController extends Controller
             ->leftJoin('users as us','u.fromyaoqingma','=','us.yaoqingma')
             ->leftJoin('teacher as t','u.id','=','t.parentId')
             ->select('u.*','us.id as userId','us.username as name','t.price','t.stock','t.intro','t.cover');
-        if($request->type == 0){
-            $query = $query->where('u.username','like','%'.trim($request->search).'%');
-            $search['type'] = 0;
+
+        if($request['beginTime']){ //上传的起止时间
+            $query = $query->where('u.created_at','>=',$request['beginTime']);
         }
+        if($request['endTime']){ //上传的起止时间
+            $query = $query->where('u.created_at','<=',$request['endTime']);
+        }
+
         if($request->type == 1){
-            $query = $query->where('u.realname','like','%'.trim($request->search).'%');
-            $search['type'] = 1;
+            $query = $query->where('u.username','like','%'.trim($request->search).'%');
         }
         if($request->type == 2){
-            $query = $query->where('u.phone','like','%'.trim($request->search).'%');
-            $search['type'] = 2;
+            $query = $query->where('u.realname','like','%'.trim($request->search).'%');
         }
         if($request->type == 3){
-            if($request->beginTime){
-                $query = $query->where('u.created_at','>=',trim($request->beginTime));
-            }
-
-            if($request->endTime){
-                $query = $query->where('u.created_at','<=',trim($request->endTime));
-            }
-            $search['type'] = 3;
+            $query = $query->where('u.phone','like','%'.trim($request->search).'%');
         }
 
-        if($request->type == 4){
-            $query = $query;
-            $search['type'] = 4;
-        }
         $data = $query->where('u.type','=',2)->orderBy('u.id','desc')->paginate(10);
         foreach($data as &$val){
             $val->price = $val->price / 100;
         }
+        $data->type = $request['type'];
+        $data->beginTime = $request['beginTime'];
+        $data->endTime = $request['endTime'];
 //        dd($data);
         return view('admin.users.famousTeacherList',compact('data','search'));
     }
@@ -133,6 +127,7 @@ class famousTeacherController extends Controller
         if($id = DB::table('users')->insertGetId($data)){
             //向名师表插入数据
             $famous['parentId'] = $id;
+            $this -> OperationLog("新增加了用户ID为{$id}的名师", 1);
             if(DB::table('teacher')->insert($famous)){
                 return redirect('admin/message')->with(['status'=>'分配名师成功','redirect'=>'users/famousTeacherList']);
             }else{
@@ -223,6 +218,7 @@ class famousTeacherController extends Controller
 
         if(FALSE !== DB::table('users')->where('id',$request['id'])->update($input)){
             DB::table('teacher')->where('parentId',$request['id'])->update($famous);
+            $this -> OperationLog("修改了用户ID为{$request['id']}的名师信息", 1);
             return redirect('admin/message')->with(['status'=>'修改名师信息成功','redirect'=>'users/famousTeacherList']);
         }else{
             return redirect('admin/message')->with(['status'=>'修改用户名师失败','redirect'=>'users/famousTeacherList']);
@@ -239,6 +235,7 @@ class famousTeacherController extends Controller
     {
         //删除用户
         if(DB::table('users')->delete($id)){
+            $this -> OperationLog("删除了用户ID为{$id}的名师", 1);
             if($rec = DB::table('teacher')->where('parentId',$id)->first()){
                 //名师表存在即可删除
                 DB::table('teacher')->where('id',$rec->id)->delete();

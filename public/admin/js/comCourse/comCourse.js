@@ -23,6 +23,10 @@ function selectCheck(id,checkid,username,teachername,teacherPhone,orderSn){
             }
             if(res.state == 2){
                 $('#pupUpback1').css({'display':'block'});
+                $('.redactionId').val(id);
+                $('.redfromUsername').val(username);
+                $('.redusername').val(teachername);
+
                 $('.teacherPhone').val(teacherPhone);
                 $('.orderSn').val(orderSn);
             }
@@ -31,13 +35,21 @@ function selectCheck(id,checkid,username,teachername,teacherPhone,orderSn){
 }
 
 $('#suer_btn0').click(function(){
+    var actionId = $('.redactionId').val();
+    var fromUsername = $('.redfromUsername').val();
+    var username = $('.redusername').val();
+    var toUsername = $('.redtoUsername').val();
+    var token = $('.token').val();
+
     var phone = $('.teacherPhone').val();
     var orderSn = $('.orderSn').val();
     $.ajax({
-        type: "get",
-        url: "/admin/commentCourse/sendMessage/" + phone + '/' + orderSn,
+        type: "post",
+        data:{actionId:actionId,fromUsername:fromUsername,username:username,toUsername:toUsername,phone:phone,orderSn:orderSn,_token:token},
+        url: "/admin/commentCourse/sendMessage",
         dataType: 'json',
         success: function (res) {
+            console.log(res);return;
             if(res == true){
             }
         }

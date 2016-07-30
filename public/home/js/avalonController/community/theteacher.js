@@ -2,7 +2,7 @@ avalon.directive('theteacheryincang', {
     update: function (value) {
         // 超出部分隐藏
         $('.content_introduce div').each(function(){
-            var maxwidth=80;
+            var maxwidth=130;
             if($(this).html().length>maxwidth){
                 $($(this)).html($($(this)).html().substring(0,maxwidth));
                 $($(this)).html($($(this)).html()+'…');
@@ -153,8 +153,10 @@ define([],function(){
             }else if (type == '26') {
                 $('.z').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
+            }else if (type == '27') {
+                $('.tabss').addClass('bluebackground').siblings().removeClass('bluebackground');
+                model.gettheteacher(type);
             }
-
         }
 
     });

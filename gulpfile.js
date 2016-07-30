@@ -1,5 +1,3 @@
-var elixir = require('laravel-elixir');
-
 /*
  |--------------------------------------------------------------------------
  | Elixir Asset Management
@@ -10,7 +8,40 @@ var elixir = require('laravel-elixir');
  | file for our application, as well as publishing vendor resources.
  |
  */
+/*
+ var elixir = require('laravel-elixir');
 
-elixir(function(mix) {
-    mix.sass('app.scss');
+ elixir(function(mix) {
+     mix.sass('app.scss');
+ });
+ */
+var gulp = require('gulp');
+var jshint = require('gulp-jshint');
+var concat = require('gulp-concat');
+var uglify = require('gulp-uglify');
+var rename = require('gulp-rename');
+var livereload = require('gulp-livereload');
+var minifyHtml = require('gulp-minify-html');
+
+gulp.task('jshint', function () {
+	return gulp.src('public/home/js/avalonController/lessonComment/*/*.js').pipe(jshint()).pipe(jshint.reporter('default')).pipe(livereload());
 });
+
+gulp.task('minify', function () {
+	// 合并 & 压缩
+	return gulp.src('public/home/js/avalonController/lessonComment/studentHomepage/index.js').pipe(concat('indexs.js')).pipe(gulp.dest('public/home/js/avalonController/lessonComment/studentHomepage'))
+		.pipe(uglify()).pipe(rename('indexs.min.js')).pipe(gulp.dest('public/home/js/avalonController/lessonComment/studentHomepage')).pipe(livereload());
+	//return gulp.src('public/home/js/avalonController/lessonComment/studentHomepage/index.js').pipe(uglify())
+	//	   .pipe(rename('indexs.js')).pipe(gulp.dest('public/home/js/avalonController/lessonComment/studentHomepage')).pipe(livereload());
+});
+
+gulp.task('watch', function () {
+	gulp.watch('public/home/js/avalonController/lessonComment/*/*.js', ['jshint', 'minify'])
+});
+
+gulp.task('minify-html', function () {
+	return gulp.src('resources/views/home/lessonComment/studentHomePage/index.html').pipe(minifyHtml())
+		.pipe(rename('indexs.html')).pipe(gulp.dest('resources/views/home/lessonComment/studentHomePage'));
+});
+
+gulp.task('default', ['jshint', 'watch', 'minify']);

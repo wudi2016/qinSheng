@@ -269,12 +269,12 @@
 								</li>
 
 
-								<li class="specialcoursespecialtype">
-									<a href="{{url('/admin/specialCourse/specialTypeList')}}">
-										<i class="icon-double-angle-right"></i>
-										课程类型列表
-									</a>
-								</li>
+								{{--<li class="specialcoursespecialtype">--}}
+									{{--<a href="{{url('/admin/specialCourse/specialTypeList')}}">--}}
+										{{--<i class="icon-double-angle-right"></i>--}}
+										{{--课程类型列表--}}
+									{{--</a>--}}
+								{{--</li>--}}
 
 								<li class="specialcoursespecialfeedback">
 									<a href="{{url('/admin/specialCourse/specialFeedbackList')}}">
@@ -337,42 +337,42 @@
 							</a>
 
 							<ul class="submenu">
-								<li class="orderorder">
+								<li class="orderorderlist5">
 									<a href="{{url('/admin/order/orderList/5')}}">
 										<i class="icon-double-angle-right"></i>
 										未付款订单
 									</a>
 								</li>
 
-								<li class="orderorde0r">
+								<li class="orderorderlist0">
 									<a href="{{url('/admin/order/orderList/0')}}">
 										<i class="icon-double-angle-right"></i>
 										已付款订单
 									</a>
 								</li>
 
-								<li class="orderorder1">
+								<li class="orderorderlist1">
 									<a href="{{url('/admin/order/orderList/1')}}">
 										<i class="icon-double-angle-right"></i>
 										待点评订单
 									</a>
 								</li>
 
-								<li class="orderorder2">
+								<li class="orderorderlist2">
 									<a href="{{url('/admin/order/orderList/2')}}">
 										<i class="icon-double-angle-right"></i>
 										已完成订单
 									</a>
 								</li>
 
-								<li class="orderorder3">
+								<li class="orderorderlist3">
 									<a href="{{url('/admin/order/orderList/3')}}">
 										<i class="icon-double-angle-right"></i>
 										退款中订单
 									</a>
 								</li>
 
-								<li class="orderorder4">
+								<li class="orderorderlist4">
 									<a href="{{url('/admin/order/orderList/4')}}">
 										<i class="icon-double-angle-right"></i>
 										已退款订单
@@ -483,12 +483,12 @@
 								</li>
 
 
-								<li class="activityaddactivity">
-									<a href="{{url('/admin/activity/addactivity')}}">
-										<i class="icon-double-angle-right"></i>
-										添加赛事
-									</a>
-								</li>
+								{{--<li class="activityaddactivity">--}}
+									{{--<a href="{{url('/admin/activity/addactivity')}}">--}}
+										{{--<i class="icon-double-angle-right"></i>--}}
+										{{--添加赛事--}}
+									{{--</a>--}}
+								{{--</li>--}}
 
 							</ul>
 						</li>
@@ -604,14 +604,14 @@
 										后台用户列表
 									</a>
 								</li>
-								@permission('add.companyUser')
-								<li class="companyuseraddcompanyuser">
-									<a href="{{url('/admin/companyUser/addcompanyUser')}}">
-										<i class="icon-double-angle-right"></i>
-										添加后台用户
-									</a>
-								</li>
-								@endpermission
+								{{--@permission('add.companyUser')--}}
+								{{--<li class="companyuseraddcompanyuser">--}}
+									{{--<a href="{{url('/admin/companyUser/addcompanyUser')}}">--}}
+										{{--<i class="icon-double-angle-right"></i>--}}
+										{{--添加后台用户--}}
+									{{--</a>--}}
+								{{--</li>--}}
+								{{--@endpermission--}}
 
 							</ul>
 
@@ -838,141 +838,97 @@
 			var url = window.location.href;
 			var param = url.split('admin/');
 			var route = (param[param.length - 1]).toLowerCase();
-			var first = route.split('/')[(route.split('/').length - 2)];
-//			alert(first);
+			var first = route.split('/')[(route.split('/').length - 2)]; //取admin/后一个
+
 			var second = route.split('/')[(route.split('/').length - 3)];
+
 			if(route.match(/\//g)){
 				if (route.match(/\//g).length == '1') { // 一个‘/’
 					route = route.split('/')[route.split('/').length - 1];
-//					alert(route);
+
 					if (route.indexOf('?') > 0) { // 一个‘/’ 一个‘？’
 						var real = route.split('?')[route.split('?').length - 2];
-						if (first == 'resource') { // 资源多级菜单
-							$('.' + first + real.slice(0, -4)).parent().parent().parent().parent().parent().addClass('open');
-							$('.' + first + real.slice(0, -4)).parent().parent().parent().parent().addClass('open');
-							$('.' + first + real.slice(0, -4)).parent().parent().parent().parent().parent().css('display', 'block');
-							$('.' + first + real.slice(0, -4)).parent().parent().parent().css('display', 'block');
-							$('.' + first + real.slice(0, -4)).parent().parent().addClass('open');
-							$('.' + first + real.slice(0, -4)).parent().parent().css('display', 'block');
-							$('.' + first + real.slice(0, -4)).parent().css('display', 'block');
-							$('.' + first + real.slice(0, -4)).addClass('active');
 
-							$('.' + first + real.slice(4)).parent().parent().parent().parent().parent().addClass('open');
-							$('.' + first + real.slice(4)).parent().parent().parent().parent().addClass('open');
-							$('.' + first + real.slice(4)).parent().parent().parent().parent().parent().css('display', 'block');
-							$('.' + first + real.slice(4)).parent().parent().parent().css('display', 'block');
-							$('.' + first + real.slice(4)).parent().parent().addClass('open');
-							$('.' + first + real.slice(4)).parent().parent().css('display', 'block');
-							$('.' + first + real.slice(4)).parent().css('display', 'block');
-							$('.' + first + real.slice(4)).addClass('active');
-						} else {
-							$('.' + first + real.slice(0, -4)).parent().parent().addClass('open');
-							$('.' + first + real.slice(0, -4)).parent().css('display', 'block');
-							$('.' + first + real.slice(0, -4)).addClass('active');
-							$('.' + first + real.slice(4)).parent().parent().addClass('open');
-							$('.' + first + real.slice(4)).parent().css('display', 'block');
-							$('.' + first + real.slice(4)).addClass('active');
-						}
+						$('.' + first + real.slice(0, -4)).parent().parent().addClass('open');
+						$('.' + first + real.slice(0, -4)).parent().css('display', 'block');
+						$('.' + first + real.slice(0, -4)).addClass('active');
+						$('.' + first + real.slice(4)).parent().parent().addClass('open');
+						$('.' + first + real.slice(4)).parent().css('display', 'block');
+						$('.' + first + real.slice(4)).addClass('active');
 					} else { // 仅一个‘/’
-						if (first == 'resource') { // 资源一个 ‘/’
-							$('.' + first + route.slice(0, -4)).parent().parent().parent().parent().parent().addClass('open');
-							$('.' + first + route.slice(0, -4)).parent().parent().parent().parent().addClass('open');
-							$('.' + first + route.slice(0, -4)).parent().parent().parent().parent().parent().css('display', 'block');
-							$('.' + first + route.slice(0, -4)).parent().parent().parent().css('display', 'block');
-							$('.' + first + route.slice(0, -4)).parent().parent().addClass('open');
-							$('.' + first + route.slice(0, -4)).parent().parent().css('display', 'block');
-							$('.' + first + route.slice(0, -4)).parent().css('display', 'block');
-							$('.' + first + route.slice(0, -4)).addClass('active');
 
-							$('.' + first + route.slice(4)).parent().parent().parent().parent().parent().addClass('open');
-							$('.' + first + route.slice(4)).parent().parent().parent().parent().addClass('open');
-							$('.' + first + route.slice(4)).parent().parent().parent().parent().parent().css('display', 'block');
-							$('.' + first + route.slice(4)).parent().parent().parent().css('display', 'block');
-							$('.' + first + route.slice(4)).parent().parent().addClass('open');
-							$('.' + first + route.slice(4)).parent().parent().css('display', 'block');
-							$('.' + first + route.slice(4)).parent().css('display', 'block');
-							$('.' + first + route.slice(4)).addClass('active');
-
-						} else { // 一个‘/’
-//							alert('aa');
-//							alert('.' + first + route.slice(3));
-							$('.' + first + route.slice(0, -4)).parent().parent().addClass('open');
-							$('.' + first + route.slice(0, -4)).parent().css('display', 'block');
-							$('.' + first + route.slice(0, -4)).addClass('active');
-							$('.' + first + route.slice(4)).parent().parent().addClass('open');
-							$('.' + first + route.slice(4)).parent().css('display', 'block');
-							$('.' + first + route.slice(4)).addClass('active');
-							if('.'+first + route.slice(3) != '.usersuser'){
-								$('.' + first + route.slice(3)).parent().parent().addClass('open');
-								$('.' + first + route.slice(3)).parent().css('display', 'block');
-								$('.' + first + route.slice(3)).addClass('active');
-							}
-
+						$('.' + first + route.slice(0, -4)).parent().parent().addClass('open');
+						$('.' + first + route.slice(0, -4)).parent().css('display', 'block');
+						$('.' + first + route.slice(0, -4)).addClass('active');
+						$('.' + first + route.slice(4)).parent().parent().addClass('open');
+						$('.' + first + route.slice(4)).parent().css('display', 'block');
+						$('.' + first + route.slice(4)).addClass('active');
+						if('.'+first + route.slice(3) != '.usersuser'){
+							$('.' + first + route.slice(3)).parent().parent().addClass('open');
+							$('.' + first + route.slice(3)).parent().css('display', 'block');
+							$('.' + first + route.slice(3)).addClass('active');
 						}
-
 					}
 				} else if (route.match(/\//g).length == '2') { // 2个‘/’
+					orderroute = route.split('/')[0] + route.split('/')[1] + route.split('/')[2];
+					if(orderroute == 'orderorderlist5'){
+						$('.orderorderlist5').parent().parent().addClass('open');
+						$('.orderorderlist5').parent().css('display', 'block');
+						$('.orderorderlist5').addClass('active');
+					}
+					if(orderroute == 'orderorderlist0'){
+						$('.orderorderlist0').parent().parent().addClass('open');
+						$('.orderorderlist0').parent().css('display', 'block');
+						$('.orderorderlist0').addClass('active');
+					}
+					if(orderroute == 'orderorderlist1'){
+						$('.orderorderlist1').parent().parent().addClass('open');
+						$('.orderorderlist1').parent().css('display', 'block');
+						$('.orderorderlist1').addClass('active');
+					}
+					if(orderroute == 'orderorderlist2'){
+						$('.orderorderlist2').parent().parent().addClass('open');
+						$('.orderorderlist2').parent().css('display', 'block');
+						$('.orderorderlist2').addClass('active');
+					}
+					if(orderroute == 'orderorderlist3'){
+						$('.orderorderlist3').parent().parent().addClass('open');
+						$('.orderorderlist3').parent().css('display', 'block');
+						$('.orderorderlist3').addClass('active');
+					}
+					if(orderroute == 'orderorderlist4'){
+						$('.orderorderlist4').parent().parent().addClass('open');
+						$('.orderorderlist4').parent().css('display', 'block');
+						$('.orderorderlist4').addClass('active');
+					}
 					route = route.split('/')[route.split('/').length - 2];
-					if (second == 'specialcourse') {
+					if(second == 'auth'){  //权限管理
+						if(route == 'checkroleuser' || route == 'addroleuser' || route == 'checkrolepermission' || route == 'addrolepermission'){
+							$('.authrole').parent().parent().addClass('open');
+							$('.authrole').parent().css('display', 'block');
+							$('.authrole').addClass('active');
+						}
+					}
+
+					if(second == 'companyuser'){ //后台用户列表的查看密码
+						if(route == 'resetpassword'){
+							$('.companyusercompanyuser').parent().parent().addClass('open');
+							$('.companyusercompanyuser').parent().css('display', 'block');
+							$('.companyusercompanyuser').addClass('active');
+						}
+					}
+					if (second == 'specialcourse') { //课程管理
 						if (route == 'specialchapterlist' || route == 'datalist' || route == 'adddata' || route == 'editdata' || route == 'addspecialchapter') {
 							$('.specialcoursespecialcourse').parent().parent().addClass('open');
 							$('.specialcoursespecialcourse').parent().css('display', 'block');
 							$('.specialcoursespecialcourse').addClass('active');
 						}
-						$('.' + second + route.slice(0, -4)).parent().parent().parent().parent().parent().addClass('open');
-						$('.' + second + route.slice(0, -4)).parent().parent().parent().parent().addClass('open');
-						$('.' + second + route.slice(0, -4)).parent().parent().parent().parent().parent().css('display', 'block');
-						$('.' + second + route.slice(0, -4)).parent().parent().parent().css('display', 'block');
-						$('.' + second + route.slice(0, -4)).parent().parent().addClass('open');
-						$('.' + second + route.slice(0, -4)).parent().parent().css('display', 'block');
-						$('.' + second + route.slice(0, -4)).parent().css('display', 'block');
-						$('.' + second + route.slice(0, -4)).addClass('active');
-
-						$('.' + second + route.slice(4)).parent().parent().parent().parent().parent().addClass('open');
-						$('.' + second + route.slice(4)).parent().parent().parent().parent().addClass('open');
-						$('.' + second + route.slice(4)).parent().parent().parent().parent().parent().css('display', 'block');
-						$('.' + second + route.slice(4)).parent().parent().parent().css('display', 'block');
-						$('.' + second + route.slice(4)).parent().parent().addClass('open');
-						$('.' + second + route.slice(4)).parent().parent().css('display', 'block');
-						$('.' + second + route.slice(4)).parent().css('display', 'block');
-						$('.' + second + route.slice(4)).addClass('active');
-					} else if (route == 'show' || route == 'resetpass') {
-//						$('.usersuser').parent().parent().addClass('open');
-//						$('.usersuser').parent().css('display', 'block');
+					} else if (route == 'show' || route == 'resetpass' || route == 'focuslist' || route == 'friendslist') {  //名师管理
 						$('.usersfamousteacher').parent().parent().addClass('open');
 						$('.usersfamousteacher').parent().css('display', 'block');
 						$('.usersfamousteacher').addClass('active');
 
-					}else if(route == 'order'){
-//						alert(route);
-						if (route == 'remarklist') {
-							$('.orderorder').parent().parent().addClass('open');
-							$('.orderorder').parent().css('display', 'block');
-							$('.orderorder').addClass('active');
-						}
-					} else if (route == 'checkrolepermission' || route == 'addrolepermission') {
-						$('.authrole').parent().parent().addClass('open');
-						$('.authrole').parent().css('display', 'block');
-					} else if (route == 'checkpermissions' || route == 'adduserpermission') {
-						$('.authclassmanager').parent().parent().addClass('open');
-						$('.authclassmanager').parent().css('display', 'block');
-					} else if (route == 'detailmicrolesson') {
-						$('.microlessonmicrolesson').parent().parent().addClass('open');
-						$('.microlessonmicrolesson').parent().css('display', 'block');
-						$('.microlessonmicrolesson').addClass('active');
-					} else if (route == 'newsdetail') {
-						$('.newsnews').parent().parent().addClass('open');
-						$('.newsnews').parent().css('display', 'block');
-						$('.newsnews').addClass('active');
-					} else if (route == 'detailcomment') {
-						$('.microlessonmicrolessoncomment').parent().parent().addClass('open');
-						$('.microlessonmicrolessoncomment').parent().css('display', 'block');
-						$('.microlessonmicrolessoncomment').addClass('active');
-					} else if (route == 'listgrade' || route == 'listsubject' || route == 'editgrade' || route == 'editsubject') {
-						$('.microlessonmicrolessoncategory').parent().parent().addClass('open');
-						$('.microlessonmicrolessoncategory').parent().css('display', 'block');
-						$('.microlessonmicrolessoncategory').addClass('active');
-					} else {
+					}else {
 						$('.' + second + route.slice(0, -4)).parent().parent().addClass('open');
 						$('.' + second + route.slice(0, -4)).parent().css('display', 'block');
 						$('.' + second + route.slice(0, -4)).addClass('active');
@@ -987,11 +943,45 @@
 					$('.' + auth + route.slice(0, -4)).parent().css('display', 'block');
 					$('.' + auth + route.slice(0, -4)).addClass('active');
 				} else if (route.match(/\//g).length == '3') {
-					route = route.split('/')[route.split('/').length - 3];
-					if(route == 'checkmanagers' || route == 'addmanager'){
-						$('.schoolschoolclass').parent().parent().addClass('open');
-						$('.schoolschoolclass').parent().css('display', 'block');
+					remarks = route.split('/')[0] + route.split('/')[1] + route.split('/')[3];
+					//用户管理
+					if(remarks == 'usersresetpassu1' || remarks == 'usersshowu1' || remarks == 'usersfocuslistu1' || remarks == 'usersfriendslistu1'){
+						$('.usersuser').parent().parent().addClass('open');
+						$('.usersuser').parent().css('display', 'block');
+						$('.usersuser').addClass('active');
 					}
+					//订单
+					if(remarks == 'orderremarklist5'){
+						$('.orderorderlist5').parent().parent().addClass('open');
+						$('.orderorderlist5').parent().css('display', 'block');
+						$('.orderorderlist5').addClass('active');
+					}
+					if(remarks == 'orderremarklist0'){
+						$('.orderorderlist0').parent().parent().addClass('open');
+						$('.orderorderlist0').parent().css('display', 'block');
+						$('.orderorderlist0').addClass('active');
+					}
+					if(remarks == 'orderremarklist1'){
+						$('.orderorderlist1').parent().parent().addClass('open');
+						$('.orderorderlist1').parent().css('display', 'block');
+						$('.orderorderlist1').addClass('active');
+					}
+					if(remarks == 'orderremarklist2'){
+						$('.orderorderlist2').parent().parent().addClass('open');
+						$('.orderorderlist2').parent().css('display', 'block');
+						$('.orderorderlist2').addClass('active');
+					}
+					if(remarks == 'orderremarklist3' || remarks == 'ordereditretiredmoney3' || remarks == 'ordereditrefundmoney3' || remarks == 'orderrefundlist3'){
+						$('.orderorderlist3').parent().parent().addClass('open');
+						$('.orderorderlist3').parent().css('display', 'block');
+						$('.orderorderlist3').addClass('active');
+					}
+					if(remarks == 'orderremarklist4' || remarks == 'orderrefundlist4'){
+						$('.orderorderlist4').parent().parent().addClass('open');
+						$('.orderorderlist4').parent().css('display', 'block');
+						$('.orderorderlist4').addClass('active');
+					}
+
 				}
 			}
 

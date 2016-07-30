@@ -111,7 +111,7 @@
                                         <th>邀请人ID</th>
                                         <th>邀请人</th>
                                         <th>订单类型</th>
-                                        <th>课程</th>
+                                        {{--<th>课程</th>--}}
                                         <th>应退金额</th>
                                         <th>已退金额</th>
                                         <th>付款时间</th>
@@ -152,13 +152,13 @@
                                                 购买点评订单
                                             @endif
                                         </td>
-                                        <td>
-                                            @if($order->orderType == 0)
-                                                <a href="{{url('/lessonSubject/detail/'.$order->courseId)}}">查看课程</a>
-                                            @else
-                                                <a href="{{url('/lessonComment/detail/'.$order->courseId)}}">查看课程</a>
-                                            @endif
-                                        </td>
+                                        {{--<td>--}}
+                                            {{--@if($order->orderType == 0)--}}
+                                                {{--<a href="{{url('/lessonSubject/detail/'.$order->courseId)}}">查看课程</a>--}}
+                                            {{--@else--}}
+                                                {{--<a href="{{url('/lessonComment/detail/'.$order->courseId)}}">查看课程</a>--}}
+                                            {{--@endif--}}
+                                        {{--</td>--}}
                                         <td>{{$order->refundableAmount}}</td>
                                         <td>{{$order->refundAmount}}</td>
                                         <td>{{$order->payTime}}</td>

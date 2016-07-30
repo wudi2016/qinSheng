@@ -35,7 +35,6 @@
         var container = $(this);
 
         var pagination = {
-
             initialize: function() {
                 var self = this;
 
@@ -60,14 +59,14 @@
                     pageRange: attributes.pageRange,
                     pageSize: attributes.pageSize
                 };
-
                 // "dataSource"`s type is unknown, parse it to find true data
                 self.parseDataSource(attributes.dataSource, function(dataSource) {
 
                     // Whether pagination is sync mode
-                    self.sync = Helpers.isArray(dataSource);
+                    self.sync = Helpers.isArray(dataSource['data']);
                     if (self.sync) {
-                        model.totalNumber = attributes.totalNumber = dataSource.length;
+                        // model.totalNumber = attributes.totalNumber = dataSource.length;
+                        model.totalNumber = attributes.totalNumber = dataSource['totalNumber'];
                     }
 
                     // Obtain the total number of pages
@@ -387,7 +386,7 @@
                 $.extend(true, formatAjaxParams, attributes.ajax);
                 $.extend(formatAjaxParams.data || {}, postData);
 
-                formatAjaxParams.url = attributes.dataSource;
+                formatAjaxParams.url = attributes.dataSource['data'];
                 formatAjaxParams.success = function(response) {
                     render(self.filterDataByLocator(response));
                 };
@@ -549,14 +548,34 @@
 
             // Get data segments
             getDataSegment: function(number) {
-                var pageSize = attributes.pageSize;
-                var dataSource = attributes.dataSource;
-                var totalNumber = attributes.totalNumber;
 
-                var start = pageSize * (number - 1) + 1;
-                var end = Math.min(number * pageSize, totalNumber);
+                if(number > 1){
+                    attributes.getData(number,attributes.pageSize)
+                    return false;
+                }
 
-                return dataSource.slice(start - 1, end);
+                // var pageSize = attributes.pageSize;
+                var dataSource = attributes.dataSource['data']['data'];
+                // var totalNumber = attributes.totalNumber;
+                // var start = pageSize * (number - 1) + 1;
+                // var end = Math.min(number * pageSize, totalNumber);
+                return dataSource;
+
+                // var pageSize = attributes.pageSize;
+                // var dataSource = attributes.dataSource['data']['data'];
+                // var totalNumber = attributes.totalNumber;
+                // var start = pageSize * (number - 1) + 1;
+                // var end = Math.min(number * pageSize, totalNumber);
+                // return dataSource.slice(start - 1, end);
+
+
+                // self.myfun();
+                // attributes.dataSource();
+                // console.log(number);
+                // return [1,1,1,1,1]
+
+
+
             },
 
             // Get total page
@@ -614,10 +633,10 @@
                 var args = arguments;
 
                 if (Helpers.isObject(dataSource)) {
-                    callback(attributes.dataSource = self.filterDataByLocator(dataSource));
+                    callback(attributes.dataSource['data'] = self.filterDataByLocator(dataSource));
                 }
                 else if (Helpers.isArray(dataSource)) {
-                    callback(attributes.dataSource = dataSource);
+                    callback(attributes.dataSource['data'] = dataSource);
                 }
                 else if ($.isFunction(dataSource)) {
                     attributes.dataSource(function(data) {

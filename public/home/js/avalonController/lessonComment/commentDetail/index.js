@@ -187,7 +187,8 @@ define([], function() {
 						actionId: comment.commentID,
 						fromUsername: comment.mineUsername,
 						toUsername: comment.replayInfo.toUserName || comment.studentInfo.username,
-						content: comment.replayInfo.commentContent || comment.studentInfo.extra
+						content: comment.replayInfo.commentContent || comment.studentInfo.extra,
+						courseType: 1
 					};
 					comment.getData('/lessonComment/getFirst', 'submitComment', {table: 'usermessage', action: 2, data: data}, 'POST');
 				}

@@ -54,6 +54,11 @@
                         <i class="icon-double-angle-right"></i>
                         专题课程列表
                     </small>
+
+                    <a href="{{url('/admin/recycle/deleteRecycle')}}" class="btn btn-xs btn-info" style="float: right;margin-right: 50px;">
+                        清空回收站
+                    </a>
+
                 </h1>
             </div><!-- /.page-header -->
 
@@ -103,7 +108,7 @@
                                         <th>浏览数</th>
                                         <th>观看数</th>
                                         <th>收藏数</th>
-                                        <th>课程公告</th>
+                                        {{--<th>课程公告</th>--}}
                                         <th>课程状态</th>
 
                                         <th>操作</th>
@@ -138,7 +143,7 @@
                                             <td>{{$special->courseView}}</td>
                                             <td>{{$special->coursePlayView}}</td>
                                             <td>{{$special->courseFav}}</td>
-                                            <td>{{$special->courseNotice}}</td>
+                                            {{--<td>{{$special->courseNotice}}</td>--}}
                                             <td>{{$special->courseStatus ? '锁定' : '激活'}}</td>
 
                                             <td>

@@ -2,6 +2,7 @@ define(['lessonComment/md5'], function(CryptoJS) {
 
 	function PrimecloudPaas() {
 		this.xhr = null;
+		this.lock = false;
 	}
 
 
@@ -34,29 +35,61 @@ define(['lessonComment/md5'], function(CryptoJS) {
      * @paramter callback 		扫描完成回调函数
      * @paramter progresback 	扫描进度回调函数
      */
-	PrimecloudPaas.prototype.MD5 = function(file, callback, progresback) {
-	    selectFile(file);
-	    function selectFile(f) {
-	        (function(){
-	            var type = CryptoJS.algo.MD5;
-	            var algoInst = {name: "MD5", instance:type.create()};
-	            PrimecloudPaas.prototype.progressiveRead(f, function(data, pos, file){
-	                progresback(pos,file.size);
-	                var wordArray = PrimecloudPaas.prototype.arrayBufferToWordArray(data);
-	                algoInst.instance.update(wordArray);
-	            }, function (file){
-	                callback(algoInst.instance.finalize());
-	            });
-	        })();
-	    }
+	PrimecloudPaas.prototype.MD5 = function(inputFile, callback, progresback) {
+        var type = CryptoJS.algo.MD5;
+        var algoInst = {name: "MD5", instance:type.create()};
+        this.progressiveRead(inputFile, function(data, pos, file){
+            progresback(pos, file.size);
+            var wordArray = PrimecloudPaas.prototype.arrayBufferToWordArray(data);
+            algoInst.instance.update(wordArray);
+        }, function (file){
+            callback(algoInst.instance.finalize());
+        });
 	};
+
+
+	/**
+     * 读取进度
+     *
+     */
+	PrimecloudPaas.prototype.progressiveRead = function(file, work, done) {
+	    var chunkSize = 204800;
+	    var pos = 0;
+	    var reader = new FileReader();
+		this.progress(chunkSize, pos, reader, file, work, done);
+	};
+
+
+	/**
+     * 递归调用读取进度
+     *
+     */
+	PrimecloudPaas.prototype.progress = function(chunkSize, pos, reader, file, work, done) {
+		var that = this;
+		var end = Math.min(pos + chunkSize, file.size);
+        reader.onload = function (e) {
+            pos = end;
+            work(e.target.result, pos, file);
+            if (pos < file.size) {
+                that.lock || that.progress(chunkSize, pos, reader, file, work, done);
+            } else {
+                done(file);
+            }
+        }
+        if (file.slice) {
+            var blob = file.slice(pos, end);
+        } else if (file.webkitSlice) {
+            var blob = file.webkitSlice(pos, end);
+        }
+        reader.readAsArrayBuffer(blob);
+	}
 
 
 	/**
      * 获取32位字节码
      *
      */
-	PrimecloudPaas.prototype.swapendian32 = function (val) {
+	PrimecloudPaas.prototype.swapendian32 = function(val) {
 	    return (((val & 0xFF) << 24) | ((val & 0xFF00) << 8) | ((val >> 8) & 0xFF00) | ((val >> 24) & 0xFF)) >>> 0;
 	}
 
@@ -90,36 +123,6 @@ define(['lessonComment/md5'], function(CryptoJS) {
 
 
 	/**
-     * 读取进度
-     *
-     */
-	PrimecloudPaas.prototype.progressiveRead = function (file, work, done) {
-	    var chunkSize = 204800;
-	    var pos = 0;
-	    var reader = new FileReader();
-	    function progressiveReadNext() {
-	        var end = Math.min(pos + chunkSize, file.size);
-	        reader.onload = function (e) {
-	            pos = end;
-	            work(e.target.result, pos, file);
-	            if (pos < file.size) {
-	                setTimeout(progressiveReadNext, 0);
-	            } else {
-	                done(file);
-	            }
-	        }
-	        if (file.slice) {
-	            var blob = file.slice(pos, end);
-	        } else if (file.webkitSlice) {
-	            var blob = file.webkitSlice(pos, end);
-	        }
-	        reader.readAsArrayBuffer(blob);
-	    }
-	    setTimeout(progressiveReadNext, 0);
-	};
-
-
-	/**
      * 生成时间戳文件名
      *
      * @paramter fileName		上传文件域的文件名
@@ -137,6 +140,16 @@ define(['lessonComment/md5'], function(CryptoJS) {
 	PrimecloudPaas.prototype.endUpload = function() {
 		this.xhr && this.xhr.abort();
 	}
+
+
+	/**
+     * 中断MD5
+     *
+     */
+	PrimecloudPaas.prototype.endMD5 = function() {
+		this.lock = true;
+	}
+
 
 	return PrimecloudPaas;
 
