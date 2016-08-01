@@ -84,7 +84,6 @@
 			};
 
 			upload.messageID = {{$messageID}} || null;
-			upload.messageID && upload.getData('/lessonComment/getFirst', 'deleteMessage', {action: 3, table: 'usermessage', data: {id: upload.messageID}}, 'POST');
 
 			upload.$watch('uploadInfo.courseTitle', function(value, oldValue) {
                 if (value.length > 20) upload.uploadInfo.courseTitle = oldValue;

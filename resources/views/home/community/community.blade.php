@@ -118,8 +118,8 @@
                 <!-- 循环 -->
                 <div class="new_content" ms-repeat="newlist">
                     <!-- 图片 -->
-                    <div class="new_content_img">
-                        <span ms-html=" $index+1 "> </span>
+                    <div class="new_content_img"  >
+                        <div ms-html=" $index+1 "> </div>
                     </div>
                     <!-- 文字 -->
                     <div class="new_content_font">

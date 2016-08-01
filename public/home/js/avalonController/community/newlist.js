@@ -5,35 +5,57 @@
  		lujing: '/community/newdetail/',
 
          newlist :[],
-         getData:function(){
-             $('#demo').pagination({
-                 dataSource: function(done) {
+         getDatas:function(){
+            $('#demo').pagination({
+                dataSource: function(done) {
                      $.ajax({
                          type: 'GET',
-                         url : '/community/getnewlist/',
-                         dataType : 'json',
+                         url : '/community/getnewlist/'+this.pageNumber+'/'+this.pageSize,
+                         //dataType:'json',
                          success: function(response) {
                              if(response.statuss){
-                                 done(response.data);
+                                 var format = [];
+                                 format['data'] = response.data;
+                                 format['totalNumber'] = response.count;
+                                 done(format);
+                                 //console.log(format['data'])
+                                 //console.log(format['totalNumber'])
+                                 //done(response.data);
                              }
                          }
                      });
-                 },
-                 pageSize: 10,
-                 className:"paginationjs-theme-blue",
-                 showGoInput: true,
-                 showGoButton: true,
-                 callback: function(data) {
-                     if(data){
-                         model.newlist = data;
-                     }
+                },
 
-                 }
+                getData: function(pageNumber,pageSize) {
+                     var self = this;
+                     $.ajax({
+                         type: 'GET',
+                         url: '/community/getnewlist/'+pageNumber+'/'+pageSize,
+                         //dataType:'json',
+                         success: function(response) {
+                             self.callback(response.data);
+                         }
+                     });
+                },
+
+
+                pageSize: 10,
+                pageNumber :1,
+                totalNumber :1,
+                className:"paginationjs-theme-blue",
+                showGoInput: true,
+                showGoButton: true,
+                callback: function(data) {
+                    if(data){
+                        model.newlist = data;
+                    }
+
+                }
              })
 
          },
 
  	});
-     model.getData();
+     model.getDatas();
  	return model;
  });

@@ -16,7 +16,11 @@
                 </li>
 
                 <li>
-                    <a href="{{url('/admin/users/userList')}}">用户管理</a>
+                    @if($data->status == 'u1')
+                        <a href="{{url('/admin/users/userList')}}">用户管理</a>
+                    @else
+                        <a href="{{url('/admin/users/famousTeacherList')}}">名师管理</a>
+                    @endif
                 </li>
                 <li class="active">用户管理列表</li>
             </ul><!-- .breadcrumb -->
@@ -76,10 +80,17 @@
                                                 <strong>删除</strong>
                                             </a>
 
-                                            <a href="{{url('admin/users/show/'.$value->deleteId)}}"
-                                               class="btn btn-xs btn-success" name="person-detail">
-                                                <strong>查看详情</strong>
-                                            </a>
+                                            @if($data->status == 'u1')
+                                                <a href="{{url('admin/users/show/'.$value->deleteId.'/u1')}}"
+                                                   class="btn btn-xs btn-success" name="person-detail">
+                                                    <strong>查看详情</strong>
+                                                </a>
+                                            @else
+                                                <a href="{{url('admin/users/show/'.$value->deleteId)}}"
+                                                   class="btn btn-xs btn-success" name="person-detail">
+                                                    <strong>查看详情</strong>
+                                                </a>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

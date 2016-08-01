@@ -26,7 +26,7 @@
 
 		@if (\Auth::user() -> type == 2)
 			<div class="switch_video" style="height: 110px;">
-	            <a href='/lessonComment/upload/{{$orderSn}}' class="upload">上传点评视频</a>
+	            <a href='/lessonComment/upload/{{$orderSn}}/{{$messageID}}' class="upload">上传点评视频</a>
 				<div class="tip">该视频已上传<span style="color: red;" ms-html='studentInfo.time'></span>天</div>
 			</div>
 		@endif
@@ -53,6 +53,8 @@
 		require(['lessonComment/commentDetail/wait'], function (comment) {
 			comment.commentID = {{$commentID}} || null;
 			comment.orderSn = '{{$orderSn}}' || null;
+			comment.messageID = '{{$messageID}}' || null;
+			console.log(comment.messageID);
 
 			//  获取点评信息
 			comment.getData('/lessonComment/getDetailInfo/'+ comment.orderSn +'/0', 'studentInfo');

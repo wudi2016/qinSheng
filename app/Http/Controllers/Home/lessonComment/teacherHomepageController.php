@@ -21,11 +21,11 @@ class teacherHomepageController extends Controller
      */
     public function index($teacherID)
     {
-        $teacherInfo = DB::table('users') -> select('id') -> where(['id' => $teacherID, 'type' => 2]) -> first();
+        $teacherInfo = DB::table('users') -> select('id', 'checks') -> where(['id' => $teacherID, 'type' => 2]) -> first();
         $teacherInfo || abort(404);
         $mineID = \Auth::check() ? \Auth::user() -> id : 0;
         $mineName = \Auth::check() ? \Auth::user() -> username : 0;
-        return view('home.lessonComment.teacherHomepage.index') -> with('userID', $teacherID) -> with('mineID', $mineID) -> with('mineName', $mineName);
+        return view('home.lessonComment.teacherHomepage.index') -> with('userID', $teacherID) -> with('mineID', $mineID) -> with('mineName', $mineName) -> with('checks', $teacherInfo -> checks);
     }
 
 

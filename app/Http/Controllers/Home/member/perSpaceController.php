@@ -141,51 +141,79 @@ class perSpaceController extends Controller
     }
     
     //我的关注
-    public function myFocus()
+    public function myFocus($pageNumber, $pageSize)
     {
+        $skip = ($pageNumber - 1) * $pageSize;
         $myFocus = \DB::table('friends as f')
             ->join('users as u', 'f.toUserId', '=', 'u.id')
             ->select('u.id', 'u.username', 'u.pic', 'u.type')
             ->where('f.fromUserId', \Auth::check() ? \Auth::user()->id : 0)
             ->where('u.checks',0)
             ->orderBy('u.type', 'desc')
+            ->skip($skip)
+            ->take($pageSize)
             ->get();
+        $count = \DB::table('friends as f')
+            ->join('users as u', 'f.toUserId', '=', 'u.id')
+            ->select('u.id', 'u.username', 'u.pic', 'u.type')
+            ->where('f.fromUserId', \Auth::check() ? \Auth::user()->id : 0)
+            ->where('u.checks',0)
+            ->count();
         if ($myFocus) {
-            return response()->json(['data' => $myFocus, 'total' => count($myFocus), 'type' => true]);
+            return response()->json(['data' => $myFocus, 'total' => $count, 'type' => true]);
         } else {
-            return response()->json(['total' => count($myFocus), 'type' => false]);
+            return response()->json(['total' => $count, 'type' => false]);
         }
     }
 
     //我的粉丝$myFans  && 我的好友$myFriends
-    public function myFriends()
+    public function myFriends($pageNumber, $pageSize)
     {
+        $skip = ($pageNumber - 1) * $pageSize;
         $myFriends = \DB::table('friends as f')
             ->join('users as u', 'f.fromUserId', '=', 'u.id')
             ->select('u.id', 'u.username', 'u.pic', 'u.type')
             ->where('f.toUserId', \Auth::check() ? \Auth::user()->id : 0)
             ->where('u.checks',0)
             ->orderBy('u.type', 'desc')
+            ->skip($skip)
+            ->take($pageSize)
             ->get();
+
+        $count = \DB::table('friends as f')
+            ->join('users as u', 'f.fromUserId', '=', 'u.id')
+            ->select('u.id', 'u.username', 'u.pic', 'u.type')
+            ->where('f.toUserId', \Auth::check() ? \Auth::user()->id : 0)
+            ->where('u.checks',0)
+            ->count();
         if ($myFriends) {
-            return response()->json(['data' => $myFriends, 'total' => count($myFriends), 'type' => true]);
+            return response()->json(['data' => $myFriends, 'total' => $count, 'type' => true]);
         } else {
-            return response()->json(['total' => count($myFriends), 'type' => false]);
+            return response()->json(['total' => $count, 'type' => false]);
         }
     }
 
 
     // 个人中心我的专题课程
-    public function getCourse($type, $flag)
+    public function getCourse($type, $flag, $pageNumber, $pageSize)
     {
-        $flag == '1' ? $order = 'created_at' : $order = 'id';
+        $skip = ($pageNumber - 1) * $pageSize;
+
         if ($type == '1') { // 学员
+            $flag == '1' ? $order = 'o.created_at' : $order = 'c.courseStudyNum';
             $info = DB::table('course as c')->leftJoin('orders as o', 'c.id', '=', 'o.courseId')
                 ->select('c.id', 'c.courseTitle', 'c.coursePic', 'coursePrice', 'c.coursePlayView', 'c.courseDiscount','c.created_at','c.courseStudyNum')
                 ->where(['o.userId' => Auth::user()->id, 'o.orderType' => 0, 'c.courseStatus' => 0,'o.isDelete' => 0,'o.status' => 2])
-                ->orderBy('o.'.$order, 'desc')->get();
+                ->orderBy($order, 'desc')->skip($skip)->take($pageSize)->get();
+            $count = DB::table('course as c')->leftJoin('orders as o', 'c.id', '=', 'o.courseId')
+                ->select('c.id', 'c.courseTitle', 'c.coursePic', 'coursePrice', 'c.coursePlayView', 'c.courseDiscount','c.created_at','c.courseStudyNum')
+                ->where(['o.userId' => Auth::user()->id, 'o.orderType' => 0, 'c.courseStatus' => 0,'o.isDelete' => 0,'o.status' => 2])->count();
         } else { // 名师
-            $info = DB::table('course')->select('id', 'courseTitle', 'coursePic', 'coursePrice', 'coursePlayView','courseDiscount','created_at','courseStudyNum')->where(['teacherId' => Auth::user()->id, 'courseStatus' => '0'])->orderBy($order, 'desc')->get();
+            $flag == '1' ? $order = 'created_at' : $order = 'courseStudyNum';
+            $info = DB::table('course')->select('id', 'courseTitle', 'coursePic', 'coursePrice', 'coursePlayView','courseDiscount','created_at','courseStudyNum')
+                ->where(['teacherId' => Auth::user()->id, 'courseStatus' => '0'])->orderBy($order, 'desc')->skip($skip)->take($pageSize)->get();
+            $count = DB::table('course')->select('id', 'courseTitle', 'coursePic', 'coursePrice', 'coursePlayView','courseDiscount','created_at','courseStudyNum')
+                ->where(['teacherId' => Auth::user()->id, 'courseStatus' => '0'])->count();
         }
         foreach ($info as $key => $value) {
             if($info[$key]->courseDiscount){
@@ -197,72 +225,70 @@ class perSpaceController extends Controller
             $info[$key]->coursePlayView = $info[$key]->courseStudyNum;
         }
         if ($info) {
-            if($flag == '2'){
-                return response()->json(['status' => true, 'data' => $this->mySort($info,'coursePlayView'), 'total' => count($info)]);
-            }else{
-                return response()->json(['status' => true, 'data' => $info, 'total' => count($info)]);
-            }
+            return response()->json(['status' => true, 'data' => $info, 'total' => $count]);
         } else {
-            return response()->json(['status' => false,'total' => count($info)]);
+            return response()->json(['status' => false,'total' => $count]);
         }
-    }
-
-    function mySort($arrays,$sort_key,$sort_order=SORT_DESC,$sort_type=SORT_NUMERIC)
-    {
-        if(is_array($arrays)){
-            foreach ($arrays as $array){
-                $key_arrays[] = $array->$sort_key;
-            }
-        }else{
-            return false;
-        }
-        array_multisort($key_arrays,$sort_order,$sort_type,$arrays);
-        return $arrays;
     }
 
     // 个人中心我的点评课程
-    public function getCommentCourse(Request $request,$type)
+    public function getCommentCourse(Request $request,$pageNumber, $pageSize)
     {
+        $skip = ($pageNumber - 1) * $pageSize;
         $id = $request->userId;
-        $info1 = DB::table('orders as o')->leftJoin('commentcourse as c','c.orderSn', '=', 'o.orderSn')->leftJoin('applycourse as a','a.orderSn', '=', 'o.orderSn')
-            ->select(
-                'a.id as AId','a.courseTitle as ATitle','a.courseStatus','a.courseIsDel','a.state as AState','a.created_at as ACreated',
-                'o.id as OId','o.orderType','o.status','o.courseId as OCourseId','o.userName as OUserName','o.teacherName as OTeacherName','o.isDelete','o.created_at',
-                'c.courseTitle as CTitle','c.coursePic as CPic','c.state as CState','c.courseStatus','c.courseIsDel','c.coursePlayView as CPlayView','c.coursePrice as CPrice'
-            )->where('o.userId', $id)->whereBetween('o.status',[1,2])->where('o.orderType',1)->where(['o.isDelete' => 0])->get();
-        $info2 = DB::table('orders as o')->leftJoin('commentcourse as c','c.id', '=', 'o.courseId')
-            ->select(
-                'o.id as OId','o.orderType','o.status','o.courseId as OCourseId','o.userName as OUserName','o.teacherName as OTeacherName','o.isDelete','o.created_at',
-                'c.courseTitle as CTitle','c.coursePic as CPic','c.state as CState','c.courseStatus','c.courseIsDel','c.coursePlayView as CPlayView','c.coursePrice as CPrice'
-            )->where(['o.userId' => $id,'o.status' => 2,'o.orderType' =>2, 'o.isDelete' => 0])->get();
-
-        foreach ($info1 as $key => $value) {
-            $result = DB::table('usermessage')->where(['actionId' => $value->AId,'username' => Auth::user()->username, 'type' => 0])->first();
-            $info1[$key]->CPrice = ceil($info1[$key]->CPrice/100);
-            $info1[$key]->messageID = $result ? $result->id : '';
-        }
-        foreach ($info2 as $key => $value) {
-            $info2[$key]->CPrice = ceil($info2[$key]->CPrice/100);
-            $info2[$key]->messageID = '';
-        }
-        $arr = array_merge($info1,$info2);
-        if ($arr) {
-            if($type == '2'){
-                return response()->json(['status' => true, 'data' => $this->mySort($arr,'CPlayView'), 'total' => count($arr)]);
+        $info = DB::table('orders')->select('orderSn', 'orderType','status','courseId as OCourseId','userName as OUserName','teacherName as OTeacherName','isDelete','created_at')
+            ->where('userId',$id)->whereIn('status',[1,2])->whereIn('orderType',[1,2])->where('isDelete',0)->orderBy('created_at','desc')
+            ->skip($skip)->take($pageSize)->get();
+        $count = DB::table('orders')->select('orderSn', 'orderType','status','courseId as OCourseId','userName as OUserName','teacherName as OTeacherName','isDelete','created_at')
+            ->where('userId',$id)->whereIn('status',[1,2])->whereIn('orderType',[1,2])->where('isDelete',0)->count();
+        foreach($info as $key => $value){
+            if($value->orderType == 1){
+                if($value->status == 1){
+                    $data1 = DB::table('applycourse')->select('id','courseTitle','courseStatus','courseIsDel','state','created_at')->where('orderSn',$value->orderSn)->first();
+                    $info[$key] -> AId = $data1->id;
+                    $info[$key] -> ATitle = $data1->courseTitle;
+                    $info[$key] -> courseStatus = $data1->courseStatus;
+                    $info[$key] -> courseIsDel = $data1->courseIsDel;
+                    $info[$key] -> AState = $data1->state;
+                    $info[$key] -> ACreated = $data1->created_at;
+                    $result = DB::table('usermessage')->where(['actionId' => $data1->id,'username' => Auth::user()->username, 'type' => 0])->first();
+                    $info[$key]->messageID = $result ? $result->id : '';
+                }else{
+                    $data2 = DB::table('commentcourse')->select('courseTitle','coursePic','state','courseStatus','courseIsDel','coursePlayView','coursePrice')->where('id',$value->OCourseId)->first();
+                    $info[$key] -> CTitle = $data2->courseTitle;
+                    $info[$key] -> CPic = $data2->coursePic;
+                    $info[$key] -> CState = $data2->state;
+                    $info[$key] -> courseStatus = $data2->courseStatus;
+                    $info[$key] -> courseIsDel = $data2->courseIsDel;
+                    $info[$key] -> CPlayView = $data2->coursePlayView;
+                    $info[$key] -> CPrice = ceil($data2->coursePrice/100);
+                }
             }else{
-                return response()->json(['status' => true, 'data' => $this->mySort($arr,'created_at'), 'total' => count($arr)]);
+                $data = DB::table('commentcourse')->select('courseTitle','coursePic','state','courseStatus','courseIsDel','coursePlayView','coursePrice')->where('id',$value->OCourseId)->first();
+                $info[$key] -> CTitle = $data->courseTitle;
+                $info[$key] -> CPic = $data->coursePic;
+                $info[$key] -> CState = $data->state;
+                $info[$key] -> courseStatus = $data->courseStatus;
+                $info[$key] -> courseIsDel = $data->courseIsDel;
+                $info[$key] -> CPlayView = $data->coursePlayView;
+                $info[$key] -> CPrice = ceil($data->coursePrice/100);
             }
+        }
+        if ($info) {
+            return response()->json(['status' => true, 'data' => $info, 'total' => $count]);
         } else {
-            return response()->json(['status' => false, 'total' => count($arr)]);
+            return response()->json(['status' => false, 'total' => $count]);
         }
     }
 
     // 个人中心我的收藏
-    public function getCollectionInfo()
+    public function getCollectionInfo($pageNumber, $pageSize)
     {
+        $skip = ($pageNumber - 1) * $pageSize;
         $course = [];
-        $info = DB::table('collection')->select('id','courseId', 'type')->where('userId', Auth::user()->id)->orderBy('created_at', 'desc')->get();
-
+        $info = DB::table('collection')->select('id','courseId', 'type')->where('userId', Auth::user()->id)->orderBy('created_at', 'desc')
+            ->skip($skip)->take($pageSize)->get();
+        $count = DB::table('collection')->select('id','courseId', 'type')->where('userId', Auth::user()->id)->count();
         if ($info) {
             foreach ($info as $key => $value) {
                 if ($value->type == 0) { // 收藏课程为专题课程
@@ -286,10 +312,9 @@ class perSpaceController extends Controller
                     $course[$key]->collectId = $value->id;
                 }
             }
-
-            return response()->json(['data' => $course, 'total' => count($info), 'status' => true]);
+            return response()->json(['data' => $course, 'total' => $count, 'status' => true]);
         } else {
-            return response()->json(['total' => count($info), 'status' => false]);
+            return response()->json(['total' => $count, 'status' => false]);
         }
     }
 
@@ -315,11 +340,13 @@ class perSpaceController extends Controller
     }
 
     // 获取全部通知
-    public function getNoticeInfo(Request $request)
+    public function getNoticeInfo(Request $request, $pageNumber, $pageSize)
     {
-        $info = DB::table('usermessage as u')->leftJoin('usermessagetem as t','u.tempId','=','t.id')
-            ->select('u.*','t.tempName')->where('u.username',$request->username)
-            ->whereNotIn('u.type',[5,6])->orderBy('created_at','desc')->get();
+        $skip = ($pageNumber - 1) * $pageSize;
+        $info = DB::table('usermessage as u')->leftJoin('usermessagetem as t','u.tempId','=','t.id')->select('u.*','t.tempName')->where('u.username',$request->username)
+            ->whereNotIn('u.type',[5,6])->orderBy('created_at','desc')->skip($skip)->take($pageSize)->get();
+        $count = DB::table('usermessage as u')->leftJoin('usermessagetem as t','u.tempId','=','t.id')->select('u.*','t.tempName')->where('u.username',$request->username)
+            ->whereNotIn('u.type',[5,6])->count();
         if($info) {
             foreach ($info as $key => $value) {
                 if ($value->type == '3') {
@@ -329,9 +356,9 @@ class perSpaceController extends Controller
             }
         }
         if($info){
-            return response()->json(['data' => $info, 'status' => true]);
+            return response()->json(['data' => $info, 'status' => true,'count' => $count]);
         }else{
-            return response()->json(['status' => false]);
+            return response()->json(['status' => false,'count' => $count]);
         }
     }
     // 删除通知消息
@@ -372,16 +399,18 @@ class perSpaceController extends Controller
         if(!$result1 && !$result2) return response()->json(['status' => 4]);// 评论回复消息
     }
     // 获取评论回复
-    public function getCommentInfo(Request $request)
+    public function getCommentInfo(Request $request, $pageNumber, $pageSize)
     {
-        $info = DB::table('usermessage')->Where(['toUsername' => $request->username])->whereIn('type',[5,6])->orderBy('created_at','desc')->get();
+        $skip = ($pageNumber - 1) * $pageSize;
+        $info = DB::table('usermessage')->Where(['toUsername' => $request->username])->whereIn('type',[5,6])->orderBy('created_at','desc')->skip($skip)->take($pageSize)->get();
+        $count = DB::table('usermessage')->Where(['toUsername' => $request->username])->whereIn('type',[5,6])->orderBy('created_at','desc')->count();
         foreach($info as $key => $value){
             $info[$key] -> content = '"'.$value->content.'"';
         }
         if($info){
-            return response()->json(['data' => $info, 'status' => true]);
+            return response()->json(['data' => $info, 'status' => true, 'count' => $count]);
         }else{
-            return response()->json(['status' => false]);
+            return response()->json(['status' => false, 'count' => $count]);
         }
     }
     // 删除评论消息
@@ -549,15 +578,23 @@ class perSpaceController extends Controller
 
 
     //学员 --我的订单
-    public function myOrders()
+    public function myOrders($pageNumber, $pageSize)
     {
+        $skip = ($pageNumber - 1) * $pageSize;
         $id = \Auth::user()->id;
-        $data = DB::table('orders as o')
+        $data = \DB::table('orders as o')
             ->leftJoin('users as u','u.id','=','o.teacherId')
             ->select('o.id','o.userId','o.orderSn','o.userName','o.orderTitle','o.orderPrice','o.payPrice','o.orderType','o.courseId','o.status','o.payTime','u.realname','u.username')
             ->where(['o.userId'=>$id,'o.isDelete'=>0])
             ->orderBy('o.id','desc')
+            ->skip($skip)
+            ->take($pageSize)
             ->get();
+        $count = \DB::table('orders as o')
+            ->leftJoin('users as u','u.id','=','o.teacherId')
+            ->select('o.id','o.userId','o.orderSn','o.userName','o.orderTitle','o.orderPrice','o.payPrice','o.orderType','o.courseId','o.status','o.payTime','u.realname','u.username')
+            ->where(['o.userId'=>$id,'o.isDelete'=>0])
+            ->count();
 
         $seven = Carbon::now()->subDays(7);
         if($data){
@@ -571,10 +608,10 @@ class perSpaceController extends Controller
 
 //              dd($data);
 
-            return response()->json(['seven'=>$seven,'data'=>$data,'type'=>true]);
+            return response()->json(['data'=>$data,'total'=>$count,'type'=>true]);
 
         }else{
-            return response()->json(['seven'=>$seven,'type'=>false]);
+            return response()->json(['type'=>false,'total'=>$count]);
         }
     }
 
@@ -583,8 +620,9 @@ class perSpaceController extends Controller
     /*
      * 名师 -- 待评点评
      */
-    public function waitComment()
+    public function waitComment($pageNumber,$pageSize)
     {
+        $skip = ($pageNumber - 1) * $pageSize;
         $id = \Auth::user()->id;
         $data = \DB::table('orders as o')
             ->leftJoin('commentcourse as cs','cs.orderSn','=','o.orderSn')
@@ -593,16 +631,25 @@ class perSpaceController extends Controller
             ->select('o.teacherName','o.status','app.courseTitle as applyTitle','app.id as applyId','cs.id as commentId','cs.created_at as time','cs.courseLowPath as low','cs.courseMediumPath as medium','cs.courseHighPath as high','cs.state as commentState','u.realname','u.username','app.state as applyState','app.created_at as applyTime')
             ->where(['o.teacherId'=>$id,'o.isDelete'=>0,'o.orderType'=>1,'o.status'=>1,'app.courseStatus'=>0,'app.courseIsDel'=>0,'app.state'=>2])
             ->orderBy('app.created_at','desc')
+            ->skip($skip)
+            ->take($pageSize)
             ->get();
+        $count = \DB::table('orders as o')
+            ->leftJoin('commentcourse as cs','cs.orderSn','=','o.orderSn')
+            ->leftJoin('applycourse as app','app.orderSn','=','o.orderSn')
+            ->leftJoin('users as u','u.id','=','o.userId')
+            ->select('o.teacherName','o.status','app.courseTitle as applyTitle','app.id as applyId','cs.id as commentId','cs.created_at as time','cs.courseLowPath as low','cs.courseMediumPath as medium','cs.courseHighPath as high','cs.state as commentState','u.realname','u.username','app.state as applyState','app.created_at as applyTime')
+            ->where(['o.teacherId'=>$id,'o.isDelete'=>0,'o.orderType'=>1,'o.status'=>1,'app.courseStatus'=>0,'app.courseIsDel'=>0,'app.state'=>2])
+            ->count();
 //        dd($data);
         foreach($data as $key => $value){
             $result = DB::table('usermessage')->where(['actionId' => $value->commentId,'username' => Auth::user()->username])->first();
             $data[$key]->messageId = $result ? $result->id : '';
         }
         if($data){
-            return response()->json(['total'=>count($data),'data'=>$data,'type'=>true]);
+            return response()->json(['total'=>$count,'data'=>$data,'type'=>true]);
         }else{
-            return response()->json(['total'=>0,'type'=>false]);
+            return response()->json(['total'=>$count,'type'=>false]);
         }
 
     }
@@ -611,8 +658,9 @@ class perSpaceController extends Controller
     /*
      * 名师 -- 点评完成
      */
-    public function completeComment(Request $request)
+    public function completeComment(Request $request,$pageNumber,$pageSize)
     {
+        $skip = ($pageNumber - 1) * $pageSize;
         $id = \Auth::user()->id;
         $request->get('type') == 'hot' ? $condition = 'cs.coursePlayView' : $condition = 'cs.created_at';
         $data = \DB::table('commentcourse as cs')
@@ -622,12 +670,21 @@ class perSpaceController extends Controller
             ->select('cs.teachername','cs.courseTitle as commentTitle','cs.id as commentId','cs.coursePlayView as view','cs.courseFav as fav','cs.created_at as commentTime','u.realname','u.username','cs.state','o.status','app.id as applyId','app.courseTitle as applayTitle','app.created_at as time')
             ->where(['cs.teacherId'=>$id,'cs.courseIsDel'=>0,'cs.courseStatus'=>0,'o.status'=>2,'o.orderType'=>1,'cs.state'=>2,'o.isDelete'=>0,'app.state'=>2])
             ->orderBy($condition,'desc')
+            ->skip($skip)
+            ->take($pageSize)
             ->get();
+        $count = \DB::table('commentcourse as cs')
+            ->join('orders as o','o.orderSn','=','cs.orderSn')
+            ->join('applycourse as app','app.orderSn','=','o.orderSn')
+            ->join('users as u','u.id','=','cs.userId')
+            ->select('cs.teachername','cs.courseTitle as commentTitle','cs.id as commentId','cs.coursePlayView as view','cs.courseFav as fav','cs.created_at as commentTime','u.realname','u.username','cs.state','o.status','app.id as applyId','app.courseTitle as applayTitle','app.created_at as time')
+            ->where(['cs.teacherId'=>$id,'cs.courseIsDel'=>0,'cs.courseStatus'=>0,'o.status'=>2,'o.orderType'=>1,'cs.state'=>2,'o.isDelete'=>0,'app.state'=>2])
+            ->count();
 //        dd($data);
         if($data){
-            return response()->json(['total'=>count($data),'data'=>$data,'type'=>true]);
+            return response()->json(['total'=>$count,'data'=>$data,'type'=>true]);
         }else{
-            return response()->json(['total'=>0,'type'=>false]);
+            return response()->json(['total'=>$count,'type'=>false]);
         }
 
     }

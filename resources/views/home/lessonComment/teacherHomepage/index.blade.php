@@ -74,11 +74,13 @@
 						立即申请
 						<div class="teacherHomepage_detail_content_applyTips">该老师近期没有点评名额</div>
 					</a>
+				@else
+					<a href="/index/login" class="teacherHomepage_detail_content_button active">立即申请</a>
 				@endif
 				<div style="clear: both; height: 10px;"></div>
 				<div class="claer_line"></div>
 				<div class="teacher_info" ms-html="userInfo.username"></div>
-				<div class="teacher_info" ms-html="userInfo.company" style="font-size: 18px; color: gray;"></div>
+				<div class="teacher_info" ms-html="userInfo.company" style="font-size: 16px; color: gray;"></div>
 				<div class="claer_line"></div>
 				<div class="teacher_info">名师简介</div>
 				<div class="teacher_introduction" ms-html="userInfo.intro"></div>
@@ -90,7 +92,7 @@
 					<span ms-css-color="order.special == 0 ? '#0593EA' : 'rgb(102, 102, 102)'" ms-click="changeOrder('special', 0)">最新</span> - 
 					<span ms-css-color="order.special == 1 ? '#0593EA' : 'rgb(102, 102, 102)'" ms-click="changeOrder('special', 1)">热门</span>
 				</div>
-				<div style="width: 100%; height: 300px; line-height: 300px; text-align: center; display: none;" ms-visible='specialLesson.size() < 1 && !loading'>暂无数据</div>
+				<div style="width: 100%; height: 300px; line-height: 300px; text-align: center; display: none; font-size: 16px;" ms-visible='specialLesson.size() < 1 && !loading'>暂无数据</div>
 				<div class="teacherHomepage_detail_video hide" ms-visible="!loading">
 					<a class="teacherHomepage_detail_video_block" ms-repeat="specialLesson" ms-attr-href="'/lessonSubject/detail/' + el.id">
 						<div class='img' style='overflow: hidden; position: relative;' ms-attr-href="'/lessonSubject/detail/' + el.id">
@@ -121,7 +123,7 @@
 					<span ms-css-color="order.comment == 1 ? '#0593EA' : 'rgb(102, 102, 102)'" ms-click="changeOrder('comment', 1)">热门</span>
 				</div>
 
-				<div style="width: 100%; height: 300px; line-height: 300px; text-align: center; display: none;" ms-visible='commentLesson.size() < 1 && !loading'>暂无数据</div>
+				<div style="width: 100%; height: 300px; line-height: 300px; text-align: center; display: none; font-size: 16px;" ms-visible='commentLesson.size() < 1 && !loading'>暂无数据</div>
 
 				<div class="teacherHomepage_detail_video hide" ms-visible="!loading">
 					<a class="teacherHomepage_detail_video_block" ms-repeat="commentLesson" ms-attr-href="'/lessonComment/detail/' + el.id">
@@ -192,6 +194,7 @@
 			user.mineID = {{$mineID}} || null;
 			user.mineName = '{{$mineName}}' || null;
 			user.videoUrl = '/lessonComment/getTeacherVideo';
+			user.checks = {{$checks}} || null;
 
 			user.tabStatus = 2;
 			//	获取用户信息

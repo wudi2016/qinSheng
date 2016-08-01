@@ -97,8 +97,8 @@ class buyCommentController extends Controller
             ->where(['id' => $applyID, 'userId' => \Auth::user()->id, 'state' => 0, 'courseStatus' => 0, 'courseIsDel' => 0])->first();
         $result || abort(404);
         $messageID || $messageID = 0;
-        return view('home.lessonComment.buyComment.reUpload')->with('applyID', $result->id)
-            ->with('courseTitle', $result->courseTitle)->with('message', $result->message)->with('mineID', \Auth::user()->id)->with('messageID', $messageID);
+        return view('home.lessonComment.buyComment.reUpload')->with('applyID', $result -> id) -> with('courseTitle', $result -> courseTitle) 
+               -> with('message', $result -> message) -> with('mineID', \Auth::user() -> id) -> with('messageID', $messageID);
     }
 
 

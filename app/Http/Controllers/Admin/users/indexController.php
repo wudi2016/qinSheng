@@ -192,7 +192,7 @@ class indexController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id,$status=null)
     {
         //查询个人信息
         $data = User::findOrFail($id);
@@ -209,6 +209,7 @@ class indexController extends Controller
             }
 
         }
+        $data->status = $status;
         return view('admin.users.showUser',compact('data'));
     }
 
@@ -286,7 +287,7 @@ class indexController extends Controller
         }
     }
 
-    public function resetPass($id)
+    public function resetPass($id,$status=null)
     {
         if($input = \Input::all()){
             //首先判断管理员密码，正确向下执行，否则报错，在页面显示错误信息
@@ -302,9 +303,9 @@ class indexController extends Controller
                     $input['password'] = bcrypt($input['password']);
                     if(User::where('id','=',$id)->update(['password'=>$input['password']])){
                         $this -> OperationLog("重置了用户ID为{$id}的密码", 1);
-                        return redirect('admin/message')->with(['status'=>'重置密码成功','redirect'=>'users/userList']);
+                        return redirect('admin/message')->with(['status'=>'重置密码成功','redirect'=>$input['pathUrl']]);
                     }else{
-                        return redirect('admin/message')->with(['status'=>'重置密码失败','redirect'=>'users/userList']);
+                        return redirect('admin/message')->with(['status'=>'重置密码失败','redirect'=>$input['pathUrl']]);
                     }
                 }
             }else if(!$input['managerPass']){
@@ -316,6 +317,7 @@ class indexController extends Controller
         }else{
             //如果没数据，显示重置密码页面
             $data = User::findOrFail($id);
+            $data->status = $status;
             return view('admin.users.resetPass',compact('data'));
         }
     }

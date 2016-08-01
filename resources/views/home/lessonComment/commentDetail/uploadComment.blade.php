@@ -70,6 +70,7 @@
 			upload.uploadInfo.userId = '{{$info -> userId}}' || null;
 			upload.uploadInfo.teacherId = '{{$info -> teacherId}}' || null;
 			upload.uploadInfo.teacherName = '{{$info -> teacherName}}' || null;
+			upload.messageID = '{{$messageID}}' || null;
             avalon.scan();
 		});
 	</script>

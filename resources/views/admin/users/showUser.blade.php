@@ -13,7 +13,11 @@
                 </li>
 
                 <li>
-                    <a href="{{url('/admin/users/userList')}}">用户管理</a>
+                    @if($data->status == 'u1')
+                        <a href="{{url('/admin/users/userList')}}">用户管理</a>
+                    @else
+                        <a href="{{url('/admin/users/famousTeacherList')}}">名师管理</a>
+                    @endif
                 </li>
                 <li class="active">个人详情</li>
             </ul><!-- .breadcrumb -->
@@ -22,7 +26,11 @@
         <div class="page-content">
             <div class="page-header">
                 <h1>
-                    用户管理
+                    @if($data->status == 'u1')
+                        用户管理
+                    @else
+                        名师管理
+                    @endif
                     <small>
                         <i class="icon-double-angle-right"></i>
                         个人详情
@@ -115,7 +123,7 @@
                                 </div>
 
                                 {{--教师--}}
-                                @if($data->type == 2)
+                                @if($data->type == 2 || $data->type == 1)
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label no-padding-right" for="form-field-1">学历：</label>
 
@@ -147,85 +155,93 @@
                                             {{--<input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-5" value="{{$data->school}}"/>--}}
                                         {{--</div>--}}
                                     {{--</div>--}}
+                                    @if($data->type == 2)
+                                       <div class="form-group">
+                                           <label class="col-sm-3 control-label no-padding-right" for="form-field-1">名师介绍：</label>
 
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label no-padding-right" for="form-field-1">名师介绍：</label>
+                                           <div class="col-sm-9">
+                                               {{--<input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-5" value="{{$data->school}}"/>--}}
+                                               <textarea name="intro" readonly id="form-field-3" class="col-xs-10 col-sm-5" cols="30" rows="10" style="resize: none">{{$data->intro}}</textarea>
+                                           </div>
+                                       </div>
+                                    @endif
+                                   {{--学生--}}
+                                   @else
+                                       <div class="form-group">
+                                           <label class="col-sm-3 control-label no-padding-right" for="form-field-1">生日：</label>
 
-                                        <div class="col-sm-9">
-                                            {{--<input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-5" value="{{$data->school}}"/>--}}
-                                            <textarea name="intro" readonly id="form-field-3" class="col-xs-10 col-sm-5" cols="30" rows="10" style="resize: none">{{$data->intro}}</textarea>
-                                        </div>
-                                    </div>
-                                {{--学生--}}
-                                @else
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label no-padding-right" for="form-field-1">生日：</label>
+                                           <div class="col-sm-9">
+                                               <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-2" value="{{($data->birthYear?:' -- ').'年'}}"/>
+                                               <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-1" value="{{($data->birthMonth?:' -- ').'月'}}"/>
+                                               <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-1" value="{{($data->birthDay?:' -- ').'日'}}"/>
+                                           </div>
+                                       </div>
 
-                                        <div class="col-sm-9">
-                                            <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-2" value="{{($data->birthYear?:' -- ').'年'}}"/>
-                                            <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-1" value="{{($data->birthMonth?:' -- ').'月'}}"/>
-                                            <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-1" value="{{($data->birthDay?:' -- ').'日'}}"/>
-                                        </div>
-                                    </div>
+                                       <div class="form-group">
+                                           <label class="col-sm-3 control-label no-padding-right" for="form-field-1">当前等级：</label>
 
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label no-padding-right" for="form-field-1">当前等级：</label>
+                                           <div class="col-sm-9">
+                                               <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-5" value="{{$data->pianoGrade}}"/>
+                                           </div>
+                                       </div>
 
-                                        <div class="col-sm-9">
-                                            <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-5" value="{{$data->pianoGrade}}"/>
-                                        </div>
-                                    </div>
+                                       <div class="form-group">
+                                           <label class="col-sm-3 control-label no-padding-right" for="form-field-1">开始学琴时间：</label>
 
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label no-padding-right" for="form-field-1">开始学琴时间：</label>
-
-                                        <div class="col-sm-9">
-                                            <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-3" value="{{($data->learnYear?:' -- ') .'年'}}"/>
-                                            <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-2" value="{{($data->learnMonth?:' -- ').'月'}}"/>
-                                        </div>
-                                    </div>
-
-
-
-                                @endif
+                                           <div class="col-sm-9">
+                                               <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-3" value="{{($data->learnYear?:' -- ') .'年'}}"/>
+                                               <input type="text" id="form-field-3" readonly  class="col-xs-10 col-sm-2" value="{{($data->learnMonth?:' -- ').'月'}}"/>
+                                           </div>
+                                       </div>
 
 
 
+                                   @endif
 
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">创建时间：</label>
 
-                                    <div class="col-sm-9">
-                                        <input type="text" id="form-field-1" readonly  placeholder="created_at" class="col-xs-10 col-sm-5"
-                                               value="{{$data->created_at}}"/>
-                                    </div>
-                                </div>
 
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1">最近登录时间：</label>
 
-                                    <div class="col-sm-9">
-                                        <input type="text" id="form-field-1" readonly  placeholder="updated_at" class="col-xs-10 col-sm-5"
-                                               value="{{$data->updated_at}}"/>
-                                    </div>
-                                </div>
+                                   <div class="form-group">
+                                       <label class="col-sm-3 control-label no-padding-right" for="form-field-1">创建时间：</label>
+
+                                       <div class="col-sm-9">
+                                           <input type="text" id="form-field-1" readonly  placeholder="created_at" class="col-xs-10 col-sm-5"
+                                                  value="{{$data->created_at}}"/>
+                                       </div>
+                                   </div>
+
+                                   <div class="form-group">
+                                       <label class="col-sm-3 control-label no-padding-right" for="form-field-1">最近登录时间：</label>
+
+                                       <div class="col-sm-9">
+                                           <input type="text" id="form-field-1" readonly  placeholder="updated_at" class="col-xs-10 col-sm-5"
+                                                  value="{{$data->updated_at}}"/>
+                                       </div>
+                                   </div>
+
+                                   <div class="clearfix form-actions">
+                                       <div class="col-md-offset-3 col-md-4">
+                                           <a href="{{url('admin/users/userList')}}" class="btn btn-info btn-block" style="margin-left: -15px;">
+                                               <i class="icon-ok bigger-110"></i>
+                                               返回首页
+                                           </a>
+                                       </div>
+                                   </div>
 
                                 <div class="clearfix form-actions">
                                     <div class="col-md-offset-3 col-md-4">
-                                        <a href="{{url('admin/users/userList')}}" class="btn btn-info btn-block" style="margin-left: -15px;">
+                                        <a href="{{$_SERVER['HTTP_REFERER']}}" class="btn btn-info btn-block" style="margin-left: -15px;">
                                             <i class="icon-ok bigger-110"></i>
-                                            返回首页
+                                            返回上一页
                                         </a>
                                     </div>
                                 </div>
 
-                            </form>
+                           </div><!-- /.col -->
+                       </div><!-- /row -->
 
-                        </div><!-- /.col -->
-                    </div><!-- /row -->
-
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.page-content -->
-    </div><!-- /.main-content -->
-@endsection
+                   </div><!-- /.col -->
+               </div><!-- /.row -->
+           </div><!-- /.page-content -->
+       </div><!-- /.main-content -->
+   @endsection

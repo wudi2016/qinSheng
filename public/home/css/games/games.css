@@ -37,7 +37,7 @@
     line-height:65px;
     font-size:20px;
     color:#000000;
-    font-weight: bold;
+    /*font-weight: bold;*/
     float:left;
     padding:0 10px;
     cursor: pointer;
@@ -87,25 +87,27 @@
     width:525px;
     height:78px;
     line-height:78px;
-    font-weight:bold;
+    /*font-weight:bold;*/
     font-size:20px;
-    color:rgb(34,34,34);
+    color:rgb(22,22,22);
 }
 .cont_con_con_con_li_r_time{
     width:525px;
     height:78px;
     line-height:78px;
-    font-weight:bold;
+    /*font-weight:bold;*/
     font-size:18px;
-    color:rgb(34,34,34);
+    color:rgb(66,66,66);
 }
 .cont_con_con_con_li_r_from{
     width:525px;
     height:78px;
     line-height:78px;
-    font-weight:bold;
+    /*font-weight:bold;*/
     font-size:18px;
-    color:rgb(102,102,102);
+    /*color:rgb(102,102,102);*/
+    color:rgb(66,66,66);
+
 }
 
 

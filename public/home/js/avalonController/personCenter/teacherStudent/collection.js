@@ -16,20 +16,35 @@ define([], function () {
             $('#page_collection').pagination({
                 dataSource: function (done) {
                     $.ajax({
-                        url: '/member/getCollectionInfo',
+                        url: '/member/getCollectionInfo/' + this.pageNumber + '/' + this.pageSize,
                         type: 'GET',
                         dataType: 'json',
                         success: function (response) {
                             collection.total = response.total;
                             if (response.status) {
-                                done(response.data);
+                                var format = [];
+                                format['data'] = response.data;
+                                format['totalNumber'] = response.total;
+                                done(format);
                             }else{
                                 collection.collectionMsg = true;
                             }
                         },
                     });
                 },
+                getData: function (pageNumber, pageSize) {
+                    var self = this;
+                    $.ajax({
+                        type: 'GET',
+                        url: '/member/getNoticeInfo/' + pageNumber + '/' + pageSize,
+                        success: function (response) {
+                            self.callback(response.data);
+                        }
+                    });
+                },
                 pageSize: 6,
+                pageNumber: 1,
+                totalNumber: 1,
                 className: "paginationjs-theme-blue",
                 showGoInput: true,
                 showGoButton: true,

@@ -63,9 +63,11 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 							}
 						}
 						if (model == 'finishUpload' || model == 'isReload') {
+							upload.messageID && upload.getData('/lessonComment/getFirst', 'deleteMessage', {action: 3, table: 'usermessage', data: {id: upload.messageID}}, 'POST');
 							location.href = '/member/student/'+ upload.mineID +'/lessonComment';
 						}
 						if (model == 'comment') {
+							upload.messageID && upload.getData('/lessonComment/getFirst', 'deleteMessage', {action: 3, table: 'usermessage', data: {id: upload.messageID}}, 'POST');
 							location.href = '/member/famousTeacher/waitComment';
 						}
 					}

@@ -419,7 +419,8 @@
                 <div class="center_right_information">点评课程</div>
                 <div class="center_right_count">
                     <div class="right_count_left">共&nbsp;<span ms-text="total"></span>&nbsp;个视频</div>
-                    <div class="right_count_right"><span ms-click="getCommentCourse('{{$mineUserId}}',1);">最新</span>&nbsp;-&nbsp;<span class="count_right_hot" ms-click="getCommentCourse('{{$mineUserId}}',2);">热门</span>
+                    <div class="right_count_right">
+                        {{--<span ms-click="getCommentCourse('{{$mineUserId}}',1);">最新</span>&nbsp;-&nbsp;<span class="count_right_hot" ms-click="getCommentCourse('{{$mineUserId}}',2);">热门</span>--}}
                     </div>
                 </div>
             </div>
@@ -441,7 +442,7 @@
                             <div class="comment_video_time" ms-text="'发布时间：' + el.ACreated"></div>
                         </div>
                         <!-- 视频审核通过 -->
-                        <a ms-attr-href="'/lessonComment/detail/' + el.OCourseId" ms-if="el.orderType == '1' && el.AState == '2' && el.CState == '2'" >
+                        <a ms-attr-href="'/lessonComment/detail/' + el.OCourseId" ms-if="el.orderType == '1' && el.status == '2' && el.CState == '2'" >
                             <img ms-attr-src="el.CPic" alt="" width="280" height="180" class="img_big" ms-imgBig />
                         </a>
                         <!-- 视频审核通过 -->
@@ -456,13 +457,13 @@
                             </div>
                         </a>
                     </div>
-                    <div class="comment_repeat_title" ms-text="el.CTitle" ms-if="el.orderType == 2 || (el.orderType == 1 && el.AState == 2 && el.CState == 2)"></div>
+                    <div class="comment_repeat_title" ms-text="el.CTitle" ms-if="el.orderType == 2 || (el.orderType == 1 && el.status == 2 && el.CState == '2')"></div>
                     <div class="comment_repeat_title" ms-text="el.ATitle" ms-if="el.orderType == '1' && el.CState != 2"></div>
 
-                    <div class="comment_repeat_name" ms-if="el.orderType == '1' && el.AState == '2' && el.CState == '2'"><span ms-text="'讲师：' + el.OTeacherName"></span> <span ms-text="el.CPlayView + '人学过'"></span></div>
+                    <div class="comment_repeat_name" ms-if="el.orderType == '1' && el.status == 2 && el.CState == '2'"><span ms-text="'讲师：' + el.OTeacherName"></span> <span ms-text="el.CPlayView + '人学过'"></span></div>
                     <div class="comment_repeat_name" ms-if="el.orderType == '2'"><span ms-text="'讲师：' + el.OTeacherName"></span> <span ms-text="el.CPlayView + '人学过'"></span></div>
                     <div class="comment_repeat_unchecked"  ms-if="el.orderType == '1' && el.CState != 2"><span ms-text="'点评讲师：' + el.OTeacherName"></span><span ms-text="'发布者：' + el.OUserName"></span></div>
-                    <div class="comment_repeat_price" ms-if="el.orderType == '1' && el.AState == '2' && el.CState == '2'" ms-text="'￥ ' + el.CPrice"></div>
+                    <div class="comment_repeat_price" ms-if="el.orderType == '1' && el.status == 2 && el.CState == '2'" ms-text="'￥ ' + el.CPrice"></div>
                     <div class="comment_repeat_price" ms-if="el.orderType == '2'" ms-text="'￥ ' + el.CPrice"></div>
                 </div>
                 <div ms-visible="commentMsg" class="warning_msg">暂无相关课程...</div>

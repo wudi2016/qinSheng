@@ -11,13 +11,16 @@ define([], function () {
             $('#page_comment').pagination({
                 dataSource: function (done) {
                     $.ajax({
-                        url: '/member/getCommentInfo',
+                        url: '/member/getCommentInfo/' + this.pageNumber + '/' + this.pageSize,
                         type: 'POST',
                         dataType: 'json',
                         data : {username:username},
                         success: function (response) {
                             if (response.status) {
-                                done(response.data);
+                                var format = [];
+                                format['data'] = response.data;
+                                format['totalNumber'] = response.count;
+                                done(format);
                             }else{
                                 comment.commentInfo = [];
                                 comment.answerMsg = true;
@@ -25,7 +28,19 @@ define([], function () {
                         },
                     });
                 },
+                getData: function (pageNumber, pageSize) {
+                    var self = this;
+                    $.ajax({
+                        type: 'GET',
+                        url: '/member/getCommentInfo/' + pageNumber + '/' + pageSize,
+                        success: function (response) {
+                            self.callback(response.data);
+                        }
+                    });
+                },
                 pageSize: 10,
+                pageNumber: 1,
+                totalNumber: 1,
                 className: "paginationjs-theme-blue",
                 showGoInput: true,
                 showGoButton: true,

@@ -12,13 +12,16 @@ define([], function () {
             $('#page_focus').pagination({
                 dataSource: function (done) {
                     $.ajax({
-                        url: '/member/myFocus',
+                        url: '/member/myFocus/'+ this.pageNumber + '/' + this.pageSize,
                         type: 'GET',
                         dataType: 'json',
                         success: function (response) {
+                            myFocusTeacher.total = response.total;
                             if (response.type) {
-                                done(response.data);
-                                myFocusTeacher.total = response.total;
+                                var format = [];
+                                format['data'] = response.data;
+                                format['totalNumber'] = response.total;
+                                done(format);
                             }else{
                                 myFocusTeacher.total =0;
                                 myFocusTeacher.myFocus = true;
@@ -27,7 +30,19 @@ define([], function () {
                         },
                     });
                 },
+                getData: function (pageNumber, pageSize) {
+                    var self = this;
+                    $.ajax({
+                        type: 'GET',
+                        url: '/member/myFocus/' + pageNumber + '/' + pageSize,
+                        success: function (response) {
+                            self.callback(response.data);
+                        }
+                    });
+                },
                 pageSize: 24,
+                pageNumber: 1,
+                totalNumber: 1,
                 className: "paginationjs-theme-blue",
                 showGoInput: true,
                 showGoButton: true,

@@ -104,20 +104,20 @@
                         <div class="space-4"></div>
 
 
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 审核状态 </label>
+                        {{--<div class="form-group">--}}
+                            {{--<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 审核状态 </label>--}}
 
-                            <div class="col-sm-9">
-                                <input  disabled="true" type="text" name="courseTitle" id="form-field-1" placeholder="审核状态" class="col-xs-10 col-sm-5" value="@if($data->checks==0) 激活 @elseif($data->checks==1) 禁用 @endif" />
-                                    <span class="help-inline col-xs-12 col-sm-7">
-                                    <label class="middle">
-                                        <span class="lbl"></span>
-                                    </label>
-                                </span>
-                            </div>
-                        </div>
+                            {{--<div class="col-sm-9">--}}
+                                {{--<input  disabled="true" type="text" name="courseTitle" id="form-field-1" placeholder="审核状态" class="col-xs-10 col-sm-5" value="@if($data->checks==0) 激活 @elseif($data->checks==1) 禁用 @endif" />--}}
+                                    {{--<span class="help-inline col-xs-12 col-sm-7">--}}
+                                    {{--<label class="middle">--}}
+                                        {{--<span class="lbl"></span>--}}
+                                    {{--</label>--}}
+                                {{--</span>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
 
-                        <div class="space-4"></div>
+                        {{--<div class="space-4"></div>--}}
 
 
 

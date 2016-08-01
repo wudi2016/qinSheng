@@ -40,7 +40,7 @@
           
                     <div  class="us5 us" ms-click="tabs(5);">友情链接</div>
         
-                    <div  class="us6 us" ms-click="tabs(6);">意见反馈</div>
+                    {{--<div  class="us6 us" ms-click="tabs(6);">意见反馈</div>--}}
        
             </div>
 
@@ -146,17 +146,17 @@
 
 
                 {{--反馈--}}
-                <div class="main_right_content"   ms-visible="currentIndex==6" ms-repeat="aboutus6" >
+                {{--<div class="main_right_content"   ms-visible="currentIndex==6" ms-repeat="aboutus6" >--}}
 
-                    <div class="main_right_content_name" ms-html="el.title" >
+                    {{--<div class="main_right_content_name" ms-html="el.title" >--}}
 
-                    </div>
-                    <div style="height:32px"></div>
+                    {{--</div>--}}
+                    {{--<div style="height:32px"></div>--}}
 
-                    <div class="main_right_content_intro1"  ms-html="el.content"  >
+                    {{--<div class="main_right_content_intro1"  ms-html="el.content"  >--}}
 
-                    </div>
-                </div>
+                    {{--</div>--}}
+                {{--</div>--}}
 
 
 

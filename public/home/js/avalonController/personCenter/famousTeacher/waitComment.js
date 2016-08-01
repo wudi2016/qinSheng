@@ -12,14 +12,16 @@ define([], function () {
             $('#page_waitComment').pagination({
                 dataSource: function (done) {
                     $.ajax({
-                        url: '/member/waitComment',
+                        url: '/member/waitComment/'+ this.pageNumber + '/' + this.pageSize,
                         type: 'POST',
                         dataType: 'json',
                         success: function (response) {
                             waitCommentController.total = response.total;
                             if (response.type) {
-                                waitCommentController.realInfo = true;
-                                done(response.data);
+                                var format = [];
+                                format['data'] = response.data;
+                                format['totalNumber'] = response.total;
+                                done(format);
                             }else{
                                 waitCommentController.waitComment = true;
                                 waitCommentController.waitCommentList = [];
@@ -27,7 +29,19 @@ define([], function () {
                         },
                     });
                 },
+                getData: function (pageNumber, pageSize) {
+                    var self = this;
+                    $.ajax({
+                        type: 'GET',
+                        url: '/member/waitComment/' + pageNumber + '/' + pageSize,
+                        success: function (response) {
+                            self.callback(response.data);
+                        }
+                    });
+                },
                 pageSize: 6,
+                pageNumber: 1,
+                totalNumber: 1,
                 className: "paginationjs-theme-blue",
                 showGoInput: true,
                 showGoButton: true,

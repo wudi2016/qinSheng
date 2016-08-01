@@ -283,7 +283,7 @@ class lessonSubjectController extends Controller
         $info = DB::table('coursecomment as c')
             ->join('users as u', 'c.username', '=', 'u.username')
             ->select('u.pic', 'c.id', 'c.username', 'c.tousername', 'c.commentContent', 'c.likeNum', 'c.created_at')
-            ->where(['c.courseId' => $id, 'status' => 0])->orderBy('c.created_at', 'desc')->get();
+            ->where(['c.courseId' => $id, 'status' => 0, 'checks' => 0])->orderBy('c.created_at', 'desc')->get();
         foreach ($info as $key => $value) {
             $info[$key]->likeUser = $info[$key]->likeNum ? array_filter(explode(',', $info[$key]->likeNum)) : [];
             $info[$key]->isLike = Auth::check() ? in_array(Auth::user()->id, $info[$key]->likeUser) : true;

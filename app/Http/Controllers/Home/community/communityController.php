@@ -25,7 +25,7 @@ class communityController extends Controller
      * 社区首页新闻数据接口
      */
     public function getlist(){
-        $getlist = DB::table('news')->orderBy('sort','asc')->where('status',0)->limit(10)->get();
+        $getlist = DB::table('news')->orderBy('sort','asc')->where('status',0)->where('sort','!=',0)->limit(10)->get();
         if($getlist){
             foreach ($getlist as $k => $v) {
                 //只保留 年月日
@@ -78,7 +78,8 @@ class communityController extends Controller
                     ->leftjoin('recteacher as rec','u.id','=','rec.userId')
                     ->select('rec.id','u.realname','u.company','t.intro','t.cover','t.parentId')
                     ->where('u.type',2)
-                    ->orderBy('rec.sort','desc')
+                    ->where('sort','!=',0)
+                    ->orderBy('rec.sort','asc')
                     ->limit(5)
                     ->get();
         if($getteacher){

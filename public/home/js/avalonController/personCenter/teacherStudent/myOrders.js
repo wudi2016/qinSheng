@@ -13,13 +13,16 @@ define([], function () {
             $('#page_orders').pagination({
                 dataSource: function (done) {
                     $.ajax({
-                        url: '/member/myOrders',
+                        url: '/member/myOrders/' + this.pageNumber + '/' + this.pageSize,
                         type: 'POST',
                         data:{},
                         dataType: 'json',
                         success: function (response) {
                             if (response.type) {
-                                done(response.data);
+                                var format = [];
+                                format['data'] = response.data;
+                                format['totalNumber'] = response.total;
+                                done(format);
                             }else{
                                 myOrdersStudent.myOrders = true;
                                 myOrdersStudent.myOrdersList = [];
@@ -27,7 +30,19 @@ define([], function () {
                         },
                     });
                 },
+                getData: function (pageNumber, pageSize) {
+                    var self = this;
+                    $.ajax({
+                        type: 'POST',
+                        url: '/member/myOrders/' + pageNumber + '/' + pageSize,
+                        success: function (response) {
+                            self.callback(response.data);
+                        }
+                    });
+                },
                 pageSize: 10,
+                pageNumber: 1,
+                totalNumber: 1,
                 className: "paginationjs-theme-blue",
                 showGoInput: true,
                 showGoButton: true,

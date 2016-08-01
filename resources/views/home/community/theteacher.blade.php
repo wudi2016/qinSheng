@@ -31,33 +31,33 @@
 
 			<!-- 排序字母 -->
 			<div class="orderletter">
-				<div ms-click="tabs(27)" class="tabss">全部</div>
-				<div ms-click="tabs(1)" class="a" >A</div>
-				<div ms-click="tabs(2)" class="b">B</div>
-				<div ms-click="tabs(3)" class="c">C</div>
-				<div ms-click="tabs(4)" class="d">D</div>
-				<div ms-click="tabs(5)" class="e">E</div>
-				<div ms-click="tabs(6)" class="f">F</div>
-				<div ms-click="tabs(7)" class="g">G</div>
-				<div ms-click="tabs(8)" class="h">H</div>
-				<div ms-click="tabs(9)" class="i">I</div>
-				<div ms-click="tabs(10)" class="j">J</div>
-				<div ms-click="tabs(11)" class="k">K</div>
-				<div ms-click="tabs(12)" class="l">L</div>
-				<div ms-click="tabs(13)" class="m">M</div>
-				<div ms-click="tabs(14)" class="n">N</div>
-				<div ms-click="tabs(15)" class="o">O</div>
-				<div ms-click="tabs(16)" class="p">P</div>
-				<div ms-click="tabs(17)" class="q">Q</div>
-				<div ms-click="tabs(18)" class="r">R</div>
-				<div ms-click="tabs(19)" class="s">S</div>
-				<div ms-click="tabs(20)" class="t">T</div>
-				<div ms-click="tabs(21)" class="u">U</div>
-				<div ms-click="tabs(22)" class="v">V</div>
-				<div ms-click="tabs(23)" class="w">W</div>
-				<div ms-click="tabs(24)" class="x">X</div>
-				<div ms-click="tabs(25)" class="y">Y</div>
-				<div ms-click="tabs(26)" class="z">Z</div>
+				<div ms-click="tabs('tabss')" class="tabss">全部</div>
+				<div ms-click="tabs('A')" class="A">A</div>
+				<div ms-click="tabs('B')" class="B">B</div>
+				<div ms-click="tabs('C')" class="C">C</div>
+				<div ms-click="tabs('D')" class="D">D</div>
+				<div ms-click="tabs('E')" class="E">E</div>
+				<div ms-click="tabs('F')" class="F">F</div>
+				<div ms-click="tabs('G')" class="G">G</div>
+				<div ms-click="tabs('H')" class="H">H</div>
+				<div ms-click="tabs('I')" class="I">I</div>
+				<div ms-click="tabs('J')" class="J">J</div>
+				<div ms-click="tabs('K')" class="J">K</div>
+				<div ms-click="tabs('L')" class="L">L</div>
+				<div ms-click="tabs('M')" class="M">M</div>
+				<div ms-click="tabs('N')" class="N">N</div>
+				<div ms-click="tabs('O')" class="O">O</div>
+				<div ms-click="tabs('P')" class="P">P</div>
+				<div ms-click="tabs('Q')" class="Q">Q</div>
+				<div ms-click="tabs('R')" class="R">R</div>
+				<div ms-click="tabs('S')" class="S">S</div>
+				<div ms-click="tabs('T')" class="T">T</div>
+				<div ms-click="tabs('U')" class="U">U</div>
+				<div ms-click="tabs('V')" class="V">V</div>
+				<div ms-click="tabs('W')" class="W">W</div>
+				<div ms-click="tabs('X')" class="X">X</div>
+				<div ms-click="tabs('Y')" class="Y">Y</div>
+				<div ms-click="tabs('Z')" class="Z">Z</div>
 			</div>
 			
 			<div style="height:20px"></div>

@@ -138,13 +138,18 @@ class commentDetailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function wait($applyID)
+    public function wait($applyID, $messageID = '')
     {
         $userType = \Auth::user() -> type != 2 ? 'userId' : 'teacherId';
         $result = DB::table('applycourse') -> select('orderSn', 'created_at') 
                 -> where(['state' => 2, 'courseStatus' => 0, 'courseIsDel' => 0, $userType => \Auth::user() -> id, 'id' => $applyID]) -> first();
         $result || abort(404);
-        return view('home.lessonComment.commentDetail.wait', ['created_at' => floor((time() - strtotime($result -> created_at))/86400), 'commentID' => $applyID, 'orderSn' => $result -> orderSn]);
+        return view('home.lessonComment.commentDetail.wait', [
+            'created_at' => floor((time() - strtotime($result -> created_at))/86400), 
+            'commentID' => $applyID, 
+            'orderSn' => $result -> orderSn,
+            'messageID' => $messageID
+        ]);
     }
 
 
@@ -153,13 +158,13 @@ class commentDetailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function uploadComment($orderSn)
+    public function uploadComment($orderSn, $messageID = null)
     {
         $result = DB::table('orders') -> join('applycourse', 'orders.orderSn', '=', 'applycourse.orderSn') 
                 -> select('orders.id', 'orders.userName', 'orders.userId', 'orders.teacherId', 'orders.teacherName', 'applycourse.courseTitle')
                 -> where(['orders.orderSn' => $orderSn, 'orders.status' => 1, 'orders.isDelete' => 0, 'orders.teacherId' => \Auth::user() -> id]) -> first();
         $result || abort(404);
-        return view('home.lessonComment.commentDetail.uploadComment') -> with('orderSn', $orderSn) -> with('info', $result);
+        return view('home.lessonComment.commentDetail.uploadComment') -> with('orderSn', $orderSn) -> with('info', $result) -> with('messageID', $messageID);
     }
 
 
@@ -168,12 +173,12 @@ class commentDetailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function reUploadComment($commentID)
+    public function reUploadComment($commentID, $messageID = null)
     {
         $result = DB::table('commentcourse') -> select('id', 'suitlevel') 
                 -> where(['state' => 0, 'courseStatus' => 0, 'courseIsDel' => 0, 'id' => $commentID, 'teacherId' => \Auth::user() -> id]) -> first();
         $result || abort(404);
-        return view('home.lessonComment.commentDetail.reUploadComment') -> with('info', $result);
+        return view('home.lessonComment.commentDetail.reUploadComment') -> with('info', $result) -> with('messageID', $messageID);
     }
 
 

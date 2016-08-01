@@ -90,8 +90,8 @@
                                     <th>被评论Id</th>
                                     <th>用户名</th>
                                     <th>被回复用户</th>
-                                    <th>审核状态</th>
-                                    <th>评论状态</th>
+                                    {{--<th>审核状态</th>--}}
+                                    {{--<th>评论状态</th>--}}
                                     <th>创建时间</th>
                                     {{--<th>更新时间</th>--}}
                                     <th>操作</th>
@@ -107,20 +107,20 @@
                                         <td>{{$course->parentId}}</td>
                                         <td>{{$course->username}}</td>
                                         <td>{{$course->tousername}}</td>
-                                        <td>
-                                            @if($course->checks == 0)
-                                                通过
-                                            @elseif($course->checks == 1)
-                                                未审核状态
-                                            @endif
-                                        </td>
-                                        <td >
-                                            @if($course->status == 0)
-                                                正常
-                                            @elseif($course->status == 1)
-                                                锁定
-                                            @endif
-                                        </td>
+                                        {{--<td>--}}
+                                            {{--@if($course->checks == 0)--}}
+                                                {{--通过--}}
+                                            {{--@elseif($course->checks == 1)--}}
+                                                {{--未审核状态--}}
+                                            {{--@endif--}}
+                                        {{--</td>--}}
+                                        {{--<td >--}}
+                                            {{--@if($course->status == 0)--}}
+                                                {{--正常--}}
+                                            {{--@elseif($course->status == 1)--}}
+                                                {{--锁定--}}
+                                            {{--@endif--}}
+                                        {{--</td>--}}
                                         <td>{{$course->created_at}}</td>
                                         {{--<td>{{$course->updated_at}}</td>--}}
                                         <td>
@@ -152,15 +152,15 @@
 
 
 
-                                                <span class="btn btn-xs btn-primary" style="position: relative;display: inline-block;">
-                                                    <strong>审核状态</strong>
-                                                    <span class="icon-caret-down icon-on-right"></span>
-                                                    <select id="courseChecks" class="col-xs-10 col-sm-2" onchange="courseChecks({{$course->id}},this.value);" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">
-                                                            <option value="11" selected></option>
-                                                            <option value="0" >通过</option>
-                                                            <option value="1" >未审核</option>
-                                                    </select>
-                                                </span>
+                                                {{--<span class="btn btn-xs btn-primary" style="position: relative;display: inline-block;">--}}
+                                                    {{--<strong>审核状态</strong>--}}
+                                                    {{--<span class="icon-caret-down icon-on-right"></span>--}}
+                                                    {{--<select id="courseChecks" class="col-xs-10 col-sm-2" onchange="courseChecks({{$course->id}},this.value);" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">--}}
+                                                            {{--<option value="11" selected></option>--}}
+                                                            {{--<option value="0" >通过</option>--}}
+                                                            {{--<option value="1" >未审核</option>--}}
+                                                    {{--</select>--}}
+                                                {{--</span>--}}
                                                 @endpermission
 
 

@@ -169,16 +169,22 @@ a{
 
 /*数字图片*/
 .new_content_img{
-    width:55px;
-    height:57px;
-    background:url('../../../home/image/community/shuzi.png') no-repeat;
+    width:42px;
+    height:46px;
+    background:url('../../../home/image/community/0.png') no-repeat;
     position: relative;
     top:16px;
 }
-.new_content_img span{
-    position: relative;
-    top:19px;
-    left:26px;
+.new_content_img div{
+    /*position: relative;*/
+    /*top:19px;*/
+    /*left:26px;*/
+    width:42px;
+    height:46px;
+    text-align: center;
+    padding-left: 3px;
+    padding-top: 3px;
+    line-height:40px;
 }
 
 /*文字*/
@@ -199,8 +205,8 @@ a{
 }
 
 /*图片字体颜色*/
-.new_content_img span{
-    font-size: 22px;
+.new_content_img div{
+    font-size: 20px;
     color:#ffffff;
     font-family:"微软雅黑";
 }

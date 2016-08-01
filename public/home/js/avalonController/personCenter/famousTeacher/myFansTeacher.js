@@ -12,13 +12,16 @@ define([], function () {
             $('#page_friend').pagination({
                 dataSource: function (done) {
                     $.ajax({
-                        url: '/member/myFriends',
+                        url: '/member/myFriends/' + this.pageNumber + '/' + this.pageSize,
                         type: 'GET',
                         dataType: 'json',
                         success: function (response) {
+                            myFansTeacher.total = response.total;
                             if (response.type) {
-                                done(response.data);
-                                myFansTeacher.total = response.total;
+                                var format = [];
+                                format['data'] = response.data;
+                                format['totalNumber'] = response.total;
+                                done(format);
                             }else{
                                 myFansTeacher.total = 0;
                                 myFansTeacher.myFans = true;
@@ -27,7 +30,19 @@ define([], function () {
                         },
                     });
                 },
+                getData: function (pageNumber, pageSize) {
+                    var self = this;
+                    $.ajax({
+                        type: 'GET',
+                        url: '/member/myFriends/' + pageNumber + '/' + pageSize,
+                        success: function (response) {
+                            self.callback(response.data);
+                        }
+                    });
+                },
                 pageSize: 24,
+                pageNumber: 1,
+                totalNumber: 1,
                 className: "paginationjs-theme-blue",
                 showGoInput: true,
                 showGoButton: true,
@@ -35,6 +50,7 @@ define([], function () {
                     if (data) {
                         myFansTeacher.myFansList = data;
                     }
+
                 }
             })
         },

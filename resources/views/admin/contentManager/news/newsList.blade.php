@@ -26,7 +26,6 @@
                         <input type="text" name="endTime" id="form-field-1" placeholder="结束时间" class="col-xs-10 col-sm-5" value="{{$news->endTime}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;margin-left:10px;background:url('{{asset("admin/image/2.png")}}') no-repeat;background-position:right;"/>
                     </span>
 
-
                     <select name="type" id="form-field-1" class="searchtype">
                         <option value="">--请选择--</option>
                         <option value="1" @if($news->type == 1) selected @endif>ID</option>

@@ -11,7 +11,6 @@ define([], function() {
 				dataType: "json",
 				success: function(response) {
 					if (response.type) comment[model] = response.data;
-					response.type && console.log(response.data);
 					model == 'studentInfo' && comment.setVideo(function () {});
 				},
 				error: function(error) {

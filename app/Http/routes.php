@@ -111,19 +111,19 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
 
 
         //个人中心我的关注
-        Route::get('/myFocus',['middleware' => 'check','uses'=>'perSpaceController@myFocus']);
+        Route::get('/myFocus/{pageNumber}/{pageSize}',['middleware' => 'check','uses'=>'perSpaceController@myFocus']);
 
         //个人中心我的粉丝&&我的好友（暂定 谁关注我就是我的好友）
-        Route::get('/myFriends',['middleware' => 'check','uses'=>'perSpaceController@myFriends']);
+        Route::get('/myFriends/{pageNumber}/{pageSize}',['middleware' => 'check','uses'=>'perSpaceController@myFriends']);
 
         //学员--我的订单
-        Route::post('/myOrders',['middleware' => 'check','uses'=>'perSpaceController@myOrders']);
+        Route::post('/myOrders/{pageNumber}/{pageSize}',['middleware' => 'check','uses'=>'perSpaceController@myOrders']);
 
         //名师--待评点评
-        Route::post('/waitComment',['middleware' => 'check','uses'=>'perSpaceController@waitComment']);
+        Route::post('/waitComment/{pageNumber}/{pageSize}',['middleware' => 'check','uses'=>'perSpaceController@waitComment']);
 
         //名师--点评完成
-        Route::post('/completeComment',['middleware' => 'check','uses'=>'perSpaceController@completeComment']);
+        Route::post('/completeComment/{pageNumber}/{pageSize}',['middleware' => 'check','uses'=>'perSpaceController@completeComment']);
 
         //我的订单 -- 申请退款页面数据接口
         Route::post('/applyRefund',['middleware' => 'check','uses'=>'perSpaceController@applyRefund']);
@@ -139,15 +139,15 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
 
 
         // 个人中心 专题课程 type => 1 => 学员 type => 2 => 名师 flag => 1 => 最新 flag => 2 => 热门
-        Route::get('/getCourse/{type}/{flag}','perSpaceController@getCourse');
+        Route::get('/getCourse/{type}/{flag}/{pageNumber}/{pageSize}','perSpaceController@getCourse');
         // 个人中心 点评课程 type => 1 => 最新 flag => 2 => 热门
-        Route::post('/getCommentCourse/{type}','perSpaceController@getCommentCourse');
-        // 个人中心
-        Route::get('/getCollectionInfo', 'perSpaceController@getCollectionInfo');
+        Route::post('/getCommentCourse/{type}/{pageNumber}/{pageSize}','perSpaceController@getCommentCourse');
+        // 个人中心 我的收藏
+        Route::get('/getCollectionInfo/{pageNumber}/{pageSize}', 'perSpaceController@getCollectionInfo');
         // 个人中心 删除收藏
         Route::post('/deleteCollection', 'perSpaceController@deleteCollection');
         // 个人中心 全部通知
-        Route::post('/getNoticeInfo','perSpaceController@getNoticeInfo');
+        Route::post('/getNoticeInfo/{pageNumber}/{pageSize}','perSpaceController@getNoticeInfo');
         // 个人中心 删除通知
         Route::post('/deleteNotice','perSpaceController@deleteNotice');
         // 个人中心 更改通知状态
@@ -155,7 +155,7 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         // 个人中心 查看是否有通知消息
         Route::post('/findHaveNotice','perSpaceController@findHaveNotice');
         // 个人中心 评论回复
-        Route::post('/getCommentInfo', 'perSpaceController@getCommentInfo');
+        Route::post('/getCommentInfo/{pageNumber}/{pageSize}', 'perSpaceController@getCommentInfo');
         // 个人中心 评论删除
         Route::post('/deleteComment', 'perSpaceController@deleteComment');
 
@@ -204,13 +204,13 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         //名师列表
         Route::get('/theteacher/', 'theteacherController@index');
         //名师列表获取数据接口
-        Route::get('/gettheteacher/{type}', 'theteacherController@gettheteacher');
+        Route::get('/gettheteacher/{type}/{pageNumber}/{pageSize}', 'theteacherController@gettheteacher');
 
 
         //新闻资讯列表
         Route::get('/newlist', 'newlistController@index');
         //新闻列表接口
-        Route::get('/getnewlist','newlistController@getnewlist');
+        Route::get('/getnewlist/{pageNumber}/{pageSize}','newlistController@getnewlist');
         //新闻资讯详情
         Route::get('/newdetail/{id}', 'newlistController@newdetail');
         //新闻资讯详情数据接口
@@ -349,7 +349,7 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         //  待点评详情
         Route::get('/wait/{commentID}/{messageID?}', ['middleware' => 'check', 'uses' => 'commentDetailController@wait']);
         //  上传点评视频
-        Route::get('/upload/{orderSn}', ['middleware' => 'check', 'uses' => 'commentDetailController@uploadComment']);
+        Route::get('/upload/{orderSn}/{messageID?}', ['middleware' => 'check', 'uses' => 'commentDetailController@uploadComment']);
         //  审核未通过重新上传视频
         Route::get('/reUploadComment/{commentID}/{messageID?}', ['middleware' => 'check', 'uses' => 'commentDetailController@reUploadComment']);
         //  完成点评视频上传

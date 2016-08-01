@@ -55,7 +55,6 @@ class noticeController extends Controller
             'username.required' => '请选择接收消息的用户',
             'content.required' => '请输入通知内容'
         ]);
-        dd($request->all());
         $username = $request->username;
         $userType = $request->userType;
         $stuTempId = $request->stuTempId;

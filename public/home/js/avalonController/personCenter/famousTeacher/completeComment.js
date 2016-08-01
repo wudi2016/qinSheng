@@ -13,14 +13,17 @@ define([], function () {
             $('#page_sureComment').pagination({
                 dataSource: function (done) {
                     $.ajax({
-                        url: '/member/completeComment',
+                        url: '/member/completeComment/'+ this.pageNumber + '/' + this.pageSize,
                         type: 'POST',
                         data:{type:type},
                         dataType: 'json',
                         success: function (response) {
                             completeCommentController.total = response.total;
                             if (response.type) {
-                                done(response.data);
+                                var format = [];
+                                format['data'] = response.data;
+                                format['totalNumber'] = response.total;
+                                done(format);
                             }else{
                                 completeCommentController.sureComment = true;
                                 completeCommentController.completeCommentList = [];
@@ -28,7 +31,19 @@ define([], function () {
                         },
                     });
                 },
+                getData: function (pageNumber, pageSize) {
+                    var self = this;
+                    $.ajax({
+                        type: 'POST',
+                        url: '/member/completeComment/' + pageNumber + '/' + pageSize,
+                        success: function (response) {
+                            self.callback(response.data);
+                        }
+                    });
+                },
                 pageSize: 6,
+                pageNumber: 1,
+                totalNumber: 1,
                 className: "paginationjs-theme-blue",
                 showGoInput: true,
                 showGoButton: true,

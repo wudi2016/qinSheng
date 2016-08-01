@@ -28,34 +28,34 @@
 }
 
 .contain_lessonDetail_top_video_right{
-    width: 400px;
+    width: 360px;
     height: 515px;
     float: right;
     background-color: #ffffff;
 }
 .contain_lessonDetail_top_video_right_name{
-    width:350px;
+    width:330px;
     height: 124px;
     line-height: 140px;
-    margin-left:50px;
-    font-size: 24px;
+    margin-left:30px;
+    font-size: 22px;
     color: #222222;
 }
 .contain_lessonDetail_top_video_right_price{
-    width: 350px;
+    width: 330px;
     height: 30px;
     line-height: 30px;
-    margin-left: 50px;
+    margin-left: 30px;
     color: #222222;
-    font-size: 24px;
+    font-size: 22px;
 }
 .contain_lessonDetail_top_video_right_price span{
     color: #FF0000;
 }
 .contain_lessonDetail_top_video_right_detail{
-    width:350px;
+    width:330px;
     height: 31px;
-    margin-left: 50px;
+    margin-left: 30px;
     margin-top: 60px;
 }
 .contain_lessonDetail_top_video_right_detail span{
@@ -77,9 +77,9 @@
     background: url("/home/image/lessonSubject/detail/study.png") no-repeat;
 }
 .contain_lessonDetail_top_video_right_btn{
-    width:350px;
+    width:330px;
     height: 50px;
-    margin-left: 50px;
+    margin-left: 30px;
     margin-top: 125px;
     font-size: 20px;
     line-height: 50px;
@@ -105,10 +105,12 @@
     margin-left: 35px;
     width: 116px;
     height: 46px;
+    line-height: 46px;
     background-color: rgb(255,255,255);
     border: 2px solid #209eea;
     border-radius: 4px;
     color: rgb(32,158,234);
+    text-align: center;
     letter-spacing:1px;
     cursor: pointer;
 }
@@ -126,7 +128,7 @@
     width: 350px;
     height:95px;
     line-height: 95px;
-    margin-left:50px;
+    margin-left:30px;
 }
 .contain_lessonDetail_top_video_right_collect div{
     float: left;

@@ -22,8 +22,12 @@ class newlistController extends Controller
 
 
     //新闻列表数据接口
-    public function getnewlist(){
-        $getnewlist = DB::table('news')->orderBy('sort','asc')->where('status',0)->get();
+    public function getnewlist($pageNumber,$pageSize){
+        $skip = ($pageNumber-1) * $pageSize;
+        $getnewlist = DB::table('news')->orderBy('created_at','desc')->where('status',0)->skip($skip)->take($pageSize)->get();
+        $count = DB::table('news')->select('id')
+            ->where('status',0)
+            ->count();
         if($getnewlist){
             foreach ($getnewlist as $k => $v) {
                 //只保留 年月日
@@ -35,12 +39,10 @@ class newlistController extends Controller
                     'time'  => $created_ats[0]
                 ];
             }
-            $data['statuss'] = true;
+            return response()->json(['statuss'=>true,'data'=>$data['data'],'count'=>$count]);
         }else {
-            $data['statuss'] = false;
+            return response()->json(['statuss'=>false]);
         }
-
-        echo json_encode($data);
 
     }
 

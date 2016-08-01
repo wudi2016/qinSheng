@@ -65,6 +65,7 @@
 		require(['lessonComment/directive', 'lessonComment/buyComment/upload'], function (directive, upload) {
 			upload.commentID = {{$info -> id}} || null;
 			upload.selectedLevel = '{{$info -> suitlevel}}'.split(/,/);
+			upload.messageID = '{{$messageID}}' || null;
 
 			avalon.directive('selectedlevel', {
 				update: function(value) {

@@ -31,12 +31,15 @@ define([],function(){
                  dataSource: function(done) {
                      $.ajax({
                          type: 'GET',
-                         url : '/community/gettheteacher/'+type,
-                         dataType : 'json',
+                         url : '/community/gettheteacher/'+type+'/'+this.pageNumber+'/'+this.pageSize,
+                         //dataType : 'json',
                          success: function(response) {
                              if(response.statuss){
-                                 //console.log(response);
-                                 done(response.data);
+                                 var format = [];
+                                 format['data'] = response.data;
+                                 format['totalNumber'] = response.count;
+                                 done(format);
+                                 //done(response.data);
                                  model.Yes = true;
                              }else{
                                  //console.log(response);
@@ -45,7 +48,21 @@ define([],function(){
                          }
                      });
                  },
-                 pageSize: 3,
+
+                 getData: function(pageNumber,pageSize) {
+                     var self = this;
+                     $.ajax({
+                         type: 'GET',
+                         url: '/community/gettheteacher/'+type+'/'+pageNumber+'/'+pageSize,
+                         success: function(response) {
+                             self.callback(response.data);
+                         }
+                     });
+                 },
+
+                 pageSize: 8,
+                 pageNumber :1,
+                 totalNumber :1,
                  className:"paginationjs-theme-blue",
                  showGoInput: true,
                  showGoButton: true,
@@ -57,103 +74,92 @@ define([],function(){
                  }
              })
      
-            //$.ajax({
-            //    url : '/community/gettheteacher/'+type,
-            //    type : 'get',
-            //    dataType : 'json',
-            //    success: function(response){
-            //        if(response.statuss){
-            //            model.theteacherlist = response.data;
-            //        }else{
-            //            model.theteacherlist = [];
-            //        }
-            //    },
-            //})
+
 
         },
 
         tabs:function(type){
-            if (type == '0') {
+            if (type == 'tabss') {
+                model.gettheteacher(0);
+            }else if (type == 'A') {
+                $('.A').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '1') {
-                $('.a').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'B') {
+                $('.B').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '2') {
-                $('.b').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'C') {
+                $('.C').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '3') {
-                $('.c').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'D') {
+                $('.D').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '4') {
-                $('.d').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'E') {
+                $('.E').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '5') {
-                $('.e').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'F') {
+                $('.F').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '6') {
-                $('.f').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'G') {
+                $('.G').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '7') {
-                $('.g').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'H') {
+                $('.H').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '8') {
-                $('.h').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'I') {
+                $('.I').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '9') {
-                $('.i').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'J') {
+                $('.J').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '10') {
-                $('.j').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'K') {
+                $('.K').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '11') {
-                $('.k').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'L') {
+                $('.L').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '12') {
-                $('.l').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'M') {
+                $('.M').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '13') {
-                $('.m').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'N') {
+                $('.N').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '14') {
-                $('.n').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'O') {
+                $('.O').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '15') {
-                $('.o').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'P') {
+                $('.P').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '16') {
-                $('.p').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'Q') {
+                $('.Q').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '17') {
-                $('.q').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'R') {
+                $('.R').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '18') {
-                $('.r').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'S') {
+                $('.S').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '19') {
-                $('.s').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'T') {
+                $('.T').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '20') {
-                $('.t').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'U') {
+                $('.U').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '21') {
-                $('.u').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'V') {
+                $('.V').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '22') {
-                $('.v').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'W') {
+                $('.W').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '23') {
-                $('.w').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'X') {
+                $('.X').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '24') {
-                $('.x').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'Y') {
+                $('.Y').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '25') {
-                $('.y').addClass('bluebackground').siblings().removeClass('bluebackground');
+            }else if (type == 'Z') {
+                $('.Z').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
-            }else if (type == '26') {
-                $('.z').addClass('bluebackground').siblings().removeClass('bluebackground');
-                model.gettheteacher(type);
-            }else if (type == '27') {
+            }else if (type == 'tabss') {
                 $('.tabss').addClass('bluebackground').siblings().removeClass('bluebackground');
                 model.gettheteacher(type);
             }

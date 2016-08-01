@@ -75,8 +75,8 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 开始结束时间 </label>
 
                             <div class="col-sm-9">
-                                <input type="text" name="beginTime" id="form-field-1" placeholder="开始时间" class="col-xs-10 col-sm-5" value=""  onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:150px;"/>
-                                <input type="text" name="endTime" id="form-field-1" placeholder="结束时间" class="col-xs-10 col-sm-5" value=""  onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:150px;" />
+                                <input type="text" name="beginTime" id="form-field-1" placeholder="开始时间" class="col-xs-10 col-sm-5" value=""  onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" style="width:150px;"/>
+                                <input type="text" name="endTime" id="form-field-1" placeholder="结束时间" class="col-xs-10 col-sm-5" value=""  onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" style="width:150px;" />
                             </div>
                         </div>
 

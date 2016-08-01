@@ -27,7 +27,7 @@
             text-indent:20px;
             height:48px;
             line-height:48px;
-            font-size:20px;
+            font-size:18px;
             /*font-weight:bold;*/
 
         }
@@ -58,6 +58,14 @@
             background-color: #ffffff;
             color: #209EEA;
         }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 50px;
+            position: absolute;
+            top: 1px;
+            right: 10px;
+            width: 20px;
+        }
     </style>
 @endsection
 
@@ -71,7 +79,7 @@
                     <form action="{{url('/index/search')}}" method="post">
                     <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                     <div class="con_top_con_sbar_l">
-                    <select name="type"   class="js-example-basic-single" style="width:165px;height:50px;border: none">
+                    <select name="type"   class="js-example-basic-single" style="width:171px;height:50px;border: none">
                         <option selected="selected" value="all">全部课程</option>
                         <option value="course">专题课程</option>
                         <option value="review">点评课程</option>

@@ -14,7 +14,9 @@
             <div class="cont_con_con">
                 <div class="cont_con_con_t">
                     <div class="cont_con_con_t_li sel" ms-cont="1" ms-click="getdata(1)">进行中</div>
+                    <div style="float: left;width:26px;height: 100%;"></div>
                     <div class="cont_con_con_t_li" ms-cont="2" ms-click="getdata(2)">未开始</div>
+                    <div style="float: left;width:26px;height: 100%;"></div>
                     <div class="cont_con_con_t_li" ms-cont="3" ms-click="getdata(3)">已结束</div>
                 </div>
                 <div class="cont_con_con_con ">

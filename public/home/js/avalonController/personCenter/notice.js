@@ -5,27 +5,42 @@ define([], function () {
     var notice = avalon.define({
         $id: 'noticeController',
         noticeInfo: [],
-        noticeMsg : false,
-        isRead : true,
+        noticeMsg: false,
+        isRead: true,
         getNoticeInfo: function (username) {
             $('#page_notice').pagination({
                 dataSource: function (done) {
                     $.ajax({
-                        url: '/member/getNoticeInfo',
+                        url: '/member/getNoticeInfo/' + this.pageNumber + '/' + this.pageSize,
                         type: 'POST',
                         dataType: 'json',
-                        data : {username:username},
+                        data: {username: username},
                         success: function (response) {
                             if (response.status) {
-                                done(response.data);
-                            }else{
+                                var format = [];
+                                format['data'] = response.data;
+                                format['totalNumber'] = response.count;
+                                done(format);
+                            } else {
                                 notice.noticeMsg = true;
                                 notice.noticeInfo = [];
                             }
                         },
                     });
                 },
+                getData: function (pageNumber, pageSize) {
+                    var self = this;
+                    $.ajax({
+                        type: 'GET',
+                        url: '/member/getNoticeInfo/' + pageNumber + '/' + pageSize,
+                        success: function (response) {
+                            self.callback(response.data);
+                        }
+                    });
+                },
                 pageSize: 10,
+                pageNumber: 1,
+                totalNumber: 1,
                 className: "paginationjs-theme-blue",
                 showGoInput: true,
                 showGoButton: true,
@@ -37,13 +52,13 @@ define([], function () {
                 }
             })
         },
-        changeNoticeStatus: function(){
+        changeNoticeStatus: function () {
             $.ajax({
                 url: '/member/changeNoticeStatus/0',
-                type : 'GET',
-                dataType : 'json',
-                success : function(response){
-                    if(response){
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    if (response) {
                         notice.isRead = false;
                     }
                 }

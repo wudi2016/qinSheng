@@ -143,7 +143,9 @@
     	    	<div style="height:20px;"></div>
     	    	<div class="foot_con_m_b"><a href="/aboutUs/firmintro/1">公司介绍</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="/aboutUs/firmintro/4">用户协议</a></div>
     	    	<div class="foot_con_m_b"><a href="/aboutUs/firmintro/2">联系我们</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="/aboutUs/firmintro/5">友情链接</a></div>
-    	    	<div class="foot_con_m_b"><a href="/aboutUs/firmintro/3">常见问题</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="/aboutUs/firmintro/6">意见反馈</a></div>
+    	    	<div class="foot_con_m_b"><a href="/aboutUs/firmintro/3">常见问题</a> &nbsp;&nbsp;&nbsp;&nbsp;
+					{{--<a href="/aboutUs/firmintro/6">意见反馈</a>--}}
+				</div>
     	    </div>
     	    <div class="foot_con_r">
 	    	    <div style="height:40px;"></div>

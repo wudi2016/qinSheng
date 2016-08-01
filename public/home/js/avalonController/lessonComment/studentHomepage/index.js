@@ -40,6 +40,9 @@ define([], function () {
 				dataType: 'json',
 				success: function(response) {
 					if (response.type) {
+						if (model == 'userInfo' && user.checks) {
+							response.data.stock = 0;
+						}
 						user[model] = response.data;
 					}
 					if (model == 'specialCount' || model == 'commentCount') {

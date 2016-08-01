@@ -13,7 +13,11 @@
                 </li>
 
                 <li>
-                    <a href="{{url('/admin/users/userList')}}">用户管理</a>
+                    @if($data->status == 'u1')
+                        <a href="{{url('/admin/users/userList')}}">用户管理</a>
+                    @else
+                        <a href="{{url('/admin/users/famousTeacherList')}}">名师管理</a>
+                    @endif
                 </li>
                 <li class="active">重置密码</li>
             </ul><!-- .breadcrumb -->
@@ -36,7 +40,11 @@
         <div class="page-content">
             <div class="page-header">
                 <h1>
-                    用户管理
+                    @if($data->status == 'u1')
+                        用户管理
+                    @else
+                        名师管理
+                    @endif
                     <small>
                         <i class="icon-double-angle-right"></i>
                         重置密码
@@ -49,6 +57,7 @@
                     <!-- PAGE CONTENT BEGINS -->
                     <form class="form-horizontal" role="form" method="post" action="" >
                         {{csrf_field()}}
+                        <input type="hidden" name="pathUrl" value="{{$_SERVER['HTTP_REFERER']}}">
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 用户名： </label>
                             <div class="col-sm-9">
