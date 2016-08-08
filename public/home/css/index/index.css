@@ -398,9 +398,13 @@
 }
 .flex-direction-nav .flex-prev{
 	background: url('/home/image/index/left.png');
+	position: absolute;
+	left:0px;
 }
 .flex-direction-nav .flex-next{
 	background: url('/home/image/index/right.png');
+	position: absolute;
+	right:0px;
 }
 /*圆点标志*/
 .flex-control-paging li a{
