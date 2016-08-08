@@ -17,19 +17,19 @@
                 </li>
 
                 <li>
-                    <a href="{{url('/admin/activity/activityList')}}">赛事活动列表</a>
+                    <a href="{{url('/admin/aboutUs/friendlinkList')}}">友情链接列表</a>
                 </li>
-                <li class="active">赛事活动添加</li>
+                <li class="active">友情链接编辑</li>
             </ul><!-- .breadcrumb -->
         </div>
 
         <div class="page-content">
             <div class="page-header">
                 <h1>
-                    赛事活动管理
+                    友情链接列表
                     <small>
                         <i class="icon-double-angle-right"></i>
-                        活动添加
+                        友情链接编辑
                     </small>
                 </h1>
             </div><!-- /.page-header -->

@@ -9,10 +9,10 @@
 @section('content')
 	<div class="uploadComment" ms-controller="uploadController">
 		<div class="crumbs">
-			<a href="">首页</a> >
-			<a href="">名师点评</a> >
-			<a href="">名师主页</a> >
-			<a href="">上传视频</a>
+			<a href="/">首页</a> >
+			<a href="/community">名师点评</a> >
+			<a href="/lessonComment/teacher/{{$info -> teacherId}}">名师主页</a> >
+			<a>上传视频</a>
 		</div>
 
 		<div class="uploadComment_content">
@@ -71,7 +71,8 @@
 			upload.uploadInfo.teacherId = '{{$info -> teacherId}}' || null;
 			upload.uploadInfo.teacherName = '{{$info -> teacherName}}' || null;
 			upload.messageID = '{{$messageID}}' || null;
-            avalon.scan();
+			upload.mineID = {{$mineID}} || null;
+			avalon.scan();
 		});
 	</script>
 @endsection

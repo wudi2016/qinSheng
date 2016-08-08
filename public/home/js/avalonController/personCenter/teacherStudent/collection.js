@@ -36,7 +36,7 @@ define([], function () {
                     var self = this;
                     $.ajax({
                         type: 'GET',
-                        url: '/member/getNoticeInfo/' + pageNumber + '/' + pageSize,
+                        url: '/member/getCollectionInfo/' + pageNumber + '/' + pageSize,
                         success: function (response) {
                             self.callback(response.data);
                         }

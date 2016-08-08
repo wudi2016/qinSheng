@@ -109,9 +109,9 @@
                                         {{--<th>高清</th>--}}
                                         {{--<th>超清</th>--}}
                                         <th>点评名师</th>
-                                        <th>浏览数</th>
-                                        <th>观看数</th>
-                                        <th>收藏数</th>
+                                        {{--<th>浏览数</th>--}}
+                                        {{--<th>观看数</th>--}}
+                                        {{--<th>收藏数</th>--}}
                                         <th>课程状态</th>
                                         <th>最近审核时间</th>
                                         <th>审核状态</th>
@@ -138,23 +138,27 @@
                                         <td>{{$comcourse->username}}</td>
                                         <td style="color: #0b6cbc">
                                             @if(!$comcourse->courseLowPath && !$comcourse->courseMediumPath && !$comcourse->courseHighPath)
-                                                正在转码...
+                                                @if($comcourse->msg['code'] == '200')
+                                                    正在转码...
+                                                @else
+                                                    {{$comcourse->msg['message']}}
+                                                @endif
                                             @else
                                                 <span class="lookVideo" onclick="lookVideo('{{$comcourse->courseLowPathurl}}')" style="color: #00a0e9;cursor:pointer;">查看</span>
                                             @endif
                                         </td>
                                         <td>
                                             {{--<a id="example2-2" href="{{asset($comcourse->coursePic)}}">查看--}}
-                                                <img src="{{asset($comcourse->coursePic)}}" alt="" width="50px" height="50px">
+                                                <img src="{{asset($comcourse->coursePic)}}" alt="" width="50px" height="50px" onerror="this.src='/admin/image/back.png'">
                                             {{--</a>--}}
                                         </td>
                                         {{--<td>--}}
                                             {{--<a href="{{$comcourse->courceHighPath}}">查看</a>--}}
                                         {{--</td>--}}
                                         <td>{{$comcourse->teachername}}</td>
-                                        <td>{{$comcourse->courseView}}</td>
-                                        <td>{{$comcourse->coursePlayView}}</td>
-                                        <td>{{$comcourse->courseFav}}</td>
+                                        {{--<td>{{$comcourse->courseView}}</td>--}}
+                                        {{--<td>{{$comcourse->coursePlayView}}</td>--}}
+                                        {{--<td>{{$comcourse->courseFav}}</td>--}}
                                         <td>{{$comcourse->courseStatus ? '锁定' : '激活'}}</td>
                                         <td>{{$comcourse->lastCheckTime}}</td>
                                         <td>
@@ -167,6 +171,7 @@
                                                     {{--<i class="icon-ok bigger-120"></i>--}}
                                                 {{--</button>--}}
 
+                                                @permission('edit.commentcourse')
                                                 <span class="btn btn-xs btn-primary" style="position: relative;display: inline-block;">
                                                     <strong>审核状态</strong>
                                                     <span class="icon-caret-down icon-on-right"></span>
@@ -177,7 +182,9 @@
                                                         <option value="2" >审核通过</option>
                                                     </select>
                                                 </span>
+                                                @endpermission
 
+                                                @permission('edit.commentcourse')
                                                 <span class="btn btn-xs btn-inverse" style="position: relative;display: inline-block;">
                                                     <strong>课程状态</strong>
                                                     <span class="icon-caret-down icon-on-right"></span>
@@ -187,18 +194,25 @@
                                                         <option value="1" >锁定</option>
                                                     </select>
                                                 </span>
+                                                @endpermission
 
+                                                @permission('edit.commentcourse')
                                                 <a href="{{url('/admin/commentCourse/editCommentCourse/'.$comcourse->id)}}" class="btn btn-xs btn-info">
                                                     <i class="icon-edit bigger-120"></i>
                                                 </a>
+                                                @endpermission
 
+                                                @permission('del.commentcourse')
                                                 <a href="{{url('/admin/commentCourse/delCommentCourse/'.$comcourse->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
                                                     <i class="icon-trash bigger-120"></i>
                                                 </a>
+                                                @endpermission
 
+                                                @permission('check.commentcourse')
                                                 <div href="" class="btn btn-xs btn-warning" ms-click="commentdetailpop({{$comcourse->id}})">
                                                     <i class="icon-flag bigger-120"></i>
                                                 </div>
+                                                @endpermission
                                             </div>
 
                                             <div class="visible-xs visible-sm hidden-md hidden-lg">

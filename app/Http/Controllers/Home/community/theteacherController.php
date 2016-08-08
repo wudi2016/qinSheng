@@ -21,14 +21,29 @@ class theteacherController extends Controller
     }
 
 
+    //26字母接口
+    public function getfirstletter(){
+        $firstletter = DB::table('teacher')->select('firstletter')->distinct()->orderBy('firstletter','asc')->get();
+        if($firstletter){
+            return response()->json(['statuss'=>true,'firstletter' => $firstletter]);
+        }else{
+            return response()->json(['statuss'=>false]);
+        }
+    }
+
+
+
     //名师列表数据接口
     public function gettheteacher($type,$pageNumber,$pageSize){
+
         $skip = ($pageNumber-1) * $pageSize;
         if($type == '0'){
             $count = DB::table('teacher')->select('id')->count();
         }else{
             $count = DB::table('teacher')->select('id')->where('firstletter','=',$type)->count();
         }
+
+
 
         if($type == '0') {
             $gettheteacher = DB::table('teacher as t')
@@ -51,7 +66,9 @@ class theteacherController extends Controller
         }
 
 
+
         if($gettheteacher){
+
             foreach($gettheteacher as $k => $v){
                 $data['data'][] = [
                     'id' => $v->id,
@@ -71,8 +88,12 @@ class theteacherController extends Controller
 
     }
 
-
-
 }
+
+
+
+
+
+
 
 

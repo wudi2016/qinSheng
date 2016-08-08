@@ -74,9 +74,11 @@
                 </div>
             @endif
 
+            @permission('add.course')
             <a href="{{url('/admin/specialCourse/addSpecialChapter/'.$data->courseId)}}" class="btn btn-xs btn-info">
                 <i class="icon-ok bigger-110">添加</i>
             </a>
+            @endpermission
 
             <div class="row" ms-controller="specialcommentdetail">
 
@@ -100,10 +102,10 @@
                                         <th>章节名称</th>
                                         <th>父级ID</th>
                                         <th>课程</th>
-                                        <th>封面图</th>
-                                        <th>时长</th>
-                                        <th>大小</th>
-                                        <th>播放数</th>
+                                        {{--<th>封面图</th>--}}
+                                        {{--<th>时长</th>--}}
+                                        {{--<th>大小</th>--}}
+                                        {{--<th>播放数</th>--}}
                                         <th>是否试学</th>
                                         <th>状态</th>
                                         <th>创建时间</th>
@@ -128,21 +130,20 @@
                                             </td>
                                             <td>{{$chapter->title}}</td>
                                             <td>{{$chapter->parentId}}</td>
-                                            <td>
-                                                @if($chapter->parentId == 0)
-                                                @elseif(!$chapter->courseLowPath && !$chapter->courseMediumPath && !$chapter->courseHighPath)
-                                                    正在转码...
-                                                @else
+                                            <td style="color: #0b6cbc">
+                                                @if($chapter->parentId != 0)
                                                     <span class="lookVideo" onclick="lookVideo('{{$chapter->courseLowPathurl}}')" style="color: #00a0e9;cursor:pointer;">查看</span>
                                                 @endif
 
                                             </td>
-                                            <td>
-                                                <img src="{{asset($chapter->coursePic)}}" alt="" width="50px" height="50px">
-                                            </td>
-                                            <td>{{$chapter->courseTime}}</td>
-                                            <td>{{$chapter->courseSize}}</td>
-                                            <td>{{$chapter->coursePlayView}}</td>
+                                            {{--<td>--}}
+                                                {{--@if($chapter->parentId != 0)--}}
+                                                    {{--<img src="{{asset($chapter->coursePic)}}" alt="" width="50px" height="50px">--}}
+                                                {{--@endif--}}
+                                            {{--</td>--}}
+                                            {{--<td>{{$chapter->courseTime}}</td>--}}
+                                            {{--<td>{{$chapter->courseSize}}</td>--}}
+                                            {{--<td>{{$chapter->coursePlayView}}</td>--}}
                                             <td>
                                                 @if($chapter->parentId != 0)
                                                     {{$chapter->isTrylearn ? '是' : '否'}}
@@ -158,6 +159,7 @@
                                                     {{--<i class="icon-ok bigger-120"></i>--}}
                                                     {{--</button>--}}
 
+                                                    @permission('edit.course')
                                                     <span class="btn btn-xs btn-inverse" style="position: relative;display: inline-block;">
                                                         <strong>课程状态</strong>
                                                         <span class="icon-caret-down icon-on-right"></span>
@@ -167,19 +169,24 @@
                                                             <option value="1" >锁定</option>
                                                         </select>
                                                     </span>
+                                                    @endpermission
 
 
+                                                    @permission('edit.course')
                                                     <a href="{{url('/admin/specialCourse/editSpecialChapter/'.$data->courseId.'/'.$chapter->id)}}" class="btn btn-xs btn-info">
                                                         <i class="icon-edit bigger-120"></i>
                                                     </a>
+                                                    @endpermission
 
+                                                    @permission('del.course')
                                                     <a href="{{url('/admin/specialCourse/delSpecialChapter/'.$data->courseId.'/'.$chapter->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
                                                         <i class="icon-trash bigger-120"></i>
                                                     </a>
+                                                    @endpermission
 
-                                                    <div href="" class="btn btn-xs btn-warning" ms-click="commentdetailpop()">
-                                                        <i class="icon-flag bigger-120"></i>
-                                                    </div>
+                                                    {{--<div href="" class="btn btn-xs btn-warning" ms-click="commentdetailpop()">--}}
+                                                        {{--<i class="icon-flag bigger-120"></i>--}}
+                                                    {{--</div>--}}
 
                                                 </div>
 
@@ -233,7 +240,7 @@
 
         <!--弹窗显示详情-->
         <div id="videodetailpupUpback" class="videodetailpupUpback">
-            <div class="videopopup1" style="width: 700px;height: 400px;">
+            <div class="videopopup1" style="width: 700px;height: 400px;margin-top: -200px;">
                 <div class="videodetailtopbaner">
                     <div class="detailtitle" style="width: 650px;padding-left: 40px">视频</div>
                     <div class="deldetail" style="float: right"></div>

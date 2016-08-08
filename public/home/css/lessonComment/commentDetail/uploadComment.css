@@ -15,7 +15,6 @@
 	color: gray;
 }
 .crumbs a { color: gray; }
-.crumbs a:hover { text-decoration: underline; }
 
 
 .uploadComment_content {
@@ -221,7 +220,7 @@
 	width: 800px;
 	height: 80px;
 	margin: 0px 0px 0px 44px;
-	font-size: 15px;
+	font-size: 16px;
 }
 
 .works_title span {
@@ -240,15 +239,16 @@
 	font-family: 微软雅黑;
 	padding: 0px 45px 0px 10px;
 	letter-spacing: 1px;
+	font-size: 13px;
 }
 
 .works_title_number {
 	color: gray;
 	height: 36px;
 	line-height: 36px;
-	float: left;
+	float: right;
 	position: relative;
-	left: -40px;
+	right: 280px;
 }
 
 
@@ -305,7 +305,7 @@
 
 
 .uploadWarning {
-	margin: 10px 0 0 20px; 
+	margin: 10px 0 0 20px;
 	color: red; 
 	float: left;
 	font-size: 14px;

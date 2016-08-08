@@ -9,10 +9,9 @@
 @section('content')
 	<div class="uploadComment" ms-controller="uploadController">
 		<div class="crumbs">
-			<a href="">首页</a> >
-			<a href="">名师点评</a> >
-			<a href="">名师主页</a> >
-			<a href="">上传视频</a>
+			<a href="/">首页</a> >
+			<a href="/community">名师主页</a> >
+			<a>上传视频</a>
 		</div>
 
 		<div class="uploadComment_content">
@@ -66,6 +65,7 @@
 			upload.commentID = {{$info -> id}} || null;
 			upload.selectedLevel = '{{$info -> suitlevel}}'.split(/,/);
 			upload.messageID = '{{$messageID}}' || null;
+			upload.mineID = {{$mineID}} || null;
 
 			avalon.directive('selectedlevel', {
 				update: function(value) {

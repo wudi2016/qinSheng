@@ -231,7 +231,7 @@
                             </div>
                         </div>
 
-
+                        @if($data->type == 1)
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-6">姓名</label>
 
@@ -240,7 +240,7 @@
                                       value="{{$data->realname}}"/>
                             </div>
                         </div>
-
+                        @endif
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-6">性别</label>
 
@@ -485,10 +485,10 @@
 
             //onSubmit
             function postcheck(){
+                review();
                 if(checkPhone){
                     return true;
                 }else{
-                    review();
                     return false;
                 }
             }

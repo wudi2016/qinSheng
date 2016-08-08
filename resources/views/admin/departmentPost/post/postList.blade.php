@@ -13,7 +13,7 @@
                 </li>
 
                 <li>
-                    <a href="{{url('/admin/departmentPost/departmentList')}}">岗位列表</a>
+                    <a href="{{url('/admin/departmentPost/postList')}}">岗位列表</a>
                 </li>
                 <li class="active">岗位列表</li>
             </ul><!-- .breadcrumb -->

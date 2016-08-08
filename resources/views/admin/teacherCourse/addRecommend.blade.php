@@ -51,13 +51,15 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 标题 </label>
 
                             <div class="col-sm-9">
-                                {{--<input type="text" name="typeName" id="form-field-1" placeholder="课程类型" class="col-xs-10 col-sm-5" value="" />--}}
-                                <select name="courseId" id="form-field-1" class="col-xs-10 col-sm-5">
-                                    @foreach($data as $names)
-                                        <option value="{{$names->id}}">{{$names->courseTitle}}</option>
-                                    @endforeach
+                                <input type="text" readonly name="courseName" id="form-field-1" placeholder="标题" class="col-xs-10 col-sm-5" value="{{$data->courseTitle}}" />
+                                <input type="hidden"  name="courseId" id="form-field-1" placeholder="标题" class="col-xs-10 col-sm-5" value="{{$data->id}}" />
 
-                                </select>
+                                {{--<select name="courseId" id="form-field-1" class="col-xs-10 col-sm-5">--}}
+                                    {{--@foreach($data as $names)--}}
+                                        {{--<option value="{{$names->id}}">{{$names->courseTitle}}</option>--}}
+                                    {{--@endforeach--}}
+
+                                {{--</select>--}}
                             <span class="help-inline col-xs-12 col-sm-7">
                                 <label class="middle">
                                     <span class="lbl"></span>

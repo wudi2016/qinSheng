@@ -72,9 +72,11 @@
                 </div>
             @endif
 
+            @permission('add.course')
             <a href="{{url('/admin/specialCourse/addData/'.$data->courseId)}}" class="btn btn-xs btn-info">
                 <i class="icon-ok bigger-110">添加</i>
             </a>
+            @endpermission
 
             <div class="row" ms-controller="data">
 
@@ -137,6 +139,7 @@
                                                     {{--<i class="icon-ok bigger-120"></i>--}}
                                                     {{--</button>--}}
 
+                                                    @permission('edit.course')
                                                     <span class="btn btn-xs btn-inverse" style="position: relative;display: inline-block;">
                                                         <strong>状态</strong>
                                                         <span class="icon-caret-down icon-on-right"></span>
@@ -146,15 +149,20 @@
                                                             <option value="1" >锁定</option>
                                                         </select>
                                                     </span>
+                                                    @endpermission
 
 
+                                                    @permission('edit.course')
                                                     <a href="{{url('/admin/specialCourse/editData/'.$coursedata->id)}}" class="btn btn-xs btn-info">
                                                         <i class="icon-edit bigger-120"></i>
                                                     </a>
+                                                    @endpermission
 
+                                                    @permission('del.course')
                                                     <a href="{{url('/admin/specialCourse/delData/'.$data->courseId.'/'.$coursedata->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
                                                         <i class="icon-trash bigger-120"></i>
                                                     </a>
+                                                    @endpermission
 
                                                 </div>
 

@@ -20,14 +20,14 @@
             <div class="contain_lessonDetail_top_video" ms-if="haveCourse">
                 <div class="contain_lessonDetail_top_video_left">
                     {{--<img ms-attr-src="pageInfo.video"/>--}}
-                    <div class="video_block" style="height: 515px;">
+                    <div class="video_block" style="height: 450px;">
                         <div class="videobox" id="mediaplayer" ms-visible="!overtime"></div>
-                        <div class="overtime hide" ms-visible="overtime" style="height: 515px;">
-                            <div style="clear: both; height: 170px;"></div>
+                        <div class="overtime hide" ms-visible="overtime" style="height: 450px;">
+                            <div style="clear: both; height: 140px;"></div>
                             <div class="overtime_detail">
                                 <img class="palyinfo_detail_img" style="margin-top: 7px;" src="/home/image/lessonComment/commentDetail/download_warning.png">
                                 <div class="palyinfo_detail_text">尊敬的用户：</div>
-                                <div class="palyinfo_detail_text">该课程无试学课程，请购买观看课程。</div>
+                                <div class="palyinfo_detail_text">该课程无试学课程，请购买观看</div>
                             </div>
                             @if (Auth::check())
                                 <a class="comment_button" style="margin: 30px auto 0; float: none; background: #1588E5; color: white; cursor: pointer; display: block;" ms-click="popUpSwitch('buyCourse')">立即购买</a>
@@ -35,19 +35,20 @@
                                 <a href="/index/login" class="overtime_tologin"><img src="{{asset('/home/image/lessonComment/commentDetail/gologin.png')}}" width="100%" height="100%"></a>
                             @endif
                         </div>
-                        <div class="overtime hide" ms-visible="noresourse" style="height: 515px;">
-                            <div style="clear: both; height: 170px;"></div>
+                        <div class="overtime hide" ms-visible="noresourse" style="height: 450px;">
+                            <div style="clear: both; height: 140px;"></div>
                             <div class="overtime_detail">
                                 <img class="palyinfo_detail_img" style="margin-top: 7px;" src="/home/image/lessonComment/commentDetail/download_warning.png">
                                 <div class="palyinfo_detail_text">尊敬的用户：</div>
-                                <div class="palyinfo_detail_text">该视频出现了问题，暂时不能观看。</div>
+                                <div class="palyinfo_detail_text">该视频出现问题，暂时不能观看。</div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="contain_lessonDetail_top_video_right">
-                    <div class="contain_lessonDetail_top_video_right_name" ms-text="detailInfo.courseTitle">钢琴演奏基础课程</div>
-                    <div class="contain_lessonDetail_top_video_right_price">价格：<span ms-text="'￥' + detailInfo.coursePrice + '元'"></span></div>
+                    <div class="contain_lessonDetail_top_video_right_name" ms-text="detailInfo.courseTitle" ms-attr-title="detailInfo.courseTitle">钢琴演奏基础课程</div>
+                    <div class="contain_lessonDetail_top_video_right_price" ms-if="!detailInfo.isFree">价格：<span ms-text="'￥' + detailInfo.coursePrice + '元'"></span></div>
+                    <div class="contain_lessonDetail_top_video_right_price" ms-if="detailInfo.isFree"><span ms-text="'免费课程'"></span></div>
                     <div class="contain_lessonDetail_top_video_right_detail">
                         <span class="classes" ms-text="detailInfo.classHour + '课时'"></span>
                         <span class="study" ms-text="detailInfo.coursePlayView + '人学习'"></span>
@@ -56,20 +57,20 @@
                         @if(Auth::check() && $mineType == '2')
                             <span class="third">立即学习</span>
                         @else
-                            <span class="first" ms-click="popUpSwitch('buyCourse')" ms-visible="!detailInfo.isBuy">立即购买</span>
-                            <span class="second" ms-visible="!detailInfo.isBuy && detailInfo.isTryLearn">立即试学</span>
-                            <span class="third" ms-visible="detailInfo.isBuy">立即学习</span>
+                            <span class="first" ms-click="popUpSwitch('buyCourse')" ms-visible="!detailInfo.isBuy && !detailInfo.isFree">立即购买</span>
+                            <span class="second" ms-visible="!detailInfo.isBuy && detailInfo.isTryLearn" ms-click="tryLearn(detailInfo.chapterId);">立即试学</span>
+                            <span class="third" ms-visible="detailInfo.isBuy || detailInfo.isFree">立即学习</span>
                         @endif
                     </div>
                     <div class="contain_lessonDetail_top_video_right_collect">
                         <div ms-if="!detailInfo.isCollection" class="collect" ms-click="addCollect(detailInfo.id,detailInfo.isCollection);">收藏</div>
-                        <div ms-if="detailInfo.isCollection" class="collect_light" ms-click="addCollect(detailInfo.id,detailInfo.isCollection);">已收藏</div>
+                        <div ms-if="detailInfo.isCollection" class="collect_light" ms-click="popUpSwitch('quitCollection');">已收藏</div>
                         @if(!Auth::check())
                             <a href="/index/login"><div class="response">反馈</div></a>
                         @elseif($mineType == '2')
                             <div class="response" ms-click="popUpSwitch('feedback')">反馈</div>
                         @else
-                            <div class="response" ms-click="popUpSwitch('feedback')" ms-if="detailInfo.isBuy">反馈</div>
+                            <div class="response" ms-click="popUpSwitch('feedback')" ms-if="detailInfo.isBuy || detailInfo.isFree">反馈</div>
                             <div class="response" ms-if="!detailInfo.isBuy">反馈</div>
                         @endif
                         <!-- 锚点定位(评论回复) -->
@@ -109,10 +110,18 @@
                             <div class="contain_lessonDetail_bot_left_info_div">
                                 <div class="data" ms-repeat="el.section">
                                     <span class="spot"></span>
-                                    <a href="#changeVideo"><span class="data_content" ms-html="el.title" ms-click="changeVideo(el.id,el.courseLowPath,el.isTryLearn,detailInfo.isBuy,detailInfo.isTeacher,el.coursePic);"></span></a>
+                                    <a href="#changeVideo">
+                                        <span class="data_content" ms-html="el.title"
+                                              ms-click="changeVideo(el.id,el.courseLowPath,el.isTryLearn,detailInfo.isFree,detailInfo.isBuy,detailInfo.isTeacher,el.coursePic);">
+                                        </span>
+                                    </a>
                                     <span ms-if="el.isTryLearn == 1" class="try">试学</span>
                                     <span ms-if="el.isLearn" class="have">已学</span>
-                                    <a href="#changeVideo"><span class="play" ms-click="changeVideo(el.id,el.courseLowPath,el.isTryLearn,detailInfo.isBuy,detailInfo.isTeacher,el.coursePic);"></span></a>
+                                    <a href="#changeVideo">
+                                        <span class="play"
+                                              ms-click="changeVideo(el.id,el.courseLowPath,el.isTryLearn,detailInfo.isFree,detailInfo.isBuy,detailInfo.isTeacher,el.coursePic);">
+                                        </span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -121,17 +130,20 @@
                 </div>
                 <div name="comment" class="hide" ms-visible="changeOption == 'comment'">
                     @if(Auth::check())
-                        <div ms-if="detailInfo.isBuy || detailInfo.isAuthor || detailInfo.isTeacher" class="contain_lessonDetail_bot_left_comment">
+                        <div ms-if="detailInfo.isBuy || detailInfo.isAuthor || detailInfo.isTeacher || detailInfo.isFree" class="contain_lessonDetail_bot_left_comment">
                             <textarea ms-duplex="commentContent" maxlength="100"></textarea>
                             <span ms-on-mouseout="descriptionSwitch('replyWarning', false)" ms-click="publishComment(detailInfo.id,commentContent);">发布</span>
                             <div class="teacherHomepage_detail_content_applyTip" ms-visible="replyWarning">请输入评论内容</div>
                         </div>
+                    @else
+                        <div class="comment_textarea comment_textarea_nologin" style="line-height: 150px;"><a href="/index/login" style="color: #3BA3FE;text-decoration: none;">请登录后发表评论</a></div>
+                        <div class="comment_button" style="background: none;"></div>
                     @endif
                     <div class="clear" style="width: 100%;height: 20px;"></div>
                     <div class="first_not">
                         <div class="contain_lessonDetail_bot_left_comment_content" ms-repeat="commentInfo">
                             <div class="photo">
-                                <img ms-attr-src="el.pic" width="85" height="85" alt=""/>
+                                <img ms-attr-src="el.pic" width="70" height="70" alt=""/>
                             </div>
                             <div class="right">
                                 <div class="top">
@@ -148,7 +160,7 @@
                                     </a>
                                     <span class="third" ms-if="el.isSelf" ms-click="deleteComment($index)">删除</span>
                                     <span class="second" ms-click="addLike(el);" ms-if="!el.isLike">点赞（[-- el.likeTotal || 0--] )</span>
-                                    <span class="no_hover" ms-if="el.isLike" ms-click="addLike(el);">点赞（[-- el.likeTotal || 0--] )</span>
+                                    <span class="no_hover" ms-if="el.isLike">已赞（[-- el.likeTotal || 0--] )</span>
                                 </div>
                             </div>
                         </div>
@@ -175,7 +187,7 @@
                 <div class="contain_lessonDetail_bot_right_teacher" ms-controller="teacherInfoController">
                     <span class="teacher">讲师介绍</span>
                     <div class="photo">
-                        <a ms-attr-href="'/lessonComment/teacher/' + teacherInfo.id"><img ms-attr-src="teacherInfo.pic" width="90" height="90" alt=""/></a>
+                        <a ms-attr-href="'/lessonComment/teacher/' + teacherInfo.id"><img ms-attr-src="teacherInfo.pic" width="85" height="85" alt=""/></a>
                     </div>
                     <div class="desc">
                         <a ms-attr-href="'/lessonComment/teacher/' + teacherInfo.id"><span class="name" ms-html="teacherInfo.realname"></span></a>
@@ -311,6 +323,16 @@
                 <a class="sure" ms-attr-href="path" ms-attr-download="dataName" ms-click="popUpSwitch(false)">确定</a>
             </div>
         </div>
+        <!-- 取消收藏弹出层 -->
+        <div class="delete_comment hide" ms-visible="'quitCollection' == popUp">
+            <div class="top">
+                <span>确认取消收藏？</span>
+            </div>
+            <div class="bot">
+                <span class="quit" ms-click="popUpSwitch(false)">取消</span>
+                <a class="sure" ms-click="popUpSwitch(false,'quitCollect',detailInfo.id,detailInfo.isCollection)">确定</a>
+            </div>
+        </div>
         <div class="no_course" ms-if="!haveCourse">
             <div>该课程已下架，
                 <a href="/lessonSubject/list/1">点击返回</a>
@@ -350,6 +372,9 @@
         });
         $(function(){
             $('.contain_lessonDetail_top_video_right_btn .second').click(function(){
+
+            })
+            $('.contain_lessonDetail_top_video_right_btn .third').click(function(){
                 $('#mediaplayer_display_button_play').click();
             })
         });

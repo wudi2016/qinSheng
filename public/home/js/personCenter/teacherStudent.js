@@ -104,15 +104,25 @@ $(function(){
     })
 
     //删除收藏--完成
+    //$('.right_count_right div .count_right_store').click(function(){
+    //    $(this).css('display','none').siblings().css('display','inline-block');
+    //    if($(this).hasClass('deleteImg')){
+    //        $(".comment_repeat_img span").css('display','block');
+    //    }else{
+    //        $(".comment_repeat_img span").css('display','none');
+    //
+    //    }
+    //})
     $('.right_count_right div .count_right_store').click(function(){
         $(this).css('display','none').siblings().css('display','inline-block');
-        if($(this).hasClass('deleteImg')){
+        if($(this).text() == '删除收藏'){
             $(".comment_repeat_img span").css('display','block');
         }else{
             $(".comment_repeat_img span").css('display','none');
 
         }
     })
+
 
 
     //学员问好提示框

@@ -6,9 +6,11 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use Illuminate\Http\Request;
 use Messages;
 use Hash;
 use DB;
+use URL;
 
 class indexController extends Controller
 {
@@ -19,7 +21,7 @@ class indexController extends Controller
      */
     public function index()
     {
-        $banners = DB::table('banner')->where('status',0)->select('path','url')->get();
+        $banners = DB::table('banner')->where('status',0)->select('path','url','bgColor')->get();
         $frids   = DB::table('partner')->select('title','path','url')->where('status',0)->get();
         return view('home.index',compact('banners','frids'));
     }
@@ -37,6 +39,7 @@ class indexController extends Controller
             ->leftJoin('teacher', 'teacher.parentId', '=', 'users.id')
             ->select('users.id as id', 'users.realname as name', 'users.company as org','teacher.cover as img','teacher.intro as info')
             ->where('users.checks',0)
+            ->where('hotteacher.sort','<>',0)
             ->orderBy('hotteacher.sort', 'asc')
             ->skip(0)->take(6)
             ->get();
@@ -67,8 +70,9 @@ class indexController extends Controller
     {
         $courses = DB::table('hotcourse')
             ->leftJoin('course', 'course.id', '=', 'hotcourse.courseId')
-            ->select('course.id as id', 'course.coursePic as img', 'course.courseTitle as title','course.coursePlayView as countpeople','course.coursePrice as price','course.courseType as courseType','course.courseDiscount as courseDiscount')
+            ->select('course.id as id', 'course.coursePic as img', 'course.courseTitle as title','course.courseStudyNum as countpeople','course.coursePrice as price','course.courseType as courseType','course.courseDiscount as courseDiscount')
             ->where('course.courseStatus',0)
+            ->where('hotcourse.sort','<>',0)
             ->orderBy('hotcourse.sort', 'asc')
             ->skip(0)->take(8)
             ->get();
@@ -76,8 +80,12 @@ class indexController extends Controller
         if($courses){
             foreach ($courses as &$course){
                 $course -> counttime = DB::table('coursechapter')->where('courseId',$course->id)->where('parentId','<>',0)->where('status',0)->count();
-                $course -> price = ceil($course->price/100);
-                $course -> countpeople = count(DB::table('courseview')->select('courseId','userId','courseType')->where(['courseId' => $course->id, 'courseType' => 0])->distinct()->get());
+                if($course->courseDiscount == 0){
+                    $course -> price = ceil($course->price/100);
+                }else{
+                    $course -> price = ceil($course->price/100*$course->courseDiscount/10000);
+                }
+//                $course -> countpeople = count(DB::table('courseview')->select('courseId','userId','courseType')->where(['courseId' => $course->id, 'courseType' => 0])->distinct()->get());
             }
         }
 
@@ -110,14 +118,19 @@ class indexController extends Controller
             ->select('commentcourse.id as id', 'commentcourse.coursePic as img', 'commentcourse.courseTitle as title','commentcourse.teachername as teacher','commentcourse.coursePlayView as countpeople','commentcourse.coursePrice as price','commentcourse.courseType as courseType','commentcourse.courseDiscount as courseDiscount')
             ->where('commentcourse.state',2)
             ->where('commentcourse.courseStatus',0)
+            ->where('hotreviewcourse.sort','<>',0)
             ->orderBy('hotreviewcourse.sort', 'asc')
             ->skip(0)->take(8)
             ->get();
 
         if($courses){
             foreach ($courses as &$course){
-                $course -> price = ceil($course->price/100);
-                $course -> countpeople = count(DB::table('courseview')->select('courseId','userId','courseType')->where(['courseId' => $course->id, 'courseType' => 1])->distinct()->get());
+                if($course->courseDiscount==0){
+                    $course -> price = ceil($course->price/100);
+                }else{
+                    $course -> price = ceil($course->price/100*$course->courseDiscount/10000);
+                }
+//                $course -> countpeople = count(DB::table('courseview')->select('courseId','userId','courseType')->where(['courseId' => $course->id, 'courseType' => 1])->distinct()->get());
             }
         }
 //        $data = [
@@ -149,8 +162,8 @@ class indexController extends Controller
             'http://'.$_SERVER['HTTP_HOST'].'/index/login',
             'http://'.$_SERVER['HTTP_HOST'].'/index/register'
         ];
-        if(!in_array($_SERVER['HTTP_REFERER'],$ignorearr)){
-            session(['lastUrl' => $_SERVER['HTTP_REFERER']]);
+        if(!in_array(URL::previous(),$ignorearr)){
+            session(['lastUrl' => URL::previous()]);
         }
         return view('home.users.login');
     }
@@ -466,9 +479,10 @@ class indexController extends Controller
     public function getgames($type,$pageNumber,$pageSize)
     {
         $skip = ($pageNumber-1) * $pageSize;
-        $data = DB::table('activity')->select('id','path as img','title','beginTime as starttime','endTime as endtime','activityRrom as org','url')
+        $data = DB::table('activity')->select('id','path as img','title','beginTime as starttime','endTime as endtime','activityRrom as org','url','created_at')
             ->where('status',$type)
             ->skip($skip)->take($pageSize)
+            ->orderBy('created_at','desc')
             ->get();
         $count = DB::table('activity')->select('id')
             ->where('status',$type)
@@ -539,14 +553,14 @@ class indexController extends Controller
             ->count();
         if($order == 0){
             $data = DB::table('course')
-                ->select('id as id', 'coursePic as img', 'courseTitle as title','coursePlayView as countpeople','coursePrice as price')
+                ->select('id as id', 'coursePic as img', 'courseTitle as title','coursePlayView as countpeople','coursePrice as price','courseDiscount')
                 ->where('courseTitle','like','%'.$search.'%')
                 ->where('courseStatus',0)
                 ->skip($skip)->take($pageSize)
                 ->get();
         }elseif($order == 1){
             $data = DB::table('course')
-                ->select('id as id', 'coursePic as img', 'courseTitle as title','coursePlayView as countpeople','coursePrice as price')
+                ->select('id as id', 'coursePic as img', 'courseTitle as title','coursePlayView as countpeople','coursePrice as price','courseDiscount')
                 ->where('courseTitle','like','%'.$search.'%')
                 ->where('courseStatus',0)
                 ->orderBy('created_at', 'desc')
@@ -554,7 +568,7 @@ class indexController extends Controller
                 ->get();
         }else{
             $data = DB::table('course')
-                ->select('id as id', 'coursePic as img', 'courseTitle as title','coursePlayView as countpeople','coursePrice as price')
+                ->select('id as id', 'coursePic as img', 'courseTitle as title','coursePlayView as countpeople','coursePrice as price','courseDiscount')
                 ->where('courseTitle','like','%'.$search.'%')
                 ->where('courseStatus',0)
                 ->orderBy('coursePlayView', 'desc')
@@ -565,7 +579,11 @@ class indexController extends Controller
         if($data){
             foreach ($data as &$course){
                 $course -> counttime = DB::table('coursechapter')->where('courseId',$course->id)->where('parentId','<>',0)->where('status',0)->count();
-                $course -> price = ceil($course->price/100);
+                if($course->courseDiscount == 0){
+                    $course -> price = ceil($course->price/100);
+                }else{
+                    $course -> price = ceil($course->price/100*$course->courseDiscount/10000);
+                }
 
             }
         }
@@ -593,7 +611,7 @@ class indexController extends Controller
             ->count();
         if($order == 0){
             $data = DB::table('commentcourse')
-                ->select('id', 'coursePic as img', 'courseTitle as title','teachername as teacher','coursePlayView as countpeople','coursePrice as price')
+                ->select('id', 'coursePic as img', 'courseTitle as title','teachername as teacher','coursePlayView as countpeople','coursePrice as price','courseDiscount')
                 ->where('courseTitle','like','%'.$search.'%')
                 ->where('state',2)
                 ->where('courseStatus',0)
@@ -601,7 +619,7 @@ class indexController extends Controller
                 ->get();
         }elseif($order == 1){
             $data = DB::table('commentcourse')
-                ->select('id', 'coursePic as img', 'courseTitle as title','teachername as teacher','coursePlayView as countpeople','coursePrice as price')
+                ->select('id', 'coursePic as img', 'courseTitle as title','teachername as teacher','coursePlayView as countpeople','coursePrice as price','courseDiscount')
                 ->where('courseTitle','like','%'.$search.'%')
                 ->where('state',2)
                 ->where('courseStatus',0)
@@ -610,7 +628,7 @@ class indexController extends Controller
                 ->get();
         }else{
             $data = DB::table('commentcourse')
-                ->select('id', 'coursePic as img', 'courseTitle as title','teachername as teacher','coursePlayView as countpeople','coursePrice as price')
+                ->select('id', 'coursePic as img', 'courseTitle as title','teachername as teacher','coursePlayView as countpeople','coursePrice as price','courseDiscount')
                 ->where('courseTitle','like','%'.$search.'%')
                 ->where('state',2)
                 ->where('courseStatus',0)
@@ -621,7 +639,11 @@ class indexController extends Controller
 
         if($data){
             foreach ($data as &$course){
-                $course -> price = ceil($course->price/100);
+                if($course->courseDiscount == 0){
+                    $course -> price = ceil($course->price/100);
+                }else{
+                    $course -> price = ceil($course->price/100*$course->courseDiscount/10000);
+                }
             }
         }
 
@@ -631,6 +653,37 @@ class indexController extends Controller
             return response()->json(['status'=>false,]);
         }
     }
-    
+
+
+    //头像上传（移动端接口）
+    public function editHeadImg(Request $request){
+        try {
+            $uid = $request['uid'];
+            if ($request->hasFile('img')) { //判断文件是否存在
+                if ($request->file('img')->isValid()) { //判断文件在上传过程中是否出错
+                    $name = $request->file('img')->getClientOriginalName();//获取图片名
+                    $entension = $request->file('img')->getClientOriginalExtension();//上传文件的后缀
+                    $newname = md5(date('ymdhis' . $name)) . '.' . $entension;//拼接新的图片名
+                    if ($request->file('img')->move('uploads/heads', $newname)) {
+                        $path = 'uploads/heads/' . $newname;
+                        if (DB::table('users')->where('id', $uid)->update(['pic' => $path])) {
+                            return response()->json(['state' => true, 'message' => 'success', 'filepath' => $path]);
+                        } else {
+                            return response()->json(['state' => false, 'message' => 'database save failed']);
+                        }
+                    } else {
+                        return response()->json(['state' => false, 'message' => 'file save failed']);
+                    }
+                } else {
+                    return response()->json(['state' => false, 'message' => 'failed in uploading']);
+                }
+            } else {
+                return response()->json(['state' => false, 'message' => 'please select file']);
+            }
+        }catch (\Exception $e){
+            Log::info($e -> getMessage() . " --- teachers 抛出异常");
+            return $this -> throwError();
+        }
+    }
     
 }

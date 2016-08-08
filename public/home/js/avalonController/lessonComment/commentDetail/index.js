@@ -54,6 +54,15 @@ define([], function() {
 				data: data || {},
 				dataType: "json",
 				success: function(response) {
+					if (model == 'teacherInfo') {
+						if (parseInt(response.data.extra) > 0) {
+							if (response.data.courseDiscount > 0) {
+								response.data.extra = response.data.extra * (response.data.courseDiscount / 10000);
+							}
+						} else {
+							response.data.extra = '免费课程';
+						}
+					}
 					if (model == 'likes' || model == 'feedBack') {
 						callback(response.type);
 						return;
@@ -115,7 +124,7 @@ define([], function() {
                 type: "mp4"
             });
             typeof callback === 'function' && callback();
-            (!comment.videoType && !comment.bought) && comment.thePlayer.onTime(function(){
+            (!comment.videoType && !comment.bought && comment.teacherInfo.extra != '免费课程') && comment.thePlayer.onTime(function(){
 	            if (comment.thePlayer.getPosition() >= 60) {
 	                comment.thePlayer.play(false);
 	                comment.thePlayer.remove();

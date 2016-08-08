@@ -74,9 +74,11 @@
                 </div>
             @endif
 
-            <a href="{{url('/admin/commentCourse/addRecommendCourse')}}" class="btn btn-xs btn-info">
-                <i class="icon-ok bigger-110">添加</i>
-            </a>
+            {{--@permission('add.commentcourse')--}}
+            {{--<a href="{{url('/admin/commentCourse/addRecommendCourse')}}" class="btn btn-xs btn-info">--}}
+                {{--<i class="icon-ok bigger-110">添加</i>--}}
+            {{--</a>--}}
+            {{--@endpermission--}}
 
             <div class="row">
                 <div class="col-xs-12">
@@ -127,13 +129,17 @@
                                         <td>
                                             <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
 
+                                                @permission('edit.commentcourse')
                                                 <a href="{{url('/admin/commentCourse/editRecommendCourse/'.$recommend->id)}}" class="btn btn-xs btn-info">
                                                     <i class="icon-edit bigger-120"></i>
                                                 </a>
+                                                @endpermission
 
+                                                @permission('del.commentcourse')
                                                 <a href="{{url('/admin/commentCourse/delRecommendCourse/'.$recommend->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
                                                     <i class="icon-trash bigger-120"></i>
                                                 </a>
+                                                @endpermission
 
                                             </div>
 

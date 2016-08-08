@@ -57,7 +57,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 活动名称 </label>
 
                             <div class="col-sm-9">
-                                <input  type="text" name="title" id="form-field-1" placeholder="活动名称" class="col-xs-10 col-sm-5" value="" />
+                                <input  type="text" name="title" id="form-field-1" placeholder="活动名称" class="col-xs-10 col-sm-5" value="{{old('title')}}" />
                                     <span class="help-inline col-xs-12 col-sm-7">
                                     <label class="middle">
                                     <span class="lbl"></span>
@@ -75,8 +75,8 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 开始结束时间 </label>
 
                             <div class="col-sm-9">
-                                <input type="text" name="beginTime" id="form-field-1" placeholder="开始时间" class="col-xs-10 col-sm-5" value=""  onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" style="width:150px;"/>
-                                <input type="text" name="endTime" id="form-field-1" placeholder="结束时间" class="col-xs-10 col-sm-5" value=""  onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" style="width:150px;" />
+                                <input type="text" name="beginTime" id="form-field-1" placeholder="开始时间" class="col-xs-10 col-sm-5" value="{{old('beginTime')}}"  onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" style="width:150px;"/>
+                                <input type="text" name="endTime" id="form-field-1" placeholder="结束时间" class="col-xs-10 col-sm-5" value="{{old('endTime')}}"  onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" style="width:150px;" />
                             </div>
                         </div>
 
@@ -90,7 +90,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 活动举办方 </label>
 
                             <div class="col-sm-9">
-                                <input  type="text" name="activityRrom" id="form-field-1" placeholder="活动举办方" class="col-xs-10 col-sm-5" value="" />
+                                <input  type="text" name="activityRrom" id="form-field-1" placeholder="活动举办方" class="col-xs-10 col-sm-5" value="{{old('activityRrom')}}" />
                                     <span class="help-inline col-xs-12 col-sm-7">
                                     <label class="middle">
                                         <span class="lbl"></span>
@@ -107,7 +107,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> url </label>
 
                             <div class="col-sm-9">
-                                <input  type="text" name="url" id="form-field-1" placeholder="(填写格式例如: http://www.baidu.com)" class="col-xs-10 col-sm-5" value="" />
+                                <input  type="text" name="url" id="form-field-1" placeholder="(填写格式例如: http://www.baidu.com)" class="col-xs-10 col-sm-5" value="{{old('url')}}" />
                                     <span class="help-inline col-xs-12 col-sm-7">
                                     <label class="middle">
                                         <span class="lbl"></span>

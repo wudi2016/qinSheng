@@ -1,20 +1,11 @@
-$(document).ready(function(){
-    var unslider04 = $('.banner').unslider({
-        speed: 500,               
-        delay: 4000,
-        complete: function() {},  
-        keys: true,               
-        dots: true,               
-        fluid: true              
-    });
-    
-    data04 = unslider04.data('unslider');
-    
-    $('.unslider-arrow04').click(function() {
-        var fn = this.className.split(' ')[1];
-        data04[fn]();
+$(function() {
+    $(".flexslider").flexslider({
+        slideshowSpeed: 4000, //展示时间间隔ms
+        animationSpeed: 400, //滚动时间ms
+        touch: true //是否支持触屏滑动
     });
 });
+
 // 名师推荐
 
 // $('.teacher_con_con_li').hover(

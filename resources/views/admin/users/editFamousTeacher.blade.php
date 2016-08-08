@@ -229,7 +229,7 @@
                                 <span style="display: block;height:30px;line-height: 30px;color:brown;"></span>
                             </div>
                         </div>
-                        <input type="hidden" name="pic" id="pic" />
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1">用户名</label>
 
@@ -576,10 +576,10 @@
 
             //onSubmit
             function postcheck(){
+                review();
                 if(checkPhone){
                     return true;
                 }else{
-                    review();
                     return false;
                 }
             }
@@ -798,6 +798,7 @@
                             data:{imgsrc:imgsrc,x:x,y:y,w:w,h:h},
                             async:false,
                             success: function(data){
+                                console.log(data);
                                 $("#pic").val(data);
                                 $("#showImg").attr('src',data);
                                 $('#imgs').html("<div style=\"height:50px;\"></div><img id=\"imghead\" style=\"\" src=\"{{asset('home/image/personCenter/unload.png')}}\">");

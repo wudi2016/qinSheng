@@ -64,9 +64,13 @@ class commentDetailController extends Controller
         $extra = $type ? 'coursePrice' : 'courseTitle';
         $levelOrMessage = $type ? 'suitlevel' : 'message';
         $condition = $type ? 'id' : 'orderSn';
+
+		$select = ['users.pic', 'users.username', $tableName.'.courseLowPath', $tableName.'.courseMediumPath', $tableName.'.courseHighPath', $tableName.'.'.$levelOrMessage,
+			$tableName.'.created_at', $tableName.'.'.$extra.' as extra', $tableName.'.'.$joinField, $tableName.'.orderSn', $tableName.'.coursePic'];
+		$type && array_push($select, $tableName.'.courseDiscount');
+
         $result = \DB::table($tableName) -> join('users', $tableName.'.'.$joinField, '=', 'users.id')
-                -> select('users.pic', 'users.username', $tableName.'.courseLowPath', $tableName.'.courseMediumPath', $tableName.'.courseHighPath', $tableName.'.'.$levelOrMessage, 
-                    $tableName.'.created_at', $tableName.'.'.$extra.' as extra', $tableName.'.'.$joinField, $tableName.'.orderSn', $tableName.'.coursePic')
+                -> select($select)
                 -> where([$tableName.'.'.$condition => $commentID, $tableName.'.state' => 2, $tableName.'.courseStatus' => 0, $tableName.'.courseIsDel' => 0]) -> first();
         if ($result) {
             $result -> time = floor((time() - strtotime($result -> created_at)) / 86400) + 1;
@@ -74,7 +78,6 @@ class commentDetailController extends Controller
             $result -> courseLowPath = $this -> getPlayUrl($result -> courseLowPath);
             $result -> courseMediumPath = $this -> getPlayUrl($result -> courseMediumPath);
             $result -> courseHighPath = $this -> getPlayUrl($result -> courseHighPath);
-            $result -> coursePic = $this -> getPlayUrl($result -> coursePic);
         }
         return $this -> returnResult($result);
     }
@@ -145,8 +148,8 @@ class commentDetailController extends Controller
                 -> where(['state' => 2, 'courseStatus' => 0, 'courseIsDel' => 0, $userType => \Auth::user() -> id, 'id' => $applyID]) -> first();
         $result || abort(404);
         return view('home.lessonComment.commentDetail.wait', [
-            'created_at' => floor((time() - strtotime($result -> created_at))/86400), 
-            'commentID' => $applyID, 
+            'created_at' => floor((time() - strtotime($result -> created_at))/86400),
+            'commentID' => $applyID,
             'orderSn' => $result -> orderSn,
             'messageID' => $messageID
         ]);
@@ -164,7 +167,7 @@ class commentDetailController extends Controller
                 -> select('orders.id', 'orders.userName', 'orders.userId', 'orders.teacherId', 'orders.teacherName', 'applycourse.courseTitle')
                 -> where(['orders.orderSn' => $orderSn, 'orders.status' => 1, 'orders.isDelete' => 0, 'orders.teacherId' => \Auth::user() -> id]) -> first();
         $result || abort(404);
-        return view('home.lessonComment.commentDetail.uploadComment') -> with('orderSn', $orderSn) -> with('info', $result) -> with('messageID', $messageID);
+        return view('home.lessonComment.commentDetail.uploadComment') -> with('orderSn', $orderSn) -> with('info', $result) -> with('messageID', $messageID) -> with('mineID', \Auth::user() -> id);
     }
 
 
@@ -178,7 +181,7 @@ class commentDetailController extends Controller
         $result = DB::table('commentcourse') -> select('id', 'suitlevel') 
                 -> where(['state' => 0, 'courseStatus' => 0, 'courseIsDel' => 0, 'id' => $commentID, 'teacherId' => \Auth::user() -> id]) -> first();
         $result || abort(404);
-        return view('home.lessonComment.commentDetail.reUploadComment') -> with('info', $result) -> with('messageID', $messageID);
+        return view('home.lessonComment.commentDetail.reUploadComment') -> with('info', $result) -> with('messageID', $messageID) -> with('mineID', \Auth::user() -> id);
     }
 
 

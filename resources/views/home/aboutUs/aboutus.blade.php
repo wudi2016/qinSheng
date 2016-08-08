@@ -19,29 +19,29 @@
 @section('content')
 
 
-    <div class="background" ms-controller="aboutus" >
+    <div class="background"  >
 
 
         <div style="height:30px"></div>
 
-        <div class="main">
+        <div class="main" ms-controller="aboutus">
 
             <!-- 左侧链接 -->
             <div class="main_left">
 
-               
-                    <div class="us1 us intro"   ms-click="tabs(1);">公司介绍</div>
-               
-                    <div class="us2 us" ms-click="tabs(2);">联系我们</div>
-                
-                    <div class="us3 us" ms-click="tabs(3);">常见问题</div>
-              
-                    <div class="us4 us" ms-click="tabs(4);">用户协议</div>
-          
-                    <div  class="us5 us" ms-click="tabs(5);">友情链接</div>
-        
-                    {{--<div  class="us6 us" ms-click="tabs(6);">意见反馈</div>--}}
-       
+                <span class="span_hover"></span>
+                <div class="us1 us intro"   ms-click="tabs(1);">公司介绍</div>
+                <span class="span_hover"></span>
+                <div class="us2 us" ms-click="tabs(2);">联系我们</div>
+                <span class="span_hover"></span>
+                <div class="us3 us" ms-click="tabs(3);">常见问题</div>
+                <span class="span_hover"></span>
+                <div class="us4 us" ms-click="tabs(4);">用户协议</div>
+                <span class="span_hover"></span>
+                <div  class="us5 us" ms-click="tabs(5);">友情链接</div>
+
+                {{--<div  class="us6 us" ms-click="tabs(6);">意见反馈</div>--}}
+
             </div>
 
             <!-- 右侧内容 -->
@@ -108,11 +108,7 @@
 
                     </div>
                     <div style="height:32px"></div>
-                    <!-- 图片 -->
-                    {{--<div class="main_right_content_img">--}}
-                        {{--<img src="{{asset('home/image/aboutus/gangqin.png')}}" alt="" />--}}
-                    {{--</div>--}}
-                    {{--<div style="height:63px"></div>--}}
+
                     <div class="main_right_content_intro1"  ms-html="el.content"  >
 
                     </div>
@@ -174,8 +170,8 @@
 
     </div>
 
-
-
+    <div class="clear"></div>
+    <div style="height:220px"></div>
 
 
 
@@ -185,6 +181,19 @@
     <script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.1&services=true"></script>
     <script type="text/javascript" src="{{asset('home/js/games/pagination.js')}}"></script>
 
+    <script>
+
+//            $(".us").hover(
+//                    function () {
+//                        $(this).addClass("active_hover").prev('span').addClass('span_active');
+//
+//                    },
+//                    function () {
+//                        $(this).removeClass("active_hover").prev('span').removeClass('span_active');
+//                    }
+//            );
+
+    </script>
 
     <script>
         require(['/aboutus/firmintro'], function (model) {
@@ -205,6 +214,8 @@
             avalon.scan();
         });
   </script>
+
+
 
 
 @endsection

@@ -108,9 +108,9 @@
                                         <th>课程状态</th>
                                         <th>最近审核时间</th>
                                         <th>审核状态</th>
-                                        <th>折扣</th>
                                         <th>价格</th>
-
+                                        <th>折扣</th>
+                                        <th>折扣后价钱</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
@@ -132,16 +132,20 @@
                                         <td>{{$teaccourse->courseTitle}}</td>
                                         <td>{{$teaccourse->typeName}}</td>
                                         <td>{{$teaccourse->userName}}</td>
-                                        <td>
+                                        <td style="color: #0b6cbc">
                                             @if(!$teaccourse->courseLowPath && !$teaccourse->courseMediumPath && !$teaccourse->courseHighPath)
-                                                正在转码...
+                                                @if($teaccourse->msg['code'] == '200')
+                                                    正在转码...
+                                                @else
+                                                    {{$teaccourse->msg['message']}}
+                                                @endif
                                             @else
                                                 <span class="lookVideo" onclick="lookVideo('{{$teaccourse->courseLowPathurl}}')" style="color: #00a0e9;cursor:pointer;">查看</span>
                                             @endif
                                         </td>
                                         <td>
                                             {{--<a id="example2-2" href="{{asset($comcourse->coursePic)}}">查看--}}
-                                                <img src="{{asset($teaccourse->coursePic)}}" alt="" width="50px" height="50px">
+                                                <img src="{{asset($teaccourse->coursePic)}}" alt="" width="50px" height="50px" onerror="this.src='/admin/image/back.png'">
                                             {{--</a>--}}
                                         </td>
                                         {{--<td>--}}
@@ -157,6 +161,7 @@
                                         <td>
                                             @if($teaccourse->state == 0) 审核未通过 @elseif($teaccourse->state == 1) 审核中 @else 审核通过 @endif
                                         </td>
+                                        <td>{{$teaccourse->coursePrice}}</td>
                                         <td>
                                             @if($teaccourse->courseDiscount != 0)
                                                 {{$teaccourse->courseDiscount}} 折
@@ -165,14 +170,14 @@
                                             @endif
 
                                         </td>
-                                        <td>{{$teaccourse->coursePrice}}</td>
-
+                                        <td>{{$teaccourse->discountPrice}}</td>
                                         <td>
                                             <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
                                                 {{--<button class="btn btn-xs btn-success">--}}
                                                     {{--<i class="icon-ok bigger-120"></i>--}}
                                                 {{--</button>--}}
 
+                                                @permission('edit.commentcourse')
                                                 <span class="btn btn-xs btn-primary" style="position: relative;display: inline-block;">
                                                     <strong>审核状态</strong>
                                                     <span class="icon-caret-down icon-on-right"></span>
@@ -183,7 +188,9 @@
                                                         <option value="2" >审核通过</option>
                                                     </select>
                                                 </span>
+                                                @endpermission
 
+                                                @permission('edit.commentcourse')
                                                 <span class="btn btn-xs btn-inverse" style="position: relative;display: inline-block;">
                                                     <strong>课程状态</strong>
                                                     <span class="icon-caret-down icon-on-right"></span>
@@ -193,18 +200,30 @@
                                                         <option value="1" >锁定</option>
                                                     </select>
                                                 </span>
+                                                @endpermission
 
+                                                @permission('edit.commentcourse')
                                                 <a href="{{url('/admin/commentCourse/editTeacherCourse/'.$teaccourse->id)}}" class="btn btn-xs btn-info">
                                                     <i class="icon-edit bigger-120"></i>
                                                 </a>
+                                                @endpermission
 
+                                                @permission('del.commentcourse')
                                                 <a href="{{url('/admin/commentCourse/delTeacherCourse/'.$teaccourse->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
                                                     <i class="icon-trash bigger-120"></i>
                                                 </a>
+                                                @endpermission
 
+                                                @permission('check.commentcourse')
                                                 <div href="" class="btn btn-xs btn-warning" ms-click="commentdetailpop({{$teaccourse->id}})">
                                                     <i class="icon-flag bigger-120"></i>
                                                 </div>
+                                                @endpermission
+
+                                                <a href="{{url('/admin/commentCourse/addRecommendCourse/'.$teaccourse->id)}}" class="btn btn-xs btn-info">
+                                                    <i class=" bigger-110"></i>推荐
+                                                </a>
+
                                             </div>
 
                                             <div class="visible-xs visible-sm hidden-md hidden-lg">

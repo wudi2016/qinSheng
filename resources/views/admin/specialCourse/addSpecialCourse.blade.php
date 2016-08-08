@@ -217,18 +217,18 @@
                             </div>
                         </div>
 
-                        {{--<div class="form-group" ms-visible="watchSelect">--}}
-                            {{--<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 折扣后价格 </label>--}}
+                        <div class="form-group" ms-visible="watchSelect">
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 折扣后价格 </label>
 
-                            {{--<div class="col-sm-9">--}}
-                                {{--<input type="text" readonly name="" id="form-field-1" placeholder="折扣后价格" class="col-xs-10 col-sm-5"  ms-duplex="discountPrice" />--}}
-                            {{--<span class="help-inline col-xs-12 col-sm-7">--}}
-                                {{--<label class="middle">--}}
-                                    {{--<span class="lbl"></span>--}}
-                                {{--</label>--}}
-                            {{--</span>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
+                            <div class="col-sm-9">
+                                <input type="text" readonly name="" id="form-field-1" placeholder="折扣后价格" class="col-xs-10 col-sm-5"  ms-duplex="discountPrice" />
+                            <span class="help-inline col-xs-12 col-sm-7">
+                                <label class="middle">
+                                    <span class="lbl"></span>
+                                </label>
+                            </span>
+                            </div>
+                        </div>
 
                         <div class="space-4"></div>
 

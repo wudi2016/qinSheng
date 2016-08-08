@@ -24,8 +24,8 @@
 				<div class="head_con_login_con "><a href="{{url('/index/login')}}"><span>登录</span></a>&nbsp;|&nbsp;<a href="{{url('/index/register')}}"><span>注册</span></a></div>
     		    <!-- 登陆后 -->
 				@else
-                <img  class="touxiang " src="{{asset(\Auth::user()->pic)}}" onerror="javascript:this.src='/home/image/layout/default.png';">
 				@if ($Msg)<div class="haveMsg">·</div>@else<div class="haveMsg"></div> @endif
+				<img  class="touxiang " src="{{asset(\Auth::user()->pic)}}" onerror="javascript:this.src='/home/image/layout/default.png';">
 				<div class="clear"></div>
                 <div  class="persapce hide">
                 	<div class="persapce_li">
@@ -40,9 +40,25 @@
 						</div>
 					</div>
 					@if( \Auth::user()->type != 2 )
-						<div class="persapce_li"><a href="{{asset('/member/student/'.\Auth::user()->type.'/wholeNotice')}}"><div class="persapce_li_con_msg">消息通知 @if($Msg)<span>&nbsp;·</span>@endif</div></a></div>
+						<div class="persapce_li">
+							<a href="{{asset('/member/student/'.\Auth::user()->type.'/wholeNotice')}}">
+								@if ($Msg)
+								<div class="persapce_li_con_msg" style="background: url('/home/image/layout/haveMsg.png') no-repeat 15px 5px;">消息通知</div>
+								@else
+								<div class="persapce_li_con_msg">消息通知</div>
+								@endif
+							</a>
+						</div>
 					@else
-						<div class="persapce_li"><a href="{{asset('/member/famousTeacher/wholeNotice')}}"><div class="persapce_li_con_msg">消息通知 @if($Msg)<span>&nbsp;·</span>@endif</div></a></div>
+						<div class="persapce_li">
+							<a href="{{asset('/member/famousTeacher/wholeNotice')}}">
+								@if ($Msg)
+									<div class="persapce_li_con_msg" style="background: url('/home/image/layout/haveMsg.png') no-repeat 15px 5px;">消息通知</div>
+								@else
+									<div class="persapce_li_con_msg">消息通知</div>
+								@endif
+							</a>
+						</div>
 					@endif
                 	<div class="persapce_li" style="border-bottom:1px solid #F5F5F5"><a href="{{url('/index/switchs')}}"><div class="persapce_li_con_cha">切换账号</div></a></div>
                 	<div class="persapce_li"><a href="{{url('/auth/logout')}}"><div class="persapce_li_con_lout">退出登录</div></a></div>

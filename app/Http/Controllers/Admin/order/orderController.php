@@ -13,6 +13,8 @@ use Primecloud\Pay\Weixin\Kernel\WxPayConfig;
 use Primecloud\Pay\Weixin\Kernel\WxPayApi;
 use Primecloud\Pay\Weixin\Kernel\WxPayDataBase;
 use Primecloud\Pay\Weixin\Kernel\WxPayRefund;
+use Log;
+use Input;
 
 
 class orderController extends Controller
@@ -42,18 +44,37 @@ class orderController extends Controller
             $query = $query->where('userName','like','%'.trim($request['search']).'%');
         }
 
-        $data = $query
-            ->where('isDelete',0)
-            ->where('status',$status)
-            ->orderBy('id','desc')
-            ->paginate(10);
+
         //导出数据
+        $query = $query
+            ->select('id','orderSn as 订单号','tradeSn as 交易编号','orderTitle as 订单名称','orderPrice as 订单价格','payPrice as 实付金额','payType as 支付方式(0:支付宝1:微信)','userId as 购买用户ID','userName as 购买用户','teacherId as 邀请人ID','teacherName as 邀请人','orderType as 订单类型(0:购买专题订单1:点评申请订单2:购买点评订单)','courseId as 专题课程ID(订单类型为0或1时为点评课程ID)','refundableAmount as 应退金额','refundAmount as 已退金额','payTime as 付款时间','status as 订单状态(0:已付款1:待点评2:已完成3:退款中4:已退款5:未付款)')
+            ->where('isDelete',0);
+        if($status == 8){
+            $query = $query;
+        }else{
+            $query = $query->where('status',$status);
+        }
         $excel = $query
-            ->select('id','orderSn as 订单号','tradeSn as 交易编号','orderTitle as 订单名称','orderPrice as 订单价格','payPrice as 实付金额','payType as 支付方式(0:支付宝1:微信)','userId as 购买用户ID','userName as 购买用户','teacherId as 邀请人ID','teacherName as 邀请人','orderType as 订单类型(0:购买专题订单1:点评申请订单2:购买点评订单)','courseId as 专题课程ID(订单类型为0或1时为点评课程ID)','refundableAmount as 应退金额','refundAmount as 已退金额','payTime as 付款时间','status as 订单状态(0:已付款1:待点评2:已完成3:退款中4:已退款)')
-            ->where('isDelete',0)
             ->orderBy('id','desc')
             ->get();
+        foreach($excel as &$value){
+            $value->订单价格 = $value->订单价格 / 100;
+            $value->实付金额 = $value->实付金额 / 100;
+            $value->应退金额 = $value->应退金额 / 100;
+            $value->已退金额 = $value->已退金额 / 100;
+        }
         $excel = json_encode($excel);
+
+        $query = $query->where('isDelete',0);
+        if($status == 8){ //全部订单
+            $query = $query;
+        }else{
+            $query = $query->where('status',$status);
+        }
+        $data = $query
+            ->orderBy('id','desc')
+            ->select('*')
+            ->paginate(10);
 
         foreach($data as &$val){
             $val->orderPrice = $val->orderPrice / 100;
@@ -155,6 +176,7 @@ class orderController extends Controller
      */
     public function editRefundmoney($id,$status){
         $data = DB::table('orders')->where('id',$id)->select('id','orderSn','refundableAmount')->first();
+        $data->refundableAmount = $data->refundableAmount / 100;
         $data->status = $status;
         return view('admin.order.editRefundmoney',['data'=>$data]);
     }
@@ -163,12 +185,18 @@ class orderController extends Controller
      *执行修改应退金额
      */
     public function doRefundmoney(Request $request){
-        $validator = $this -> validator($request->all());
-        if ($validator -> fails()){
-            return Redirect()->back()->withInput()->withErrors($validator);
+//        $validator = $this -> validator($request->all());
+//        if ($validator -> fails()){
+//            return Redirect()->back()->withInput()->withErrors($validator);
+//        }
+        $payPrice = DB::table('orders')->where('id',$request['id'])->pluck('payPrice'); //实付金额
+        $payPrice = $payPrice / 100;
+        if($request['refundableAmount'] > $payPrice){
+            return Redirect()->back()->withInput()->withErrors('应退金额不能大于实付金额');
         }
         $data = $request->except('_token');
         $data['updated_at'] = Carbon::now();
+        $data['refundableAmount'] = $request['refundableAmount'] * 100;
         if(DB::table('orders')->where('id',$request['id'])->update($data)){
             $this -> OperationLog('修改了id为'.$request['id'].'的订单应退金额');
             return redirect('admin/message')->with(['status'=>'成功','redirect'=>'order/orderList/'.$request['status']]);
@@ -182,6 +210,7 @@ class orderController extends Controller
      */
     public function editRetiredmoney($id,$status){
         $data = DB::table('orders')->where('id',$id)->select('id','orderSn','refundAmount')->first();
+        $data->refundAmount = $data->refundAmount / 100;
         $data->status = $status;
         return view('admin.order.editRetiredmoney',['data'=>$data]);
     }
@@ -190,12 +219,18 @@ class orderController extends Controller
      *执行修改已退金额
      */
     public function doRetiredmoney(Request $request){
-       $this->validate($request,[
-           'refundAmount'=>'integer'
-       ],[
-           'refundAmount.integer'=>'已退金额必须为整型'
-       ]);
+//       $this->validate($request,[
+//           'refundAmount'=>'integer'
+//       ],[
+//           'refundAmount.integer'=>'已退金额必须为整型'
+//       ]);
+        $refundableAmount = DB::table('orders')->where('id',$request['id'])->pluck('refundableAmount'); //应退金额
+        $refundableAmount = $refundableAmount / 100;
+        if($request['refundAmount'] > $refundableAmount){
+            return Redirect()->back()->withInput()->withErrors('已退金额不能大于应退金额');
+        }
         $data = $request->except('_token');
+        $data['refundAmount'] = $request['refundAmount'] * 100;
         $data['updated_at'] = Carbon::now();
         if(DB::table('orders')->where('id',$request['id'])->update($data)){
             $this -> OperationLog('修改了id为'.$request['id'].'的订单已退金额');
@@ -333,7 +368,7 @@ class orderController extends Controller
         $wxPayRefund->SetOp_user_id(WxPayConfig::MCHID);
 
         $result = $wxPay->refund($wxPayRefund);
-
+        dd($result);
         if($result['return_code'] == 'SUCCESS'){
             DB::table('orders')->where('id',$orderid)->update(['status'=>4]);//如果退款成功将订单状态改为4已退款
             $this -> OperationLog('id为'.$orderid.'的订单确认了退款');
@@ -347,9 +382,85 @@ class orderController extends Controller
     /**
      *支付宝确认退款
      */
-    public function alipayRefund(){
+    public function alipayRefund($orderId){
+//        dump($orderId);
+        $order = DB::table('orders')->where('id',$orderId)->where('isDelete',0)->first();
+
         $alipay = app('alipay.web');
+        $alipay->setService('refund_fastpay_by_platform_pwd');
+        $alipay->setOutTradeNo($order->orderSn);//商户订单号
+        $alipay->setTotalFee($order->orderPrice / 100);
+//        $alipay->setRefund($order->refundAmount / 100); //需要退款的金额
+        $alipay->setSubject($order->orderTitle);
+        $alipay->setRefundDate(date('Y-m-d H:i:s'));//退款请求时间
+        $alipay->setBatchNo(date('Ymd').time());  //退款批次号
+        $alipay->setBatchNum(1);//总笔数
+        $aa = '2016080257a03b44948a6'.'^'.'5.00'.'^'.'正常退款';
+//        dd($aa);
+        $alipay->setDetailData($aa);//单笔数据集
+        $aa = $alipay->getPayLink();
+//        dd($aa);
+        return redirect()->to($alipay->getPayLink());
     }
+
+    /**
+     * 支付宝异步回调页面
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function alipayAsyncCallback()
+    {
+        dd();
+        if (!app('alipay.web')->verify()) {
+            Log::info('支付宝异步校验失败 ', [
+                'data' => json_encode(Input::all())
+            ]);
+            return 'fail';
+        }
+
+        if (Input::get('trade_status') == 'TRADE_SUCCESS' || Input::get('trade_status') == 'TRADE_FINISHED') {
+            return 'success';
+        }
+    }
+
+
+    /**
+     * 支付宝同步回调页面
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function alipaySyncCallback()
+    {
+        if (!app('alipay.web')->verify()) {
+            Log::info('支付宝同步校验失败 ', [
+                'data' => Request::getQueryString()
+            ]);
+            abort(404);
+        }
+
+        if (Input::get('trade_status') == 'TRADE_SUCCESS' || Input::get('trade_status') == 'TRADE_FINISHED') {
+            $orderSn = Input::get('out_trade_no');
+            DB::table('orders')->where('orderSn', $orderSn)->update(['status'=>4]);
+
+        }
+    }
+
+
+
+//    public function alipayRefund_back($orderId){
+////        dump($orderId);
+//        $order = DB::table('orders')->where('id',$orderId)->where('isDelete',0)->first();
+//
+//        $alipay = app('alipay.web');
+//        $alipay->setService('alipay.trade.refund');
+//        $alipay->setOutTradeNo($order->orderSn);//商户订单号
+//        $alipay->setTotalFee($order->orderPrice / 100);
+//        $alipay->setRefund($order->refundAmount / 100); //需要退款的金额
+//        $alipay->setSubject($order->orderTitle);
+//        $aa = $alipay->getPayLink();
+////        dd($aa);
+//        return redirect()->to($alipay->getPayLink());
+//    }
 
 }
 

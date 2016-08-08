@@ -5,55 +5,72 @@ define(['PrimecloudPaas'], function(PrimecloudPaas) {
         chapter:false,
         section:false,
         or:false,
-        //selectid:'',//选择的章还是节的标识
-        //chapterinfo:{
-        //    courseid:'',
-        //    title:'',
-        //},
         select:function(id,courseid){
-            upload.uploadInfo.courseid = courseid;//页面传的专题课程ID
+            upload.courseid = courseid;//页面传的专题课程ID
             if(id == 1){
                 upload.chapter = true;
                 upload.section = false;
                 upload.or = true;
-                upload.uploadInfo.selectid = id;
+                upload.selectid = id;
             }else if(id == 2){
-                upload.uploadInfo.courseid = courseid;//页面传的专题课程ID
+                upload.courseid = courseid;//页面传的专题课程ID
                 upload.section = true;
                 upload.chapter = true;
                 upload.or = true;
-                upload.uploadInfo.selectid = id;
+                upload.selectid = id;
             }else{
                 upload.section = false;
                 upload.chapter = false;
                 upload.or = false;
-                upload.uploadInfo.selectid = id;
+                upload.selectid = id;
             }
         },
 
         //选择的所属parentId
         parentId:function(id){
-            upload.uploadInfo.parentId = id;
+            upload.parentid = id;
         },
 
+        selectid:'',
+        courseid:'',
+        title:'',
+        parentid:'',
+        isTrylearn:'',
 
         //视频上传部分
-        progressBar: 0,
-        uploadStatus: 1,
-        uploadTip: '',
-        uploadInfo: {
-            selectid:'',
-            courseid:'',
-            title:'',
-            parentId:'',
-            isTrylearn:'',
-            fileID: null,
-            courseLowPath: null,
-            courseMediumPath:null,
-            courseHighPath:null,
+        progressBar: {
+            low:0,
+            middle:0,
+            high:0
         },
+        uploadStatus: {
+            low:1,
+            middle:1,
+            high:1
+        },
+        uploadTip: {
+            low:0,
+            middle:0,
+            high:0
+        },
+
+        uploadInfo: {
+            low: {
+                fileID: null,
+                courseLowPath: null,
+            },
+            middle: {
+                fileID: null,
+                courseMediumPath:null,
+            },
+            high: {
+                fileID: null,
+                courseHighPath:null,
+            }
+        },
+        uploadIndex: ['low', 'middle', 'high'],
+        warning: {title: false, message: false},
         getData: function(url, model, data, method, callback) {
-            if (data) data._token = upload.csrf;
             $.ajax({
                 type: method || 'GET',
                 url: url,
@@ -61,90 +78,96 @@ define(['PrimecloudPaas'], function(PrimecloudPaas) {
                 dataType: "json",
                 success: function(response) {
                     if (response.type) {
-                        if (model == 'uploadResource') {
-                            if (upload.uploadStatus == 2 && response.data.code != 401) {
+                        if (model == 'low' || model == 'middle' || model == 'high') {
+                            if (upload.uploadStatus[model] == 2 && response.data.code != 401) {
                                 if (response.data.data.AllowUpload == 2) {
-                                    upload.progressBar = 100;
+                                    upload.progressBar[model] = 100;
                                     setTimeout(function() {
-                                        upload.endUpload('视频上传完成！');
-                                        upload.uploadInfo.fileID = response.data.data.FileID;
-                                        //console.log(response.data.data);return;
-                                        upload.getData('/lessonComment/transformation', 'transformation', {fileID: upload.uploadInfo.fileID}, 'POST');
+                                        upload.endUpload(model,'视频上传完成！');
+                                        upload.uploadInfo[model].fileID = response.data.data.FileID;
                                     }, 1000);
                                 } else {
-                                    if (response.data.data.AllowUpload == 1) upload.paas.requestUpload({ url: response.data.data.UUrl, method: "POST", data: {"filedata": upload.file} });
+                                    if (response.data.data.AllowUpload == 1) upload.paas.requestUpload({ url: response.data.data.UUrl, method: "POST", data: {"filedata": upload.file[model]} });
                                     console.log('文件上传进度： ' + parseInt(response.data.data.UploadLength / response.data.data.FileLenth * 100) + '%');
-                                    upload.progressBar = 25 + response.data.data.UploadLength / response.data.data.FileLenth * 100 * 0.75;
+                                    upload.progressBar[model] = 25 + response.data.data.UploadLength / response.data.data.FileLenth * 100 * 0.75;
                                     setTimeout(function() {
-                                        upload.getData('/lessonComment/uploadResource', 'uploadResource', {md5: upload.fileMD5, filename: upload.fileName, directory: '/'}, 'POST');
+                                        upload.getData('/lessonComment/uploadResource', model, {md5: upload.fileMD5[model], filename: upload.fileName[model], directory: '/'}, 'POST');
                                     }, 500);
                                 }
                             } else {
-                                upload.endUpload('上传中断');
+                                upload.endUpload(model, '上传中断');
                             }
                         }
-                        if (model == 'transformation') {
-                            if (response.data.code == 200 && response.data.data.Waiting < 0) {
-                                for (var i in response.data.data.FileList) {
-                                    switch(response.data.data.FileList[i].Level) {
-                                        case 1:
-                                            upload.uploadInfo.courseLowPath = response.data.data.FileList[i].FileID;
-                                            break;
-                                        case 2:
-                                            upload.uploadInfo.courseMediumPath = response.data.data.FileList[i].FileID;
-                                            break;
-                                        case 3:
-                                            upload.uploadInfo.courseHighPath = response.data.data.FileList[i].FileID;
-                                            break;
-                                    }
-                                }
-                            }
-                        }
+
                     }
                 },
                 error: function(error) {
-                    upload.endUpload('上传失败请重试');
+                    upload.endUpload('上传失败请重试.');
                 }
             });
         },
-        file: null,
-        fileName: null,
-        fileMD5: null,
-        paas: null,
-        uploadResource: function(value) {
-            upload.paas = upload.paas || new PrimecloudPaas();
-            upload.uploadStatus = 2;
-            upload.uploadTip = '';
-            upload.paas.MD5(upload.file, function(result){
+        file:{
+            low:null,
+            middle:null,
+            high:null
+        },
+        fileName: {
+            low:null,
+            middle:null,
+            high:null
+        },
+        fileMD5: {
+            low:null,
+            middle:null,
+            high:null
+        },
+        paas: {
+            low:null,
+            middle:null,
+            high:null
+        },
+        uploadResource: function(value, index) {
+            upload.paas[index] = new PrimecloudPaas();
+            console.log(upload.paas[index]);
+            upload.uploadStatus[index] = 2;
+            upload.uploadTip[index] = '';
+            //upload.uploadInfo[index].fileID = null;
+            upload.paas[index].MD5(index, upload.file[index], function(result, index){
                 if (result) {
-                    upload.fileName = upload.paas.splitFileName(value);
+                    upload.fileName[index] = upload.paas[index].splitFileName(value);
                     $('#md5container').val(result);
-                    upload.fileMD5 = $('#md5container').val();
-                    upload.getData('/lessonComment/uploadResource', 'uploadResource', {md5: upload.fileMD5, filename: upload.fileName, directory: '/'}, 'POST');
+                    upload.fileMD5[index] = $('#md5container').val();
+                    upload.getData('/lessonComment/uploadResource', index, {md5: upload.fileMD5[index], filename: upload.fileName[index], directory: '/'}, 'POST');
                     console.log('------------------------------------  扫描完成  ---------------------------------------');
                 } else {
-                    upload.endUpload('上传失败请重试');
+                    upload.endUpload(index, '上传失败请重试');
                 }
-            }, function(pos, size){
+            }, function(pos, size, index){
+
                 if (Math.ceil(size / 1024 / 1024) > 1000) {
-                    upload.endUpload('上传文件过大');
+                    upload.endUpload(index,'上传文件过大');
                     console.log(Math.ceil(size / 1024 / 1024) + ' MB');
                     return false;
                 }
-                if (upload.uploadStatus != 2) {
-                    upload.endUpload('上传中断');
+                if (upload.uploadStatus[index] != 2) {
+                    upload.endUpload(index,'上传中断');
                     return false;
                 }
 
                 console.log('文件扫描进度： ' + parseInt(pos / size * 100) + '%');
-                upload.progressBar = pos / size * 100 * 0.25;
+                upload.progressBar[index] = pos / size * 100 * 0.25;
             });
         },
-        endUpload: function(tip) {
-            upload.paas.endUpload();
-            upload.progressBar = 0;
-            upload.uploadStatus = 3;
-            upload.uploadTip = tip || '';
+        endUpload: function(index, tip, remove) {
+            console.log(index);
+            if (upload.paas[index]) {
+                upload.paas[index].endUpload();
+                upload.paas[index].endMD5();
+            }
+            if (remove) upload.paas[index] = null;
+            upload.progressBar[index] = 0;
+            upload.uploadStatus[index] = 3;
+            upload.uploadTip[index] = tip || '';
         },
 
 
@@ -152,57 +175,94 @@ define(['PrimecloudPaas'], function(PrimecloudPaas) {
         errormessagetitle:'',
         errormessagebelong:'',
         submit:function(){
-            if(upload.uploadInfo.selectid == 1){ //选择章
-                if(!upload.uploadInfo.title){
+            if(upload.selectid == 1){ //选择章
+                upload.title = $('#ttitle').val();
+                if(!$('#ttitle').val()){
                     upload.errormessagetitle = '<span style="color: red;">请输入名称</span>';
                     return false;
+                }else{
+                    var ttitle = $('#ttitle').val();
+                    if(ttitle.length > 20){
+                        upload.errormessagetitle = '<span style="color: red;">名称不超过20</span>';
+                        return false;
+                    }else{
+                        upload.errormessagetitle = '';
+                    }
                 }
-                console.log(upload.uploadInfo.title);
 
                 $.ajax({
                     type: "post",
-                    data:upload.uploadInfo,
+                    data:{title:upload.title,courseid:upload.courseid,selectid:upload.selectid},
                     url: "/admin/specialCourse/doAddSpecialChapter",
 
                     dataType: 'json',
                     success: function (res) {
                         console.log(res);
                         if(res == 1){
-                            location.href= '/admin/specialCourse/specialChapterList/'+ upload.uploadInfo.courseid;
+                            location.href= '/admin/specialCourse/specialChapterList/'+ upload.courseid;
                             alert('添加成功');
                         }
                     }
                 });
             }else{
-                if(upload.uploadInfo.selectid == 2){ //选择节
-                    upload.uploadInfo.isTrylearn = $('#istrylearn').val();
+                if(upload.selectid == 2){ //选择节
+                    upload.isTrylearn = $('#istrylearn').val(); //获取是否试读字段
+                    upload.title = $('#ttitle').val();
+                    console.log(upload.selectid);
+                    console.log(upload.courseid);
+                    console.log(upload.parentid);
+                    console.log(upload.title);
+                    console.log(upload.isTrylearn);
+                    console.log('asdf');
+
                     if(!$('#belong').val()){
                         upload.errormessagebelong = '<span style="color: red;">请选择所属章(如没有请先添加章)</span>';
                         return false;
+                    }else{
+                        upload.errormessagebelong = '';
                     }
-                    if(!upload.uploadInfo.title){
+                    if(!$('#ttitle').val()){
                         upload.errormessagetitle = '<span style="color: red;">请输入名称</span>';
                         return false;
+                    }else{
+                        var ttitle = $('#ttitle').val();
+                        if(ttitle.length > 20){
+                            upload.errormessagetitle = '<span style="color: red;">名称不超过20</span>';
+                            return false;
+                        }else{
+                            upload.errormessagetitle = '';
+                        }
                     }
-                    if(!upload.uploadInfo.fileID){
-                        upload.uploadStatus = 3
-                        upload.uploadTip = '<span style="color: red;">请先上传视频</span>';
+                    if(!upload.uploadInfo.low.fileID){
+                        upload.uploadStatus.low = 3;
+                        upload.uploadTip.low = '<span style="color: red;">请先上传视频</span>';
                         return false;
                     }
-                    console.log(upload.uploadInfo.fileID);
-                    console.log(upload.uploadInfo.courseLowPath);
-                    console.log(upload.uploadInfo.courseMediumPath);
-                    console.log(upload.uploadInfo.courseHighPath);
+                    if(!upload.uploadInfo.middle.fileID){
+                        upload.uploadStatus.middle = 3;
+                        upload.uploadTip.middle = '<span style="color: red;">请先上传视频</span>';
+                        return false;
+                    }
+                    if(!upload.uploadInfo.high.fileID){
+                        upload.uploadStatus.high = 3;
+                        upload.uploadTip.high = '<span style="color: red;">请先上传视频</span>';
+                        return false;
+                    }
+                    console.log(upload.uploadInfo.low.fileID);
+                    console.log(upload.uploadInfo.middle.fileID);
+                    console.log(upload.uploadInfo.high.fileID);
+
+                    //return;
                     $.ajax({
                         type: "post",
-                        data:upload.uploadInfo,
+                        data:{selectid:upload.selectid,courseid:upload.courseid,parentId:upload.parentid,title:upload.title,isTrylearn:upload.isTrylearn,courseLowPath:upload.uploadInfo.low.fileID,courseMediumPath:upload.uploadInfo.middle.fileID,courseHighPath:upload.uploadInfo.high.fileID},
                         url: "/admin/specialCourse/doAddSpecialChapter",
 
                         dataType: 'json',
                         success: function (res) {
                             console.log(res);
                             if(res == 1){
-                                location.href= '/admin/specialCourse/specialChapterList/'+ upload.uploadInfo.courseid;
+                                location.href= '/admin/specialCourse/specialChapterList/'+ upload.courseid;
                                 alert('添加成功');
                             }
                         }

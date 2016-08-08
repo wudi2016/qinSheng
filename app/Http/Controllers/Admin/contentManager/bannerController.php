@@ -65,6 +65,7 @@ class bannerController extends Controller{
                 return redirect()->back()->withInput()->withErrors('文件在上传过程中出错');
             }
         }
+//        dd($input);
         //验证
         $validate = $this->validator($input);
         if($validate->fails()){
@@ -106,7 +107,7 @@ class bannerController extends Controller{
                 $name = $request->file('path')->getClientOriginalName();//获取图片名
                 $entension = $request->file('path')->getClientOriginalExtension();//上传文件的后缀
                 $newname = md5(date('path'.$name)).'.'.$entension;//拼接新的图片名
-                if($request->file('path')->move('./admin/image/\contentManager/banner',$newname)){
+                if($request->file('path')->move('./admin/image/contentManager/banner',$newname)){
                     $input['path'] = '/admin/image/contentManager/banner/'.$newname;
                 }else{
                     return redirect()->back()->withInput()->withErrors('文件保存失败');
@@ -166,12 +167,14 @@ class bannerController extends Controller{
         $rules = [
             'title' => 'required',
             'url' => 'required',
-            'path' => 'required'
+            'path' => 'required',
+            'bgColor' => 'required'
         ];
         $messages = [
             'title.required' => '请输入标题名称',
             'url.required'  => '请按要求填写链接',
-            'path.required' => '请上传图片'
+            'bgColor.required' => '请添加背景颜色',
+            'path.required' => '请上传图片',
         ];
 
 
@@ -186,10 +189,12 @@ class bannerController extends Controller{
         $rules = [
             'title' => 'required',
             'url' => 'required',
+            'bgColor' => 'required'
         ];
         $messages = [
             'title.required' => '请输入标题名称',
             'url.required'  => '请按要求填写链接',
+            'bgColor.required' => '请添加背景颜色',
         ];
 
 

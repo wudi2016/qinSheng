@@ -9,10 +9,14 @@
 @section('content')
 	<div class="commentDetail" ms-controller="waitCommentController">
 		<div class="crumbs">
-			<a href="">个人中心</a> >
-			<a href="">我的点评</a>
+			@if(\Auth::user() -> type == 2)
+				<a href="/member/student/{{\Auth::user() -> id}}">个人中心</a> >
+				<a href="/member/student/{{\Auth::user() -> id}}/basicInfo">我的点评</a>
+			@else
+				<a href="/member/famousTeacher">个人中心</a> >
+				<a href="/member/famousTeacher/basicInfo">我的点评</a>
+			@endif
 		</div>
-
 
 		<div class="current_video">
 			<div class="video_block">
@@ -55,6 +59,7 @@
 			comment.orderSn = '{{$orderSn}}' || null;
 			comment.messageID = '{{$messageID}}' || null;
 			console.log(comment.messageID);
+			console.log('{{$messageID}}');
 
 			//  获取点评信息
 			comment.getData('/lessonComment/getDetailInfo/'+ comment.orderSn +'/0', 'studentInfo');

@@ -33,6 +33,7 @@
         }
 
 
+
         .select2-container--default .select2-selection--single .select2-selection__arrow b {
             border-width: 10px 8px 0 8px;
             height: 0;
@@ -66,6 +67,18 @@
             right: 10px;
             width: 20px;
         }
+
+        .select2-dropdown {
+            background-color: white;
+            border: 2px solid #ECE8ED;
+            border-radius: 4px;
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            left: -100000px;
+            width: 100%;
+            z-index: 1051;
+        }
     </style>
 @endsection
 
@@ -79,7 +92,7 @@
                     <form action="{{url('/index/search')}}" method="post">
                     <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                     <div class="con_top_con_sbar_l">
-                    <select name="type"   class="js-example-basic-single" style="width:171px;height:50px;border: none">
+                    <select name="type"   class="js-example-basic-single" style="width:171px;height:50px;border: none;">
                         <option selected="selected" value="all">全部课程</option>
                         <option value="course">专题课程</option>
                         <option value="review">点评课程</option>

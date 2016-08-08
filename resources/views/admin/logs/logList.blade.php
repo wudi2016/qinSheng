@@ -20,17 +20,21 @@
 
             <div class="nav-search" id="nav-search">
                 <form action="" method="get" class="form-search">
-                    <select name="type" id="form-field-1" class="searchtype input-select">
+
+                    <input type="text" style="width:180px;padding-left:5px; padding-right: 5px;background:#fff url('/admin/image/2.png') no-repeat 153px 3px" name="beginTime"  placeholder="开始时间" class="col-xs-10 col-sm-5 " value="{{$search['beginTime'] ? $search['beginTime'] : ''}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+                    <input type="text" style="width:180px;padding-left:5px;padding-right: 5px;margin-left:5px;background:#fff url('/admin/image/2.png') no-repeat 153px 3px" name="endTime"  placeholder="结束时间" class="col-xs-10 col-sm-5 " value="{{$search['endTime'] ? $search['endTime'] : ''}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;" />
+
+                    <select name="type" id="searchType" class="searchtype input-select" style="margin-left:5px;">
                         <option value="0" {{$search['type'] == 0 ? 'selected':''}}>用户名</option>
-                        {{--<option value="1" {{$search['type'] == 1 ? 'selected':''}}>时间筛选</option>--}}
+                        {{--<option value="1" {{$search['type'] == 2 ? 'selected':''}}>时间筛选</option>--}}
                         <option value="1" {{$search['type'] == 1 ? 'selected':''}}>全部</option>
                     </select>
                     <span class="input-icon">
                         <span style="display: block;" class="input-icon" id="search1">
                             <input type="text" placeholder="Search ..." style="margin-left:8px" name="search" class="nav-search-input" id="nav-search-input" autocomplete="off" />
                             <i class="icon-search nav-search-icon" style="margin-left:8px"></i>
-                            <input type="text" style="padding-left:10px; padding-right: 5px;" value="{{$search['time'] ?:''}}" name="time"  class="nav-search-input" placeholder="请选择时间 (可不选)"  value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
-                            <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;padding-left: 8px;" type="submit" value="筛选" />
+                            <input type="text" style="padding-left:10px; padding-right: 5px;" value="{{$search['time'] ?:''}}" name="time"  class="nav-search-input" placeholder="请选择月份 (可不选)"  value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+                            <input style="background: #6FB3E0;width:60px;height:28px ;border:0;color:#fff;padding-left: 8px;" type="submit" value="搜索" />
                         </span>
                     </span>
                 </form>
@@ -135,5 +139,5 @@
 @endsection
 @section('js')
     <script language="javascript" type="text/javascript" src="{{asset('DatePicker/WdatePicker.js') }}"></script>
-    {{--<script language="javascript" type="text/javascript" src="{{asset('admin/js/searchtype.js') }}"></script>--}}
+    <script language="javascript" type="text/javascript" src="{{asset('admin/js/searchtype.js') }}"></script>
 @endsection

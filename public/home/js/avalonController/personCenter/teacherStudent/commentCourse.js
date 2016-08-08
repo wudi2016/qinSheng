@@ -11,7 +11,7 @@ define([], function () {
             $('#page_course_comment').pagination({
                 dataSource: function (done) {
                     $.ajax({
-                        url: '/member/getCommentCourse/' + type + '/' + this.pageNumber + '/' + this.pageSize,
+                        url: '/member/getCommentCourse/' + this.pageNumber + '/' + this.pageSize,
                         type: 'POST',
                         dataType: 'json',
                         data : {userId:userId},
@@ -34,7 +34,7 @@ define([], function () {
                         type: 'POST',
                         dataType: 'json',
                         data : {userId:userId},
-                        url: '/member/getCommentCourse/' + type + '/' + pageNumber + '/' + pageSize,
+                        url: '/member/getCommentCourse/' + pageNumber + '/' + pageSize,
                         success: function (response) {
                             self.callback(response.data);
                         }

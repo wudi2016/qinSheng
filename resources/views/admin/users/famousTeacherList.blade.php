@@ -50,10 +50,12 @@
                         <i class="icon-double-angle-right"></i>
                         名师管理列表
                     </small>
+                    @permission('add.famous')
                     <a href="{{url('admin/users/addFamousTeacher')}}" class="btn btn-xs btn-info"
                        style="margin-left:8px;">
                         <strong class="icon-expand-alt bigger-30">&nbsp;分配名师</strong>
                     </a>
+                    @endpermission
                 </h1>
             </div><!-- /.page-header -->
 
@@ -110,37 +112,48 @@
                                             <td id="checks{{$value->id}}">@if($value->checks == 0)激活@elseif($value->checks == 1)<span style=" color:red">禁用</span>@endif</td>
                                             <td>{{$value->phone}}</td>
                                             <td>@if($value->type == 0)学生@elseif($value->type == 1)教师@else名师@endif</td>
-                                            <td><img src="{{asset($value->pic)}}" alt="" width="40" height="40"></td>
+                                            <td>
+                                                <img src="{{asset($value->pic)}}" alt="" width="40" height="40" onerror="this.src='/admin/image/back.png'">
+                                            </td>
                                             <td>{{$value->price}}</td>
                                             <td>{{$value->stock}}</td>
                                             <td>
-                                                <img src="{{asset($value->cover)}}" alt="" width="40" height="40">
+                                                <img src="{{asset($value->cover)}}" alt="" width="40" height="40" onerror="this.src='/admin/image/back.png'">
                                             </td>
                                             <td>{{$value->created_at}}</td>
                                             <td>{{$value->updated_at}}</td>
                                             <td>
                                                 <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+                                                    @permission('edit.famous')
                                                     <a href="{{url('admin/users/editFamousTeacher/'.$value->id)}}"
                                                        class="btn btn-xs btn-info">
                                                         <strong>编辑</strong>
                                                     </a>
+                                                    @endpermission
 
+                                                    @permission('del.famous')
                                                     <a href="{{url('admin/users/delFamousTeacher/'.$value->id)}}"
                                                        class="btn btn-xs btn-danger">
                                                         <strong>删除</strong>
                                                     </a>
+                                                    @endpermission
 
+                                                    @permission('check.famous')
                                                     <a href="{{url('admin/users/resetPass/'.$value->id)}}"
                                                        class="btn btn-xs btn-inverse" name="reset-pass">
                                                         <strong>重置密码</strong>
                                                     </a>
+                                                    @endpermission
 
+                                                    @permission('check.famous')
                                                     <a href="{{url('admin/users/show/'.$value->id)}}"
                                                        class="btn btn-xs btn-success" name="person-detail">
                                                         <strong>查看详情</strong>
                                                     </a>
+                                                    @endpermission
 
 
+                                                    @permission('edit.famous')
                                                     <span class="btn btn-xs btn-default" name="btn-status" onchange="changeStatus({{$value->id}});" style="position: relative;display: inline-block;">
                                                             <strong>审核状态</strong>
                                                             <select id="form-field-status{{$value->id}}" class="col-xs-10 col-sm-2" name="form-field-status" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:59px;">
@@ -148,7 +161,9 @@
                                                                 <option value="1" {{$value->checks==1 ? 'selected':''}}>禁用</option>
                                                             </select>
                                                     </span>
+                                                    @endpermission
 
+                                                    @permission('check.famous')
                                                     <a href="{{url('admin/users/focusList/'.$value->id)}}"
                                                        class="btn btn-xs btn-inverse">
                                                         <strong>关注</strong>
@@ -158,6 +173,7 @@
                                                        class="btn btn-xs btn-inverse">
                                                         <strong>粉丝</strong>
                                                     </a>
+                                                    @endpermission
                                                </div>
                                             </td>
                                         </tr>

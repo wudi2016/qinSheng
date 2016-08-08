@@ -191,7 +191,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 课程价格 </label>
 
                             <div class="col-sm-9">
-                                <input type="text" name="coursePrice" id="form-field-1" placeholder="课程价格" class="col-xs-10 col-sm-5" value="{{$data->coursePrice}}" />
+                                <input type="text" name="coursePrice" id="form-field-1" placeholder="课程价格" class="col-xs-10 col-sm-5" ms-duplex="coursePrice" />
                             <span class="help-inline col-xs-12 col-sm-7">
                                 <label class="middle">
                                     <span class="lbl"></span>
@@ -369,6 +369,16 @@
     <script type="text/javascript" src="{{ URL::asset('/admin/js/addSubject.js') }}"></script>
     <script>
         require(['/specialCourse/editcourse'], function (detail) {
+            detail.coursePrice = '{{$data->coursePrice}}' || null
+
+            //进入编辑页默认是打折课程类型时显示折扣和折扣后价钱
+            var coursetype = $('#coursetype').val();
+            if(coursetype == 1){
+                detail.watchSelect = true;
+                var aa = $('#zhekou').val();
+                var price = detail.coursePrice;
+                detail.discountPrice = Math.ceil(price * (aa / 10));
+            }
             avalon.scan();
         });
     </script>

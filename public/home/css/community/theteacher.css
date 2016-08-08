@@ -19,6 +19,14 @@ a{
 	/*background: #eee;*/
 	margin: 0 auto;
 }
+
+/*.guding{*/
+	/*width:1200px;*/
+	/*!*height:128px;*!*/
+	/*margin: 0 auto;*/
+	/*position:fixed;*/
+/*}*/
+
 /*table循环*/
 .table_loop{
 	width:1200px;
@@ -81,7 +89,7 @@ a{
 /*内容*/
 .content{
 	width:1200px;
-	height:255px;
+	min-height:255px;
 	/*background: #eee;*/
 }
 .lettertitle{
@@ -102,7 +110,7 @@ a{
 /*详细内容*/
 .detailcontent{
 	width:1200px;
-	height:200px;
+	min-height:227px;
 	/*background: pink;*/
 }
 /*左侧部分*/
@@ -110,6 +118,7 @@ a{
 	width:300px;
 	height:200px;
 	float: left;
+	margin-top: 10px;
 	/*background: #aaaaaa;*/
 }
 .content_left img{
@@ -173,3 +182,20 @@ a{
 	line-height: 200px;
 	text-align: center;
 }
+
+
+
+.pagecon{
+	width:1200px;
+	height:35px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+
+
+
+
+
+
+

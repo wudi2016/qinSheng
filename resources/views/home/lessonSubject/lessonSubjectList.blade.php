@@ -29,16 +29,20 @@
             <div class="contain_lesson_center_data" ms-visible="changeOption == 'subject'">
                 <a ms-attr-href="detail + el.id" ms-repeat="subjectInfo">
                     <div class="contain_lesson_center_data_info">
+                        <img class="logo_hot hide" ms-visible="el.courseType == 1" ms-attr-src="{{asset('/home/image/index/course/[-- el.courseDiscount --].png')}}" alt="">
+                        <img class="logo_hot hide" ms-visible="el.courseType == 2" src="{{asset('/home/image/index/course/hot.png')}}" alt="">
+                        <img class="logo_hot hide" ms-visible="el.courseType == 3" src="{{asset('/home/image/index/course/new.png')}}" alt="">
                         <div class="contain_lesson_center_data_info_top" ms-if="el.coursePic">
                             <img ms-attr-src="el.coursePic" ms-imgBig width="280" height="180" class="img_big"/>
                         </div>
                         <div class="contain_lesson_center_data_info_top_no" ms-if="!el.coursePic">
                         </div>
                         <div class="contain_lesson_center_data_info_bot">
-                            <span class="top" ms-html="el.courseTitle"></span>
+                            <span class="top" ms-html="el.courseTitle" ms-attr-title="el.courseTitle"></span>
                             <div class="center"><span class="left classes" ms-html="el.classHour + '课时'"></span><span class="right study" ms-html="el.coursePlayView + '人学过'"></span>
                             </div>
-                            <span class="bot" ms-html="'￥' + el.coursePrice"></span>
+                            <span class="bot" ms-html="'￥' + el.coursePrice" ms-if="el.coursePrice"></span>
+                            <span class="bot" ms-html="'免费课程'" ms-if="!el.coursePrice"></span>
                         </div>
                     </div>
                 </a>
@@ -53,15 +57,19 @@
             <div class="contain_lesson_center_data_comment hide" ms-visible="changeOption == 'comment'">
                 <div class="contain_lesson_center_data_info" ms-repeat="commentInfo">
                     <a ms-attr-href="commentDetail + el.id">
+                        <img class="logo_hot hide" ms-visible="el.courseType == 1" ms-attr-src="{{asset('/home/image/index/course/[-- el.courseDiscount --].png')}}" alt="">
+                        <img class="logo_hot hide" ms-visible="el.courseType == 2" src="{{asset('/home/image/index/course/hot.png')}}" alt="">
+                        <img class="logo_hot hide" ms-visible="el.courseType == 3" src="{{asset('/home/image/index/course/new.png')}}" alt="">
                         <div class="contain_lesson_center_data_info_top" ms-if="el.coursePic">
                             <img ms-attr-src="el.coursePic" ms-imgBig width="280" height="180" class="img_big"/>
                         </div>
                         <div class="contain_lesson_center_data_info_top_no" ms-if="!el.coursePic">
                         </div>
                         <div class="contain_lesson_center_data_info_bot">
-                            <span class="top" ms-html="el.courseTitle"></span>
+                            <span class="top" ms-html="el.courseTitle" ms-attr-title="el.courseTitle"></span>
                             <div class="center"><span class="left" ms-html="'讲师：' + el.teachername"></span><span class="right study" ms-html="el.coursePlayView + '人学过'"></span></div>
-                            <span class="bot" ms-html="'￥' + el.coursePrice"></span>
+                            <span class="bot" ms-html="'￥' + el.coursePrice" ms-if="el.coursePrice"></span>
+                            <span class="bot" ms-html="'免费课程'" ms-if="!el.coursePrice"></span>
                         </div>
                     </a>
                 </div>

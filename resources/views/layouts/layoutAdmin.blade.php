@@ -221,7 +221,7 @@
 
 							</ul>
 						</li>
-						@endpermission
+
 
 						<!--名师管理-->
 						<li>
@@ -250,7 +250,9 @@
 
 							</ul>
 						</li>
+						@endpermission
 
+						@permission('check.course')
 						<!--专题课程管理-->
 						<li>
 							<a href="#" class="dropdown-toggle">
@@ -268,20 +270,12 @@
 									</a>
 								</li>
 
-
 								{{--<li class="specialcoursespecialtype">--}}
 									{{--<a href="{{url('/admin/specialCourse/specialTypeList')}}">--}}
 										{{--<i class="icon-double-angle-right"></i>--}}
 										{{--课程类型列表--}}
 									{{--</a>--}}
 								{{--</li>--}}
-
-								<li class="specialcoursespecialfeedback">
-									<a href="{{url('/admin/specialCourse/specialFeedbackList')}}">
-										<i class="icon-double-angle-right"></i>
-										意见反馈列表
-									</a>
-								</li>
 
 								<li class="specialcourserecommendspecialcourse">
 									<a href="{{url('/admin/specialCourse/recommendSpecialCourseList')}}">
@@ -290,9 +284,17 @@
 									</a>
 								</li>
 
+								<li class="specialcoursespecialfeedbacklist0">
+									<a href="{{url('/admin/specialCourse/specialFeedbackList/0')}}">
+										<i class="icon-double-angle-right"></i>
+										意见反馈列表
+									</a>
+								</li>
 							</ul>
 						</li>
+						@endpermission
 
+						@permission('check.commentcourse')
 						<!--点评管理-->
 						<li>
 							<a href="#" class="dropdown-toggle">
@@ -324,9 +326,18 @@
 									</a>
 								</li>
 
+								<li class="specialcoursespecialfeedbacklist1">
+									<a href="{{url('/admin/specialCourse/specialFeedbackList/1')}}">
+										<i class="icon-double-angle-right"></i>
+										意见反馈列表
+									</a>
+								</li>
+
 							</ul>
 						</li>
+						@endpermission
 
+						@permission('check.order')
 						<!--订单管理-->
 						<li>
 							<a href="#" class="dropdown-toggle">
@@ -337,6 +348,13 @@
 							</a>
 
 							<ul class="submenu">
+								<li class="orderorderlist8">
+									<a href="{{url('/admin/order/orderList/8')}}">
+										<i class="icon-double-angle-right"></i>
+										全部订单
+									</a>
+								</li>
+
 								<li class="orderorderlist5">
 									<a href="{{url('/admin/order/orderList/5')}}">
 										<i class="icon-double-angle-right"></i>
@@ -381,6 +399,8 @@
 
 							</ul>
 						</li>
+						@endpermission
+
 						@permission('list.notice')
 						<!--通知管理-->
 						<li>
@@ -654,7 +674,7 @@
 						@endpermission
 
 
-
+						@permission('logs.list')
 						<!--后台日志管理-->
 						<li>
 							<a href="#" class="dropdown-toggle">
@@ -675,8 +695,10 @@
 
 							</ul>
 						</li>
+						@endpermission
 
-						<!--后台日志管理-->
+						@permission('check.count')
+						<!--数据统计管理-->
 						<li>
 							<a href="#" class="dropdown-toggle">
 								<i class="icon-align-justify"></i>
@@ -710,7 +732,9 @@
 
 							</ul>
 						</li>
+						@endpermission
 
+						@permission('check.recycle')
 						<!--回收站-->
 						<li>
 							<a href="#" class="dropdown-toggle">
@@ -751,6 +775,7 @@
 
 							</ul>
 						</li>
+						@endpermission
 
 
 
@@ -841,14 +866,13 @@
 			var first = route.split('/')[(route.split('/').length - 2)]; //取admin/后一个
 
 			var second = route.split('/')[(route.split('/').length - 3)];
-
+			console.log(route);
 			if(route.match(/\//g)){
 				if (route.match(/\//g).length == '1') { // 一个‘/’
 					route = route.split('/')[route.split('/').length - 1];
 
 					if (route.indexOf('?') > 0) { // 一个‘/’ 一个‘？’
 						var real = route.split('?')[route.split('?').length - 2];
-
 						$('.' + first + real.slice(0, -4)).parent().parent().addClass('open');
 						$('.' + first + real.slice(0, -4)).parent().css('display', 'block');
 						$('.' + first + real.slice(0, -4)).addClass('active');
@@ -856,7 +880,6 @@
 						$('.' + first + real.slice(4)).parent().css('display', 'block');
 						$('.' + first + real.slice(4)).addClass('active');
 					} else { // 仅一个‘/’
-
 						$('.' + first + route.slice(0, -4)).parent().parent().addClass('open');
 						$('.' + first + route.slice(0, -4)).parent().css('display', 'block');
 						$('.' + first + route.slice(0, -4)).addClass('active');
@@ -871,6 +894,23 @@
 					}
 				} else if (route.match(/\//g).length == '2') { // 2个‘/’
 					orderroute = route.split('/')[0] + route.split('/')[1] + route.split('/')[2];
+					orderroute = orderroute.split('?')[0];
+					console.log(orderroute);
+					if(orderroute == 'specialcoursespecialfeedbacklist1'){
+						$('.specialcoursespecialfeedbacklist1').parent().parent().addClass('open');
+						$('.specialcoursespecialfeedbacklist1').parent().css('display', 'block');
+						$('.specialcoursespecialfeedbacklist1').addClass('active');
+					}
+					if(orderroute == 'specialcoursespecialfeedbacklist0'){
+						$('.specialcoursespecialfeedbacklist0').parent().parent().addClass('open');
+						$('.specialcoursespecialfeedbacklist0').parent().css('display', 'block');
+						$('.specialcoursespecialfeedbacklist0').addClass('active');
+					}
+					if(orderroute == 'orderorderlist8'){
+						$('.orderorderlist8').parent().parent().addClass('open');
+						$('.orderorderlist8').parent().css('display', 'block');
+						$('.orderorderlist8').addClass('active');
+					}
 					if(orderroute == 'orderorderlist5'){
 						$('.orderorderlist5').parent().parent().addClass('open');
 						$('.orderorderlist5').parent().css('display', 'block');
@@ -917,11 +957,17 @@
 							$('.companyusercompanyuser').addClass('active');
 						}
 					}
+
 					if (second == 'specialcourse') { //课程管理
-						if (route == 'specialchapterlist' || route == 'datalist' || route == 'adddata' || route == 'editdata' || route == 'addspecialchapter') {
+						if (route == 'specialchapterlist' || route == 'datalist' || route == 'adddata' || route == 'editdata' || route == 'addspecialchapter' || route == 'editspecialcourse') {
 							$('.specialcoursespecialcourse').parent().parent().addClass('open');
 							$('.specialcoursespecialcourse').parent().css('display', 'block');
 							$('.specialcoursespecialcourse').addClass('active');
+						}
+						if(route == 'editrecommendspecialcourse'){
+							$('.specialcourserecommendspecialcourse ').parent().parent().addClass('open');
+							$('.specialcourserecommendspecialcourse ').parent().css('display', 'block');
+							$('.specialcourserecommendspecialcourse ').addClass('active');
 						}
 					} else if (route == 'show' || route == 'resetpass' || route == 'focuslist' || route == 'friendslist') {  //名师管理
 						$('.usersfamousteacher').parent().parent().addClass('open');
@@ -951,6 +997,11 @@
 						$('.usersuser').addClass('active');
 					}
 					//订单
+					if(orderroute == 'orderorderlist8'){
+						$('.orderorderlist8').parent().parent().addClass('open');
+						$('.orderorderlist8').parent().css('display', 'block');
+						$('.orderorderlist8').addClass('active');
+					}
 					if(remarks == 'orderremarklist5'){
 						$('.orderorderlist5').parent().parent().addClass('open');
 						$('.orderorderlist5').parent().css('display', 'block');

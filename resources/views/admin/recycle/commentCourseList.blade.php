@@ -162,13 +162,17 @@
                                                     {{--<i class="icon-ok bigger-120"></i>--}}
                                                 {{--</button>--}}
 
+                                                @permission('edit.recycle')
                                                 <a href="{{url('/admin/recycle/editRecycleCommentCourse/'.$comcourse->id)}}" class="btn btn-xs btn-warning">
                                                     <i class="icon-reply bigger-120"></i>还原
                                                 </a>
+                                                @endpermission
 
+                                                @permission('del.recycle')
                                                 <a href="{{url('/admin/recycle/delRecycleCommentCourse/'.$comcourse->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
                                                     <i class="icon-trash bigger-120"></i>
                                                 </a>
+                                                @endpermission
 
                                             </div>
 

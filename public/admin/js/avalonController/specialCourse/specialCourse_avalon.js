@@ -26,7 +26,7 @@ define([], function() {
         price:'',
         discountPrice:'',//折扣后价钱
         typeSelect:function(id){
-            detail.discountPrice = Math.round(detail.price * 0.9);
+            detail.discountPrice = Math.ceil(detail.price * 0.9);
             if(id == 1){
                 detail.watchSelect = true;
             }else{
@@ -36,7 +36,7 @@ define([], function() {
 
         //选择折扣
         discountSelect:function(discountid){
-            detail.discountPrice = Math.round(detail.price * (discountid/10));
+            detail.discountPrice = Math.ceil(detail.price * (discountid/10));
         },
 
 
@@ -65,7 +65,7 @@ define([], function() {
 
     $("input[name='coursePrice']").change(function(){
         var aa = $('#zhekou').val();
-        detail.discountPrice = detail.price * (aa / 10);
+        detail.discountPrice =  Math.ceil(detail.price * (aa / 10));
     })
 
 

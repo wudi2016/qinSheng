@@ -44,6 +44,13 @@ class SpecialCourseController extends Controller
         foreach($data as &$val){
             $val->coursePrice = $val->coursePrice / 100;
             $val->courseDiscount = $val->courseDiscount / 1000;
+
+            if($val->courseType ==1){
+                $val->discountPrice = ceil(($val->coursePrice) * $val->courseDiscount / 10);
+            }else{
+                $val->discountPrice = $val->coursePrice;
+            }
+
             if($val->courseType){
                 $coursetype = DB::table('coursetype')->where('id',$val->courseType)->first();
                 $val->typeName = $coursetype->typeName;

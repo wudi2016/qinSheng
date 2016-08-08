@@ -23,8 +23,8 @@ class recommendController extends Controller
     /**
      *添加推荐
      */
-    public function addRecommendCourse(){
-        $data = DB::table('commentcourse')->select('id','courseTitle')->get();
+    public function addRecommendCourse($id){
+        $data = DB::table('commentcourse')->where('id',$id)->first();
         return view('admin/teacherCourse/addRecommend',['data'=>$data]);
     }
 
@@ -47,9 +47,9 @@ class recommendController extends Controller
         $data['updated_at'] = Carbon::now();
         if($id = DB::table('hotreviewcourse')->insertGetId($data)){
             $this -> OperationLog('添加了id为'.$id.'的点评视频推荐');
-            return redirect('admin/message')->with(['status'=>'点评视频推荐成功','redirect'=>'commentCourse/recommendCourseList']);
+            return redirect('admin/message')->with(['status'=>'点评视频推荐成功','redirect'=>'commentCourse/teacherCourseList']);
         }else{
-            return redirect('admin/message')->with(['status'=>'点评视频推荐失败','redirect'=>'commentCourse/recommendCourseList']);
+            return redirect('admin/message')->with(['status'=>'点评视频推荐失败','redirect'=>'commentCourse/teacherCourseList']);
         }
     }
 

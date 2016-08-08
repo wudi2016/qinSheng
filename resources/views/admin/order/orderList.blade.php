@@ -65,14 +65,18 @@
                             退款中订单列表
                         @elseif($data->status == 4)
                             已退款订单列表
+                        @elseif($data->status == 8)
+                            全部订单
                         @endif
                     </small>
 
-                    @if($data->status == 5)
-                    <a href="{{url('/admin/order/deleteOrders')}}" class="btn btn-xs btn-info" onclick="return confirm('确定要清除垃圾订单吗?');" style="float: right;margin-right: 50px;">
-                        清除垃圾订单
-                    </a>
-                    @endif
+                    @permission('del.order')
+                        @if($data->status == 5)
+                        <a href="{{url('/admin/order/deleteOrders')}}" class="btn btn-xs btn-info" onclick="return confirm('确定要清除垃圾订单吗?');" style="float: right;margin-right: 50px;">
+                            清除垃圾订单
+                        </a>
+                        @endif
+                    @endpermission
 
                 </h1>
 
@@ -198,6 +202,7 @@
                                                     {{--<i class="icon-ok bigger-120"></i>--}}
                                                 {{--</button>--}}
 
+                                                @permission('edit.recycle')
                                                 <span class="btn btn-xs btn-primary" style="position: relative;display: inline-block;">
                                                     <strong>订单状态</strong>
                                                     <span class="icon-caret-down icon-on-right"></span>
@@ -210,56 +215,66 @@
                                                         <option value="4" >已退款</option>
                                                     </select>
                                                 </span>
+                                                @endpermission
 
 
-                                                @if($order->status == 3 || $order->status ==4)
-                                                <a href="{{url('/admin/order/refundList/'.$order->orderSn.'/'.$data->status)}}" class="btn btn-xs btn-success">
-                                                    <i class="icon-pencil bigger-120"></i>退款信息
-                                                </a>
-                                                @endif
-
-                                                <div href="" class="btn btn-xs btn-warning" ms-click="commentdetailpop({{$order->id}})">
-                                                    <i class="icon-pencil bigger-120"></i>添加备注
-                                                </div>
-
-                                                <a href="{{url('/admin/order/remarkList/'.$order->id).'/'.$data->status}}" class="btn btn-xs btn-warning">
-                                                    <i class=""></i>查看备注
-                                                </a>
-
-                                                {{--只有已退款的订单才可以删除--}}
-                                                @if($order->status ==4)
-                                                    {{--删除--}}
-                                                    <a href="{{url('/admin/order/delOrder/'.$order->id.'/'.$data->status)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
-                                                        <i class="icon-trash bigger-120"></i>
+                                                @permission('check.order')
+                                                    @if($order->status == 3 || $order->status ==4)
+                                                    <a href="{{url('/admin/order/refundList/'.$order->orderSn.'/'.$data->status)}}" class="btn btn-xs btn-success">
+                                                        <i class="icon-pencil bigger-120"></i>退款信息
                                                     </a>
-                                                @endif
-
-                                                @if($order->status == 3)
-                                                <a href="{{url('/admin/order/editRefundmoney/'.$order->id.'/'.$data->status)}}" class="btn btn-xs btn-info">
-                                                    <i class="icon-pencil bigger-120"></i>编辑应退金额
-                                                </a>
-                                                @endif
-
-                                                @if($order->status == 3)
-                                                <a href="{{url('/admin/order/editRetiredmoney/'.$order->id.'/'.$data->status)}}" class="btn btn-xs btn-success">
-                                                    <i class="icon-pencil bigger-120"></i>编辑已退金额
-                                                </a>
-                                                @endif
-
-                                                @if($order->status == 3)
-                                                    {{--支付宝支付--}}
-                                                    @if($order->payType == 0)
-                                                        <a href="{{url('/admin/order/alipayRefund/'.$order->id)}}" class="btn btn-xs btn-danger">
-                                                            <i class="icon- bigger-120"></i>确认退款
-                                                        </a>
-                                                    {{--微信支付--}}
-                                                    @elseif($order->payType == 1)
-                                                        <a href="{{url('/admin/order/weiXinRefund/'.$order->id)}}" class="btn btn-xs btn-danger">
-                                                            <i class="icon- bigger-120"></i>确认退款
-                                                        </a>
                                                     @endif
 
-                                                @endif
+                                                    <div href="" class="btn btn-xs btn-warning" ms-click="commentdetailpop({{$order->id}})">
+                                                        <i class="icon-pencil bigger-120"></i>添加备注
+                                                    </div>
+
+                                                    <a href="{{url('/admin/order/remarkList/'.$order->id).'/'.$data->status}}" class="btn btn-xs btn-warning">
+                                                        <i class=""></i>查看备注
+                                                    </a>
+                                                @endpermission
+
+                                                @permission('del.order')
+                                                    {{--只有已退款的订单才可以删除--}}
+                                                    @if($order->status ==4)
+                                                        {{--删除--}}
+                                                        <a href="{{url('/admin/order/delOrder/'.$order->id.'/'.$data->status)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
+                                                            <i class="icon-trash bigger-120"></i>
+                                                        </a>
+                                                    @endif
+                                                @endpermission
+
+                                                @permission('edit.Refundmoney')
+                                                    @if($order->status == 3)
+                                                    <a href="{{url('/admin/order/editRefundmoney/'.$order->id.'/'.$data->status)}}" class="btn btn-xs btn-info">
+                                                        <i class="icon-pencil bigger-120"></i>编辑应退金额
+                                                    </a>
+                                                    @endif
+                                                @endpermission
+
+                                                @permission('edit.Retiredmoney')
+                                                    @if($order->status == 3)
+                                                    <a href="{{url('/admin/order/editRetiredmoney/'.$order->id.'/'.$data->status)}}" class="btn btn-xs btn-success">
+                                                        <i class="icon-pencil bigger-120"></i>编辑已退金额
+                                                    </a>
+                                                    @endif
+                                                @endpermission
+
+                                                @permission('edit.Retiredmoney')
+                                                    @if($order->status == 3)
+                                                        {{--支付宝支付--}}
+                                                        @if($order->payType == 0)
+                                                            <a href="{{url('/admin/order/alipayRefund/'.$order->id)}}" class="btn btn-xs btn-danger">
+                                                                <i class="icon- bigger-120"></i>确认退款
+                                                            </a>
+                                                        {{--微信支付--}}
+                                                        @elseif($order->payType == 1)
+                                                            <a href="{{url('/admin/order/weiXinRefund/'.$order->id)}}" class="btn btn-xs btn-danger">
+                                                                <i class="icon- bigger-120"></i>确认退款
+                                                            </a>
+                                                        @endif
+                                                    @endif
+                                                @endpermission
                                             </div>
 
                                             <div class="visible-xs visible-sm hidden-md hidden-lg">
@@ -302,13 +317,15 @@
                                 </table>
                                 {!! $data->appends(app('request')->all())->render() !!}
 
-                                @if(count($excel))
-                                    <form action="{{url('admin/excel/orderExport')}}" method="post" style="float: right;margin-top:65px;margin-right:-130px;">
-                                        <input type="submit" class="btn btn-xs btn-info"  value="导出订单" style="width:86px; cursor: pointer; margin-top:-87px;margin-right:130px;" />
-                                        {{csrf_field()}}
-                                        <input type="hidden" name="excels" value="{{$excel}}"/>
-                                    </form>
-                                @endif
+                                @permission('check.order')
+                                    @if(count($excel))
+                                        <form action="{{url('admin/excel/orderExport')}}" method="post" style="float: right;margin-top:65px;margin-right:-130px;">
+                                            <input type="submit" class="btn btn-xs btn-info"  value="导出订单" style="width:86px; cursor: pointer; margin-top:-87px;margin-right:130px;" />
+                                            {{csrf_field()}}
+                                            <input type="hidden" name="excels" value="{{$excel}}"/>
+                                        </form>
+                                    @endif
+                                @endpermission
 
                             </div><!-- /.table-responsive -->
                         </div><!-- /span -->

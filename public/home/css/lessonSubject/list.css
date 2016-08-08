@@ -13,7 +13,13 @@
     width: 1200px;
     height: 370px;
     margin: 0 auto;
-    background: url("/home/image/lessonSubject/list/banner2.png") no-repeat;
+    background: url("/home/image/lessonSubject/list/banner2.jpg") no-repeat;
+}
+
+.logo_hot{
+    position: absolute;
+    z-index: 1;
+    margin-left: 230px;
 }
 
 .hr_4 {
@@ -152,6 +158,9 @@
     padding-left: 10px;
     font-size: 16px;
     font-family: 微软雅黑;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .contain_lesson_center_data_info_bot .center {

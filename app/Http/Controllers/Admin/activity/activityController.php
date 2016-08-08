@@ -38,10 +38,10 @@ class activityController extends Controller{
             $query = $query->where('title','like','%'.trim($request['search']).'%');
         }
         if($request['beginTime']){ //上传的起止时间
-            $query = $query->where('beginTime','>=',$request['beginTime']);
+            $query = $query->where('beginTime','<=',$request['endTime']);
         }
         if($request['endTime']){ //上传的起止时间
-            $query = $query->where('endTime','<=',$request['endTime']);
+            $query = $query->where('endTime','>=',$request['beginTime']);
         }
 
     	$data = $query->orderBy('id','desc')->paginate(10);
@@ -87,7 +87,7 @@ class activityController extends Controller{
                 return redirect()->back()->withInput()->withErrors('文件在上传过程中出错');
             }
         }
-//        dd($input);
+       // dd($input);
         if($res = DB::table('activity')->insertGetId($input)){
             $this -> OperationLog("新增了赛事管理ID为{$res}的信息", 1);
             return redirect('admin/message')->with(['status'=>'添加成功','redirect'=>'activity/activityList']);

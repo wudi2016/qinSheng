@@ -55,9 +55,11 @@
                         专题课程列表
                     </small>
 
+                    @permission('del.recycle')
                     <a href="{{url('/admin/recycle/deleteRecycle')}}" class="btn btn-xs btn-info" style="float: right;margin-right: 50px;">
                         清空回收站
                     </a>
+                    @endpermission
 
                 </h1>
             </div><!-- /.page-header -->
@@ -153,13 +155,17 @@
                                                     {{--</button>--}}
 
 
+                                                    @permission('edit.recycle')
                                                     <a href="{{url('/admin/recycle/editRecycleCourse/'.$special->id)}}" class="btn btn-xs btn-warning">
                                                         <i class="icon-reply bigger-120"></i>还原
                                                     </a>
+                                                    @endpermission
 
+                                                    @permission('del.recycle')
                                                     <a href="{{url('/admin/recycle/delRecycleCourse/'.$special->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
                                                         <i class="icon-trash bigger-120"></i>
                                                     </a>
+                                                    @endpermission
 
                                                 </div>
 

@@ -90,6 +90,8 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         //搜索点评课程接口
         Route::get('/getCoursebb/{search}/{pageNumber}/{pageSize}/{ordder?}', 'indexController@getCoursebb');
 
+        //移动端头像上传接口
+        Route::post('/editHeadImg', 'indexController@editHeadImg');
     });
 
     /*
@@ -141,7 +143,7 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         // 个人中心 专题课程 type => 1 => 学员 type => 2 => 名师 flag => 1 => 最新 flag => 2 => 热门
         Route::get('/getCourse/{type}/{flag}/{pageNumber}/{pageSize}','perSpaceController@getCourse');
         // 个人中心 点评课程 type => 1 => 最新 flag => 2 => 热门
-        Route::post('/getCommentCourse/{type}/{pageNumber}/{pageSize}','perSpaceController@getCommentCourse');
+        Route::post('/getCommentCourse/{pageNumber}/{pageSize}','perSpaceController@getCommentCourse');
         // 个人中心 我的收藏
         Route::get('/getCollectionInfo/{pageNumber}/{pageSize}', 'perSpaceController@getCollectionInfo');
         // 个人中心 删除收藏
@@ -205,6 +207,9 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         Route::get('/theteacher/', 'theteacherController@index');
         //名师列表获取数据接口
         Route::get('/gettheteacher/{type}/{pageNumber}/{pageSize}', 'theteacherController@gettheteacher');
+        //26字母接口
+        Route::get('/getfirstletter', 'theteacherController@getfirstletter');
+
 
 
         //新闻资讯列表
@@ -557,27 +562,27 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
 
 
         // -------------------------- 名师路由组 ------------------------------//
-        Route::get('famousTeacherList','famousTeacherController@index');
-        Route::get('addFamousTeacher','famousTeacherController@create');
-        Route::post('insertTeacher','famousTeacherController@insert');
+        Route::get('famousTeacherList',['middleware' => 'permission:check.famous','uses' =>'famousTeacherController@index']);
+        Route::get('addFamousTeacher',['middleware' => 'permission:add.famous','uses' =>'famousTeacherController@create']);
+        Route::post('insertTeacher',['middleware' => 'permission:add.famous','uses' =>'famousTeacherController@insert']);
         //编辑名师
-        Route::get('editFamousTeacher/{id}','famousTeacherController@editFamousTeacher');
+        Route::get('editFamousTeacher/{id}',['middleware' => 'permission:edit.famous','uses' =>'famousTeacherController@editFamousTeacher']);
         //执行编辑
-        Route::post('doEditFamousTeacher','famousTeacherController@doEditFamousTeacher');
+        Route::post('doEditFamousTeacher',['middleware' => 'permission:edit.famous','uses' =>'famousTeacherController@doEditFamousTeacher']);
         //删除
-        Route::get('delFamousTeacher/{id}','famousTeacherController@delFamousTeacher');
+        Route::get('delFamousTeacher/{id}',['middleware' => 'permission:del.famous','uses' =>'famousTeacherController@delFamousTeacher']);
 
 
         //名师推荐
-        Route::get('recommendFamousList','recommendFamousController@recommendFamousList');
+        Route::get('recommendFamousList',['middleware' => 'permission:check.famous','uses' =>'recommendFamousController@recommendFamousList']);
         //添加名师推荐
-        Route::get('addRecommendFamous','recommendFamousController@addRecommendFamous');
-        Route::post('doAddRecommendFamous','recommendFamousController@doAddRecommendFamous');
+        Route::get('addRecommendFamous',['middleware' => 'permission:add.famous','uses' =>'recommendFamousController@addRecommendFamous']);
+        Route::post('doAddRecommendFamous',['middleware' => 'permission:add.famous','uses' =>'recommendFamousController@doAddRecommendFamous']);
         //编辑
-        Route::get('editRecommendFamous/{id}','recommendFamousController@editRecommendFamous');
-        Route::post('doEditRecommendFamous','recommendFamousController@doEditRecommendFamous');
+        Route::get('editRecommendFamous/{id}',['middleware' => 'permission:edit.famous','uses' =>'recommendFamousController@editRecommendFamous']);
+        Route::post('doEditRecommendFamous',['middleware' => 'permission:edit.famous','uses' =>'recommendFamousController@doEditRecommendFamous']);
         //删除
-        Route::get('delRecommendFamous/{id}','recommendFamousController@delRecommendFamous');
+        Route::get('delRecommendFamous/{id}',['middleware' => 'permission:del.famous','uses' =>'recommendFamousController@delRecommendFamous']);
 
 
 
@@ -626,35 +631,35 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
  */
     Route::group(['prefix' => '/specialCourse', 'namespace' => 'specialCourse'], function () {
         //专题课程列表
-        Route::get('specialCourseList', 'SpecialCourseController@specialCourseList');
+        Route::get('specialCourseList',['middleware' => 'permission:check.course','uses' =>'SpecialCourseController@specialCourseList']);
         //添加专题课程
-        Route::get('addSpecialCourse', 'SpecialCourseController@addSpecialCourse');
-        Route::post('doAddSpecialCourse','SpecialCourseController@doAddSpecialCourse');
+        Route::get('addSpecialCourse', ['middleware' => 'permission:add.course','uses' =>'SpecialCourseController@addSpecialCourse']);
+        Route::post('doAddSpecialCourse',['middleware' => 'permission:add.course','uses' =>'SpecialCourseController@doAddSpecialCourse']);
         //编辑专题课程
-        Route::get('editSpecialCourse/{id}', 'SpecialCourseController@editSpecialCourse');
-        Route::post('doEditSpecialCourse','SpecialCourseController@doEditSpecialCourse');
+        Route::get('editSpecialCourse/{id}', ['middleware' => 'permission:edit.course','uses' =>'SpecialCourseController@editSpecialCourse']);
+        Route::post('doEditSpecialCourse',['middleware' => 'permission:edit.course','uses' =>'SpecialCourseController@doEditSpecialCourse']);
         //删除专题课程
-        Route::get('delSpecialCourse/{id}','SpecialCourseController@delSpecialCourse');
+        Route::get('delSpecialCourse/{id}',['middleware' => 'permission:del.course','uses' =>'SpecialCourseController@delSpecialCourse']);
         //专题课程状态
-        Route::get('specialCourseState','SpecialCourseController@specialCourseState');
+        Route::get('specialCourseState',['middleware' => 'permission:edit.course','uses' =>'SpecialCourseController@specialCourseState']);
         //专题课程详情
-        Route::get('detailSpecialCourse/{id}','SpecialCourseController@detailSpecialCourse');
+        Route::get('detailSpecialCourse/{id}',['middleware' => 'permission:del.course','uses' =>'SpecialCourseController@detailSpecialCourse']);
 
 
         //专题章节列表
-        Route::get('specialChapterList/{id}','SpecialChapterController@specialChapterList');
+        Route::get('specialChapterList/{id}',['middleware' => 'permission:check.course','uses' =>'SpecialChapterController@specialChapterList']);
         //课程章节状态
         Route::get('specialChapterState','SpecialChapterController@specialChapterState');
         //添加课程章节
-        Route::get('addSpecialChapter/{id}','SpecialChapterController@addSpecialChapter');
+        Route::get('addSpecialChapter/{id}',['middleware' => 'permission:add.course','uses' =>'SpecialChapterController@addSpecialChapter']);
         //执行添加
-        Route::post('doAddSpecialChapter','SpecialChapterController@doAddSpecialChapter');
+        Route::post('doAddSpecialChapter',['middleware' => 'permission:add.course','uses' =>'SpecialChapterController@doAddSpecialChapter']);
         //编辑章节
-        Route::get('editSpecialChapter/{courseid}/{id}','SpecialChapterController@editSpecialChapter');
+        Route::get('editSpecialChapter/{courseid}/{id}',['middleware' => 'permission:edit.course','uses' =>'SpecialChapterController@editSpecialChapter']);
         //执行编辑
         Route::post('doEditSpecialChapter','SpecialChapterController@doEditSpecialChapter');
         //删除章节
-        Route::get('delSpecialChapter/{courseid}/{id}','SpecialChapterController@delSpecialChapter');
+        Route::get('delSpecialChapter/{courseid}/{id}',['middleware' => 'permission:del.course','uses' =>'SpecialChapterController@delSpecialChapter']);
 
 
 
@@ -673,7 +678,7 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
 
 
         //课程意见反馈
-        Route::get('specialFeedbackList','SpecialFeedbackController@specialFeedbackList');
+        Route::get('specialFeedbackList/{type}','SpecialFeedbackController@specialFeedbackList');
         //意见反馈状态
         Route::get('specialFeedbackState','SpecialFeedbackController@specialFeedbackState');
         //删除
@@ -681,31 +686,31 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
 
 
         //课程资料列表
-        Route::get('dataList/{id}','SpecialDataController@dataList');
+        Route::get('dataList/{id}',['middleware' => 'permission:check.course','uses' =>'SpecialDataController@dataList']);
         //资料状态
         Route::get('courseDataState','SpecialDataController@courseDataState');
         //添加课程资料
-        Route::get('addData/{id}','SpecialDataController@addData');
+        Route::get('addData/{id}',['middleware' => 'permission:add.course','uses' =>'SpecialDataController@addData']);
         //执行添加
-        Route::post('doAddData','SpecialDataController@doAddData');
+        Route::post('doAddData',['middleware' => 'permission:add.course','uses' =>'SpecialDataController@doAddData']);
         //上传
         Route::post('doUploadfile','SpecialDataController@doUploadfile');
         //编辑资料
-        Route::get('editData/{id}','SpecialDataController@editData');
+        Route::get('editData/{id}',['middleware' => 'permission:edit.course','uses' =>'SpecialDataController@editData']);
         Route::post('doEditData','SpecialDataController@doEditData');
         //删除资料
-        Route::get('delData/{courseid}/{id}','SpecialDataController@delData');
+        Route::get('delData/{courseid}/{id}',['middleware' => 'permission:del.course','uses' =>'SpecialDataController@delData']);
 
-        //点评视频推荐
-        Route::get('recommendSpecialCourseList','recommendCourseController@recommendSpecialCourseList');
+        //专题课程推荐
+        Route::get('recommendSpecialCourseList',['middleware' => 'permission:check.course','uses' =>'recommendCourseController@recommendSpecialCourseList']);
         //添加推荐位
-        Route::get('addRecommendSpecialCourse','recommendCourseController@addRecommendSpecialCourse');
-        Route::post('doAddRecommendSpecialCourse','recommendCourseController@doAddRecommendSpecialCourse');
+        Route::get('addRecommendSpecialCourse/{id}',['middleware' => 'permission:add.course','uses' =>'recommendCourseController@addRecommendSpecialCourse']);
+        Route::post('doAddRecommendSpecialCourse',['middleware' => 'permission:add.course','uses' =>'recommendCourseController@doAddRecommendSpecialCourse']);
         //编辑推荐
-        Route::get('editRecommendSpecialCourse/{id}','recommendCourseController@editRecommendSpecialCourse');
-        Route::post('doEditRecommendSpecialCourse','recommendCourseController@doEditRecommendSpecialCourse');
+        Route::get('editRecommendSpecialCourse/{id}',['middleware' => 'permission:edit.course','uses' =>'recommendCourseController@editRecommendSpecialCourse']);
+        Route::post('doEditRecommendSpecialCourse',['middleware' => 'permission:edit.course','uses' =>'recommendCourseController@doEditRecommendSpecialCourse']);
         //删除
-        Route::get('delRecommendSpecialCourse/{id}','recommendCourseController@delRecommendSpecialCourse');
+        Route::get('delRecommendSpecialCourse/{id}',['middleware' => 'permission:del.course','uses' =>'recommendCourseController@delRecommendSpecialCourse']);
 
     });
 
@@ -718,18 +723,18 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
 	 */
     Route::group(['prefix'=>'/commentCourse','namespace'=>'commentCourse'],function(){
         //演奏视频列表
-        Route::get('commentCourseList','commentCourseController@commentCourseList');
+        Route::get('commentCourseList',['middleware' => 'permission:check.commentcourse','uses' =>'commentCourseController@commentCourseList']);
         //审核状态
-        Route::get('commentState','commentCourseController@commentState');
+        Route::get('commentState',['middleware' => 'permission:edit.commentcourse','uses' =>'commentCourseController@commentState']);
         //课程状态
-        Route::get('comcourseState','commentCourseController@comcourseState');
+        Route::get('comcourseState',['middleware' => 'permission:edit.commentcourse','uses' =>'commentCourseController@comcourseState']);
         //添加演奏视频
         Route::get('addCommentCourse','commentCourseController@addCommentCourse');
         //编辑演奏视频
-        Route::get('editCommentCourse/{id}','commentCourseController@editCommentCourse');
-        Route::post('doEditCommentCourse','commentCourseController@doEditCommentCourse');
+        Route::get('editCommentCourse/{id}',['middleware' => 'permission:edit.commentcourse','uses' =>'commentCourseController@editCommentCourse']);
+        Route::post('doEditCommentCourse',['middleware' => 'permission:edit.commentcourse','uses' =>'commentCourseController@doEditCommentCourse']);
         //删除演奏视频
-        Route::get('delCommentCourse/{id}','commentCourseController@delCommentCourse');
+        Route::get('delCommentCourse/{id}',['middleware' => 'permission:del.commentcourse','uses' =>'commentCourseController@delCommentCourse']);
         //审核未通过
         Route::post('noPassMsg','commentCourseController@noPassMsg');
         //视频详情
@@ -739,32 +744,32 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
 
 
         //名师点评视频
-        Route::get('teacherCourseList','teacherCourseController@teacherCourseList');
+        Route::get('teacherCourseList',['middleware' => 'permission:check.commentcourse','uses' =>'teacherCourseController@teacherCourseList']);
         //名师审核状态
-        Route::get('teacherState','teacherCourseController@teacherState');
+        Route::get('teacherState',['middleware' => 'permission:edit.commentcourse','uses' =>'teacherCourseController@teacherState']);
         //名师课程状态
-        Route::get('teaccourseState','teacherCourseController@teaccourseState');
+        Route::get('teaccourseState',['middleware' => 'permission:edit.commentcourse','uses' =>'teacherCourseController@teaccourseState']);
         //名师点评详情
         Route::get('detailTeacherCommentCourse/{id}','teacherCourseController@detailTeacherCommentCourse');
         //编辑点评视频
-        Route::get('editTeacherCourse/{id}','teacherCourseController@editTeacherCourse');
-        Route::post('doEditTeacherCourse','teacherCourseController@doEditTeacherCourse');
+        Route::get('editTeacherCourse/{id}',['middleware' => 'permission:edit.commentcourse','uses' =>'teacherCourseController@editTeacherCourse']);
+        Route::post('doEditTeacherCourse',['middleware' => 'permission:edit.commentcourse','uses' =>'teacherCourseController@doEditTeacherCourse']);
         //删除名师点评
-        Route::get('delTeacherCourse/{id}','teacherCourseController@delTeacherCourse');
+        Route::get('delTeacherCourse/{id}',['middleware' => 'permission:del.commentcourse','uses' =>'teacherCourseController@delTeacherCourse']);
         //审核通过给学员发送短信提示
         Route::post('sendStudentMessage','teacherCourseController@sendStudentMessage');
 
 
         //点评视频推荐
-        Route::get('recommendCourseList','recommendController@recommendCourseList');
+        Route::get('recommendCourseList',['middleware' => 'permission:check.commentcourse','uses' =>'recommendController@recommendCourseList']);
         //添加推荐位
-        Route::get('addRecommendCourse','recommendController@addRecommendCourse');
-        Route::post('doAddRecommendCourse','recommendController@doAddRecommendCourse');
+        Route::get('addRecommendCourse/{id}',['middleware' => 'permission:add.commentcourse','uses' =>'recommendController@addRecommendCourse']);
+        Route::post('doAddRecommendCourse',['middleware' => 'permission:add.commentcourse','uses' =>'recommendController@doAddRecommendCourse']);
         //编辑推荐
-        Route::get('editRecommendCourse/{id}','recommendController@editRecommendCourse');
-        Route::post('doEditRecommendCourse','recommendController@doEditRecommendCourse');
+        Route::get('editRecommendCourse/{id}',['middleware' => 'permission:edit.commentcourse','uses' =>'recommendController@editRecommendCourse']);
+        Route::post('doEditRecommendCourse',['middleware' => 'permission:edit.commentcourse','uses' =>'recommendController@doEditRecommendCourse']);
         //删除
-        Route::get('delRecommendCourse/{id}','recommendController@delRecommendCourse');
+        Route::get('delRecommendCourse/{id}',['middleware' => 'permission:del.commentcourse','uses' =>'recommendController@delRecommendCourse']);
     });
 
 
@@ -776,11 +781,11 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
          */
     Route::group(['prefix'=>'/order','namespace'=>'order'],function(){
         //订单列表
-        Route::get('orderList/{status}','orderController@orderList');
+        Route::get('orderList/{status}',['middleware' => 'permission:check.order','uses' =>'orderController@orderList']);
         //订单状态
-        Route::get('orderState','orderController@orderState');
+        Route::get('orderState',['middleware' => 'permission:edit.order','uses' =>'orderController@orderState']);
         //删除订单
-        Route::get('delOrder/{id}/{status}','orderController@delOrder');
+        Route::get('delOrder/{id}/{status}',['middleware' => 'permission:del.order','uses' =>'orderController@delOrder']);
         //添加订单备注
         Route::post('remark','orderController@remark');
         //修改应退金额
@@ -806,8 +811,14 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
         //删除退款
         Route::get('delRefund/{orderSn}/{id}','orderController@delRefund');
 
-        //确认退款
-        Route::get('weiXinRefund/{orderSn}','orderController@weiXinRefund');
+        //确认退款微信退款
+        Route::get('weiXinRefund/{orderId}','orderController@weiXinRefund');
+        //支付宝确认退款
+        Route::any('alipayRefund/{orderId}','orderController@alipayRefund');
+        //  支付宝异步回调页面
+        Route::any('alipayAsyncCallback', 'orderController@alipayAsyncCallback');
+        //  支付宝同步回调页面
+        Route::any('alipaySyncCallback', 'orderController@alipaySyncCallback');
     });
 
 

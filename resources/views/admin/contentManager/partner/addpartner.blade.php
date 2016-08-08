@@ -57,7 +57,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 链接名称 </label>
 
                             <div class="col-sm-9">
-                                <input  type="text" name="title" id="form-field-1" placeholder="链接名称" class="col-xs-10 col-sm-5" value="" />
+                                <input  type="text" name="title" id="form-field-1" placeholder="链接名称" class="col-xs-10 col-sm-5" value="{{old('title')}}" />
                                     <span class="help-inline col-xs-12 col-sm-7">
                                     <label class="middle">
                                         <span class="lbl"></span>
@@ -75,7 +75,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 链接地址 </label>
 
                             <div class="col-sm-9">
-                                <input  type="text" name="url" id="form-field-1" placeholder="(填写格式例如: www.baidu.com)" class="col-xs-10 col-sm-5" value="" />
+                                <input  type="text" name="url" id="form-field-1" placeholder="(填写格式例如: www.baidu.com)" class="col-xs-10 col-sm-5" value="{{old('url')}}" />
                                     <span class="help-inline col-xs-12 col-sm-7">
                                     <label class="middle">
                                         <span class="lbl"></span>

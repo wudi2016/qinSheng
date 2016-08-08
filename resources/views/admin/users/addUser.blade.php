@@ -532,10 +532,10 @@
 
             //onSubmit
             function postcheck(){
+                review();
                 if(checkPhone && checkUsername && checkRealname){
                     return true;
                 }else{
-                    review();
                     return false;
                 }
             }
@@ -573,9 +573,9 @@
                     var obj = $(this);
                     var username = obj.val();
 
-                    if(!username.match(/^[\u4E00-\u9FA5A-Za-z0-9_]{4,16}$/)){
+                    if(!username.match(/^[\u4E00-\u9FA5A-Za-z0-9_]{2,8}$/)){
                         //格式错误
-                        obj.next('span').html('* 4—16位字母(不区分大小写)汉字/数字/下划线');
+                        obj.next('span').html('* 2—8位字母(不区分大小写)汉字/数字/下划线');
                         checkUsername = false;
                         return false;
                     }else{//验证唯一性
@@ -606,15 +606,17 @@
                     var realname = obj.val();
 
                     if($('.hide_teacher').css('display') != 'none'){
-                        if(!realname.match(/^[\u4E00-\u9FA5A-Za-z0-9_]{2,16}$/)){
+                        if(!realname.match(/^[\u4E00-\u9FA5A-Za-z0-9_]{2,4}$/)){
                             //格式错误
-                            obj.next('span').html('* 2—16位字母(不区分大小写)汉字/数字/下划线');
+                            obj.next('span').html('* 2—4位字母(不区分大小写)汉字/数字/下划线');
                             checkRealname = false;
                             return false;
                         }else{//
+                            obj.next('span').html(' ');
                             checkRealname = true;
                         }
                     }else{
+                        obj.next('span').html(' ');
                         checkRealname = true;
                     }
 

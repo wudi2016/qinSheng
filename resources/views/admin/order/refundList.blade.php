@@ -166,9 +166,11 @@
                                                 {{--</span>--}}
 
 
+                                                @permission('del.order')
                                                 <a href="{{url('/admin/order/delRefund/'.$refund->orderSn.'/'.$refund->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
                                                     <i class="icon-trash bigger-120"></i>
                                                 </a>
+                                                @endpermission
 
                                                 {{--<div href="" class="btn btn-xs btn-warning" ms-click="commentdetailpop({{$order->id}})">--}}
                                                     {{--<i class="icon-flag bigger-120"></i>--}}

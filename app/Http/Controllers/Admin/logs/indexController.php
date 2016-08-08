@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin\logs;
 
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -21,6 +20,8 @@ class indexController extends Controller
 
         //定义搜索初值
         $search = [];
+        $search['beginTime'] = null;
+        $search['endTime'] = null;
         $search['type'] = null;
         $search['time'] = null;
         //搜索
@@ -34,6 +35,15 @@ class indexController extends Controller
         if($request->type == 1){
             $query = $query;
             $search['type'] = 1;
+        }
+
+        if($request->beginTime ){
+            $query = $query->where('create_at','>=',strtotime($request->beginTime));
+            $search['beginTime'] = $request->beginTime;
+        }
+        if($request->endTime){
+            $query = $query->where('create_at','<=',strtotime($request->endTime));
+            $search['endTime'] = $request->endTime;
         }
 
         if($request->time){
@@ -51,6 +61,16 @@ class indexController extends Controller
                 $query = $query;
                 $search['type'] = 1;
             }
+
+            if($request->beginTime){
+                $query = $query->where('create_at','>=',strtotime($request->beginTime));
+                $search['beginTime'] = $request->beginTime;
+            }
+            if($request->endTime){
+                $query = $query->where('create_at','<=',strtotime($request->endTime));
+                $search['endTime'] = $request->endTime;
+            }
+
             $data = $query->orderBy('id','desc')->paginate();
 
             return view('admin.logs.logList',compact('data','search','tableName'))->with('time',$request->time);
@@ -68,7 +88,6 @@ class indexController extends Controller
     {
         //日志删除操作
         if(\DB::table($tableName)->delete($id)){
-//            $this -> OperationLog("删除了ID为{$id}的日志", 1);
             return redirect()->back()->with(['status'=>'删除日志成功','time'=>$time]);
         }else{
             return redirect()->back()->with(['errors'=>'删除日志失败','time'=>$time]);

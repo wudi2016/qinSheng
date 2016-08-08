@@ -81,7 +81,7 @@
 .left_top_name .top_name {
     width: 100%;
     height: 20px;
-    font-size: 21px;
+    font-size: 18px;
     color: #050505;
     line-height: 20px;
 }
@@ -311,7 +311,10 @@
     height: auto;
     position: relative;
 }
-
+.center_right_username .span_diff{
+    width:160px;
+    margin-left:18px;
+}
 /*.center_right_textarea span:last-child{*/
 /*width: 147px;*/
 /*height: 36px;*/
@@ -466,15 +469,15 @@
 }
 
 .center_right .center_right_bottom_button {
-    width: 114px;
-    height: 50px;
+    width: 100px;
+    height: 44px;
     background: #209EEA;
     color: #fff;
     margin-left: 107px;
     border: none;
-    line-height: 50px;
-    font-size: 20px;
-    letter-spacing: 1px;
+    line-height: 44px;
+    font-size: 18px;
+    letter-spacing: 3px;
     cursor: pointer;
 }
 
@@ -522,15 +525,15 @@
 }
 
 .center_right .center_right_password_button {
-    width: 114px;
-    height: 50px;
+    width: 100px;
+    height: 44px;
     background: #209EEA;
     color: #fff;
     margin-left: 107px;
     border: none;
-    line-height: 50px;
-    font-size: 20px;
-    letter-spacing: 1px;
+    line-height: 44px;
+    font-size: 18px;
+    letter-spacing: 3px;
     cursor: pointer;
 }
 
@@ -584,14 +587,14 @@
 }
 
 .center_right .center_right_phone_button {
-    width: 114px;
-    height: 36px;
+    width: 100px;
+    height: 44px;
     background: #209EEA;
     color: #fff;
     border: none;
-    line-height: 36px;
-    font-size: 20px;
-    letter-spacing: 1px;
+    line-height: 44px;
+    font-size: 18px;
+    letter-spacing: 3px;
     cursor: pointer;
 }
 
@@ -663,7 +666,7 @@
 .checkPhone_old_phone label input {
     width: 98.5%;
     height: 30px;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 36px;
     color: rgb(153, 153, 153);
     /*margin-top:34px;*/
@@ -681,9 +684,10 @@
     height: 36px;
     background: #f5f5f5;
     line-height: 36px;
+    font-size: 18px;
     text-align: center;
     /*margin-top:34px;*/
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     cursor: pointer;
     color: rgb(102, 102, 102);
 }
@@ -705,8 +709,8 @@
     border: none;
     cursor: pointer;
     color: #fff;
-    font-size: 24px;
-    letter-spacing: 2px;
+    font-size: 18px;
+    letter-spacing: 3px;
     margin-top: 34px;
 }
 
@@ -802,6 +806,7 @@
     white-space: nowrap;
     cursor: pointer;
     /*padding-right:20px;*/
+    font-size:16px;
 }
 
 .right_order_repeat_name .repeat_content_orderno {
@@ -817,6 +822,7 @@
 .right_order_td .right_order_repeat_time {
     float: left;
     width: 12.7166%;
+    font-size: 16px;
 }
 
 .right_order_repeat_time .repeat_time_whole {
@@ -835,7 +841,7 @@
     text-align: left;
     margin-top: 5px;
     margin-left: 60px;
-    font-size: 14px;
+    font-size: 16px;
     color: rgb(102, 102, 102);
 }
 
@@ -843,13 +849,13 @@
     float: left;
     width: 11.9891%;
     margin-top: 5px;
-    font-size: 14px;
+    font-size: 16px;
     color: rgb(102, 102, 102);
 }
 
 .right_order_td .right_order_repeat_control {
     float: left;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .right_order_repeat_control a {
@@ -909,16 +915,17 @@
 
 .right_count_right .count_right_store {
     display: inline-block;
-    width: 86px;
-    height: 27px;
-    /*line-height:27px;*/
-    /*text-align: center;*/
-    /*background: #209EEA;*/
-    /*color:#fff;*/
-    /*font-size:12px;*/
-    /*border:none;*/
+    width: 90px;
+    height: 34px;
+    line-height:34px;
+    text-align: center;
+    background: #209EEA;
+    color:#fff;
+    font-size:16px;
+    border:none;
+    margin-top:-2px;
     /*margin-left:28px;*/
-    /*letter-spacing:1px;*/
+    letter-spacing:2px;
     /*font-weight: bold;*/
     cursor: pointer;
 }
@@ -927,6 +934,13 @@
     float: right;
     margin-top: 2px;
 }
+.count_right_store .right_store_store{
+    width:90px;
+    height:34px;
+    margin-top:0;
+    line-height:33px;
+}
+
 
 .center_right .center_right_comment {
     width: 87.2619%;
@@ -1106,7 +1120,7 @@
     font-size: 18px;
     margin-top: 5px;
     margin-left: 8px;
-    font-weight: bold;
+    /*font-weight: bold;*/
 }
 
 /*//点评已评*/
@@ -1203,9 +1217,9 @@
     width: 100%;
     height: 50px;
     line-height: 50px;
-    font-size: 18px;
+    font-size: 16px;
     color: rgb(34, 34, 34);
-    background: url("/home/image/personCenter/notice.png") no-repeat 0 10px;
+    background: url("/home/image/personCenter/notice.png") no-repeat 0 13px;
 }
 
 .repeat_comment_text .comment_text_diff {
@@ -1259,7 +1273,7 @@
 .repeat_comment_time .comment_delete {
     width: auto;
     height: auto;
-    font-size: 18px;
+    font-size: 16px;
     margin-top: 5px;
     float: right;
 }

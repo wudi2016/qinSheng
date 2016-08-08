@@ -20,7 +20,7 @@ $.ajaxSetup({
 
 // 头像个人信息
 $('.touxiang').click(function(){
-	$(".persapce").stop().slideToggle("slow");
+	$(".persapce").stop().slideToggle("fast");
 })
 
 // 咨询

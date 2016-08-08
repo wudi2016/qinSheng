@@ -59,7 +59,7 @@ class teacherHomepageController extends Controller
         $tableName = $request['type'] ? 'commentcourse' : 'course';
         $order = $request['order'] ? $tableName.'.coursePlayView' : $tableName.'.id';
 
-        $condition = [$tableName.'.id', $tableName.'.coursePrice', $tableName.'.courseTitle', $tableName.'.coursePic', $tableName.'.coursePlayView'];
+        $condition = [$tableName.'.id', $tableName.'.coursePrice', $tableName.'.courseTitle', $tableName.'.coursePic', $tableName.'.coursePlayView', $tableName.'.courseStudyNum'];
         $where = [$tableName.'.courseIsDel' => 0, $tableName.'.courseStatus' => 0];
 
 		if ($request['type']) {

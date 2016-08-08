@@ -1,7 +1,6 @@
 
 .bar{
 	width: 100%;
-	/*height:665px;*/
 	min-width:1200px;
 	background:#ffffff;
 	height:auto;
@@ -9,13 +8,13 @@
 .activity{
 	/*width:1200px;*/
 	width:100%;
-	height:438px;
+	height:360px;
 	margin: 0 auto;
 	background:#ffffff;               
 }
 .activity_con{
 	width:1200px;
-	height:438px;
+	height:400px;
 	margin: 0 auto;
 	background:#ffffff;
 }
@@ -27,20 +26,20 @@
 }
 .activity_con_l{
 	width:590px;
-	height:300px;
+	height:260px;
 	float: left;
 	background: #F5F5F5;
 }
 .activity_con_l_l{
 	width:190px;
-	height:300px;
+	height:260px;
 	float: left;
-	background: url('/home/image/index/kecheng.png') no-repeat 20px 85px;
+	background: url('/home/image/index/kecheng.png') no-repeat 20px 65px;
 	/*background: gray;*/
 }
 .activity_con_l_r{
 	width:380px;
-	height:300px;
+	height:260px;
 	float: left;
 	/*background: gray;*/
 }
@@ -48,29 +47,29 @@
 	width:100%;
 	height:45px;
 	line-height: 45px;
-	font-size:24px;
+	font-size:22px;
 	color:rgb(34,34,34);
 }
 .activity_con_l_r_c{
 	width:100%;
 	height:140px;
 	line-height: 25px;
-	font-size: 18px;
+	font-size: 16px;
 	color: rgb(102,102,102);
 }
 
 
 .activity_con_r{
 	width:590px;
-	height:300px;
+	height:260px;
 	float: right;
 	background: #F5F5F5;
 }
 .activity_con_r_l{
 	width:190px;
-	height:300px;
+	height:260px;
 	float: left;
-	background: url('/home/image/index/saishi.png') no-repeat 20px 85px;
+	background: url('/home/image/index/saishi.png') no-repeat 20px 65px;
 	/*background: gray;*/
 }
 
@@ -78,6 +77,7 @@
 
 .teacher{
 	width:100%;
+	min-width: 1200px;
 	height:860px;
 	background:#F5F5F5;
 }
@@ -118,7 +118,7 @@
 	line-height: 127px;
 	text-align: center;
 	color:rgb(34,34,34);
-	font-size: 24px;
+	font-size: 22px;
 	float: left;
 }
 .teacher_con_con{
@@ -143,7 +143,7 @@
 .teacher_con_con_li_foot{
 	width:100%;
 	height:50px;
-	background:rgba(0,0,0,0.4);
+	background:rgba(0,0,0,0.75);
 	position:absolute;
 	bottom:0px;
 	left:0px;
@@ -181,7 +181,7 @@
 .teacher_con_con_li_info{
 	width:100%;
 	height:100%;
-	background: rgba(0,0,0,0.7);
+	background: rgba(0,0,0,0.75);
 	/*background: rgb(0,0,0);*/
 	position:absolute;
 	bottom:0px;
@@ -196,7 +196,8 @@
 	font-size:16px;
 	padding:0 25px;
 	letter-spacing:3px;
-	text-indent:2em
+	text-indent:2em;
+	/*line-height: 30px;*/
 	overflow: hidden;
 }
 .teacher_con_more{
@@ -277,6 +278,9 @@
 	padding-left: 10px;
 	font-size: 16px;
 	font-family: 微软雅黑;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .contain_lesson_center_data_info_bot .center {
@@ -346,18 +350,24 @@
 
 .commenton{
 	width:100%;
+	min-width: 1200px;
 	height:938px;
 	background: #F5F5F5;
 }
 .flinks{
 	width:100%;
-	height:105px;
+	height:155px;
 	/*padding-top:30px;*/
 	text-align: center;
 	line-height: 155px;
 	background:#ffffff;
 }
+
+
+
 .flinks_con img{
+	margin-top: 32px;
+	margin-left: 20px;
 	width: 180px;
 	height:90px;
 }
@@ -370,72 +380,41 @@
 }
 
 /*-----------轮播图----------*/
-.banner { position: relative; overflow: auto;width: 100% ;text-align: center}
-.banner li { list-style: none; }
-.banner ul li { float: left;overflow: hidden}
-
-
-.banner .dots {
+.flexslider{
+	border: 0;
+	margin: 0;
+}
+.flex-control-nav{
 	position: absolute;
-	left: 0;
-	right: 0;
-	bottom: 20px;
+	bottom: 30px;
+	z-index: 999;
 }
-.banner .dots li
-{
-	display: inline-block;
-	width: 10px;
-	height: 10px;
-	margin: 0 4px;
-	text-indent: -999em;
-	border: 2px solid #D7D7D7;
-	background: #D7D7D7;
-	border-radius: 6px;
-	cursor: pointer;
-	opacity: .4;
-	-webkit-transition: background .5s, opacity .5s;
-	-moz-transition: background .5s, opacity .5s;
-	transition: background .5s, opacity .5s;
-}
-.banner .dots li.active
-{
-	border: 2px solid yellow;
-	background: yellow;
-	opacity: 1;
-}
-.prev{
-	position: absolute;
-	top: 50%;
-	left:0;
-	margin-top: -45px;
-	outline: 0;
+
+/*左右箭头*/
+.flex-direction-nav a{
 	width: 50px;
-	height: 90px;
-	text-indent: -9999px;
-	z-index: 9999;
+	height:90px;
+	margin-top: -45px;
+}
+.flex-direction-nav .flex-prev{
 	background: url('/home/image/index/left.png');
 }
-.prev{
-	position: absolute;
-	top: 50%;
-	left:0;
-	margin-top: -45px;
-	outline: 0;
-	width: 50px;
-	height: 90px;
-	text-indent: -9999px;
-	z-index: 9999;
-	background: url('/home/image/index/left.png');
-}
-.next{
-	position: absolute;
-	top: 50%;
-	right:0;
-	margin-top: -45px;
-	outline: 0;
-	width: 50px;
-	height: 90px;
-	text-indent: -9999px;
-	z-index: 9999;
+.flex-direction-nav .flex-next{
 	background: url('/home/image/index/right.png');
 }
+/*圆点标志*/
+.flex-control-paging li a{
+	background: #D7D7D7;
+}
+.flex-control-paging li a.flex-active{
+	background: #FFFF66;
+}
+
+
+
+.teacher_con_more_btn:hover{
+	background:rgb(44, 174, 252);
+}
+
+
+

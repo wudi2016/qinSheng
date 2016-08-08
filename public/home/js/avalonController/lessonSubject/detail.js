@@ -203,6 +203,19 @@ define([], function () {
                     return;
                 }
             }
+            if(id == 'quitCollect'){
+                if (detail.mineUsername) {
+                    detail.getData('/lessonSubject/addCollect', 'POST', {
+                        courseId: path,
+                        userId: detail.mineUserId,
+                        isCollection: name
+                    }, 'result', function (response) {
+                        detail.detailInfo.isCollection = response;
+                    })
+                } else {
+                    location.href = '/index/login';
+                }
+            }
             detail.popUp = value;
         },
         // 发表反馈建议
@@ -223,7 +236,7 @@ define([], function () {
             if (detail.tel.match(/\s*/) == null || detail.tel == '') {
                 detail.warnTel = '请留下联系方式';
                 return;
-            } else if (detail.tel.match(/^1(3|5|8|7){1}[0-9]{9}$/) == null && detail.tel.match(/[1-9][0-9]{5,10}/) == null && detail.tel.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/) == null) {
+            } else if ((detail.tel.match(/^1(3|5|8|7){1}[0-9]{9}$/) == null) && (detail.tel.match(/^[1-9]{1}[0-9]{5,10}$/) == null) && (detail.tel.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/) == null)) {
                 detail.warnTel = '请正确联系方式';
                 return;
             } else {
@@ -274,7 +287,7 @@ define([], function () {
                 userName: detail.mineUsername,
                 userId: detail.mineUserId,
                 orderType: 0,
-                orderPrice: detail.detailInfo.coursePrice,
+                orderPrice: detail.detailInfo.coursePrice*100,
                 orderTitle: detail.detailInfo.courseTitle,
                 courseId: detail.detailId
             };
@@ -320,12 +333,12 @@ define([], function () {
                 }],
                 id: 'playerID',
                 width: '800',
-                height: '515',
+                height: '450',
                 aspectratio: '16:9',
                 type: "mp4"
             });
             typeof callback === 'function' && callback();
-            if(detail.detailInfo.isTryLearn || detail.detailInfo.isTeacher || detail.detailInfo.isBuy){ // 是名师或者已购买
+            if(detail.detailInfo.isTryLearn || detail.detailInfo.isTeacher || detail.detailInfo.isBuy || detail.detailInfo.isFree){ // 是名师或者已购买
                 if(!detail[model].courseHighPath && !detail[model].courseMediumPath && !detail[model].courseLowPath){ // 视频都不可观看
                     detail.thePlayer.remove();
                     detail.noresourse = true;
@@ -334,17 +347,13 @@ define([], function () {
                 detail.thePlayer.remove();
                 detail.overtime = true;
             }
-            detail.thePlayer.onTime(function () {
-                //if (detail.thePlayer.getPosition() >= 30) {
-                //    detail.thePlayer.play(false);
-                //    detail.thePlayer.remove();
-                //    detail.overtime = true;
-                //}
+            detail.thePlayer.onPlaylistComplete(function(){
+                //alert("视频播放完了！");
             });
         },
         videoPath: [],
-        changeVideo: function (chapterId, path, isTryLearn, isBuy, isTeacher,coursePic) {
-            if(isTeacher || isBuy){
+        changeVideo: function (chapterId, path, isTryLearn, isFree, isBuy, isTeacher,coursePic) {
+            if(isTeacher || isBuy || isFree){
                 detail.videoType = false;
                 detail.overtime = false;
                 detail.videoPath = {
@@ -366,7 +375,7 @@ define([], function () {
                     }, 'addCourseView');
                 }
             }else{
-                if(isTryLearn == '1'){
+                if(isTryLearn == 1){
                     detail.videoType = false;
                     detail.overtime = false;
                     detail.videoPath = {
@@ -394,6 +403,16 @@ define([], function () {
                         location.href = '/index/login';
                     }
                 }
+            }
+        },
+        tryLearn : function(chapterId){
+            $('#mediaplayer_display_button_play').click();
+            if (detail.mineUserId != null) {
+                detail.getData('/lessonSubject/addCourseView', 'POST', {
+                    chapterId: chapterId,
+                    userId: detail.mineUserId,
+                    courseId: detail.detailId
+                }, 'addCourseView');
             }
         }
     });

@@ -65,6 +65,17 @@
             right: 10px;
             width: 20px;
         }
+        .select2-dropdown {
+            background-color: white;
+            border: 2px solid #ECE8ED;
+            border-radius: 4px;
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            left: -100000px;
+            width: 100%;
+            z-index: 1051;
+        }
     </style>
 @endsection
 

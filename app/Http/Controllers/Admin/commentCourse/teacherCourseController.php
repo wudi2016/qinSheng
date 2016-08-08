@@ -65,44 +65,56 @@ class teacherCourseController extends Controller
                 }
             }
 
-            if($val->coursePic){
-                if(!Cache::get($val->coursePic)){
-                    $val->coursePic = $this->getPlayUrl(($val->coursePic));
-                    Cache::put($val->coursePic,$val->coursePic,1800);
-                }else{
-                    $val->coursePic = Cache::get($val->coursePic);
-                }
-            }
+//            if($val->coursePic){
+//                if(!Cache::get($val->coursePic)){
+//                    $val->coursePic = $this->getPlayUrl(($val->coursePic));
+//                    Cache::put($val->coursePic,$val->coursePic,1800);
+//                }else{
+//                    $val->coursePic = Cache::get($val->coursePic);
+//                }
+//            }
 
             if(!$val->courseLowPath || !$val->courseMediumPath || !$val->courseHighPath){
                 $FileList = $this->transformations($val->fileID);
+//                dump($FileList);
+                //返回的状态值
+                $val->msg['message'] = $FileList['message'];
+                $val->msg['code'] = $FileList['code'];
+
                 if($FileList['code'] == 200 && $FileList['data']['Waiting'] < 0){
                     $filelists = $FileList['data']['FileList']; //取出转好的码
+//                    dump('aa');
                     $lists = [];
                     foreach($filelists as $value){
                         switch($value['Level']){
                             case 1:
                                 $lists['courseLowPath'] = $value['FileID'];
-                                $lists['coursePic'] = $value['Cover'];
+//                                $lists['coursePic'] = $value['Cover'];
                                 break;
                             case 2:
                                 $lists['courseMediumPath'] = $value['FileID'];
-                                $lists['coursePic'] = $value['Cover'];
+//                                $lists['coursePic'] = $value['Cover'];
                                 break;
                             case 3:
                                 $lists['courseHighPath'] = $value['FileID'];
-                                $lists['coursePic'] = $value['Cover'];
+//                                $lists['coursePic'] = $value['Cover'];
                                 break;
                         }
                     }
                     if($lists){
-                        DB::table('applycourse')->where('id',$val->id)->update($lists);
+                        DB::table('commentcourse')->where('id',$val->id)->update($lists);
                     }
                 }
             }
 
             $val->coursePrice = $val->coursePrice / 100;
             $val->courseDiscount = $val->courseDiscount / 1000;
+            if($val->courseType ==1){
+                $val->discountPrice = ceil(($val->coursePrice) * $val->courseDiscount / 10);
+            }else{
+                $val->discountPrice = $val->coursePrice;
+            }
+
             if($val->courseType){
                 $coursetype = DB::table('coursetype')->where('id',$val->courseType)->first();
                 $val->typeName = $coursetype->typeName;
@@ -185,6 +197,8 @@ class teacherCourseController extends Controller
             ->where('id',$id)
             ->orderBy('id','desc')
             ->first();
+        $data->coursePrice = $data->coursePrice / 100;
+        $data->courseDiscount = $data->courseDiscount / 1000;
         if($data->courseType){
             $coursetype = DB::table('coursetype')->where('id',$data->courseType)->first();
             $data->typeName = $coursetype->typeName;

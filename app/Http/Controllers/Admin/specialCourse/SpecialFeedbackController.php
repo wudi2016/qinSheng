@@ -14,7 +14,7 @@ class SpecialFeedbackController extends Controller
     /**
      * 意见反馈列表
      */
-    public function specialFeedbackList(Request $request){
+    public function specialFeedbackList(Request $request,$courseType){
         $query = DB::table('coursefeedback as f');
         if($request['beginTime']){ //上传的起止时间
             $query = $query->where('f.created_at','>=',$request['beginTime']);
@@ -31,14 +31,22 @@ class SpecialFeedbackController extends Controller
         if($request['type'] == 3){
             $query = $query->where('f.backType','like','%'.trim($request['search']).'%');
         }
+        if($courseType == 1){  //专家课程
+            $table = 'commentcourse as c';
+        }else{
+            $table = 'course as c';
+        }
         $data = $query
-            ->leftJoin('course as c','f.courseId','=','c.id')
+            ->leftJoin($table,'f.courseId','=','c.id')
+            ->where('f.courseType',$courseType)
             ->select('f.*','c.courseTitle')
             ->orderBy('f.id','desc')
             ->paginate(15);
         $data->type = $request['type'];
         $data->beginTime = $request['beginTime'];
         $data->endTime = $request['endTime'];
+        $data->courseType = $courseType;
+//        dd($data);
         return view('admin.specialCourse.specialFeedbackList',['data'=>$data]);
 
     }

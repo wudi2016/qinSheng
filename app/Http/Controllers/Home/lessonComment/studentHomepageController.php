@@ -100,7 +100,7 @@ class studentHomepageController extends Controller
         $tableName = $request['type'] ? 'commentcourse' : 'course';
         $order = $request['order'] ? 'coursePlayView' : 'created_at';
 
-        $condition = ['orders.orderType', $tableName.'.id', $tableName.'.coursePrice', $tableName.'.courseTitle', $tableName.'.coursePic', $tableName.'.coursePlayView'];
+        $condition = ['orders.orderType', $tableName.'.id', $tableName.'.coursePrice', $tableName.'.courseTitle', $tableName.'.coursePic', $tableName.'.coursePlayView', $tableName.'.courseStudyNum'];
         $where = ['orders.userId' => $request['userid'], $tableName.'.courseIsDel' => 0, $tableName.'.courseStatus' => 0, 'orders.status' => 2];
 
         $request['type'] && array_push($condition, $tableName.'.teachername as extra');

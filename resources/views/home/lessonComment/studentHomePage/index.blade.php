@@ -10,15 +10,19 @@
 @section('content')
 	<div class="teacherHomepage" ms-controller="userHomepage">
 		<div class="teacherHomepage_crumbs">
-			<a href="">首页</a> >
-			<a href="">学员主页</a>
+			<a href="/">首页</a> >
+			<a>学员主页</a>
 		</div>
 
 		<div class="teacherHomepage_introduce">
 			<div class="teacherHomepage_introduce_header"><img ms-attr-src="userInfo.pic" width="100%" height="100%"></div>
 			<div class="teacherHomepage_introduce_name" ms-html="userInfo.username"></div>
-			<div class="studentHomepage_introduce_compant hide" ms-visible="userInfo.type == 0"><img src="{{asset('/home/image/lessonComment/studentHomepage/student.png')}}">普通学员</div>
-			<div class="studentHomepage_introduce_compant hide" ms-visible="userInfo.type == 2"><img src="{{asset('/home/image/lessonComment/studentHomepage/teacher.png')}}">教师学员</div>
+			<div class="studentHomepage_introduce_compant hide" style="margin-top: 92px;" ms-visible="userInfo.type < 2">
+				<img src="{{asset('/home/image/lessonComment/studentHomepage/student.png')}}">普通学员
+			</div>
+			<div class="studentHomepage_introduce_compant hide" style="margin-top: 92px;" ms-visible="userInfo.type == 2">
+				<img src="{{asset('/home/image/lessonComment/studentHomepage/teacher.png')}}">教师学员
+			</div>
 			<div class="teacherHomepage_introduce_videoNumber">
 				<div class="teacherHomepage_introduce_number_img"><img src="{{asset('/home/image/lessonComment/teacherHomepage/fans.png')}}" width="100%" height="100%"></div>
 				<div class="teacherHomepage_introduce_number_text">好友</div>
@@ -40,7 +44,7 @@
 					<div ms-html="userInfo.sex == 2 ? '女' : '男'"></div>
 				</div>
 				<div class="teacherHomepage_introduce_bottom_block" ms-visible='userInfo.city'>
-					<img src="{{asset('/home/image/lessonComment/teacherHomepage/location.png')}}" width="100%" height="100%">
+					<img src="{{asset('/home/image/lessonComment/teacherHomepage/location.png')}}" width="100%" height="100%" style="width: 20px; height: 24px;">
 					<div ms-html="userInfo.city"></div>
 				</div>
 				<div class="teacherHomepage_introduce_bottom_block">
@@ -71,9 +75,10 @@
 						<div class="title" ms-html="el.courseTitle"></div>
 						<div class="detail">
 							<div class="time"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--el.extra--] 课时</div>
-							<div class="learned"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--el.coursePlayView--] 人学过</div>
+							<div class="learned"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--parseInt(el.coursePlayView) + parseInt(el.courseStudyNum)--] 人学过</div>
 						</div>
-						<div class="price" ms-html="'￥ ' + el.coursePrice / 100"></div>
+						<div class="price" ms-if="el.coursePrice > 0" ms-html="'￥ ' + el.coursePrice / 100"></div>
+						<div class="price" ms-if="el.coursePrice <= 0" ms-html="'免费课程'"></div>
 					</a>
 				</div>
 				<div class="spinner " ms-visible="loading">
@@ -100,9 +105,10 @@
 						<div class="title" ms-html="el.courseTitle"></div>
 						<div class="detail">
 							<div class="time">讲师：[--el.extra--]</div>
-							<div class="learned"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--el.coursePlayView--] 人学过</div>
+							<div class="learned"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--parseInt(el.coursePlayView) + parseInt(el.courseStudyNum)--] 人学过</div>
 						</div>
-						<div class="price" ms-html="'￥ ' + el.coursePrice / 100"></div>
+						<div class="price" ms-if="el.coursePrice > 0" ms-html="'￥ ' + el.coursePrice / 100"></div>
+						<div class="price" ms-if="el.coursePrice <= 0" ms-html="'免费课程'"></div>
 					</a>
 				</div>
 				<div class="spinner " ms-visible="loading">

@@ -65,19 +65,24 @@ class commentCourseController extends Controller
                 }
             }
 
-            if($val->coursePic){
-                if(!Cache::get($val->coursePic)){
-                    $val->coursePic = $this->getPlayUrl(($val->coursePic));
-                    Cache::put($val->coursePic,$val->coursePic,1800);
-                }else{
-                    $val->coursePic = Cache::get($val->coursePic);
-                }
-            }
+//            if($val->coursePic){
+//                if(!Cache::get($val->coursePic)){
+//                    $val->coursePic = $this->getPlayUrl(($val->coursePic));
+//                    Cache::put($val->coursePic,$val->coursePic,1800);
+//                }else{
+//                    $val->coursePic = Cache::get($val->coursePic);
+//                }
+//            }
 
             //如果没有转码成功则请求转码并写入表中
             if(!$val->courseLowPath || !$val->courseMediumPath || !$val->courseHighPath){
                 $FileList = $this->transformations($val->fileID);
-//                dd($FileList);
+//                dump($FileList);
+
+                //返回的状态值
+                $val->msg['message'] = $FileList['message'];
+                $val->msg['code'] = $FileList['code'];
+
                 if($FileList['code'] == 200 && $FileList['data']['Waiting'] < 0){
                     $filelists = $FileList['data']['FileList']; //取出转好的码
                     $lists = [];
@@ -85,15 +90,15 @@ class commentCourseController extends Controller
                         switch($value['Level']){
                             case 1:
                                 $lists['courseLowPath'] = $value['FileID'];
-                                $lists['coursePic'] = $value['Cover'];
+//                                $lists['coursePic'] = $value['Cover'];
                                 break;
                             case 2:
                                 $lists['courseMediumPath'] = $value['FileID'];
-                                $lists['coursePic'] = $value['Cover'];
+//                                $lists['coursePic'] = $value['Cover'];
                                 break;
                             case 3:
                                 $lists['courseHighPath'] = $value['FileID'];
-                                $lists['coursePic'] = $value['Cover'];
+//                                $lists['coursePic'] = $value['Cover'];
                                 break;
                         }
                     }

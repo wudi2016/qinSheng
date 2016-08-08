@@ -23,8 +23,8 @@ class recommendCourseController extends Controller
     /**
      *添加专题课程推荐
      */
-    public function addRecommendSpecialCourse(){
-        $data = DB::table('course')->select('id','courseTitle')->get();
+    public function addRecommendSpecialCourse($id){
+        $data = DB::table('course')->where('id',$id)->first();
         return view('admin/specialCourse/recommend/addRecommend',['data'=>$data]);
     }
 
@@ -48,9 +48,9 @@ class recommendCourseController extends Controller
         $data['updated_at'] = Carbon::now();
         if($id = DB::table('hotcourse')->insertGetId($data)){
             $this -> OperationLog('添加了id为'.$id.'的专题课程推荐');
-            return redirect('admin/message')->with(['status'=>'课程推荐成功','redirect'=>'specialCourse/recommendSpecialCourseList']);
+            return redirect('admin/message')->with(['status'=>'课程推荐成功','redirect'=>'specialCourse/specialCourseList']);
         }else{
-            return redirect('admin/message')->with(['status'=>'课程推荐失败','redirect'=>'specialCourse/recommendSpecialCourseList']);
+            return redirect('admin/message')->with(['status'=>'课程推荐失败','redirect'=>'specialCourse/specialCourseList']);
         }
     }
 

@@ -49,34 +49,36 @@
                                     </thead>
                                     <tbody>
                                           @foreach($roleList as $roles)
-                                            <tr>
-                                                <td> <a> {{ $roles -> slug }} </a> </td>
-                                                <td> <a> {{ $roles -> created_at }} </a> </td>
+											  {{--@if($roles -> slug != 'root')--}}
+													<tr>
+														<td> <a> {{ $roles -> slug }} </a> </td>
+														<td> <a> {{ $roles -> created_at }} </a> </td>
 
-                                                <td>
-                                                    @permission('check.role')
-                                                    <a href="{{ url('admin/auth/checkRoleUser/'. $roles -> id) }}" class="btn btn-xs btn-success">查看成员</a>
-                                                    @endpermission
+														<td>
+															@permission('check.role')
+															<a href="{{ url('admin/auth/checkRoleUser/'. $roles -> id) }}" class="btn btn-xs btn-success">查看成员</a>
+															@endpermission
 
-                                                    &nbsp;&nbsp;
+															&nbsp;&nbsp;
 
-                                                    @permission('check.role')
-                                                    <a href="{{ url('admin/auth/checkRolePermission/'. $roles -> id) }}" class="btn btn-xs btn-success">查看权限</a>
-                                                    @endpermission
+															@permission('check.role')
+															<a href="{{ url('admin/auth/checkRolePermission/'. $roles -> id) }}" class="btn btn-xs btn-success">查看权限</a>
+															@endpermission
 
-                                                    &nbsp;&nbsp;
+															&nbsp;&nbsp;
 
-                                                    @permission('edit.role')
-                                                    <a href="{{ url('admin/auth/editRole/'. $roles -> id) }}" class="btn btn-xs btn-warning">编　辑</a>
-                                                    @endpermission
+															@permission('edit.role')
+															<a href="{{ url('admin/auth/editRole/'. $roles -> id) }}" class="btn btn-xs btn-warning">编　辑</a>
+															@endpermission
 
-                                                    &nbsp;&nbsp;
+															&nbsp;&nbsp;
 
-                                                    @permission('delete.role')
-                                                    <a href="{{ url('admin/auth/deleteRole/'. $roles -> id) }}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除?');">删　除</a>
-                                                    @endpermission
-                                                </td>
-                                            </tr>
+															@permission('delete.role')
+															<a href="{{ url('admin/auth/deleteRole/'. $roles -> id) }}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除?');">删　除</a>
+															@endpermission
+														</td>
+													</tr>
+											  {{--@endif--}}
                                           @endforeach
                                     </tbody>
                                 </table>

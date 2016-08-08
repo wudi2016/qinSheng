@@ -130,7 +130,7 @@ input,button,select,textarea{outline:none;filter:chroma(color=#000000);}
 	border:none;
 }
 .head_con_search_con .sbtn{
-	margin-top:10px;
+	margin-top:9px;
 	float: left;
 }
 .head_con_login{
@@ -144,12 +144,18 @@ input,button,select,textarea{outline:none;filter:chroma(color=#000000);}
 	height:85px;
 	float: left;
 	color:red;
-	font-size:20px;
+	font-size:26px;
+	margin-top: 10px;
 	font-weight: bolder;
+	margin-left: -10px;
+	margin-top: -20px;
 	line-height: 85px;
-	text-indent: 10px;
+	text-indent: 0px;
 	/*background: gray;*/
 }
+
+
+
 .head_con_login img{
 	width:60px;
 	height:60px;
@@ -178,13 +184,14 @@ input,button,select,textarea{outline:none;filter:chroma(color=#000000);}
 }
 .persapce{
 	width:130px;
-	height:170px;
+	height:175px;
 	background: #ffffff;
 	/*background:black;  */                      /* tmp*/
+	float: right;
 	position: relative;
-	/*z-index: 99;*/
+	border:1px solid #F5F5F5;
 	top:3px;
-	left:-50px;
+	left:0px;
 }
 .persapce_li{
 	width:130px;
@@ -211,7 +218,7 @@ input,button,select,textarea{outline:none;filter:chroma(color=#000000);}
 	margin:5px 0px;
 	text-indent:4em; 
 	cursor: pointer;
-	background: url('/home/image/layout/msg.png') no-repeat 15px 5px;
+	background: url('/home/image/layout/noMsg.png') no-repeat 15px 5px;
 }
 .persapce_li_con_msg span{
 	color:red;
@@ -264,35 +271,35 @@ input,button,select,textarea{outline:none;filter:chroma(color=#000000);}
 	height:212px;
 	position: fixed;
 	z-index: 10000;
-	top:50%;
+	top:75%;
 	right:0px;
 	/*background:#28ADF1;*/                       /*tmp*/
     margin-top:-107.5px;
-    background:url('/home/image/layout/touching.png') no-repeat;
+    background:url('/home/image/layout/t.png') no-repeat;
 }
 .qq{
-	width:50px;
-	height:53px;
+	width:45px;
+	height:45px;
 	/*background:#dddddd; */                       /*tmp*/
 	cursor: pointer;
 }
 .wx{
-	width:50px;
-	height:53px;
+	width:45px;
+	height:45px;
 	/*background:#dddddd;  */                      /*tmp*/
 	cursor: pointer;
 
 }
 .tel{
-	width:50px;
-	height:53px;
+	width:45px;
+	height:45px;
 /*	background:#dddddd;   */                     /*tmp*/
 	cursor: pointer;
 
 }
 .eml{
-	width:50px;
-	height:53px;
+	width:45px;
+	height:45px;
 /*	background:#dddddd;    */                    /*tmp*/
 	cursor: pointer;
 
@@ -303,7 +310,7 @@ input,button,select,textarea{outline:none;filter:chroma(color=#000000);}
 	height:148px;
 	/*background: gray;  */                          /*tmp*/
 	position:relative;
-	top:-30px;
+	top:-35px;
 	left:-280px;
 	background:url('/home/image/layout/kuang.png');
 }
@@ -313,7 +320,7 @@ input,button,select,textarea{outline:none;filter:chroma(color=#000000);}
 	line-height:40px;
 	color:#000000;
 	font-size: 18px;
-	font-weight: bold;
+	/*font-weight: bold;*/
 	text-indent:1em;
 }
 .mmsg_con{
@@ -361,6 +368,7 @@ input,button,select,textarea{outline:none;filter:chroma(color=#000000);}
 .mmmsg_con_con_l{
 	width:70px;
 	height:40px;
+	margin-top: 10px;
 	background: url('/home/image/layout/mail.png') no-repeat 35px 3px;
 	float: left;
 }
@@ -368,6 +376,7 @@ input,button,select,textarea{outline:none;filter:chroma(color=#000000);}
 	width:160px;
 	height:40px;
 	float: left;
+	margin-top: 10px;
 	line-height:20px;
 }
 
@@ -376,6 +385,7 @@ input,button,select,textarea{outline:none;filter:chroma(color=#000000);}
 /*------底部-----*/
 .foot{
 	width:100%;
+	min-width: 1200px;
 	height:225px;
 	background:#28ADF1;
 }

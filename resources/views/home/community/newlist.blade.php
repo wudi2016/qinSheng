@@ -48,8 +48,8 @@
 
 		<div style="height:175px">
 			<div style="height:50px;"></div>
-			<div style="width:1200px;height:30px;margin: 0 auto">
-				<div id="demo"></div>
+			<div class="pagecon">
+				<div style="display: inline-block"><div id="demo"></div></div>
 			</div>
 			<div style="height:100px;">
 			</div>

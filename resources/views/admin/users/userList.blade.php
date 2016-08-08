@@ -226,8 +226,7 @@
 @endsection
 @section('js')
     <script language="javascript" type="text/javascript" src="{{asset('DatePicker/WdatePicker.js') }}"></script>
-    <script language="javascript" type="text/javascript" src="{{asset('admin/js/
-    .js') }}"></script>
+    <script language="javascript" type="text/javascript" src="{{asset('admin/js/searchtype.js') }}"></script>
     <script type="text/javascript">
         $.ajaxSetup({
             headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'}

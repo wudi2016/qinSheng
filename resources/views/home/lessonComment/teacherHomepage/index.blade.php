@@ -11,9 +11,8 @@
 	<div class="teacherHomepage" ms-controller="userHomepage">
 		<div class="teacherHomepage_crumbs">
 			<a href="/">首页</a> >
-			<a href="">名师介绍</a> >
-			<a href="">名师主页</a> >
-			<a href="">申请点评</a>
+			<a href="/community">名师介绍</a> >
+			<a>名师主页</a>
 		</div>
 
 		<div class="teacherHomepage_introduce">
@@ -41,7 +40,7 @@
 					<div ms-html="userInfo.sex == 2 ? '女' : '男'"></div>
 				</div>
 				<div class="teacherHomepage_introduce_bottom_block" ms-visible="userInfo.city">
-					<img src="{{asset('/home/image/lessonComment/teacherHomepage/location.png')}}" width="100%" height="100%">
+					<img src="{{asset('/home/image/lessonComment/teacherHomepage/location.png')}}" width="100%" height="100%" style="width: 20px; height: 24px;">
 					<div ms-html="userInfo.city"></div>
 				</div>
 				<div id="nostock" class="teacherHomepage_introduce_bottom_block" style="width: 250px;">
@@ -54,7 +53,7 @@
 		<div class="teacherHomepage_detail">
 			<div class="teacherHomepage_detail_tab">
 				<div id="tabs" ms-tabstatus="tabStatus" ms-click="changeTabStatus()" value="2">申请点评</div>
-				<div id="tabs" ms-tabstatus="tabStatus" ms-click="changeTabStatus()" value="0">专题点评</div>
+				<div id="tabs" ms-tabstatus="tabStatus" ms-click="changeTabStatus()" value="0">专题课程</div>
 				<div id="tabs" ms-tabstatus="tabStatus" ms-click="changeTabStatus()" value="1">点评课程</div>
 			</div>
 
@@ -69,11 +68,13 @@
 				<div class="teacherHomepage_detail_content_comment" style="font-size: 18px; color: rgb(102, 102, 102); margin-bottom: 22px;">
 					<img src="{{asset('/home/image/lessonComment/teacherHomepage/point.png')}}">钢琴演奏
 				</div>
-				@if (\Auth::check() && \Auth::user() -> id != $userID)
-					<a ms-attr-href="[--userInfo.stock > 0 ? '/lessonComment/buy/{{$userID}}' : '#nostock'--]" class="teacherHomepage_detail_content_button" ms-applycomment="userInfo.stock">
-						立即申请
-						<div class="teacherHomepage_detail_content_applyTips">该老师近期没有点评名额</div>
-					</a>
+				@if (\Auth::check())
+					@if(\Auth::user() -> type != 2 && \Auth::user() -> id != $userID)
+						<a ms-attr-href="[--userInfo.stock > 0 ? '/lessonComment/buy/{{$userID}}' : '#nostock'--]" class="teacherHomepage_detail_content_button" ms-applycomment="userInfo.stock">
+							立即申请
+							<div class="teacherHomepage_detail_content_applyTips">该老师近期没有点评名额</div>
+						</a>
+					@endif
 				@else
 					<a href="/index/login" class="teacherHomepage_detail_content_button active">立即申请</a>
 				@endif
@@ -101,9 +102,10 @@
 						<div class="title" ms-html="el.courseTitle"></div>
 						<div class="detail">
 							<div class="time"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--el.extra--] 课时</div>
-							<div class="learned"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--el.coursePlayView--] 人学过</div>
+							<div class="learned"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--parseInt(el.coursePlayView) + parseInt(el.courseStudyNum)--] 人学过</div>
 						</div>
-						<div class="price" ms-html="'￥ ' + el.coursePrice / 100"></div>
+						<div class="price" ms-if="el.coursePrice > 0" ms-html="'￥ ' + el.coursePrice / 100"></div>
+						<div class="price" ms-if="el.coursePrice <= 0" ms-html="'免费课程'"></div>
 					</a>
 				</div>
 				<div class="spinner " ms-visible="loading">
@@ -133,9 +135,10 @@
 						<div class="title" ms-html="el.courseTitle"></div>
 						<div class="detail">
 							<div class="time">讲师：[--el.extra--]</div>
-							<div class="learned"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--el.coursePlayView--] 人学过</div>
+							<div class="learned"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--parseInt(el.coursePlayView) + parseInt(el.courseStudyNum)--] 人学过</div>
 						</div>
-						<div class="price" ms-html="'￥ ' + el.coursePrice / 100"></div>
+						<div class="price" ms-if="el.coursePrice > 0" ms-html="'￥ ' + el.coursePrice / 100"></div>
+						<div class="price" ms-if="el.coursePrice <= 0" ms-html="'免费课程'"></div>
 					</a>
 				</div>
 

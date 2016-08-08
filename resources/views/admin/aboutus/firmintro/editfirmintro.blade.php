@@ -97,6 +97,20 @@
 
 
 
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1">  </label>
+
+                            <div class="col-sm-9">
+                                <span style="color:red">图片大小推荐 627 * 306</span>
+                            </div>
+                        </div>
+
+                        <div class="space-4"></div>
+
+
+
+
+
 
 
 

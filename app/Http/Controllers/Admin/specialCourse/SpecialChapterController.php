@@ -60,44 +60,6 @@ class SpecialChapterController extends Controller
                     }
                 }
 
-                if($val->coursePic){
-                    if(!Cache::get($val->coursePic)){
-                        $val->coursePic = $this->getPlayUrl(($val->coursePic));
-                        Cache::put($val->coursePic,$val->coursePic,1800);
-                    }else{
-                        $val->coursePic = Cache::get($val->coursePic);
-                    }
-                }
-
-                if(!$val->courseLowPath || !$val->courseMediumPath || !$val->courseHighPath){
-//                    dump($val->fileID);
-                    $FileList = $this->transformations($val->fileID);
-//                    dump($FileList);
-                    if($FileList['code'] == 200 && $FileList['data']['Waiting'] < 0){
-                        $filelists = $FileList['data']['FileList']; //取出转好的码
-                        $lists = [];
-                        foreach($filelists as $value){
-                            switch($value['Level']){
-                                case 1:
-                                   $lists['courseLowPath'] = $value['FileID'];
-                                    $lists['coursePic'] = $value['Cover'];
-                                    break;
-                                case 2:
-                                    $lists['courseMediumPath'] = $value['FileID'];
-                                    $lists['coursePic'] = $value['Cover'];
-                                    break;
-                                case 3:
-                                    $lists['courseHighPath'] = $value['FileID'];
-                                    $lists['coursePic'] = $value['Cover'];
-                                    break;
-                            }
-                        }
-                        if($lists){
-                            $lists['status'] = 0;
-                            DB::table('coursechapter')->where('id',$val->id)->update($lists);
-                        }
-                    }
-                }
             }
         }
         $data->type = $request['type'];
@@ -143,30 +105,20 @@ class SpecialChapterController extends Controller
     public function doAddSpecialChapter(Request $request){
 //        dd($request->all());exit();
         if($request['selectid'] == 1){ //表示章
-            $data['courseid'] = $request['courseid'];
+            $data['courseId'] = $request['courseid'];
             $data['title'] = $request['title'];
             $data['parentId'] = 0;
 
         }
         if($request['selectid'] == 2){ //节
-            $data['courseid'] = $request['courseid'];
+            $data['courseId'] = $request['courseid'];
             $data['title'] = $request['title'];
-            $data['fileID'] = $request['fileID'];
             $data['parentId'] = $request['parentId'];
             $data['isTrylearn'] = $request['isTrylearn'];
-            if($request['courseLowPath']){
-                $data['courseLowPath'] = $request['courseLowPath'];
-            }
-            if($request['courseMediumPath']){
-                $data['courseMediumPath'] = $request['courseMediumPath'];
-            }
-            if($request['courseHighPath']){
-                $data['courseHighPath'] = $request['courseHighPath'];
-            }
-            //当三种转码格式都没有时状态值改为锁定
-            if(!$request['courseLowPath'] && !$request['courseMediumPath'] && !$request['courseHighPath']){
-                $data['status'] = 1;
-            }
+            $data['courseLowPath'] = $request['courseLowPath'];
+            $data['courseMediumPath'] = $request['courseMediumPath'];
+            $data['courseHighPath'] = $request['courseHighPath'];
+
         }
         $data['created_at'] = date('Y-m-d H:i:s',time());
         $data['updated_at'] = date('Y-m-d H:i:s',time());
@@ -192,29 +144,16 @@ class SpecialChapterController extends Controller
      *执行课程章节编辑
      */
     public function doEditSpecialChapter(Request $request){
-//        dd($request->all());
+//        dd($request->all());exit();
         if($request['selectid'] == 1){  //章
             $data['title'] = $request['title'];
         }
         if($request['selectid'] == 2){
             $data['title'] = $request['title'];
-            $data['fileID'] = $request['fileID'];
             $data['isTrylearn'] = $request['isTrylearn'];
-            if($request['courseLowPath']){
-                $data['courseLowPath'] = $request['courseLowPath'];
-            }
-            if($request['courseMediumPath']){
-                $data['courseMediumPath'] = $request['courseMediumPath'];
-            }
-            if($request['courseHighPath']){
-                $data['courseHighPath'] = $request['courseHighPath'];
-            }
-            //当三种转码格式都没有时状态值改为锁定
-            if(!$request['courseLowPath'] && !$request['courseMediumPath'] && !$request['courseHighPath']){
-                $data['status'] = 1;
-            }else{
-                $data['status'] = 0;
-            }
+            $data['courseLowPath'] = $request['courseLowPath'];
+            $data['courseMediumPath'] = $request['courseMediumPath'];
+            $data['courseHighPath'] = $request['courseHighPath'];
         }
         $data['updated_at'] = Carbon::now();
         if(DB::table('coursechapter')->where('id',$request['id'])->update($data)){

@@ -161,7 +161,7 @@
                         <div class="right_order_repeat_status" ms-if="el.status == 3">退款中</div>
                         <div class="right_order_repeat_status" ms-if="el.status == 4">已退款</div>
 
-                        <div class="right_order_repeat_control" ms-if="el.status == 0 && el.seven == 1" ms-click="popUpSwitch('applyRefund',el)"><a
+                        <div class="right_order_repeat_control" ms-if="el.status == 2 && el.seven == 1" ms-click="popUpSwitch('applyRefund',el)"><a
                                     href="#">申请退款</a></div>
                         <div class="right_order_repeat_control" ms-if="el.status == 5"><a
                                     ms-attr-href="'/lessonSubject/WeChatPay/'+ el.id">去付款</a></div>
@@ -497,7 +497,8 @@
                     </div>
                     <div class="comment_repeat_title" ms-text="el.courseTitle"></div>
                     <div class="comment_repeat_period"><span ms-text="el.classHour + '课时'"></span> <span ms-text="el.coursePlayView + '人学过'"></span></div>
-                    <div class="comment_repeat_price" ms-text="'￥ ' + el.coursePrice"></div>
+                    <div class="comment_repeat_price" ms-text="'￥ ' + el.coursePrice" ms-if="el.coursePrice"></div>
+                    <div class="comment_repeat_price" ms-text="'免费课程'" ms-if="!el.coursePrice"></div>
                 </div>
                 {{--//专题课程循环结束--}}
                 <div ms-visible="subjectMsg" class="warning_msg">暂无相关课程...</div>
@@ -521,8 +522,8 @@
                     <div class="right_count_right" ms-if="collectionInfo.size() > 0">
                         {{--<span ms-click="getCollectionInfo(1);">最新</span>&nbsp;-&nbsp;<span class="count_right_hot" ms-click="getCollectionInfo(2);">热门</span>--}}
                         <div>
-                            <div class="count_right_store deleteImg"><img src="{{asset('home/image/personCenter/deleteStore.png')}}"/></div>
-                            <div class="count_right_store" style="display: none"><img src="{{asset('home/image/personCenter/success.png')}}"/></div>
+                            <div class="count_right_store"><div class="right_store_store">删除收藏</div></div>
+                            <div class="count_right_store" style="display: none"><div class="right_store_store">完成</div></div>
                         </div>
                     </div>
                 </div>
@@ -545,7 +546,8 @@
                         <span ms-text="'讲师：' + el.teachername"></span>
                         <span ms-html="el.coursePlayView + '人学过'"></span>
                     </div>
-                    <div class="comment_repeat_price" ms-text="'￥ ' + el.coursePrice"></div>
+                    <div class="comment_repeat_price" ms-text="'￥ ' + el.coursePrice" ms-if="el.coursePrice"></div>
+                    <div class="comment_repeat_price" ms-text="'免费课程'" ms-if="!el.coursePrice"></div>
                 </div>
                 {{--//收藏课程循环结束--}}
                 <div ms-visible="collectionMsg" class="warning_msg">暂无收藏课程...</div>
@@ -582,7 +584,7 @@
             <div class="clear"></div>
             <div class="height10"></div>
             <div class="center_right_username">
-                <label><span>用户名</span><input type="text" class="input" placeholder="请填写用户名" readOnly="true" value="{{$data->username}}"></label>
+                <label><span>用户名</span><span class="span_diff">{{$data->username}}</span></label>
             </div>
             @if(\Auth::user()->type == 1)
                 <div class="height40"></div>
@@ -656,10 +658,12 @@
                             @if(!$data->education)
                             <option selected="selected">学历</option>
                             @endif
-                            <option value="专科" {{ $data->education == '专科' ? "selected" : ''}}>专科</option>
-                            <option value="本科" {{ $data->education == '本科' ? "selected" : ''}}>本科</option>
-                            <option value="研究生" {{ $data->education == '研究生' ? "selected" : ''}}>研究生</option>
-                            <option value="博士" {{ $data->education == '博士' ? "selected" : ''}}>博士</option>
+                            <option value="中专" {{$data->education == '中专' ? 'selected' : ''}}>中专</option>
+                            <option value="大专" {{$data->education == '大专' ? 'selected' : ''}}>大专</option>
+                            <option value="本科" {{$data->education == '本科' ? 'selected' : ''}}>本科</option>
+                            <option value="硕士" {{$data->education == '硕士' ? 'selected' : ''}}>硕士</option>
+                            <option value="博士" {{$data->education == '博士' ? 'selected' : ''}}>博士</option>
+                            <option value="博士后" {{$data->education == '博士后' ? 'selected' : ''}}>博士后</option>
                         </select>
                     </span>
                 </div>
@@ -942,7 +946,7 @@
                 <div style="height:20px;"></div>
                 <div id="imgs">
                     <div style="height:50px;"></div>
-                    <img id="imghead" style="" src="{{asset('home/image/personCenter/unload.png')}}">
+                    <img id="imghead" style="" src="{{asset('home/image/personCenter/default.png')}}">
                 </div>
             </div>
             <div class="headImg_con_r">
@@ -952,7 +956,7 @@
                 <div class="headImg_con_r_preview_s">
                     <div id="imgsb" style="width:60px;height:60px;overflow: hidden;">
                         {{--<img style="width: 100%;height:100%" src="{{asset(\Auth::user()->pic)}}" alt="">--}}
-                        <img style="width: 100%;height:100%" src="{{asset('home/image/personCenter/unload.png')}}" alt="">
+                        <img style="width: 100%;height:100%" src="{{asset('home/image/personCenter/default.png')}}" alt="">
                     </div>
                 </div>
                 <div class="headImg_con_r_preview_s_info">60*60</div>
@@ -960,7 +964,7 @@
                 <div class="headImg_con_r_preview_s2">
                     <div id="imgsc" style="width:100px;height:100px;overflow: hidden;">
                         {{--<img style="width: 100%;height:100%" src="{{asset(\Auth::user()->pic)}}" alt="">--}}
-                        <img style="width: 100%;height:100%" src="{{asset('home/image/personCenter/unload.png')}}" alt="">
+                        <img style="width: 100%;height:100%" src="{{asset('home/image/personCenter/default.png')}}" alt="">
                     </div>
                 </div>
                 <div class="headImg_con_r_preview_s_info">100*100</div>

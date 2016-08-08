@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use PaasResource;
 use PaasUser;
 use Primecloud\Pay\Weixin\Kernel\WxPayConfig;
+use Log;
 
 trait Gadget {
 
@@ -38,12 +39,17 @@ trait Gadget {
      */
     private function getPlayUrl($fileID, $host = '')
     {
-        $path = PaasResource::clickplay($fileID, $host);
-        if ($path['message'] == 'OK' && $path['code'] == 200) {
-            return $path['data'];
-        } else {
-            return false;
-        }
+		try {
+			$path = PaasResource::clickplay($fileID, $host);
+			if ($path['message'] == 'OK' && $path['code'] == 200) {
+				return $path['data'];
+			} else {
+				return false;
+			}
+		} catch (\Exception $e) {
+			Log::debug($e -> getMessage().'getPlayUrl 抛出异常');
+			return false;
+		}
     }
 
 
@@ -54,9 +60,14 @@ trait Gadget {
      */
     public function uploadResource(Request $request)
     {
-        if (!PaasUser::apply()) return Response() -> json(["type" => false, 'status' => '401']);
-        $recourse = PaasResource::getuploadstatus("/?md5=". $request['md5'] ."&filename=". $request['filename'] ."&directory=". $request['directory']);
-        return $this -> returnResult($recourse);
+		try {
+			if (!PaasUser::apply()) return Response() -> json(["type" => false, 'status' => '401']);
+			$recourse = PaasResource::getuploadstatus("/?md5=". $request['md5'] ."&filename=". $request['filename'] ."&directory=". $request['directory']);
+			return $this -> returnResult($recourse);
+		} catch (\Exception $e) {
+			Log::debug($e -> getMessage().'uploadResource 抛出异常');
+			return false;
+		}
     }
 
 
@@ -67,9 +78,14 @@ trait Gadget {
      */
     public function transformation(Request $request)
     {
-        if (!PaasUser::apply()) return Response() -> json(["type" => false, 'status' => '401']);
-        $recourse = PaasResource::transformation("?fileid=". $request['fileID']);
-        return $this -> returnResult($recourse);
+		try {
+			if (!PaasUser::apply()) return Response() -> json(["type" => false, 'status' => '401']);
+			$recourse = PaasResource::transformation("?fileid=". $request['fileID']);
+			return $this -> returnResult($recourse);
+		} catch (\Exception $e) {
+			Log::debug($e -> getMessage().'transformation 抛出异常');
+			return false;
+		}
     }
 
     /**
@@ -79,9 +95,14 @@ trait Gadget {
      */
     public function transformations($fileID)
     {
-        if (!PaasUser::apply()) return Response() -> json(["type" => false, 'status' => '401']);
-        $recourse = PaasResource::transformation("?fileid=". $fileID);
-        return $recourse;
+		try {
+			if (!PaasUser::apply()) return Response() -> json(["type" => false, 'status' => '401']);
+			$recourse = PaasResource::transformation("?fileid=". $fileID);
+			return $recourse;
+		} catch (\Exception $e) {
+			Log::debug($e -> getMessage().'transformations 抛出异常');
+			return false;
+		}
     }
 
 

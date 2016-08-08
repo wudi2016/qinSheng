@@ -16,13 +16,17 @@
                 </li>
 
                 <li>
-                    <a href="{{url('/admin/specialCourse/specialCourseList')}}">课程管理</a>
+                    @if($data->courseType == 0)
+                        <a href="{{url('/admin/specialCourse/specialCourseList')}}">课程管理</a>
+                    @else
+                        <a href="{{url('/admin/commentCourse/commentCourseList')}}">点评管理</a>
+                    @endif
                 </li>
                 <li class="active">意见反馈列表</li>
             </ul><!-- .breadcrumb -->
 
             <div class="nav-search" id="nav-search">
-                <form action="{{url('/admin/specialCourse/specialFeedbackList')}}" method="get" class="form-search">
+                <form action="{{url('/admin/specialCourse/specialFeedbackList/'.$data->courseType)}}" method="get" class="form-search">
 
                     <span style=""  class="searchtype" iid="form-field-1">
                         <input type="text" name="beginTime" id="form-field-1" placeholder="开始时间" class="col-xs-10 col-sm-5" value="{{$data->beginTime}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;background:url('{{asset("admin/image/2.png")}}') no-repeat;background-position:right;"/>&nbsp;&nbsp;
@@ -118,7 +122,7 @@
                                             </td>
                                             <td>{{$feedback->courseTitle}}</td>
                                             <td>{{$feedback->backType}}</td>
-                                            <td>{{$feedback->courseType ? '点评课程' : '专家课程'}}</td>
+                                            <td>{{$feedback->courseType ? '点评课程' : '专题课程'}}</td>
                                             <td>{{$feedback->username}}</td>
                                             <td>{{$feedback->backContent}}</td>
                                             <td>{{$feedback->tel}}</td>
@@ -131,8 +135,9 @@
                                                     {{--<i class="icon-ok bigger-120"></i>--}}
                                                     {{--</button>--}}
 
+                                                    @permission('edit.course')
                                                     <span class="btn btn-xs btn-inverse" style="position: relative;display: inline-block;">
-                                                        <strong>课程状态</strong>
+                                                        <strong>审核状态</strong>
                                                         <span class="icon-caret-down icon-on-right"></span>
                                                         <select id="" class="col-xs-10 col-sm-2" onchange="feedbackState({{$feedback->id}},this.value);" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">
                                                             <option value="44" selected></option>
@@ -140,11 +145,13 @@
                                                             <option value="1" >已经处理</option>
                                                         </select>
                                                     </span>
+                                                    @endpermission
 
-
+                                                    @permission('del.course')
                                                     <a href="{{url('/admin/specialCourse/delSpecialFeedback/'.$feedback->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
                                                         <i class="icon-trash bigger-120"></i>
                                                     </a>
+                                                    @endpermission
 
                                                 </div>
 

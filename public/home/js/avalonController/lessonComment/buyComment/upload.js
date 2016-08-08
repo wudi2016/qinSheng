@@ -9,11 +9,14 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 		uploadInfo: {
 			fileID: null,
 			courseTitle: null,
-			message: null
+			message: '',
+			courseLowPath: '',
+			courseMediumPath: '',
+			courseHighPath: ''
 		},
 		titleLength: 0,
 		messageLength: 0,
-		warning: {title: false, message: false},
+		warning: {title: false},
 		getData: function(url, model, data, method, callback) {
 			$.ajax({
 				type: method || 'GET',
@@ -55,7 +58,6 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 											break;
 										case 3:
 											upload.uploadInfo.courseHighPath = response.data.data.FileList[i].FileID;
-											upload.uploadInfo.coursePic = response.data.data.FileList[i].Cover;
 											break;
 									}
 								}
@@ -63,13 +65,16 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 							}
 						}
 						if (model == 'finishUpload' || model == 'isReload') {
-							upload.messageID && upload.getData('/lessonComment/getFirst', 'deleteMessage', {action: 3, table: 'usermessage', data: {id: upload.messageID}}, 'POST');
-							location.href = '/member/student/'+ upload.mineID +'/lessonComment';
+							callback && callback(function () {
+								window.location.href = '/member/student/'+ upload.mineID +'/lessonComment';
+							});
 						}
 						if (model == 'comment') {
-							upload.messageID && upload.getData('/lessonComment/getFirst', 'deleteMessage', {action: 3, table: 'usermessage', data: {id: upload.messageID}}, 'POST');
-							location.href = '/member/famousTeacher/waitComment';
+							callback && callback(function () {
+								window.location.href = '/member/famousTeacher/basicInfo';
+							});
 						}
+						model == 'deleteMessage' && callback();
 					}
 				},
 				error: function(error) {
@@ -138,9 +143,17 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 				upload.uploadInfo.state = 1;
 				if (isReload === 'reComment') {
 					delete upload.uploadInfo.courseTitle;
-					upload.getData('/lessonComment/getFirst', 'comment', {data: upload.uploadInfo, action: 4, condition: {id: upload.commentID}, table: 'commentcourse'}, 'POST');
+					upload.getData('/lessonComment/getFirst', 'comment', {data: upload.uploadInfo, action: 4, condition: {id: upload.commentID}, table: 'commentcourse'}, 'POST', function (callback) {
+						upload.messageID && upload.getData('/lessonComment/getFirst', 'deleteMessage', {action: 3, table: 'usermessage', data: {id: upload.messageID}}, 'POST', function() {
+							callback();
+						});
+					});
 				} else {
-					upload.getData('/lessonComment/finishComment', 'comment', upload.uploadInfo, 'POST');
+					upload.getData('/lessonComment/finishComment', 'comment', upload.uploadInfo, 'POST', function(callback) {
+						upload.messageID && upload.getData('/lessonComment/getFirst', 'deleteMessage', {action: 3, table: 'usermessage', data: {id: upload.messageID}}, 'POST', function() {
+							callback();
+						});
+					});
 				}
 			} else {
 				for (var i in upload.warning) {
@@ -152,10 +165,16 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 				if (isReload) {
 					for (var i in upload.temp) upload.temp[i] == upload.uploadInfo[i] && delete upload.uploadInfo[i];
 					upload.uploadInfo.state = 1;
-					upload.getData('/lessonComment/getFirst', 'isReload', {data: upload.uploadInfo, table: 'applycourse', condition: {id: upload.applyID}, action: 4}, 'POST');
+					upload.getData('/lessonComment/getFirst', 'isReload', {data: upload.uploadInfo, table: 'applycourse', condition: {id: upload.applyID}, action: 4}, 'POST', function(callback) {
+						upload.messageID && upload.getData('/lessonComment/getFirst', 'deleteMessage', {action: 3, table: 'usermessage', data: {id: upload.messageID}}, 'POST', function() {
+							callback();
+						});
+					});
 				} else {
 					upload.uploadInfo.userId = upload.mineID;
-					upload.getData('/lessonComment/finishUpload', 'finishUpload', {data: upload.uploadInfo, orderID: upload.orderID}, 'POST');
+					upload.getData('/lessonComment/finishUpload', 'finishUpload', {data: upload.uploadInfo, orderID: upload.orderID}, 'POST', function (callback) {
+						callback();
+					});
 				}
 			}
 			

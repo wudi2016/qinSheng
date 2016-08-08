@@ -72,9 +72,11 @@
                 </div>
             @endif
 
+            @permission('add.course')
             <a href="{{url('admin/specialCourse/addSpecialCourse')}}" class="btn btn-xs btn-info">
                 <i class="icon-ok bigger-110">添加</i>
             </a>
+            @endpermission
 
             <div class="row">
 
@@ -101,8 +103,9 @@
                                         <th>授课讲师</th>
                                         {{--<th>课程</th>--}}
                                         <th>封面图</th>
-                                        <th>折扣</th>
                                         <th>价格</th>
+                                        <th>折扣</th>
+                                        <th>折扣后价格</th>
                                         <th>浏览数</th>
                                         <th>观看数</th>
                                         <th>学习数(true)</th>
@@ -138,9 +141,10 @@
                                             {{--</td>--}}
                                             <td>
                                                 {{--<a id="example2-2" href="{{asset($comcourse->coursePic)}}">查看--}}
-                                                <img src="{{asset($special->coursePic)}}" alt="" width="50px" height="50px">
+                                                <img src="{{asset($special->coursePic)}}" alt="" width="50px" height="50px" onerror="this.src='/admin/image/back.png'">
                                                 {{--</a>--}}
                                             </td>
+                                            <td>{{$special->coursePrice}}</td>
                                             <td>
                                                 @if($special->courseDiscount != 0)
                                                     {{$special->courseDiscount}} 折
@@ -149,7 +153,7 @@
                                                 @endif
 
                                             </td>
-                                            <td>{{$special->coursePrice}}</td>
+                                            <td>{{$special->discountPrice}}</td>
                                             <td>{{$special->courseView}}</td>
                                             <td>{{$special->coursePlayView}}</td>
                                             <td>{{$special->completecount}}</td>
@@ -165,6 +169,7 @@
                                                     {{--</button>--}}
 
 
+                                                @permission('edit.course')
                                                 <span class="btn btn-xs btn-inverse" style="position: relative;display: inline-block;">
                                                     <strong>课程状态</strong>
                                                     <span class="icon-caret-down icon-on-right"></span>
@@ -174,33 +179,48 @@
                                                         <option value="1" >锁定</option>
                                                     </select>
                                                 </span>
+                                                @endpermission
 
 
+                                                    @permission('check.course')
                                                     <a href="{{url('/admin/specialCourse/specialChapterList/'.$special->id)}}" class="btn btn-xs btn-success">
                                                         <i class="icon-list bigger-120"></i>章节
                                                     </a>
+                                                    @endpermission
 
+                                                    @permission('check.course')
                                                     <a href="{{url('/admin/specialCourse/dataList/'.$special->id)}}" class="btn btn-xs btn-success">
                                                         <i class="icon-download bigger-120"></i>资料
                                                     </a>
+                                                    @endpermission
 
+                                                    @permission('edit.course')
                                                     <a href="{{url('/admin/specialCourse/editSpecialCourse/'.$special->id)}}" class="btn btn-xs btn-info">
                                                         <i class="icon-edit bigger-120"></i>
                                                     </a>
+                                                    @endpermission
 
+                                                    @permission('check.course')
                                                     <div href="" class="btn btn-xs btn-warning" ms-click="commentdetailpop({{$special->id}})">
                                                         <i class="icon-flag bigger-120"></i>
                                                     </div>
+                                                    @endpermission
 
-                                                    @if($special->courseStatus == 0)
-                                                        <a href="{{url('/admin/specialCourse/delSpecialCourse/'.$special->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
-                                                            <i class="icon-trash bigger-120"></i>
-                                                        </a>
-                                                    @else
-                                                        <div class="btn btn-xs btn-">
-                                                            <i class="icon-trash bigger-120"></i>
-                                                        </div>
-                                                    @endif
+                                                    @permission('del.course')
+                                                        @if($special->courseStatus == 0)
+                                                            <a href="{{url('/admin/specialCourse/delSpecialCourse/'.$special->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
+                                                                <i class="icon-trash bigger-120"></i>
+                                                            </a>
+                                                        @else
+                                                            <div class="btn btn-xs btn-">
+                                                                <i class="icon-trash bigger-120"></i>
+                                                            </div>
+                                                        @endif
+                                                    @endpermission
+
+                                                    <a href="{{url('/admin/specialCourse/addRecommendSpecialCourse/'.$special->id)}}" class="btn btn-xs btn-info">
+                                                        <i class=""></i>推荐
+                                                    </a>
 
                                                 </div>
 

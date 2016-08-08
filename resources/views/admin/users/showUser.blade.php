@@ -219,14 +219,14 @@
                                        </div>
                                    </div>
 
-                                   <div class="clearfix form-actions">
-                                       <div class="col-md-offset-3 col-md-4">
-                                           <a href="{{url('admin/users/userList')}}" class="btn btn-info btn-block" style="margin-left: -15px;">
-                                               <i class="icon-ok bigger-110"></i>
-                                               返回首页
-                                           </a>
-                                       </div>
-                                   </div>
+                                   {{--<div class="clearfix form-actions">--}}
+                                       {{--<div class="col-md-offset-3 col-md-4">--}}
+                                           {{--<a href="{{url('admin/users/userList')}}" class="btn btn-info btn-block" style="margin-left: -15px;">--}}
+                                               {{--<i class="icon-ok bigger-110"></i>--}}
+                                               {{--返回首页--}}
+                                           {{--</a>--}}
+                                       {{--</div>--}}
+                                   {{--</div>--}}
 
                                 <div class="clearfix form-actions">
                                     <div class="col-md-offset-3 col-md-4">
@@ -236,7 +236,7 @@
                                         </a>
                                     </div>
                                 </div>
-
+                            </form>
                            </div><!-- /.col -->
                        </div><!-- /row -->
 

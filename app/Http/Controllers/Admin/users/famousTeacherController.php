@@ -25,9 +25,8 @@ class famousTeacherController extends Controller
         $search = [];
         //搜索
         $query = DB::table('users as u')
-            ->leftJoin('users as us','u.fromyaoqingma','=','us.yaoqingma')
             ->leftJoin('teacher as t','u.id','=','t.parentId')
-            ->select('u.*','us.id as userId','us.username as name','t.price','t.stock','t.intro','t.cover');
+            ->select('u.*','u.id as userId','u.username as name','t.price','t.stock','t.intro','t.cover');
 
         if($request['beginTime']){ //上传的起止时间
             $query = $query->where('u.created_at','>=',$request['beginTime']);
@@ -257,12 +256,13 @@ class famousTeacherController extends Controller
     protected function validator(array $data)
     {
         $rules = [
-            'username' => 'required|min:4|max:16',
+            'username' => 'required|min:2|max:16',
             'realname' => 'required',
             'password' => 'sometimes|required|min:6|max:16',
             'phone' => 'required|digits:11',
             'sex' => 'required',
-            'price'=>'required|integer',
+//            'price'=>'required|integer',
+            'price'=>'required',
             'stock'=>'required|integer',
             'intro'=>'required|max:120'
 
@@ -270,7 +270,7 @@ class famousTeacherController extends Controller
 
         $messages = [
             'username.required' => '请输入用户名',
-            'username.min' => '用户名最少4位',
+            'username.min' => '用户名最少2位',
             'username.max' => '用户名最多16位',
             'realname.required' => '请输入姓名',
             'password.required' => '请输入密码',
@@ -280,7 +280,7 @@ class famousTeacherController extends Controller
             'phone.digits' => '手机号为11位数字',
             'sex.required' => '性别不能为空',
             'price.required'=>'请输入价格',
-            'price.integer'=>'价格为整型',
+//            'price.integer'=>'价格为整型',
             'stock.required'=>'请输入点评名额',
             'stock.integer'=>'名额为整型',
             'intro.required'=>'请输入名师介绍',

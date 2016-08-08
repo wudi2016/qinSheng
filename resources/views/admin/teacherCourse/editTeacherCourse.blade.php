@@ -74,36 +74,36 @@
                             </div>
                         </div>
 
-                        {{--<div class="space-4"></div>--}}
+                        <div class="space-4"></div>
 
-                        {{--<div class="form-group">--}}
-                            {{--<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 封面图 </label>--}}
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 封面图 </label>
 
-                            {{--<div class="col-sm-9">--}}
-                                {{--<img src="{{asset($data->coursePic)}}" id="uploadPreview" class="col-xs-10 col-sm-5" onerror="this.src='/admin/image/back.png'"/>--}}
-                            {{--<span class="help-inline col-xs-12 col-sm-7">--}}
-                                {{--<label class="middle">--}}
-                                    {{--<span class="lbl"></span>--}}
-                                {{--</label>--}}
-                            {{--</span>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
+                            <div class="col-sm-9">
+                                <img src="{{asset($data->coursePic)}}" id="uploadPreview" class="col-xs-10 col-sm-5" onerror="this.src='/admin/image/back.png'"/>
+                            <span class="help-inline col-xs-12 col-sm-7">
+                                <label class="middle">
+                                    <span class="lbl"></span>
+                                </label>
+                            </span>
+                            </div>
+                        </div>
 
-                        {{--<div class="space-4"></div>--}}
+                        <div class="space-4"></div>
 
-                        {{--<div class="form-group">--}}
-                            {{--<label class="col-sm-3 control-label no-padding-right" for="form-field-1">  </label>--}}
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1">  </label>
 
-                            {{--<div class="col-sm-9">--}}
-                                {{--<input type="file" id="uploadImage" name="coursePic" onchange="loadImageFile();" style="width:170px;height:40px;position: absolute;top: 0px;opacity: 0;"/>--}}
-                                {{--<div class="second_file"><img src="/admin/image//1.png"/></div>--}}
-                            {{--<span class="help-inline col-xs-12 col-sm-7">--}}
-                                {{--<label class="middle">--}}
-                                    {{--<span class="lbl"></span>--}}
-                                {{--</label>--}}
-                            {{--</span>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
+                            <div class="col-sm-9">
+                                <input type="file" id="uploadImage" name="coursePic" onchange="loadImageFile();" style="width:170px;height:40px;position: absolute;top: 0px;opacity: 0;"/>
+                                <div class="second_file"><img src="/admin/image//1.png"/></div>
+                            <span class="help-inline col-xs-12 col-sm-7">
+                                <label class="middle">
+                                    <span class="lbl"></span>
+                                </label>
+                            </span>
+                            </div>
+                        </div>
 
 
                         {{--<div class="space-4"></div>--}}
@@ -172,6 +172,21 @@
                         @if($data->state == 2)
 
 
+                            <div class="space-4"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 价格 </label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" name="coursePrice" id="form-field-1" placeholder="价格" class="col-xs-10 col-sm-5" value="{{$data->coursePrice}}" />
+                                <span class="help-inline col-xs-12 col-sm-7">
+                                    <label class="middle">
+                                        <span class="lbl"></span>
+                                    </label>
+                                </span>
+                                </div>
+                            </div>
+
                             <div class="form-group">
                                 <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 课程类型 </label>
 
@@ -217,20 +232,19 @@
                                 </div>
                             </div>
 
-                            <div class="space-4"></div>
-
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 价格 </label>
+                            <div class="form-group" ms-visible="watchSelect">
+                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 折扣后价格 </label>
 
                                 <div class="col-sm-9">
-                                    <input type="text" name="coursePrice" id="form-field-1" placeholder="价格" class="col-xs-10 col-sm-5" value="{{$data->coursePrice}}" />
-                            <span class="help-inline col-xs-12 col-sm-7">
-                                <label class="middle">
-                                    <span class="lbl"></span>
-                                </label>
-                            </span>
+                                    <input type="text" readonly name="" id="form-field-1" placeholder="折扣后价格" class="col-xs-10 col-sm-5"  ms-duplex="discountPrice" />
+                                <span class="help-inline col-xs-12 col-sm-7">
+                                    <label class="middle">
+                                        <span class="lbl"></span>
+                                    </label>
+                                </span>
                                 </div>
                             </div>
+
                         @endif
 
 
@@ -284,6 +298,16 @@
     <script type="text/javascript" src="{{ URL::asset('/admin/js/addSubject.js') }}"></script>
     <script>
         require(['/specialCourse/editcourse'], function (detail) {
+            detail.coursePrice = '{{$data->coursePrice}}' || null
+
+            //进入编辑页默认是打折课程类型时显示折扣和折扣后价钱
+            var coursetype = $('#coursetype').val();
+            if(coursetype == 1){
+                detail.watchSelect = true;
+                var aa = $('#zhekou').val();
+                var price = detail.coursePrice;
+                detail.discountPrice = Math.ceil(price * (aa / 10));
+            }
             avalon.scan();
         });
     </script>

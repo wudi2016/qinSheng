@@ -90,6 +90,9 @@
     /*font-weight:bold;*/
     font-size:20px;
     color:rgb(22,22,22);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .cont_con_con_con_li_r_time{
     width:525px;
@@ -107,7 +110,9 @@
     font-size:18px;
     /*color:rgb(102,102,102);*/
     color:rgb(66,66,66);
-
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 

@@ -6,13 +6,14 @@
 .background{
     width:100%;
     /*height:1275px;*/
-    height:auto;
+    /*height:auto;*/
+    min-height:900px;
     background: #F5F5F5;
 }
 
 .main{
     width:1200px;
-    height:1050px;
+    min-height:870px;
     margin: 0 auto;
 }
 
@@ -48,7 +49,7 @@
     cursor:pointer;
     text-align: center;
     line-height: 50px;
-    font-size: 20px;
+    font-size: 18px;
     /*color:#ffffff;*/
     font-family:"微软雅黑";
     /*background: #209EEA;*/
@@ -68,51 +69,51 @@
 
 .main_right_content{
     width:628px;
-    height:1000px;
+    min-height:780px;
     margin-top: 67px;
     margin-left: 107px;
     /*background: #ccc;*/
 }
 
-.main_right_content2{
-    width:628px;
-    height:1000px;
-    margin-top: 67px;
-    margin-left: 107px;
-    /*background: #ccc;*/
-}
+/*.main_right_content2{*/
+    /*width:628px;*/
+    /*min-height:780px;*/
+    /*margin-top: 67px;*/
+    /*margin-left: 107px;*/
+    /*!*background: #ccc;*!*/
+/*}*/
 
-.main_right_content3{
-    width:628px;
-    height:1000px;
-    margin-top: 67px;
-    margin-left: 107px;
-    /*background: #ccc;*/
-}
+/*.main_right_content3{*/
+    /*width:628px;*/
+    /*min-height:780px;*/
+    /*margin-top: 67px;*/
+    /*margin-left: 107px;*/
+    /*!*background: #ccc;*!*/
+/*}*/
 
-.main_right_content4{
-    width:628px;
-    height:1000px;
-    margin-top: 67px;
-    margin-left: 107px;
-    /*background: #ccc;*/
-}
+/*.main_right_content4{*/
+    /*width:628px;*/
+    /*min-height:780px;*/
+    /*margin-top: 67px;*/
+    /*margin-left: 107px;*/
+    /*!*background: #ccc;*!*/
+/*}*/
 
-.main_right_content5{
-    width:628px;
-    height:1000px;
-    margin-top: 67px;
-    margin-left: 107px;
-    /*background: #ccc;*/
-}
+/*.main_right_content5{*/
+    /*width:628px;*/
+    /*min-height:780px;*/
+    /*margin-top: 67px;*/
+    /*margin-left: 107px;*/
+    /*!*background: #ccc;*!*/
+/*}*/
 
-.main_right_content6{
-    width:628px;
-    height:1000px;
-    margin-top: 67px;
-    margin-left: 107px;
-    /*background: #ccc;*/
-}
+/*.main_right_content6{*/
+    /*width:628px;*/
+    /*min-height:780px;*/
+    /*margin-top: 67px;*/
+    /*margin-left: 107px;*/
+    /*!*background: #ccc;*!*/
+/*}*/
 
 /*公司介绍*/
 .main_right_content_name{
@@ -144,7 +145,7 @@
 
 .main_right_content_intro_qita{
     width:627px;
-    height:240px;
+    min-height:240px;
     font-size: 18px;
     /*color:#ffffff;*/
     font-family:"微软雅黑";
@@ -176,7 +177,7 @@
 
 .main_right_content_intro1{
     width:627px;
-    height:240px;
+    min-height:240px;
     font-size: 16px;
     color:rgb(102,102,102);
     line-height:30px;

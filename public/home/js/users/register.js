@@ -38,8 +38,8 @@ $('.uname').blur(function(){
             self.parent().siblings('.cuo').removeClass('hide');
             checkUname  = false;
             return false;
-        }else if (!username.match(/^[\u4E00-\u9FA5A-Za-z0-9_]{4,16}$/)) {//格式错误
-            self.parent().parent().next().html('* 4—16位字母(不区分大小写)汉字/数字/下划线');
+        }else if (!username.match(/^[\u4E00-\u9FA5A-Za-z0-9_]{2,8}$/)) {//格式错误
+            self.parent().parent().next().html('* 2—8位字母(不区分大小写)汉字/数字/下划线');
             self.parent().siblings('.cuo').removeClass('hide');
             checkUname  = false;
             return false;

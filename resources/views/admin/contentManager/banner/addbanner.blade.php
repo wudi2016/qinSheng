@@ -1,4 +1,7 @@
 @extends('layouts.layoutAdmin')
+@section('css')
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('/admin/jscolor/jquery.bigcolorpicker.css') }}" />
+@endsection
 @section('content')
 
 
@@ -17,19 +20,19 @@
                 </li>
 
                 <li>
-                    <a href="{{url('/admin/activity/activityList')}}">赛事活动列表</a>
+                    <a href="{{url('/admin/contentManager/bannerList')}}">banner列表</a>
                 </li>
-                <li class="active">赛事活动添加</li>
+                <li class="active">banner添加</li>
             </ul><!-- .breadcrumb -->
         </div>
 
         <div class="page-content">
             <div class="page-header">
                 <h1>
-                    赛事活动管理
+                    banner列表
                     <small>
                         <i class="icon-double-angle-right"></i>
-                        活动添加
+                        banner添加
                     </small>
                 </h1>
             </div><!-- /.page-header -->
@@ -57,7 +60,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 标题名称 </label>
 
                             <div class="col-sm-9">
-                                <input  type="text" name="title" id="form-field-1" placeholder="友链名称" class="col-xs-10 col-sm-5" value="" />
+                                <input  type="text" name="title" id="form-field-1" placeholder="友链名称" class="col-xs-10 col-sm-5" value="{{old('title')}}" />
                                     <span class="help-inline col-xs-12 col-sm-7">
                                     <label class="middle">
                                         <span class="lbl"></span>
@@ -74,7 +77,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 链接地址 </label>
 
                             <div class="col-sm-9">
-                                <input  type="text" name="url" id="form-field-1" placeholder="(填写格式例如: www.baidu.com)" class="col-xs-10 col-sm-5" value="" />
+                                <input  type="text" name="url" id="form-field-1" placeholder="(填写格式例如: www.baidu.com)" class="col-xs-10 col-sm-5" value="{{old('url')}}" />
                                     <span class="help-inline col-xs-12 col-sm-7">
                                     <label class="middle">
                                         <span class="lbl"></span>
@@ -84,6 +87,24 @@
                         </div>
 
                         <div class="space-4"></div>
+
+
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 背景颜色 </label>
+
+                            <div class="col-sm-9">
+                                <input  id="bgColor" type="text" name="bgColor" id="form-field-1" placeholder="背景颜色" class="col-xs-10 col-sm-5" value="" />
+                                    <span class="help-inline col-xs-12 col-sm-7">
+                                    <label class="middle">
+                                        <span class="lbl"></span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="space-4"></div>
+
 
 
 
@@ -157,7 +178,12 @@
     <script language="javascript" type="text/javascript" src="{{asset('DatePicker/WdatePicker.js') }}"></script>
     <script language="javascript" type="text/javascript" src="{{asset('admin/js/searchtype.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('/admin/js/addSubject.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('/admin/jscolor/jquery.bigcolorpicker.min.js') }}"></script>
 
-
+    <script>
+        $(function() {
+            $("#bgColor").bigColorpicker("bgColor");
+        });
+    </script>
 
 @endsection

@@ -3,6 +3,7 @@
 @section('title', '首页')
 
 @section('css')
+    <link rel="stylesheet" type="text/css" href="{{asset('home/css/index/flexslider.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('home/css/index/index.css')}}">
 @endsection
 
@@ -10,29 +11,41 @@
     <div ms-controller="index">
     <!-- 滚动栏 -->
     <div class="bar">
-        <div class="banner">
-            <ul>
+
+        <div class="flexslider">
+            <ul class="slides">
                 @foreach ($banners as $banner)
-                <li><a href="{{url('http://'.$banner->url)}}" target="_blank"><img style="width: 100%;min-height: 656px;" src="{{asset($banner->path)}}" /></a></li>
+                {{--<li><a href="{{url('http://'.$banner->url)}}" target="_blank"><img style="width: 100%;height: 480px;" src="{{asset($banner->path)}}" /></a></li>--}}
+                <li style="background: {{$banner->bgColor}};width: 100%;height: 480px;"><a href="{{url('http://'.$banner->url)}}" target="_blank"><img style="width: 1200px;height: 480px;position: relative;top:0;left:50%;margin-left: -600px;" src="{{asset($banner->path)}}" /></a></li>
                 @endforeach
+                {{--<li style="background: #1D1D1B;width: 100%;height: 480px;"><a href=""><img style="width: 1200px;height: 480px;position: relative;top:0;left:50%;margin-left: -600px;" src="{{asset('home/image/index/banner.png')}}" /></a></li>--}}
+                {{--<li style="background: #DFD5CB;width: 100%;height: 480px;"><a href=""><img style="width: 1200px;height: 480px;position: relative;top:0;left:50%;margin-left: -600px;" src="{{asset('home/image/index/banner2.png')}}" /></a></li>--}}
+            </ul>
+        </div>
+
+        {{--<div class="banner">--}}
+            {{--<ul>--}}
+                {{--@foreach ($banners as $banner)--}}
+                {{--<li><a href="{{url('http://'.$banner->url)}}" target="_blank"><img style="width: 100%;height: 480px;" src="{{asset($banner->path)}}" /></a></li>--}}
+                {{--@endforeach--}}
 
                 {{--<li><a href=""><img style="width: 100%;" src="{{asset('home/image/index/banner.png')}}" /></a></li>--}}
                 {{--<li><a href=""><img style="width: 100%;" src="{{asset('home/image/index/banner2.png')}}" /></a></li>--}}
-            </ul>
-            <a href="javascript:void(0);" class="unslider-arrow04 prev"></a>
-            <a href="javascript:void(0);" class="unslider-arrow04 next"></a>
-        </div>
+            {{--</ul>--}}
+            {{--<a href="javascript:void(0);" class="unslider-arrow04 prev"></a>--}}
+            {{--<a href="javascript:void(0);" class="unslider-arrow04 next"></a>--}}
+        {{--</div>--}}
     </div>
     <!-- 课程，赛事活动 -->
     <div class="activity">
         <div class="activity_con">
-        <div style="height:66px;"></div>
+        <div style="height:50px;"></div>
         <div class="activity_con">
             <a href="lessonSubject/list/1">
                 <div class="activity_con_l">
                     <div class="activity_con_l_l"></div>
                     <div class="activity_con_l_r">
-                        <div style="height:85px;"></div>
+                        <div style="height:65px;"></div>
                         <div class="activity_con_l_r_t">专题课程</div>
                         <div class="activity_con_l_r_c">通过权威专家的细致讲解，针对钢琴演奏过程中的重点进行教学演示，有效帮助学员提高钢琴演奏水平。</div>
                     </div>
@@ -42,7 +55,7 @@
                 <a href="{{asset('/index/games')}}">
                 <div class="activity_con_r_l"></div>
                 <div class="activity_con_l_r">
-                    <div style="height:85px;"></div>
+                    <div style="height:65px;"></div>
                     <div class="activity_con_l_r_t">活动赛事</div>
                     <div class="activity_con_l_r_c">点评网将承办各类艺术教育赛事与活动，让艺术大师走进您的身边，为广大教师与学员提供知识分享与经验交流的舞台。</div>
                 </div>
@@ -133,7 +146,8 @@
                             <span class="left classes" ms-text="el.counttime+'课时'"></span>
                             <span class="right study" ms-text="el.countpeople+'人学过'"></span>
                         </div>
-                        <span class="bot" ms-text="'￥'+el.price"></span>
+                        <span class="bot" ms-if="el.price" ms-text="'￥'+el.price"></span>
+                        <span class="bot" ms-if="!el.price" ms-text="'免费课程'"></span>
                     </div>
                     <img class="logo_hot hide" ms-class="show:el.courseType == 1" ms-if="el.courseType == 1" ms-attr-src="{{asset('/home/image/index/course/[--el.courseDiscount--].png')}}" alt="">
                     <img class="logo_hot hide" ms-class="show:el.courseType == 2" src="{{asset('/home/image/index/course/hot.png')}}" alt="">
@@ -181,7 +195,8 @@
                             <span class="leftt" ms-text="'讲师：'+el.teacher"></span>
                             <span class="right study" ms-text="el.countpeople+'人学过'"></span>
                         </div>
-                        <span class="bot" ms-text="'￥'+el.price"></span>
+                        <span class="bot" ms-if="el.price" ms-text="'￥'+el.price"></span>
+                        <span class="bot" ms-if="!el.price" ms-text="'免费课程'"></span>
                     </div>
                     <img class="logo_hot hide" ms-class="show:el.courseType == 1" ms-if="el.courseType == 1" ms-attr-src="{{asset('/home/image/index/course/[--el.courseDiscount--].png')}}" alt="">
                     <img class="logo_hot hide" ms-class="show:el.courseType == 2" src="{{asset('/home/image/index/course/hot.png')}}" alt="">
@@ -210,7 +225,7 @@
         </div>
     </div>
     <!-- 合作伙伴 -->
-    <div style="height:50px;background: #ffffff"></div>
+    {{--<div style="height:50px;background: #ffffff"></div>--}}
     <div class="flinks">
         <div class="flinks_con" style="display: inline">
             @foreach ($frids as $frid)
@@ -223,10 +238,23 @@
 
 @section('js')
     <script type="text/javascript" src="{{asset('home/js/index/index.js')}}"></script>
-    <script type="text/javascript" src="{{asset('home/js/index/onslider.js')}}"></script>
+    <script type="text/javascript" src="{{asset('home/js/index/jquery.flexslider-min.js')}}"></script>
     <script>
         require(['/index/index'], function () {
             avalon.scan(document.body);
         });
     </script>
+
+    <script>
+
+        var width = $(".teacher").width();
+        console.log(width);
+        if(width > 1400){
+            $(".teacher").width();
+        }else{
+            $(".teacher").width(980);
+        }
+
+    </script>
+
 @endsection

@@ -78,7 +78,7 @@ class perSpaceController extends Controller
         $data = array_filter($_POST);
         unset($data['_token']);
         $id = Auth::user()->id;
-        if ($aa = DB::table('users')->where('id', $id)->update($data)) {
+        if (FALSE !== DB::table('users')->where('id', $id)->update($data)) {
             return back()->with('right', ' 修改成功!');
         } else {
             return back()->with('wrong', ' 修改失败!');
@@ -96,7 +96,7 @@ class perSpaceController extends Controller
             return back()->with('wrong', ' 个人简介字数过多!');
         }
 
-        if ($aa = DB::table('users')->where('id', $id)->update($data) || $bb = DB::table('teacher')->where('parentId', $id)->update(['intro'=>$intro])) {
+        if (FALSE !== DB::table('users')->where('id', $id)->update($data) && FALSE !== DB::table('teacher')->where('parentId', $id)->update(['intro'=>$intro])) {
             return back()->with('right', ' 修改成功!');
         } else {
             return back()->with('wrong', ' 修改失败!');
@@ -232,15 +232,14 @@ class perSpaceController extends Controller
     }
 
     // 个人中心我的点评课程
-    public function getCommentCourse(Request $request,$pageNumber, $pageSize)
+    public function getCommentCourse(Request $request,$pageNumber,$pageSize)
     {
         $skip = ($pageNumber - 1) * $pageSize;
         $id = $request->userId;
         $info = DB::table('orders')->select('orderSn', 'orderType','status','courseId as OCourseId','userName as OUserName','teacherName as OTeacherName','isDelete','created_at')
             ->where('userId',$id)->whereIn('status',[1,2])->whereIn('orderType',[1,2])->where('isDelete',0)->orderBy('created_at','desc')
             ->skip($skip)->take($pageSize)->get();
-        $count = DB::table('orders')->select('orderSn', 'orderType','status','courseId as OCourseId','userName as OUserName','teacherName as OTeacherName','isDelete','created_at')
-            ->where('userId',$id)->whereIn('status',[1,2])->whereIn('orderType',[1,2])->where('isDelete',0)->count();
+        $count = DB::table('orders')->where('userId',$id)->whereIn('status',[1,2])->whereIn('orderType',[1,2])->where('isDelete',0)->count();
         foreach($info as $key => $value){
             if($value->orderType == 1){
                 if($value->status == 1){

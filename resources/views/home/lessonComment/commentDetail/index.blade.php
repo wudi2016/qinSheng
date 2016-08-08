@@ -10,7 +10,6 @@
 	<div class="commentDetail" ms-controller="commentController">
 		<div class="crumbs">
 			<a href="/">首页</a> >
-			<a href="/lessonSubject/list/1">课程</a> >
             <a href="/lessonSubject/list/2">点评课程</a> >
 			<a>课程详情</a>
 		</div>
@@ -34,7 +33,8 @@
 			</div>
 			<div class="video_bar">
 				<div class="video_bar_title" ms-html="videoType ? '演奏视频' : '点评视频'"></div>
-				<div class="video_bar_title hide" ms-visible='!bought && !videoType' ms-click="popUpSwitch('buyLesson')" style="color: red; font-weight: bold; cursor: pointer;" ms-html="'￥' + teacherInfo.extra / 100"></div>
+				<div class="video_bar_title hide" ms-visible="!bought && !videoType && teacherInfo.extra != '免费课程'" ms-click="popUpSwitch('buyLesson')" style="color: red; font-weight: bold; cursor: pointer;" ms-html="'￥' + teacherInfo.extra / 100"></div>
+				<div class="video_bar_title hide" ms-visible="!bought && !videoType && teacherInfo.extra == '免费课程'" style="color: red; font-weight: bold; cursor: pointer;" ms-html="teacherInfo.extra"></div>
                 @if (Auth::check())
                     <div class="video_bar_icon hide" ms-visible='bought' ms-click="popUpSwitch('feedback')">
                         <img src="{{asset('/home/image/lessonComment/commentDetail/editor.png')}}">反馈
@@ -65,7 +65,7 @@
 			</div>
 			<div class="palyinfo_detail_title hide" ms-visible="studentInfo.extra" ms-html="'曲目： ' + studentInfo.extra"></div>
 			<div class="palyinfo_detail_description hide" ms-class="fold: !descriptionOpen" ms-visible="studentInfo.message" ms-html="'留言： ' + studentInfo.message"></div>
-            <div class="open hide" ms-visible="!descriptionOpen" ms-click="descriptionSwitch('descriptionOpen', true)" ms-attr-title="studentInfo.message">展开>>></div>
+            <div class="open hide" ms-if="studentInfo.message" ms-visible="!descriptionOpen" ms-click="descriptionSwitch('descriptionOpen', true)" ms-attr-title="studentInfo.message">展开>>></div>
 			<div class="open hide" ms-visible="descriptionOpen" ms-click="descriptionSwitch('descriptionOpen', false)"><<<收起</div>
 
 			<div style="clear: both;"></div>
@@ -85,7 +85,7 @@
 
 
 		<div class="comment">
-			<div class="title" style="border: none; margin-top: 10px; text-indent: 0px;">评论</div>
+			<div class="title" style="border: none; margin-top: 10px; text-indent: 0px; font-size: 18px;">评论</div>
 
             @if (Auth::check())
                  <textarea ms-duplex="replayInfo.name" class="comment_textarea"></textarea>
@@ -133,7 +133,8 @@
 					<div class="recommend_detail_teacher" ms-html="'讲师：' + el.teachername"></div>
 					<div class="recommend_detail_learned"><img src="{{asset('/home/image/lessonComment/commentDetail/study.png')}}">[--el.coursePlayView--]人学过</div>
 				</div>
-				<div class="recommend_price" ms-html="'￥ ' + el.coursePrice / 100"></div>
+				<div class="recommend_price" ms-visible="el.coursePrice > 0" ms-html="'￥ ' + el.coursePrice / 100"></div>
+				<div class="recommend_price" ms-visible="el.coursePrice <= 0" ms-html="'免费课程'"></div>
 			</a>
             <div style="width: 100%; height: 200px; line-height: 200px; text-align: center; display: none;" ms-visible="recommendlist.size() < 1">暂无数据</div>
 		</div>
@@ -264,7 +265,9 @@
             comment.mineType = parseInt('{{$mine["type"]}}' || null);
 			comment.minePic = '{{$mine["pic"]}}' || null;
             comment.bought = Boolean({{$bought}} || null);
-            if (comment.mineType == 2) comment.bought = true;
+            if (comment.mineType == 2) {
+				comment.bought = true;
+			}
             console.log(comment.bought);
 
             //  获取点评信息

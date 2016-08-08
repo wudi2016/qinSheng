@@ -10,9 +10,8 @@
 	<div class="buyController" style="" ms-controller="buyController">
 		<div class="crumbs">
 			<a href="/">首页</a> >
-			<a href="">名师介绍</a> >
+			<a href="/community">名师介绍</a> >
 			<a href="/lessonComment/teacher/{{$teacherID}}">名师主页</a> >
-			<a href="/lessonComment/teacher/{{$teacherID}}">申请点评</a> >
 			<a>在线支付</a>
 		</div>
 	

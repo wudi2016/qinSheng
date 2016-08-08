@@ -72,23 +72,26 @@ class indexController extends Controller
             $search['type'] = 7;
         }
         //导出数据处理
-        $excels = $query->select('u.id','u.username','u.checks','u.phone','u.type','u.fromyaoqingma as userId','u.yaoqingma as name','u.created_at','u.updated_at')->get();
+        $excels = $query->select('u.id as 用户ID','u.username as 用户名','u.checks as 审核状态','u.phone as 手机号','u.type as 用户类型','u.fromyaoqingma as 邀请人ID','u.yaoqingma as 邀请人','u.created_at as 创建时间','u.updated_at as 最近登录时间')->get();
         foreach($excels as $key=>$value){
-            if($excels[$key]->userId){
-                $user = User::where('yaoqingma',$excels[$key]->userId)->select('id','username')->first();
+            if($excels[$key]->邀请人ID){
+                $user = User::where('yaoqingma',$excels[$key]->邀请人ID)->select('id','username')->first();
                 if($user){
-                    $excels[$key]->userId =$user->id;
-                    $excels[$key]->name = $user->username;
+                    $excels[$key]->邀请人ID =$user->id;
+                    $excels[$key]->邀请人 = $user->username;
                 }else{
-                    $excels[$key]->userId = null;
-                    $excels[$key]->name = null;
+                    $excels[$key]->邀请人ID = '无';
+                    $excels[$key]->邀请人 = '无';
                 }
             }else{
-                $excels[$key]->userId = null;
-                $excels[$key]->name = null;
+                $excels[$key]->邀请人ID = '无';
+                $excels[$key]->邀请人 = '无';
             }
+
+            $excels[$key]->审核状态 == 0 ?  $excels[$key]->审核状态 = '激活' :  $excels[$key]->审核状态 = '禁用';
+            $excels[$key]->用户类型 == 0 ?  $excels[$key]->用户类型 = '学生' :  $excels[$key]->用户类型 = '教师';
+
         }
-        //列表导出数据
         $excels = json_encode($excels);
 
 
@@ -352,7 +355,6 @@ class indexController extends Controller
             'username.required' => '请输入用户名',
             'username.min' => '用户名最少4位',
             'username.max' => '用户名最多16位',
-            'realname.required' => '请输入姓名',
             'password.required' => '请输入密码',
             'password.min' => '密码最少6位',
             'password.max' => '密码最多16位',

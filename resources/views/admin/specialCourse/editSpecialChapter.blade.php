@@ -18,17 +18,17 @@
                 <li>
                     <a href="{{url('/admin/specialCourse/specialCourseList')}}">课程管理</a>
                 </li>
-                <li class="active">添加课程章节</li>
+                <li class="active">修改课程章节</li>
             </ul><!-- .breadcrumb -->
         </div>
 
         <div class="page-content">
             <div class="page-header">
                 <h1>
-                    添加课程章节
+                    修改课程章节
                     <small>
                         <i class="icon-double-angle-right"></i>
-                        添加课程章节
+                        修改课程章节
                     </small>
                 </h1>
             </div><!-- /.page-header -->
@@ -80,7 +80,7 @@
                                         <option value="1" @if($data->isTrylearn == 1) selected @endif>是</option>
                                     </select>
                             <span class="help-inline col-xs-12 col-sm-7">
-                                <label class="middle" ms-html="errormessagebelong">
+                                <label class="middle">
                                     <span class="lbl"></span>
                                 </label>
                             </span>
@@ -92,7 +92,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 名称 </label>
 
                             <div class="col-sm-9">
-                                <input type="text" name="title" id="form-field-1" placeholder="名称" class="col-xs-10 col-sm-5" ms-duplex="uploadInfo.title" />
+                                <input type="text" name="title" id="ttitle" placeholder="名称" class="col-xs-10 col-sm-5" ms-duplex="title" />
                             <span class="help-inline col-xs-12 col-sm-7">
                                 <label class="middle" ms-html="errormessagetitle">
                                     <span class="lbl"></span>
@@ -104,44 +104,109 @@
                         <div class="space-4"></div>
 
                         @if($data->parentId != 0)
-                        <div class="form-group">
+                            <div class="space-4"></div>
 
-                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 添加视频 </label>
+                            <div class="form-group">
 
-                            {{--<div class="col-sm-9">--}}
-                                {{--<input type="hidden" name="organurl" value="{{$data->url}}">--}}
-                                {{--<img src="{{asset('admin/image/up.png')}}" alt="" id="form-field-1" style="position:absolute;">--}}
-                                {{--<input type="file" name="url" id="file_upload" multiple="true" value="" />--}}
-                                {{--<div class="uploadarea_bar_r_msg"></div>--}}
-                                {{--<div id="uploadurl"></div>--}}
-                            {{--</div>--}}
+                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 标清视频 </label>
 
-                            {{--<div style="clear: both; height: 50px;"></div>--}}
-
-                            <div id="fileDiv" class="fileButton"></div>
-                            <input type="text" value="" class="fileButton" id="md5container">
-
-                            <div class="add_video">
-                                <div class="add_video_top">
-                                    <div></div>
-                                    <div ms-slectfile='file'>本地上传</div>
-                                    <div>请上传不超过1GB大小的视频文件</div>
-                                </div>
-                                <div class="add_video_tip" style="display: none;" ms-visible="uploadStatus == 1">(支持mp4、fiv、avi、rmvb、wmv、mkv格式上传)</div>
-                                <div class="add_video_loading" style="display: none;" ms-visible="uploadStatus == 2">
-                                    <div class="progress_bar">
-                                        <div ms-css-width="[--progressBar--]%"></div>
+                                {{--<div style="clear: both; height: 50px;"></div>--}}
+                                <div class="col-sm-9">
+                                    <div style="display: none">
+                                        <div id="fileDivlow" class="fileButton"></div>
+                                        <input type="text" value="" class="fileButton" id="md5container">
                                     </div>
-                                    <div class="progress_tip">视频上传中，请勿关闭页面...</div>
-                                    <div class="progress_close" ms-click="endUpload()">取消上传</div>
+
+
+                                    <div class="add_video">
+                                        <div class="add_video_top">
+                                            <div></div>
+                                            <div ms-slectfile="uploadIndex[0]">本地上传</div>
+                                            <div>请上传不超过1GB大小的视频文件</div>
+                                        </div>
+                                        <div class="add_video_tip" style="display: none;float: left;margin-left: 0px;" ms-visible="uploadStatus.low == 1">(支持mp4、fiv、avi、rmvb、wmv、mkv格式上传)</div>
+                                        <div class="add_video_loading" style="display: none;float: left;margin-left: 0px;" ms-visible="uploadStatus.low == 2">
+                                            <div class="progress_bar">
+                                                <div ms-css-width="[--progressBar.low--]%"></div>
+                                            </div>
+                                            <div class="progress_tip">视频上传中，请勿关闭页面...</div>
+                                            <div class="progress_close" ms-click="endUpload(uploadIndex[0])">取消上传</div>
+                                        </div>
+                                        <div class="add_video_success" style="display: none;" ms-visible="uploadStatus.low == 3" ms-html='uploadTip.low'></div>
+                                    </div>
+                                    <div style="clear: both; height: 20px;"></div>
                                 </div>
-                                <div class="add_video_success" style="display: none;" ms-visible="uploadStatus == 3" ms-html='uploadTip'></div>
+
                             </div>
-                            <div style="clear: both; height: 20px;"></div>
 
-                        </div>
+                            <div class="space-4"></div>
 
-                        <div class="space-4"></div>
+                            <div class="form-group" >
+
+                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 高清视频 </label>
+
+                                <div class="col-sm-9">
+                                    <div style="display: none">
+                                        <div id="fileDivmiddle" class="fileButton"></div>
+                                        <input type="text" value="" class="fileButton" id="md5container">
+                                    </div>
+
+
+                                    <div class="add_video">
+                                        <div class="add_video_top">
+                                            <div></div>
+                                            <div ms-slectfile="uploadIndex[1]">本地上传</div>
+                                            <div>请上传不超过1GB大小的视频文件</div>
+                                        </div>
+                                        <div class="add_video_tip" style="display: none;float: left;margin-left: 0px;" ms-visible="uploadStatus.middle == 1">(支持mp4、fiv、avi、rmvb、wmv、mkv格式上传)</div>
+                                        <div class="add_video_loading" style="display: none;float: left;margin-left: 0px;" ms-visible="uploadStatus.middle == 2">
+                                            <div class="progress_bar">
+                                                <div ms-css-width="[--progressBar.middle--]%"></div>
+                                            </div>
+                                            <div class="progress_tip">视频上传中，请勿关闭页面...</div>
+                                            <div class="progress_close" ms-click="endUpload(uploadIndex[1])">取消上传</div>
+                                        </div>
+                                        <div class="add_video_success" style="display: none;" ms-visible="uploadStatus.middle == 3" ms-html='uploadTip.middle'></div>
+                                    </div>
+                                    <div style="clear: both; height: 20px;"></div>
+                                </div>
+
+                            </div>
+
+                            <div class="space-4"></div>
+
+                            <div class="form-group" >
+
+                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 超清视频 </label>
+
+                                <div class="col-sm-9">
+                                    <div style="display: none">
+                                        <div id="fileDivhigh" class="fileButton"></div>
+                                        <input type="text" value="" class="fileButton" id="md5container">
+                                    </div>
+
+
+                                    <div class="add_video">
+                                        <div class="add_video_top">
+                                            <div></div>
+                                            <div ms-slectfile="uploadIndex[2]">本地上传</div>
+                                            <div>请上传不超过1GB大小的视频文件</div>
+                                        </div>
+                                        <div class="add_video_tip" style="display: none;float: left;margin-left: 0px;" ms-visible="uploadStatus.high == 1">(支持mp4、fiv、avi、rmvb、wmv、mkv格式上传)</div>
+                                        <div class="add_video_loading" style="display: none;float: left;margin-left: 0px;" ms-visible="uploadStatus.high == 2">
+                                            <div class="progress_bar">
+                                                <div ms-css-width="[--progressBar.high--]%"></div>
+                                            </div>
+                                            <div class="progress_tip">视频上传中，请勿关闭页面...</div>
+                                            <div class="progress_close" ms-click="endUpload(uploadIndex[2])">取消上传</div>
+                                        </div>
+                                        <div class="add_video_success" style="display: none;" ms-visible="uploadStatus.high == 3" ms-html='uploadTip.high'></div>
+                                    </div>
+                                    <div style="clear: both; height: 20px;"></div>
+                                </div>
+
+                            </div>
+                            <div class="space-4"></div>
 
                         <div class="form-group">
 
@@ -201,27 +266,27 @@
                     var vmodel = this.vmodels[0];
                     $(this.element).unbind();
                     $(this.element).click(function() {
-                        if (vmodel.uploadStatus == 2) return false;
-                        document.getElementById('fileDiv').innerHTML = '<input type="file" value="" class="fileButton" id="fileObject">';
-                        $('#fileObject').bind('change', function() {
-                            vmodel.file = document.getElementById('fileObject').files[0];
-                            document.getElementById('fileDiv').innerHTML = '';
-                            vmodel.uploadResource($(this).val());
+                        if (vmodel.uploadStatus[value] == 2) return false;
+                        document.getElementById('fileDiv'+ value).innerHTML = '<input type="file" value="" class="fileButton" id="fileObject'+ value +'">';
+                        $('#fileObject'+ value).bind('change', function() {
+                            vmodel.file[value] = document.getElementById('fileObject'+ value).files[0];
+                            document.getElementById('fileDiv'+ value).innerHTML = '';
+                            var suffix = $(this).val().substring($(this).val().lastIndexOf('.') + 1);
+                            suffix.match(/(mp4|flv|avi|rmvb|wmv|mkv)/i) ? vmodel.uploadResource($(this).val(), value) : vmodel.endUpload('文件格式不正确');
                             return;
                         });
-                        $('#fileObject').click();
+                        $('#fileObject'+ value).click();
                     });
                 }
             });
 
             upload.csrf = '{{ csrf_token() }}' || null;
 //            console.log(upload.csrf);
-            upload.uploadInfo.title = '{{$data->title}}' || null,
-            upload.uploadInfo.fileID = '{{$data->fileID}}' || null,
-            upload.uploadInfo.courseLowPath = '{{$data->courseLowPath}}' || null,
-            upload.uploadInfo.courseMediumPath = '{{$data->courseMediumPath}}' || null,
-            upload.uploadInfo.courseHighPath = '{{$data->courseHighPath}}' || null,
-            upload.uploadInfo.isTrylearn = '{{$data->isTrylearn}}' || null,
+            upload.title = '{{$data->title}}' || null,
+            upload.uploadInfo.low.fileID = '{{$data->courseLowPath}}' || null,
+            upload.uploadInfo.middle.fileID = '{{$data->courseMediumPath}}' || null,
+            upload.uploadInfo.high.fileID = '{{$data->courseHighPath}}' || null,
+            upload.isTrylearn = '{{$data->isTrylearn}}' || null,
 
             avalon.scan();
         });

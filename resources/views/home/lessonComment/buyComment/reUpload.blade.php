@@ -9,10 +9,9 @@
 @section('content')
 	<div class="uploadComment" style="" ms-controller="uploadController">
 		<div class="crumbs">
-			<a href="">首页</a> >
-			<a href="">名师点评</a> >
-			<a href="">名师主页</a> >
-			<a href="">上传视频</a>
+			<a href="/">首页</a> >
+			<a href="/community">名师主页</a> >
+			<a>上传视频</a>
 		</div>
 
 		<div class="uploadComment_content" style="height: 650px;">
@@ -25,7 +24,7 @@
 				<div class="add_video_top">
 					<div>添加视频</div>
 					<div ms-slectfile='file'>本地上传</div>
-					<div>请上传不超过1GB大小的视频文件</div>
+					<div>请上传不超过8分钟的视频文件</div>
 				</div>
 				<div class="add_video_tip" style="display: none;" ms-visible="uploadStatus == 1">(支持mp4、flv、avi、rmvb、wmv、mkv格式上传)</div>
 				<div class="add_video_loading" style="display: none;" ms-visible="uploadStatus == 2">
@@ -73,8 +72,8 @@
 		require(['lessonComment/directive', 'lessonComment/buyComment/upload'], function (directive, upload) {
 			upload.mineID = {{$mineID}} || null;
 			upload.applyID = {{$applyID}} || null;
-			upload.uploadInfo.courseTitle = '{{$courseTitle}}' || null;
-			upload.uploadInfo.message = '{{$message}}' || null;
+			upload.uploadInfo.courseTitle = '{{$courseTitle}}' || '';
+			upload.uploadInfo.message = '{{$message}}' || '';
 			
 			upload.titleLength = upload.uploadInfo.courseTitle.length;
 			upload.messageLength = upload.uploadInfo.message.length;

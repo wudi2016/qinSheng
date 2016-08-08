@@ -15,5 +15,9 @@ class VerifyCsrfToken extends BaseVerifier
         '/lessonComment/wxPayCallback',
         '/lessonComment/alipayAsyncCallback',
         '/lessonComment/alipaySyncCallback',
+        '/index/editHeadImg',
+		'/lessonSubject/wxPayCallback',
+		'/lessonSubject/alipayAsyncCallback',
+		'/lessonSubject/alipaySyncCallback',
     ];
 }

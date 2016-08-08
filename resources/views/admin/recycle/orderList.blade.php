@@ -209,13 +209,17 @@
                                                     {{--<i class="icon-pencil bigger-120"></i>已退金额--}}
                                                 {{--</a>--}}
 
+                                                @permission('edit.recycle')
                                                 <a href="{{url('/admin/recycle/editRecycleOrder/'.$order->id)}}" class="btn btn-xs btn-warning">
                                                     <i class="icon-reply bigger-120"></i>还原
                                                 </a>
+                                                @endpermission
 
+                                                @permission('del.recycle')
                                                 <a href="{{url('/admin/recycle/delRecycleOrder/'.$order->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
                                                     <i class="icon-trash bigger-120"></i>
                                                 </a>
+                                                @endpermission
                                             </div>
 
                                             <div class="visible-xs visible-sm hidden-md hidden-lg">

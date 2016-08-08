@@ -118,17 +118,17 @@ define([], function (){
 
 			//实现蓝色背景效果
 			if(index == 1){
-				$('.us1').addClass('intro').siblings().removeClass('intro');
+				$(this).addClass('intro').siblings().removeClass('intro');
 			}else if(index == 2){
-				$('.us2').addClass('intro').siblings().removeClass('intro');
+				$(this).addClass('intro').siblings().removeClass('intro');
 			}else if(index == 3){
-				$('.us3').addClass('intro').siblings().removeClass('intro');
+				$(this).addClass('intro').siblings().removeClass('intro');
 			}else if(index == 4){
-				$('.us4').addClass('intro').siblings().removeClass('intro');
+				$(this).addClass('intro').siblings().removeClass('intro');
 			}else if(index == 5){
-				$('.us5').addClass('intro').siblings().removeClass('intro');
+				$(this).addClass('intro').siblings().removeClass('intro');
 			}else if(index == 6){
-				$('.us6').addClass('intro').siblings().removeClass('intro');
+				$(this).addClass('intro').siblings().removeClass('intro');
 			}
 		},
 
