@@ -15,24 +15,24 @@ $(function(){
 
 
     //url定位选项卡
-    var href = location.href.split('/');
+    var href = location.href.split('#');
+    var tem = href[0].split('/');
     var url = '';
     //学员
-    if(href[4] == 'student') {
-        if(href[6]) {
-            url = href[6];
+    if(tem[4] == 'student') {
+        if(href[1]) {
+            url = href[1];
         }else {
             url = 'basicInfo';
         }
 
-    }else if(href[4] == 'famousTeacher') {
-        if( href[5] ) {
-            url = href[5];
+    }else if(tem[4] == 'famousTeacher') {
+        if( href[1] ) {
+            url = href[1];
         }else {
             url = 'basicInfo';
         }
     }
-
     //console.log(url);
     $("div[name='"+url+"']").addClass('blue_common');
     $("div[name='"+url+"']").siblings().removeClass('blue_common');

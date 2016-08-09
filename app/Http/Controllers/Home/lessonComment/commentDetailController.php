@@ -32,22 +32,24 @@ class commentDetailController extends Controller
         DB::table('commentcourse') -> select('id') -> where(['state' => 2, 'courseStatus' => 0, 'courseIsDel' => 0, 'id' => $commentID]) -> first() || abort(404);
         if (\Auth::check()) {
             $mine = ['id' => \Auth::user() -> id, 'username' => \Auth::user() -> username, 'type' => \Auth::user() -> type, 'pic' => \Auth::user() -> pic];
-            $userType = \Auth::user() -> type != 2 ? 'userId' : 'teacherId';
-            $result = DB::table('orders') -> join('commentcourse', 'orders.courseId', '=', 'commentcourse.id') -> select('orders.id', 'orders.orderType') 
+            $result = DB::table('orders') -> join('commentcourse', 'orders.courseId', '=', 'commentcourse.id') -> select('orders.id', 'orders.orderType')
                     -> where(['orders.orderType' => 1, 'commentcourse.id' => $commentID, 'orders.userId' => \Auth::user() -> id, 'orders.status' => 2, 'orders.isDelete' => 0]) 
                     -> orWhere(['orders.orderType' => 2, 'commentcourse.id' => $commentID, 'orders.userId' => \Auth::user() -> id, 'orders.status' => 2, 'orders.isDelete' => 0]) -> first();
             if ($result) {
                 $bought = 1;
+				$orderType = $result -> orderType;
             } else {
                 $invited = DB::table('users') -> join('commentcourse', 'users.id', '=', 'commentcourse.userId') -> select('users.id', 'users.fromyaoqingma') 
                          -> where(['commentcourse.id' => $commentID, 'users.fromyaoqingma' => \Auth::user() -> yaoqingma]) -> first();
                 $bought = $invited ? 1 : 0;
+				$orderType = 0;
             }
         } else {
             $mine = ['id' => 0, 'username' => 0, 'type' => 0, 'pic' => 0];
             $bought = 0;
+			$orderType = 0;
         }
-        return view('home.lessonComment.commentDetail.index') -> with('commentID', $commentID) -> with('mine', $mine) -> with('bought', $bought);
+        return view('home.lessonComment.commentDetail.index') -> with('commentID', $commentID) -> with('mine', $mine) -> with('bought', $bought) -> with('orderType', $orderType);
     }
 
 
@@ -164,7 +166,7 @@ class commentDetailController extends Controller
     public function uploadComment($orderSn, $messageID = null)
     {
         $result = DB::table('orders') -> join('applycourse', 'orders.orderSn', '=', 'applycourse.orderSn') 
-                -> select('orders.id', 'orders.userName', 'orders.userId', 'orders.teacherId', 'orders.teacherName', 'applycourse.courseTitle')
+                -> select('orders.id', 'orders.userName', 'orders.userId', 'orders.teacherId', 'orders.teacherName', 'applycourse.courseTitle', 'applycourse.id as applyID')
                 -> where(['orders.orderSn' => $orderSn, 'orders.status' => 1, 'orders.isDelete' => 0, 'orders.teacherId' => \Auth::user() -> id]) -> first();
         $result || abort(404);
         return view('home.lessonComment.commentDetail.uploadComment') -> with('orderSn', $orderSn) -> with('info', $result) -> with('messageID', $messageID) -> with('mineID', \Auth::user() -> id);

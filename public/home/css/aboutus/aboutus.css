@@ -56,6 +56,30 @@
 }
 
 
+/*hover效果*/
+.active_hover {
+    background: #f5f5f5;
+}
+
+.span_hover {
+    width: 2%;
+    height: 50px;
+    display: inline-block;
+    float: left;
+}
+
+.span_active {
+    background: #209EEA;
+}
+
+.intro {
+    background: #209EEA;
+    color: #fff;
+}
+
+
+
+
 
 
 

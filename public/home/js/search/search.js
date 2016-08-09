@@ -23,6 +23,9 @@ $('.selOrd').click(function(){
     $(this).siblings().removeClass('gl');
 })
 
+var geta = false;
+var getb = false;
+
 function getdata(para,ord){
     $('#demo').pagination({
         dataSource: function(done) {
@@ -31,16 +34,19 @@ function getdata(para,ord){
                 url: '/index/getCourseaa/'+para+'/'+this.pageNumber+'/'+this.pageSize+'/'+ord,
                 success: function(response) {
                     if(response.status){
+                        geta = true;
                         var format = [];
-
                         format['data'] = response.data;
                         format['totalNumber'] = response.count;
                         done(format);
                         // done(response.data);
-                    }else{
-                        // $('.nofindaa').removeClass('hide');
-                        $('.con_con_top_a').addClass('hide');
 
+                        $('.con_con_top_a').removeClass('hide');
+                    }else{
+                        $('.con_con_top_a').addClass('hide');
+                        if(!getb){
+                            $('.nofindbb').removeClass('hide');
+                        }
                     }
                 }
             });
@@ -83,14 +89,19 @@ function getdatab(para,ord){
                 url: '/index/getCoursebb/'+para+'/'+this.pageNumber+'/'+this.pageSize+'/'+ord,
                 success: function(response) {
                     if(response.status){
+                        getb = true;
                         var format = [];
                         format['data'] = response.data;
                         format['totalNumber'] = response.count;
                         done(format);
                         // done(response.data);
+
+                        $('.con_con_top_b').removeClass('hide');
                     }else{
-                        // $('.nofindbb').removeClass('hide');
                         $('.con_con_top_b').addClass('hide');
+                        if(!geta){
+                            $('.nofindbb').removeClass('hide');
+                        }
                     }
 
                 }

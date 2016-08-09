@@ -61,25 +61,22 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 											break;
 									}
 								}
-								console.log(upload.uploadInfo);
 							}
 						}
 						if (model == 'finishUpload' || model == 'isReload') {
 							callback && callback(function () {
-								window.location.href = '/member/student/'+ upload.mineID +'/lessonComment';
+								window.location.href = '/member/student/'+ upload.mineType +'#myOrders';
 							});
 						}
 						if (model == 'comment') {
 							callback && callback(function () {
-								window.location.href = '/member/famousTeacher/basicInfo';
+								window.location.href = '/member/famousTeacher#sureComment';
 							});
 						}
 						model == 'deleteMessage' && callback();
 					}
 				},
-				error: function(error) {
-					upload.endUpload('上传失败请重试.');
-				}
+				error: function(error) {}
 			});
 		},
 		file: null,
@@ -144,15 +141,27 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 				if (isReload === 'reComment') {
 					delete upload.uploadInfo.courseTitle;
 					upload.getData('/lessonComment/getFirst', 'comment', {data: upload.uploadInfo, action: 4, condition: {id: upload.commentID}, table: 'commentcourse'}, 'POST', function (callback) {
-						upload.messageID && upload.getData('/lessonComment/getFirst', 'deleteMessage', {action: 3, table: 'usermessage', data: {id: upload.messageID}}, 'POST', function() {
-							callback();
-						});
+						if (upload.messageID) {
+							upload.getData('/lessonComment/getFirst', 'deleteMessage', {action: 3, table: 'usermessage', data: {id: upload.messageID}}, 'POST', function() {
+								callback();
+							});
+						} else {
+							upload.getData('/lessonComment/getFirst', 'deleteMessage', {action: 3, table: 'usermessage', data: {actionId: upload.commentID}}, 'POST', function() {
+								callback();
+							});
+						}
 					});
 				} else {
 					upload.getData('/lessonComment/finishComment', 'comment', upload.uploadInfo, 'POST', function(callback) {
-						upload.messageID && upload.getData('/lessonComment/getFirst', 'deleteMessage', {action: 3, table: 'usermessage', data: {id: upload.messageID}}, 'POST', function() {
-							callback();
-						});
+						if (upload.messageID) {
+							upload.getData('/lessonComment/getFirst', 'deleteMessage', {action: 3, table: 'usermessage', data: {id: upload.messageID}}, 'POST', function() {
+								callback();
+							});
+						} else {
+							upload.getData('/lessonComment/getFirst', 'deleteMessage', {action: 3, table: 'usermessage', data: {actionId: upload.applyID}}, 'POST', function() {
+								callback();
+							});
+						}
 					});
 				}
 			} else {
@@ -166,9 +175,15 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 					for (var i in upload.temp) upload.temp[i] == upload.uploadInfo[i] && delete upload.uploadInfo[i];
 					upload.uploadInfo.state = 1;
 					upload.getData('/lessonComment/getFirst', 'isReload', {data: upload.uploadInfo, table: 'applycourse', condition: {id: upload.applyID}, action: 4}, 'POST', function(callback) {
-						upload.messageID && upload.getData('/lessonComment/getFirst', 'deleteMessage', {action: 3, table: 'usermessage', data: {id: upload.messageID}}, 'POST', function() {
-							callback();
-						});
+						if (upload.messageID) {
+							upload.getData('/lessonComment/getFirst', 'deleteMessage', {action: 3, table: 'usermessage', data: {id: upload.messageID}}, 'POST', function() {
+								callback();
+							});
+						} else {
+							upload.getData('/lessonComment/getFirst', 'deleteMessage', {action: 3, table: 'usermessage', data: {actionId: upload.applyID}}, 'POST', function() {
+								callback();
+							});
+						}
 					});
 				} else {
 					upload.uploadInfo.userId = upload.mineID;

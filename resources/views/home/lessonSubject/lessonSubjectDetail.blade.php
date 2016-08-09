@@ -57,9 +57,9 @@
                         @if(Auth::check() && $mineType == '2')
                             <span class="third">立即学习</span>
                         @else
-                            <span class="first" ms-click="popUpSwitch('buyCourse')" ms-visible="!detailInfo.isBuy && !detailInfo.isFree">立即购买</span>
-                            <span class="second" ms-visible="!detailInfo.isBuy && detailInfo.isTryLearn" ms-click="tryLearn(detailInfo.chapterId);">立即试学</span>
-                            <span class="third" ms-visible="detailInfo.isBuy || detailInfo.isFree">立即学习</span>
+                            <span class="first hide" ms-click="popUpSwitch('buyCourse')" ms-if="!detailInfo.isBuy && !detailInfo.isFree">立即购买</span>
+                            <span class="second hide" ms-if="!detailInfo.isBuy && detailInfo.isTryLearn && !detailInfo.isFree" ms-click="tryLearn(detailInfo.chapterId);">立即试学</span>
+                            <span class="third hide" ms-if="detailInfo.isBuy || detailInfo.isFree">立即学习</span>
                         @endif
                     </div>
                     <div class="contain_lessonDetail_top_video_right_collect">
@@ -102,7 +102,7 @@
                         <span class="content" ms-html="detailInfo.courseIntro"></span>
                     </div>
                     <!-- 目录 -->
-                    <div class="contain_lessonDetail_bot_left_list" ms-controller="catalogInfoController">
+                    <div class="contain_lessonDetail_bot_left_list">
                         <span class="top">目录</span>
                         <div class="contain_lessonDetail_bot_left_info" ms-repeat="catalogInfo">
                             <div class="title" ms-html="el.title"></div>
@@ -112,14 +112,14 @@
                                     <span class="spot"></span>
                                     <a href="#changeVideo">
                                         <span class="data_content" ms-html="el.title"
-                                              ms-click="changeVideo(el.id,el.courseLowPath,el.isTryLearn,detailInfo.isFree,detailInfo.isBuy,detailInfo.isTeacher,el.coursePic);">
+                                              ms-click="changeVideo(el,detailInfo.isFree,detailInfo.isBuy,detailInfo.isTeacher);">
                                         </span>
                                     </a>
                                     <span ms-if="el.isTryLearn == 1" class="try">试学</span>
                                     <span ms-if="el.isLearn" class="have">已学</span>
                                     <a href="#changeVideo">
                                         <span class="play"
-                                              ms-click="changeVideo(el.id,el.courseLowPath,el.isTryLearn,detailInfo.isFree,detailInfo.isBuy,detailInfo.isTeacher,el.coursePic);">
+                                              ms-click="changeVideo(el,detailInfo.isFree,detailInfo.isBuy,detailInfo.isTeacher);">
                                         </span>
                                     </a>
                                 </div>
@@ -344,7 +344,7 @@
 @section('js')
     <script type="text/javascript" src="{{asset('home/jplayer/jwplayer.js')}}"></script>
     <script>
-        require(['/lessonSubject/detail', '/lessonSubject/teacherInfo', '/lessonSubject/catalogInfo'], function (detail, teacherInfo, catalogInfo) {
+        require(['/lessonSubject/detail', '/lessonSubject/teacherInfo'], function (detail, teacherInfo) {
             detail.mineUsername = '{{$mineUsername}}' || null;
             detail.mineUserId = '{{$mineUserId}}' || null;
             detail.mineType = '{{$mineType}}' || null;
@@ -355,8 +355,8 @@
             // 获取讲师信息
             teacherInfo.getTeacherInfo({{$detailId}});
             // 获取章节信息
-            catalogInfo.getCatalogInfo({{$detailId}});
-
+            detail.getData('/lessonSubject/getCatalogInfo/' + detail.detailId, 'GET', {}, 'catalogInfo');
+            detail.getPlayList();
             detail.$watch('commentContent', function (value) {
                 if (value.length < detail.commentContentLength) {
                     detail.commentContentLength = '';
@@ -372,7 +372,7 @@
         });
         $(function(){
             $('.contain_lessonDetail_top_video_right_btn .second').click(function(){
-
+                $('#mediaplayer_display_button_play').click();
             })
             $('.contain_lessonDetail_top_video_right_btn .third').click(function(){
                 $('#mediaplayer_display_button_play').click();

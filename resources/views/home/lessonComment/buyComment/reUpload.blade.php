@@ -71,6 +71,7 @@
 	<script type="text/javascript">
 		require(['lessonComment/directive', 'lessonComment/buyComment/upload'], function (directive, upload) {
 			upload.mineID = {{$mineID}} || null;
+			upload.mineType = '{{\Auth::user() -> type}}' || null;
 			upload.applyID = {{$applyID}} || null;
 			upload.uploadInfo.courseTitle = '{{$courseTitle}}' || '';
 			upload.uploadInfo.message = '{{$message}}' || '';

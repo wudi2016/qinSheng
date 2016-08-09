@@ -24,24 +24,25 @@
 				<div class="head_con_login_con "><a href="{{url('/index/login')}}"><span>登录</span></a>&nbsp;|&nbsp;<a href="{{url('/index/register')}}"><span>注册</span></a></div>
     		    <!-- 登陆后 -->
 				@else
-				@if ($Msg)<div class="haveMsg">·</div>@else<div class="haveMsg"></div> @endif
 				<img  class="touxiang " src="{{asset(\Auth::user()->pic)}}" onerror="javascript:this.src='/home/image/layout/default.png';">
+				@if ($Msg)<div class="haveMsg">·</div>@else<div class="haveMsg"></div> @endif
+
 				<div class="clear"></div>
                 <div  class="persapce hide">
                 	<div class="persapce_li">
 						<div class="persapce_li_con_per">
 							@if(\Auth::user()->type == 0)
-								<a href="{{url('/member/student/0/basicInfo')}}">个人中心</a>
+								<a href="{{url('/member/student/0/#basicInfo')}}">个人中心</a>
 							@elseif(\Auth::user()->type == 1)
-								<a href="{{url('/member/student/1/basicInfo')}}">个人中心</a>
+								<a href="{{url('/member/student/1/#basicInfo')}}">个人中心</a>
 							@elseif(\Auth::user()->type == 2)
-								<a href="{{url('/member/famousTeacher/basicInfo')}}">个人中心</a>
+								<a href="{{url('/member/famousTeacher/#basicInfo')}}">个人中心</a>
 							@endif
 						</div>
 					</div>
 					@if( \Auth::user()->type != 2 )
 						<div class="persapce_li">
-							<a href="{{asset('/member/student/'.\Auth::user()->type.'/wholeNotice')}}">
+							<a href="{{asset('/member/student/'.\Auth::user()->type.'/#wholeNotice')}}">
 								@if ($Msg)
 								<div class="persapce_li_con_msg" style="background: url('/home/image/layout/haveMsg.png') no-repeat 15px 5px;">消息通知</div>
 								@else
@@ -51,7 +52,7 @@
 						</div>
 					@else
 						<div class="persapce_li">
-							<a href="{{asset('/member/famousTeacher/wholeNotice')}}">
+							<a href="{{asset('/member/famousTeacher/#wholeNotice')}}">
 								@if ($Msg)
 									<div class="persapce_li_con_msg" style="background: url('/home/image/layout/haveMsg.png') no-repeat 15px 5px;">消息通知</div>
 								@else

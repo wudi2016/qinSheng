@@ -367,6 +367,7 @@ class orderController extends Controller
         //设置商户号
         $wxPayRefund->SetOp_user_id(WxPayConfig::MCHID);
 
+
         $result = $wxPay->refund($wxPayRefund);
         dd($result);
         if($result['return_code'] == 'SUCCESS'){
@@ -383,23 +384,22 @@ class orderController extends Controller
      *支付宝确认退款
      */
     public function alipayRefund($orderId){
-//        dump($orderId);
         $order = DB::table('orders')->where('id',$orderId)->where('isDelete',0)->first();
-
         $alipay = app('alipay.web');
         $alipay->setService('refund_fastpay_by_platform_pwd');
         $alipay->setOutTradeNo($order->orderSn);//商户订单号
         $alipay->setTotalFee($order->orderPrice / 100);
-//        $alipay->setRefund($order->refundAmount / 100); //需要退款的金额
         $alipay->setSubject($order->orderTitle);
         $alipay->setRefundDate(date('Y-m-d H:i:s'));//退款请求时间
         $alipay->setBatchNo(date('Ymd').time());  //退款批次号
         $alipay->setBatchNum(1);//总笔数
-        $aa = '2016080257a03b44948a6'.'^'.'5.00'.'^'.'正常退款';
-//        dd($aa);
+        $alipay->setBatchNum(1);//总笔数
+        $aa = $order->tradeSn.'^'.($order->refundAmount / 100).'^'.'正常退款'; //交易号^退款金额^退款理由
         $alipay->setDetailData($aa);//单笔数据集
-        $aa = $alipay->getPayLink();
-//        dd($aa);
+        $alipay->setReturnUrl('http://qinsheng.zuren8.com/admin/order/alipaySyncCallback');//同步回调
+        $alipay->setNotifyUrl('http://qinsheng.zuren8.com/admin/order/alipayAsyncCallback');//异步回调
+        $alipay->getPayLink();
+
         return redirect()->to($alipay->getPayLink());
     }
 
@@ -410,15 +410,18 @@ class orderController extends Controller
      */
     public function alipayAsyncCallback()
     {
-        dd();
+        $this -> OperationLog('异步日志为'.json_encode(Input::all()));
+
         if (!app('alipay.web')->verify()) {
             Log::info('支付宝异步校验失败 ', [
                 'data' => json_encode(Input::all())
             ]);
             return 'fail';
         }
-
-        if (Input::get('trade_status') == 'TRADE_SUCCESS' || Input::get('trade_status') == 'TRADE_FINISHED') {
+        if (Input::get('result_details') == 'SUCCESS') {
+            $orderSn = Input::get('out_trade_no');
+            DB::table('orders')->where('tradeSn', $orderSn)->update(['status'=>4]);
+            return redirect()->to('admin/order/orderList/3');
             return 'success';
         }
     }
@@ -431,32 +434,35 @@ class orderController extends Controller
      */
     public function alipaySyncCallback()
     {
+        $this -> OperationLog('异步日志为'.json_encode(Input::all()));
         if (!app('alipay.web')->verify()) {
             Log::info('支付宝同步校验失败 ', [
-                'data' => Request::getQueryString()
+                'data' =>json_encode(Input::all())
             ]);
             abort(404);
         }
+//        dump('aa');
+//        dd(Input::all());
 
         if (Input::get('trade_status') == 'TRADE_SUCCESS' || Input::get('trade_status') == 'TRADE_FINISHED') {
             $orderSn = Input::get('out_trade_no');
             DB::table('orders')->where('orderSn', $orderSn)->update(['status'=>4]);
-
+            return redirect()->to('admin/order/orderList/3');
         }
     }
 
 
 
-//    public function alipayRefund_back($orderId){
+//    public function alipayRefund($orderId){
 ////        dump($orderId);
 //        $order = DB::table('orders')->where('id',$orderId)->where('isDelete',0)->first();
 //
 //        $alipay = app('alipay.web');
 //        $alipay->setService('alipay.trade.refund');
 //        $alipay->setOutTradeNo($order->orderSn);//商户订单号
-//        $alipay->setTotalFee($order->orderPrice / 100);
+////        $alipay->setTotalFee($order->orderPrice / 100);
 //        $alipay->setRefund($order->refundAmount / 100); //需要退款的金额
-//        $alipay->setSubject($order->orderTitle);
+////        $alipay->setSubject($order->orderTitle);
 //        $aa = $alipay->getPayLink();
 ////        dd($aa);
 //        return redirect()->to($alipay->getPayLink());

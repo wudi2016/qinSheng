@@ -264,11 +264,14 @@
             comment.mineUsername = '{{$mine["username"]}}' || null;
             comment.mineType = parseInt('{{$mine["type"]}}' || null);
 			comment.minePic = '{{$mine["pic"]}}' || null;
+
+			comment.orderType = {{$orderType}} || null;
             comment.bought = Boolean({{$bought}} || null);
             if (comment.mineType == 2) {
 				comment.bought = true;
 			}
             console.log(comment.bought);
+            console.log(comment.orderType);
 
             //  获取点评信息
             comment.getData('/lessonComment/getDetailInfo/'+comment.commentID+'/1', 'teacherInfo');

@@ -26,7 +26,9 @@ class AppServiceProvider extends ServiceProvider
             if(Auth::check() && Auth::user()->type != 3){
                 $username = Auth::user()->username;
                 $Msg = DB::table('usermessage')->select('id')->where('username',$username)->where('isRead',0)->first();
-
+                if(Auth::user()->type == 2){
+                    $Msg = DB::table('usermessage')->select('id')->where('username',$username)->where('isRead',0)->where('type','<>',5)->where('type','<>',6)->first();
+                }
             }else{
                 $Msg = false;
             }

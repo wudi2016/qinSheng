@@ -19,7 +19,7 @@ abstract class Controller extends BaseController
         try {
             $tableName = 'operation'.date('_m', time());
             $data = [
-                'username' => Auth::user() -> username,
+                'username' => '',
                 'type' => $isLogin,
                 'action' => $action,
                 'client_ip' => $_SERVER['REMOTE_ADDR'],
@@ -27,7 +27,7 @@ abstract class Controller extends BaseController
             ];
             DB::table($tableName) -> insert($data);
         } catch (\Exception $e) {
-            Log::info(Auth::user() -> username .' 操作 '. $action .' 失败。 原因：'. $e -> getMessage());
+//            Log::info(Auth::user() -> username .' 操作 '. $action .' 失败。 原因：'. $e -> getMessage());
         }
     }
 }

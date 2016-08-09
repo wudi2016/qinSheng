@@ -71,7 +71,7 @@
                 <div class="account_manger">个人设置</div>
                 <div class="height5"></div>
                 <span class="span_hover"></span>
-                <div class="account_common blue_common" name="basicInfo" ms-click="changeTab('basicInfo')">基本信息</div>
+                <div class="account_common" name="basicInfo" ms-click="changeTab('basicInfo')">基本信息</div>
                 <span class="span_hover"></span>
                 <div class="account_common" ms-click="changeTab('changePass')">密码修改</div>
                 <span class="span_hover"></span>
@@ -274,7 +274,7 @@
                         </div>
                         <div class="repeat_comment_text" ms-if="el.type == 0 && el.tempId != 0">
                             <!-- 审核未通过 -->
-                            <span class="span_light" ms-text="el.tempName" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 150px;display: block;float: left;" ms-attr-title="el.tempName"></span>
+                            <span class="span_light" ms-text="el.tempName" ms-if="el.tempName" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 150px;display: block;float: left;" ms-attr-title="el.tempName"></span>
                             <span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 400px;display: block;float: left;" ms-text="el.content" ms-attr-title="el.content"></span>
                         </div>
                         <!-- 注册加入消息 -->
@@ -694,7 +694,8 @@
     <div class="headImg hide">
         <div class="headImg_tit">
             <div class="headImg_tit_l">更换头像</div>
-            <div class="headImg_tit_r"><img src="{{asset('home/image/personCenter/close.png')}}" alt=""></div>
+            {{--<div class="headImg_tit_r"><img src="{{asset('home/image/personCenter/close.png')}}" alt=""></div>--}}
+            <div class="headImg_tit_r">×</div>
         </div>
         <div class="headImg_con">
             <div class="headImg_con_l">
@@ -760,11 +761,18 @@
     <script type="text/javascript">
         require(['/personCenter/index.js'], function (sideBar) {
             sideBar.mineUsername = '{{$mineUsername}}' || null;
-            sideBar.tab = '{{$tab}}' || 'basicInfo';
-            {{--sideBar.type = '{{$typeID}}' || null;--}}
-            if(sideBar.tab){
+            {{--sideBar.tab = '{{$tab}}' || 'basicInfo';--}}
+            if(window.location.hash){
+                sideBar.tab = window.location.hash.split('#')[1];
+            }else{
+                sideBar.tab = 'basic';
+            }
+
+            if (sideBar.tab) {
                 sideBar.tabStatus = sideBar.tab;
+
                 sideBar.changeTab(sideBar.tab);
+
             }
             avalon.directive('popup', {
                 update: function (value) {

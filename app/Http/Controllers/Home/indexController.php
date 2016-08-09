@@ -72,6 +72,7 @@ class indexController extends Controller
             ->leftJoin('course', 'course.id', '=', 'hotcourse.courseId')
             ->select('course.id as id', 'course.coursePic as img', 'course.courseTitle as title','course.courseStudyNum as countpeople','course.coursePrice as price','course.courseType as courseType','course.courseDiscount as courseDiscount')
             ->where('course.courseStatus',0)
+            ->where('course.courseIsDel',0)
             ->where('hotcourse.sort','<>',0)
             ->orderBy('hotcourse.sort', 'asc')
             ->skip(0)->take(8)
@@ -118,6 +119,7 @@ class indexController extends Controller
             ->select('commentcourse.id as id', 'commentcourse.coursePic as img', 'commentcourse.courseTitle as title','commentcourse.teachername as teacher','commentcourse.coursePlayView as countpeople','commentcourse.coursePrice as price','commentcourse.courseType as courseType','commentcourse.courseDiscount as courseDiscount')
             ->where('commentcourse.state',2)
             ->where('commentcourse.courseStatus',0)
+            ->where('commentcourse.courseIsDel',0)
             ->where('hotreviewcourse.sort','<>',0)
             ->orderBy('hotreviewcourse.sort', 'asc')
             ->skip(0)->take(8)
@@ -550,12 +552,14 @@ class indexController extends Controller
             ->select('id')
             ->where('courseTitle','like','%'.$search.'%')
             ->where('courseStatus',0)
+            ->where('courseIsDel',0)
             ->count();
         if($order == 0){
             $data = DB::table('course')
                 ->select('id as id', 'coursePic as img', 'courseTitle as title','coursePlayView as countpeople','coursePrice as price','courseDiscount')
                 ->where('courseTitle','like','%'.$search.'%')
                 ->where('courseStatus',0)
+                ->where('courseIsDel',0)
                 ->skip($skip)->take($pageSize)
                 ->get();
         }elseif($order == 1){
@@ -563,6 +567,7 @@ class indexController extends Controller
                 ->select('id as id', 'coursePic as img', 'courseTitle as title','coursePlayView as countpeople','coursePrice as price','courseDiscount')
                 ->where('courseTitle','like','%'.$search.'%')
                 ->where('courseStatus',0)
+                ->where('courseIsDel',0)
                 ->orderBy('created_at', 'desc')
                 ->skip($skip)->take($pageSize)
                 ->get();
@@ -571,6 +576,7 @@ class indexController extends Controller
                 ->select('id as id', 'coursePic as img', 'courseTitle as title','coursePlayView as countpeople','coursePrice as price','courseDiscount')
                 ->where('courseTitle','like','%'.$search.'%')
                 ->where('courseStatus',0)
+                ->where('courseIsDel',0)
                 ->orderBy('coursePlayView', 'desc')
                 ->skip($skip)->take($pageSize)
                 ->get();
@@ -608,6 +614,7 @@ class indexController extends Controller
             ->where('courseTitle','like','%'.$search.'%')
             ->where('state',2)
             ->where('courseStatus',0)
+            ->where('courseIsDel',0)
             ->count();
         if($order == 0){
             $data = DB::table('commentcourse')
@@ -615,6 +622,7 @@ class indexController extends Controller
                 ->where('courseTitle','like','%'.$search.'%')
                 ->where('state',2)
                 ->where('courseStatus',0)
+                ->where('courseIsDel',0)
                 ->skip($skip)->take($pageSize)
                 ->get();
         }elseif($order == 1){
@@ -623,6 +631,7 @@ class indexController extends Controller
                 ->where('courseTitle','like','%'.$search.'%')
                 ->where('state',2)
                 ->where('courseStatus',0)
+                ->where('courseIsDel',0)
                 ->orderBy('created_at', 'desc')
                 ->skip($skip)->take($pageSize)
                 ->get();
@@ -632,6 +641,7 @@ class indexController extends Controller
                 ->where('courseTitle','like','%'.$search.'%')
                 ->where('state',2)
                 ->where('courseStatus',0)
+                ->where('courseIsDel',0)
                 ->orderBy('coursePlayView', 'desc')
                 ->skip($skip)->take($pageSize)
                 ->get();

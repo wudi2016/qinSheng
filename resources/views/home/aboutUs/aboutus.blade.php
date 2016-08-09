@@ -30,7 +30,7 @@
             <div class="main_left">
 
                 <span class="span_hover"></span>
-                <div class="us1 us intro"   ms-click="tabs(1);">公司介绍</div>
+                <div class="us1 us"   ms-click="tabs(1);">公司介绍</div>
                 <span class="span_hover"></span>
                 <div class="us2 us" ms-click="tabs(2);">联系我们</div>
                 <span class="span_hover"></span>
@@ -39,8 +39,6 @@
                 <div class="us4 us" ms-click="tabs(4);">用户协议</div>
                 <span class="span_hover"></span>
                 <div  class="us5 us" ms-click="tabs(5);">友情链接</div>
-
-                {{--<div  class="us6 us" ms-click="tabs(6);">意见反馈</div>--}}
 
             </div>
 
@@ -141,21 +139,6 @@
                 </div>
 
 
-                {{--反馈--}}
-                {{--<div class="main_right_content"   ms-visible="currentIndex==6" ms-repeat="aboutus6" >--}}
-
-                    {{--<div class="main_right_content_name" ms-html="el.title" >--}}
-
-                    {{--</div>--}}
-                    {{--<div style="height:32px"></div>--}}
-
-                    {{--<div class="main_right_content_intro1"  ms-html="el.content"  >--}}
-
-                    {{--</div>--}}
-                {{--</div>--}}
-
-
-
             </div>
 
 
@@ -183,21 +166,30 @@
 
     <script>
 
-//            $(".us").hover(
-//                    function () {
-//                        $(this).addClass("active_hover").prev('span').addClass('span_active');
-//
-//                    },
-//                    function () {
-//                        $(this).removeClass("active_hover").prev('span').removeClass('span_active');
-//                    }
-//            );
+            $(".us").hover(
+                    function () {
+                        $(this).addClass("active_hover").prev('span').addClass('span_active');
+                    },
+                    function () {
+                        $(this).removeClass("active_hover").prev('span').removeClass('span_active');
+                        ;
+                    }
+            );
+
+//            $(".intro").hover(function(){
+//                $(this).removeClass("active_hover");
+//            });
 
     </script>
 
     <script>
         require(['/aboutus/firmintro'], function (model) {
             model.currentIndex = {{$type}} || null;
+
+            if(window.location.hash){
+                model.currentIndex = window.location.hash.split('#')[1];
+            }
+
             if(model.currentIndex == 1){
                 $('.us1').addClass('intro').siblings().removeClass('intro');
             }else if(model.currentIndex == 2){
@@ -208,9 +200,8 @@
                 $('.us4').addClass('intro').siblings().removeClass('intro');
             }else if(model.currentIndex == 5){
                 $('.us5').addClass('intro').siblings().removeClass('intro');
-            }else if(model.currentIndex == 6){
-                $('.us6').addClass('intro').siblings().removeClass('intro');
             }
+
             avalon.scan();
         });
   </script>

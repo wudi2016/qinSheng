@@ -114,6 +114,7 @@ define([], function (){
 		currentIndex: 1,
 
 		tabs: function(index){
+			window.location.hash = index;
 			model.currentIndex = index;
 
 			//实现蓝色背景效果
@@ -127,15 +128,12 @@ define([], function (){
 				$(this).addClass('intro').siblings().removeClass('intro');
 			}else if(index == 5){
 				$(this).addClass('intro').siblings().removeClass('intro');
-			}else if(index == 6){
-				$(this).addClass('intro').siblings().removeClass('intro');
 			}
 		},
 
 		//公司介绍
 		aboutus1 : [],
         getData1:function(){
-
 				 $.ajax({
 					 url : '/aboutUs/getListone/' ,
 					 type : 'get',
@@ -151,7 +149,6 @@ define([], function (){
 		//联系我们
 		aboutus2 : [],
 		getData2:function(){
-
 			$.ajax({
 				url : '/aboutUs/getListtwo/' ,
 				type : 'get',
@@ -167,7 +164,6 @@ define([], function (){
 		//常见问题
 		aboutus3 : [],
 		getData3:function(){
-
 			$.ajax({
 				url : '/aboutUs/getListthree/' ,
 				type : 'get',
@@ -184,7 +180,6 @@ define([], function (){
 		//用户协议
 		aboutus4 : [],
 		getData4:function(){
-
 			$.ajax({
 				url : '/aboutUs/getListfour/' ,
 				type : 'get',
@@ -202,7 +197,6 @@ define([], function (){
 		aboutus5 : [],
 		linkurl : 'http://',
 		getData5:function(){
-
 			//$('#page').pagination({
 			//	dataSource: function(done) {
 			//		$.ajax({
@@ -232,10 +226,6 @@ define([], function (){
 			//})
 
 
-
-
-
-
 			$.ajax({
 				url : '/aboutUs/getListfive/' ,
 				type : 'get',
@@ -251,21 +241,6 @@ define([], function (){
 		},
 
 
-		//意见反馈
-		aboutus6 : [],
-		getData6:function(){
-
-			$.ajax({
-				url : '/aboutUs/getListsix/' ,
-				type : 'get',
-				dataType : 'json',
-				success: function(response){
-					if(response){
-						model.aboutus6 = response.data;
-					}
-				},
-			})
-		},
 
 
 	});
@@ -274,6 +249,5 @@ define([], function (){
 	model.getData3();
 	model.getData4();
 	model.getData5();
-	model.getData6();
 	return model;
 });

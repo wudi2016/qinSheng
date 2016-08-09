@@ -1623,7 +1623,7 @@
 .headImg_tit {
     width: 100%;
     height: 30px;
-    background: #B1584C;
+    background: #209EEA;
 }
 
 .headImg_tit_l {
@@ -1641,6 +1641,10 @@
     height: 30px;
     float: right;
     cursor: pointer;
+    color:#ffffff;
+    text-align: center;
+    line-height: 30px;
+    font-size:20px;
 }
 
 .headImg_tit_r img {
@@ -1707,7 +1711,7 @@
 .headImg_foot {
     width: 100%;
     height: 40px;
-    background: #F5EBE6;
+    background: #B2DBF2;
 }
 
 .headImg_foot_selImg {

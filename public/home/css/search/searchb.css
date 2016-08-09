@@ -49,7 +49,7 @@
     border:none;
 }
 .con_top_con_sbar_r{
-    width:124px;
+    width:122px;
     height:50px;
     float: right;
 }
@@ -153,8 +153,12 @@
     padding-left: 10px;
 
     font-size: 16px;
-    font-weight: bold;
+    /*font-weight: bold;*/
     font-family: 微软雅黑;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .contain_lesson_center_data_info_bot .center {

@@ -43,7 +43,7 @@
 				<div class="palyinfo_detail_time" ms-html="studentInfo.created_at"></div>
 			</div>
 			<div class="palyinfo_detail_title" ms-html="'曲目：' + studentInfo.extra"></div>
-			<div class="palyinfo_detail_description" ms-html="'留言：' + studentInfo.message"></div>
+			<div class="palyinfo_detail_description" ms-visible="studentInfo.message" ms-html="'留言：' + studentInfo.message"></div>
             <div style="clear: both; height: 50px;"></div>
 		</div>
 

@@ -63,7 +63,7 @@ define([], function() {
 							response.data.extra = '免费课程';
 						}
 					}
-					if (model == 'likes' || model == 'feedBack') {
+					if (model == 'likes' || model == 'feedBack' || model == 'selectCourseView') {
 						callback(response.type);
 						return;
 					}
@@ -124,13 +124,21 @@ define([], function() {
                 type: "mp4"
             });
             typeof callback === 'function' && callback();
-            (!comment.videoType && !comment.bought && comment.teacherInfo.extra != '免费课程') && comment.thePlayer.onTime(function(){
+            (!comment.videoType && !comment.bought && comment.teacherInfo.extra != '免费课程') && comment.thePlayer.onTime(function() {
 	            if (comment.thePlayer.getPosition() >= 60) {
 	                comment.thePlayer.play(false);
 	                comment.thePlayer.remove();
 	                comment.overtime = true;
 	            }
 	        });
+			if (comment.orderType == 2 && !comment.videoType) {
+				var data = {courseId: comment.commentID, courseType: 1, userId: comment.mineID, chapterId: comment.commentID};
+				comment.getData('/lessonComment/getFirst', 'selectCourseView', {table: 'courseview', action: 1, data: data}, 'POST', function(response) {
+					if (!response) {
+						comment.getData('/lessonComment/getFirst', 'courseview', {table: 'courseview', action: 2, create_time: 1, data: data}, 'POST');
+					}
+				});
+			}
 		},
 		changeVideo: function() {
 			comment.overtime = false;

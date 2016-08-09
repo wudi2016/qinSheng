@@ -40,11 +40,24 @@ define([], function () {
             }
         },
         haveCourse : true,
-        downloadMsg: false, commentMsg: false,
+        catalogInfo: [],
+        downloadMsg: false, commentMsg: false, catalogMsg : false,
+        isFree: '',isBuy: '',isTeacher: '',
         getData: function (url, type, data, model, callback) {
             $.ajax({
                 url: url, type: type || 'GET', data: data || {}, dataType: 'json',
                 success: function (response) {
+                    if (response.status) {
+                        detail[model] = response.data;
+                        if(model == 'playList'){
+                            detail.playListLength = response.total;
+                        }
+                    } else {
+                        if (model == 'commentInfo') detail.commentMsg = true;
+                        if (model == 'dataDownload') detail.downloadMsg = true;
+                        if (model == 'catalogInfo') detail.catalogMsg = true;
+                        if (model == 'detailInfo') detail.haveCourse = true;
+                    }
                     if (model == 'result') {
                         callback(response.status);
                         return;
@@ -60,31 +73,20 @@ define([], function () {
                     if(model == 'addCompleteCount'){
                         return;
                     }
-                    if (response.status) {
-                        detail[model] = response.data;
-                    } else {
-                        if (model == 'commentInfo') detail.commentMsg = true;
-                        if (model == 'dataDownload') detail.downloadMsg = true;
-                    }
-                    if(model == 'detailInfo'){
-                        if(response.status){
-                            detail[model] = response.data;
-                        }else{
-                            detail.haveCourse = false;
-                        }
-                    }
-
-                    model == 'detailInfo' && detail.setVideo(function () {detail.getData('/lessonSubject/addCompleteCount', 'POST', {id: detail.detailId}, 'addCompleteCount');});
+                    model == 'detailInfo' && detail.setVideo(function () {});
                 }, error: function (error) {
                 }
             })
         },
         // 获取详细数据
         detailInfo: {
-            courseTitle: '',
-            coursePrice: '',
-            classHour: '',
-            coursePlayView: ''
+            courseTitle : '',
+            coursePrice : '',
+            classHour : '',
+            coursePlayView : '',
+            isBuy : false,
+            isFree : false,
+            isTryLearn : true
         },
         getDetail: function (id) {
             detail.getData('/lessonSubject/getDetail/' + id, '', {}, 'detailInfo');
@@ -304,6 +306,7 @@ define([], function () {
         noresourse : false,
         thePlayer: {},
         videoType: true,
+        playFlag:1,
         setVideo: function (callback) {
             var model = detail.videoType ? 'detailInfo' : 'videoPath';
             detail.thePlayer = jwplayer('mediaplayer').setup({
@@ -348,50 +351,63 @@ define([], function () {
                 detail.overtime = true;
             }
             detail.thePlayer.onPlaylistComplete(function(){
-                //alert("视频播放完了！");
+
+                detail.getData('/lessonSubject/addCompleteCount', 'POST', {id: detail.detailId}, 'addCompleteCount');
+                if(detail.playFlag < detail.playListLength){
+                    detail.videoType = false;
+                    detail.videoPath = {
+                        courseHighPath: detail.playList[detail.playFlag].courseHighPath,
+                        courseMediumPath: detail.playList[detail.playFlag].courseMediumPath,
+                        courseLowPath: detail.playList[detail.playFlag].courseLowPath
+                    };
+                    detail.setVideo(function () {
+                        detail.noresourse = false;
+                        detail.thePlayer.play(true);
+                    });
+                    detail.playFlag = detail.playFlag + 1;
+                }
             });
         },
         videoPath: [],
-        changeVideo: function (chapterId, path, isTryLearn, isFree, isBuy, isTeacher,coursePic) {
+        changeVideo: function (el,isFree,isBuy,isTeacher) {
             if(isTeacher || isBuy || isFree){
                 detail.videoType = false;
                 detail.overtime = false;
                 detail.videoPath = {
-                    coursePic : coursePic,
-                    courseHighPath: path,
-                    courseMediumPath: path,
-                    courseLowPath: path,
+                    coursePic : el.coursePic,
+                    courseHighPath: el.courseHighPath,
+                    courseMediumPath: el.courseMediumPath,
+                    courseLowPath: el.courseLowPath
                 };
                 detail.setVideo(function () {
                     detail.noresourse = false;
                     detail.thePlayer.play(true);
-                    detail.getData('/lessonSubject/addCompleteCount', 'POST', {id: detail.detailId}, 'addCompleteCount');
+
                 });
                 if (detail.mineUserId != null) {
                     detail.getData('/lessonSubject/addCourseView', 'POST', {
-                        chapterId: chapterId,
+                        chapterId: el.id,
                         userId: detail.mineUserId,
                         courseId: detail.detailId
                     }, 'addCourseView');
                 }
             }else{
-                if(isTryLearn == 1){
+                if(el.isTryLearn == 1){
                     detail.videoType = false;
                     detail.overtime = false;
                     detail.videoPath = {
-                        coursePic : coursePic,
-                        courseHighPath: path,
-                        courseMediumPath: path,
-                        courseLowPath: path,
+                        coursePic : el.coursePic,
+                        courseHighPath: el.courseHighPath,
+                        courseMediumPath: el.courseMediumPath,
+                        courseLowPath: el.courseLowPath
                     };
                     detail.setVideo(function () {
                         detail.noresourse = false;
                         detail.thePlayer.play(true);
-                        detail.getData('/lessonSubject/addCompleteCount', 'POST', {id: detail.detailId}, 'addCompleteCount');
                     });
                     if (detail.mineUserId != null) {
                         detail.getData('/lessonSubject/addCourseView', 'POST', {
-                            chapterId: chapterId,
+                            chapterId: el.id,
                             userId: detail.mineUserId,
                             courseId: detail.detailId
                         }, 'addCourseView');
@@ -414,6 +430,11 @@ define([], function () {
                     courseId: detail.detailId
                 }, 'addCourseView');
             }
+        },
+        playList: [],
+        playListLength : '',
+        getPlayList : function(){
+            detail.getData('/lessonSubject/getPlayList', 'POST', {courseId : detail.detailId}, 'playList');
         }
     });
     return detail;

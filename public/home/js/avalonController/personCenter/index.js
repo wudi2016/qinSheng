@@ -161,7 +161,9 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
         //选项卡
         tabStatus: '',
         changeTab:function(value,type){
-
+            //锚点赋值
+            window.location.hash = value;
+            //console.log(window.location.hash);
             if(value == 'lessonSubject'){
                 if(type == 'teacher'){
                     courseTeacher.courseTeacher.courseInfo.length == '0' ? courseTeacher.courseTeacher.getCourseInfo(2,1) : courseTeacher.courseTeacher.courseInfo;
@@ -364,14 +366,16 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
 
 
     sideBar.$watch("phone", function(a, b) {//a
-        if(!a.match(/^1(3|5|8|7){1}[0-9]{9}$/)){
-            sideBar.checkPhone = false;
-            $('.Msgaa').html('* 手机号格式错误');
-        }else if(a != $('.changePhone_label_span').html()){
-            sideBar.checkPhone = false;
-            $('.Msgaa').html('* 请输入原绑定手机号');
-        }else{
-            sideBar.checkHave(a);
+        if (a.length == 11){
+            if (!a.match(/^1(3|5|8|7){1}[0-9]{9}$/)) {
+                sideBar.checkPhone = false;
+                $('.Msgaa').html('* 手机号格式错误');
+            } else if (a != $('.changePhone_label_span').html()) {
+                sideBar.checkPhone = false;
+                $('.Msgaa').html('* 请输入原绑定手机号');
+            } else {
+                sideBar.checkHave(a);
+            }
         }
     })
 

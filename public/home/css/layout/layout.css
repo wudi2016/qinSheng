@@ -142,16 +142,19 @@ input,button,select,textarea{outline:none;filter:chroma(color=#000000);}
 .haveMsg{
 	width:15px;
 	height:85px;
-	float: left;
+	float: right;
 	color:red;
 	font-size:26px;
-	margin-top: 10px;
+	/*margin-top: 10px;*/
 	font-weight: bolder;
-	margin-left: -10px;
-	margin-top: -20px;
-	line-height: 85px;
+	/*margin-left: -10px;*/
+	/*margin-top: -20px;*/
+	line-height: 60px;
 	text-indent: 0px;
 	/*background: gray;*/
+	position: relative;
+	left:-12px;
+	z-index: 99;
 }
 
 

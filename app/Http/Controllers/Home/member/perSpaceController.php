@@ -20,7 +20,7 @@ class perSpaceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($typeID,$tab = null)
+    public function index($typeID)
     {
         //0学生学员   &&   １教师学员
         if (Auth::check() && Auth::user()->type != 3) {
@@ -36,13 +36,13 @@ class perSpaceController extends Controller
             if ($data->cityId) {
                 $data->cityName = DB::table('city')->select('name')->where('code', $data->cityId)->first()->name;
             }
-            return view('home.member.student.teacherStudent', compact('typeID', 'data','mineUsername','mineUserId','tab'));
+            return view('home.member.student.teacherStudent', compact('typeID', 'data','mineUsername','mineUserId'));
         } else {
             return redirect('/');
         }
     }
 
-    public function famousTeacher($tab = null)
+    public function famousTeacher()
     {
         //名师个人中心主页
         if (Auth::check() && Auth::user()->type != 3) {
@@ -66,7 +66,7 @@ class perSpaceController extends Controller
             if ($data->cityId) {
                 $data->cityName = DB::table('city')->select('name')->where('code', $data->cityId)->first()->name;
             }
-            return view('home.member.famousTeacher.famousTeacher',compact('mineUsername','data','mineUserId','tab'));
+            return view('home.member.famousTeacher.famousTeacher',compact('mineUsername','data','mineUserId'));
         } else {
             return redirect('/');
         }
@@ -598,8 +598,8 @@ class perSpaceController extends Controller
         $seven = Carbon::now()->subDays(7);
         if($data){
             foreach($data as $key=>$value){
-                $data[$key]->orderPrice = ceil($value->orderPrice/100);
-                $data[$key]->payPrice = ceil($value->payPrice/100);
+                $data[$key]->orderPrice = $value->orderPrice/100;
+                $data[$key]->payPrice = $value->payPrice/100;
                 $data[$key]->realname || $data[$key]->realname = $data[$key]->username;
                 //0是超过七天，1是不超过7天
                 $data[$key]->seven = $seven <= $data[$key]->payTime ? 1 : 0;
@@ -694,9 +694,19 @@ class perSpaceController extends Controller
 
     public function applyRefund(Request $request)
     {
-        $total   = \DB::table('coursechapter')->where(['courseId'=>$request['courseId']])->where('parentId','<>',0)->count() ?: 1;
-        $chapter = \DB::table('courseview')->where(['userId'=>$request['userId'],'courseId'=>$request['courseId'],'courseType'=>0])->count() ?: 0;
-        $price = floor($request['payPrice'] / $total * ($total-$chapter));
+        //首先查到该课程所有付费章节总数
+        $total = \DB::table('coursechapter')->where(['courseId' =>$request['courseId'],'status'=>0, 'isTrylearn' => 0])->where('parentId', '<>', 0)->count() ?: 1;
+        //该用户看过的章节数
+        $chapter = \DB::table('courseview as view')
+            ->join('coursechapter as chapter','chapter.id','=','view.chapterId')
+            ->where(['view.userId' => $request['userId'], 'view.courseId' => $request['courseId'], 'view.courseType' => 0])
+            ->where('chapter.isTrylearn','=',0)
+            ->count();
+        $chapter || $chapter = 0;
+
+        //退款金额= 未学章节数/总的付费章节数*学员支付价格
+        $price =is_integer(($total - $chapter) / $total * ($request['payPrice']/100)) ? ($total - $chapter) / $total * ($request['payPrice']/100) : round(($total - $chapter) / $total * ($request['payPrice']/100),2);
+
         if($total - $chapter >= 0)
             return response()->json(['data'=>$price,'type'=>true]);
         else

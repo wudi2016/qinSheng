@@ -74,6 +74,7 @@
 			upload.uploadInfo.orderSn = '{{$info -> orderSn}}' || null;
 			upload.uploadInfo.teacherId = '{{$info -> teacherId}}' || null;
 			upload.mineID = {{$mineID}} || null;
+			upload.mineType = '{{\Auth::user() -> type}}' || null;
 
 			upload.$watch('uploadInfo.courseTitle', function(value, oldValue) {
                 if (value.length > 20) upload.uploadInfo.courseTitle = oldValue;

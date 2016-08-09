@@ -49,7 +49,7 @@ class communityController extends Controller
      * 最热视频数据接口
      */
     public function gethotvideo(){
-        $gethotvideo = DB::table('hotvideo')->orderBy('sort','asc')->where('status',0)->limit(6)->get();
+        $gethotvideo = DB::table('hotvideo')->where('sort','>',0)->where('status',0)->orderBy('sort','asc')->limit(6)->get();
         if($gethotvideo){
             foreach ($gethotvideo as $k => $v) {
                 $data['data'][] = [

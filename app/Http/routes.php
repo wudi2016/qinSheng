@@ -106,10 +106,10 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
                 ||     -------------------------- 个人中心路由组 ----------------------------
                 ||--------------------------------------------------------------------------------------
                  */
-        //学员个人中心主页    0 学生学员&&    1  教师学员  tab为选项卡可选参数
-        Route::get('/student/{personID}/{tab?}',['middleware' => 'check','uses'=>'perSpaceController@index']);
+        //学员个人中心主页    0 学生学员&&    1  教师学员
+        Route::get('/student/{personID}',['middleware' => 'check','uses'=>'perSpaceController@index']);
         //	名师个人中心主页  type 为 2
-        Route::get('/famousTeacher/{tab?}', ['middleware' => 'check','uses'=>'perSpaceController@famousTeacher']);
+        Route::get('/famousTeacher', ['middleware' => 'check','uses'=>'perSpaceController@famousTeacher']);
 
 
         //个人中心我的关注
@@ -279,6 +279,9 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         Route::post('/addCourseView', 'lessonSubjectController@addCourseView');
         // 增加课程观看完成数
         Route::post('/addCompleteCount','lessonSubjectController@addCompleteCount');
+        // 获取播放列表
+        Route::post('/getPlayList','lessonSubjectController@getPlayList');
+
 
         // 添加订单接口
         Route::post('/addOrder', 'lessonSubjectController@addOrder');
@@ -436,6 +439,15 @@ Route::get('/admin/login',['middleware' => 'admins',function () {
     return view('admin.login');
 }]);
 Route::post('/admin/login', 'Auth\AuthController@adminLogin');
+
+
+
+//  支付宝异步回调页面
+Route::any('/admin/order/alipayAsyncCallback', 'Admin\order\orderController@alipayAsyncCallback');
+//  支付宝同步回调页面
+Route::any('/admin/order/alipaySyncCallback', 'Admin\order\orderController@alipaySyncCallback');
+
+
 
 Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Admin'], function () {
 
@@ -815,10 +827,10 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
         Route::get('weiXinRefund/{orderId}','orderController@weiXinRefund');
         //支付宝确认退款
         Route::any('alipayRefund/{orderId}','orderController@alipayRefund');
-        //  支付宝异步回调页面
-        Route::any('alipayAsyncCallback', 'orderController@alipayAsyncCallback');
-        //  支付宝同步回调页面
-        Route::any('alipaySyncCallback', 'orderController@alipaySyncCallback');
+//        //  支付宝异步回调页面
+//        Route::post('alipayAsyncCallback', 'orderController@alipayAsyncCallback');
+//        //  支付宝同步回调页面
+//        Route::post('alipaySyncCallback', 'orderController@alipaySyncCallback');
     });
 
 
