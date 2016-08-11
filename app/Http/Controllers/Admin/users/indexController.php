@@ -182,7 +182,18 @@ class indexController extends Controller
 
 
         if($id = \DB::table('users')->insertGetId($data)){
+            //写入日志
             $this -> OperationLog("新增了用户ID为{$id}的学员", 1);
+            //添加用户通知
+            $cIP = getenv('REMOTE_ADDR');
+            $cIP1 = getenv('HTTP_X_FORWARDED_FOR');
+            $cIP2 = getenv('HTTP_CLIENT_IP');
+            $cIP1 ? $cIP = $cIP1 : null;
+            $cIP2 ? $cIP = $cIP2 : null;
+
+            DB::table('usermessage')->insert(
+                ['username' =>$data['username'], 'type' => 1,'content'=>"恭喜您成功加入点评网，您的邀请码是：".$data['yaoqingma'],'client_ip'=>$cIP, 'created_at' => Carbon::now()]
+            );
             return redirect('admin/message')->with(['status'=>'添加用户成功','redirect'=>'users/userList']);
         }else{
             return redirect('admin/message')->with(['status'=>'添加用户失败','redirect'=>'users/userList']);
@@ -345,7 +356,7 @@ class indexController extends Controller
     protected function validator(array $data)
     {
         $rules = [
-            'username' => 'required|min:4|max:16',
+            'username' => 'required|min:2|max:8',
             'password' => 'sometimes|required|min:6|max:16',
             'phone' => 'required|digits:11',
             'sex' => 'required',
@@ -353,8 +364,8 @@ class indexController extends Controller
 
         $messages = [
             'username.required' => '请输入用户名',
-            'username.min' => '用户名最少4位',
-            'username.max' => '用户名最多16位',
+            'username.min' => '用户名最少2位',
+            'username.max' => '用户名最多8位',
             'password.required' => '请输入密码',
             'password.min' => '密码最少6位',
             'password.max' => '密码最多16位',

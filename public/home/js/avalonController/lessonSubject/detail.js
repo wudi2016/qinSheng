@@ -42,7 +42,6 @@ define([], function () {
         haveCourse : true,
         catalogInfo: [],
         downloadMsg: false, commentMsg: false, catalogMsg : false,
-        isFree: '',isBuy: '',isTeacher: '',
         getData: function (url, type, data, model, callback) {
             $.ajax({
                 url: url, type: type || 'GET', data: data || {}, dataType: 'json',
@@ -84,9 +83,11 @@ define([], function () {
             coursePrice : '',
             classHour : '',
             coursePlayView : '',
-            isBuy : false,
-            isFree : false,
-            isTryLearn : true
+            isFree: false,
+            isTeacher : false,
+            isBuy: false,
+            isTryLearn: true,
+            isCollection: false
         },
         getDetail: function (id) {
             detail.getData('/lessonSubject/getDetail/' + id, '', {}, 'detailInfo');
@@ -151,7 +152,7 @@ define([], function () {
         },
         // 点赞
         addLike: function (el) {
-            if (detail.mineUsername) {
+            if (detail.mineUsername && detail.mineType != 3) {
                 el.isLike || detail.getData('/lessonSubject/addLike', 'POST', {id: el.id}, 'result', function (response) {
                     el.isLike = response;
                     el.isLike && ++el.likeTotal;
@@ -198,7 +199,7 @@ define([], function () {
                 return;
             }
             if (value == 'buyCourse') {
-                if (detail.mineUsername) {
+                if (detail.mineUsername && detail.mineType != 3) {
                     detail.popUp = value;
                 } else {
                     location.href = '/index/login';
@@ -206,7 +207,7 @@ define([], function () {
                 }
             }
             if(id == 'quitCollect'){
-                if (detail.mineUsername) {
+                if (detail.mineUsername && detail.mineType != 3) {
                     detail.getData('/lessonSubject/addCollect', 'POST', {
                         courseId: path,
                         userId: detail.mineUserId,
@@ -239,7 +240,7 @@ define([], function () {
                 detail.warnTel = '请留下联系方式';
                 return;
             } else if ((detail.tel.match(/^1(3|5|8|7){1}[0-9]{9}$/) == null) && (detail.tel.match(/^[1-9]{1}[0-9]{5,10}$/) == null) && (detail.tel.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/) == null)) {
-                detail.warnTel = '请正确联系方式';
+                detail.warnTel = '请填写正确联系方式';
                 return;
             } else {
                 detail.warnTel = '';
@@ -263,7 +264,7 @@ define([], function () {
         },
         // 添加收藏
         addCollect: function (id, isCollection) {
-            if (detail.mineUsername) {
+            if (detail.mineUsername && detail.mineType != 3) {
                 detail.getData('/lessonSubject/addCollect', 'POST', {
                     courseId: id,
                     userId: detail.mineUserId,
@@ -304,6 +305,7 @@ define([], function () {
         },
         overtime: false,
         noresourse : false,
+        tryLearnOver: false,
         thePlayer: {},
         videoType: true,
         playFlag:1,
@@ -353,18 +355,28 @@ define([], function () {
             detail.thePlayer.onPlaylistComplete(function(){
 
                 detail.getData('/lessonSubject/addCompleteCount', 'POST', {id: detail.detailId}, 'addCompleteCount');
-                if(detail.playFlag < detail.playListLength){
-                    detail.videoType = false;
-                    detail.videoPath = {
-                        courseHighPath: detail.playList[detail.playFlag].courseHighPath,
-                        courseMediumPath: detail.playList[detail.playFlag].courseMediumPath,
-                        courseLowPath: detail.playList[detail.playFlag].courseLowPath
-                    };
-                    detail.setVideo(function () {
-                        detail.noresourse = false;
-                        detail.thePlayer.play(true);
-                    });
-                    detail.playFlag = detail.playFlag + 1;
+                if(detail.detailInfo.isTryLearn && !detail.detailInfo.isBuy && !detail.detailInfo.isFree && !detail.detailInfo.isTeacher){
+                    detail.thePlayer.remove();
+                    detail.tryLearnOver = true;
+                }else{
+                    if(detail.playFlag < detail.playListLength){
+                        detail.videoType = false;
+                        detail.videoPath = {
+                            courseHighPath: detail.playList[detail.playFlag].courseHighPath,
+                            courseMediumPath: detail.playList[detail.playFlag].courseMediumPath,
+                            courseLowPath: detail.playList[detail.playFlag].courseLowPath
+                        };
+                        detail.setVideo(function () {
+                            detail.noresourse = false;
+                            detail.thePlayer.play(true);
+                        });
+                        detail.getData('/lessonSubject/addCourseView', 'POST', {
+                            chapterId: detail.playList[detail.playFlag].id,
+                            userId: detail.mineUserId,
+                            courseId: detail.detailId
+                        }, 'addCourseView');
+                        detail.playFlag = detail.playFlag + 1;
+                    }
                 }
             });
         },
@@ -384,7 +396,7 @@ define([], function () {
                     detail.thePlayer.play(true);
 
                 });
-                if (detail.mineUserId != null) {
+                if (detail.mineUserId != null && detail.mineType != 3) {
                     detail.getData('/lessonSubject/addCourseView', 'POST', {
                         chapterId: el.id,
                         userId: detail.mineUserId,
@@ -405,7 +417,8 @@ define([], function () {
                         detail.noresourse = false;
                         detail.thePlayer.play(true);
                     });
-                    if (detail.mineUserId != null) {
+
+                    if (detail.mineUserId != null && detail.mineType != 3) {
                         detail.getData('/lessonSubject/addCourseView', 'POST', {
                             chapterId: el.id,
                             userId: detail.mineUserId,
@@ -413,7 +426,7 @@ define([], function () {
                         }, 'addCourseView');
                     }
                 }else{
-                    if(detail.mineUserId){
+                    if(detail.mineUserId && detail.mineType != 3){
                         detail.popUp = 'buyCourse';
                     }else{
                         location.href = '/index/login';
@@ -422,8 +435,8 @@ define([], function () {
             }
         },
         tryLearn : function(chapterId){
-            $('#mediaplayer_display_button_play').click();
-            if (detail.mineUserId != null) {
+            detail.thePlayer.play(true);
+            if (detail.mineUserId != null && detail.mineType != 3) {
                 detail.getData('/lessonSubject/addCourseView', 'POST', {
                     chapterId: chapterId,
                     userId: detail.mineUserId,

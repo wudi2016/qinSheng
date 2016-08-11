@@ -28,7 +28,7 @@ define([], function () {
                 height:515,
                 width:800,
                 aspectratio: '16:9',
-                type: "mp4,flv",
+                type: "mp4",
                 image:data[0].cover,
             });
             console.log(data);

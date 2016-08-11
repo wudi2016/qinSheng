@@ -677,23 +677,37 @@ class indexController extends Controller
                     if ($request->file('img')->move('uploads/heads', $newname)) {
                         $path = 'uploads/heads/' . $newname;
                         if (DB::table('users')->where('id', $uid)->update(['pic' => $path])) {
-                            return response()->json(['state' => true, 'message' => 'success', 'filepath' => $path]);
+                            return response()->json(['state' => 1, 'message' => '成功', 'filepath' => $path]);
                         } else {
-                            return response()->json(['state' => false, 'message' => 'database save failed']);
+                            return response()->json(['state' => 0, 'message' => '数据库保存失败']);
                         }
                     } else {
-                        return response()->json(['state' => false, 'message' => 'file save failed']);
+                        return response()->json(['state' => 0, 'message' => '文件保存失败']);
                     }
                 } else {
-                    return response()->json(['state' => false, 'message' => 'failed in uploading']);
+                    return response()->json(['state' => 0, 'message' => '上传失败']);
                 }
             } else {
-                return response()->json(['state' => false, 'message' => 'please select file']);
+                return response()->json(['state' => 0, 'message' => '请选择文件']);
             }
         }catch (\Exception $e){
             Log::info($e -> getMessage() . " --- teachers 抛出异常");
             return $this -> throwError();
         }
     }
-    
+
+    /**
+     * 获取手机验证码接口(移动端)
+     *
+     * @return json
+     */
+    public function getMessages(Messages $message)
+    {
+        $telephone = $_POST['phone'];
+        $code    = $message::createCode();
+        $content = '您好，欢迎注册琴晟艺术教育平台：您的手机验证码'.$code.'【琴晟教育】';
+        $message::setInfo($telephone,$content);
+        $result = $message::sendMsg();
+        return $message::response($result,$code);
+    }
 }

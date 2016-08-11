@@ -32,15 +32,21 @@ class orderController extends Controller
             $query = $query->where('created_at','<=',$request['endTime']);
         }
         if($request['type'] == 1){
-            $query = $query->where('orderSn','like','%'.trim($request['search']).'%');
+            $query = $query->where('id','like','%'.trim($request['search']).'%');
         }
         if($request['type'] == 2){
-            $query = $query->where('orderTitle','like','%'.trim($request['search']).'%');
+            $query = $query->where('orderSn','like','%'.trim($request['search']).'%');
         }
         if($request['type'] == 3){
-            $query = $query->where('userId','like','%'.trim($request['search']).'%');
+            $query = $query->where('tradeSn','like','%'.trim($request['search']).'%');
         }
         if($request['type'] == 4){
+            $query = $query->where('orderTitle','like','%'.trim($request['search']).'%');
+        }
+        if($request['type'] == 5){
+            $query = $query->where('userId','like','%'.trim($request['search']).'%');
+        }
+        if($request['type'] == 6){
             $query = $query->where('userName','like','%'.trim($request['search']).'%');
         }
 
@@ -194,7 +200,7 @@ class orderController extends Controller
         if($request['refundableAmount'] > $payPrice){
             return Redirect()->back()->withInput()->withErrors('应退金额不能大于实付金额');
         }
-        $data = $request->except('_token');
+        $data = $request->except('_token','status');
         $data['updated_at'] = Carbon::now();
         $data['refundableAmount'] = $request['refundableAmount'] * 100;
         if(DB::table('orders')->where('id',$request['id'])->update($data)){
@@ -229,7 +235,7 @@ class orderController extends Controller
         if($request['refundAmount'] > $refundableAmount){
             return Redirect()->back()->withInput()->withErrors('已退金额不能大于应退金额');
         }
-        $data = $request->except('_token');
+        $data = $request->except('_token','status');
         $data['refundAmount'] = $request['refundAmount'] * 100;
         $data['updated_at'] = Carbon::now();
         if(DB::table('orders')->where('id',$request['id'])->update($data)){
@@ -351,15 +357,18 @@ class orderController extends Controller
      */
     public function weiXinRefund(WxPayApi $wxPay,WxPayDataBase $wxPayDataBase,WxPayRefund $wxPayRefund,$orderid){
         $data = DB::table('orders')->where(['id'=>$orderid,'isDelete'=>0])->first();
-        $totalPrice = $data->orderPrice * 100;
-        $refundAmount = $data->refundAmount * 100;
-        $orderid = $data->orderSn;//取出订单号
+        if(!$data->refundAmount){
+            return Redirect()->back()->withInput()->withErrors('请填写已退金额');
+        }
+        $totalPrice = $data->orderPrice;
+        $refundAmount = $data->refundAmount;
+        $orderSn = $data->orderSn;//取出订单号
         $tradeSn = $data->tradeSn;//取出微信订单号
 
         //设置微信订单号
         $wxPayRefund->SetTransaction_id($tradeSn);
         //设置退款单号
-        $wxPayRefund->SetOut_refund_no($orderid);
+        $wxPayRefund->SetOut_refund_no($orderSn);
         //设置订单总金额
         $wxPayRefund->SetTotal_fee($totalPrice);
         //设置退款总金额
@@ -369,7 +378,6 @@ class orderController extends Controller
 
 
         $result = $wxPay->refund($wxPayRefund);
-        dd($result);
         if($result['return_code'] == 'SUCCESS'){
             DB::table('orders')->where('id',$orderid)->update(['status'=>4]);//如果退款成功将订单状态改为4已退款
             $this -> OperationLog('id为'.$orderid.'的订单确认了退款');
@@ -377,7 +385,6 @@ class orderController extends Controller
         }else{
             return redirect('admin/message')->with(['status'=>'退款失败','redirect'=>'order/orderList/3']);
         }
-//        dd($result);
     }
 
     /**
@@ -385,6 +392,9 @@ class orderController extends Controller
      */
     public function alipayRefund($orderId){
         $order = DB::table('orders')->where('id',$orderId)->where('isDelete',0)->first();
+        if(!$order->refundAmount){
+            return Redirect()->back()->withInput()->withErrors('请填写已退金额');
+        }
         $alipay = app('alipay.web');
         $alipay->setService('refund_fastpay_by_platform_pwd');
         $alipay->setOutTradeNo($order->orderSn);//商户订单号
@@ -396,7 +406,7 @@ class orderController extends Controller
         $alipay->setBatchNum(1);//总笔数
         $aa = $order->tradeSn.'^'.($order->refundAmount / 100).'^'.'正常退款'; //交易号^退款金额^退款理由
         $alipay->setDetailData($aa);//单笔数据集
-        $alipay->setReturnUrl('http://qinsheng.zuren8.com/admin/order/alipaySyncCallback');//同步回调
+//        $alipay->setReturnUrl('http://qinsheng.zuren8.com/admin/order/alipaySyncCallback');//同步回调
         $alipay->setNotifyUrl('http://qinsheng.zuren8.com/admin/order/alipayAsyncCallback');//异步回调
         $alipay->getPayLink();
 
@@ -410,7 +420,7 @@ class orderController extends Controller
      */
     public function alipayAsyncCallback()
     {
-        $this -> OperationLog('异步日志为'.json_encode(Input::all()));
+        $this -> OperationOrderLog('订单异步日志'.json_encode(Input::all()));
 
         if (!app('alipay.web')->verify()) {
             Log::info('支付宝异步校验失败 ', [
@@ -418,39 +428,40 @@ class orderController extends Controller
             ]);
             return 'fail';
         }
-        if (Input::get('result_details') == 'SUCCESS') {
-            $orderSn = Input::get('out_trade_no');
-            DB::table('orders')->where('tradeSn', $orderSn)->update(['status'=>4]);
-            return redirect()->to('admin/order/orderList/3');
+
+        $resultDetails = explode('^',Input::get('result_details'));//交易号^退款金额^结果
+        if ($resultDetails[2] == 'SUCCESS') {
+            $tradeSn = $resultDetails[0]; //取出交易号
+            DB::table('orders')->where('tradeSn', $tradeSn)->update(['status'=>4]);//订单状态改为已退款
+            $this -> OperationOrderLog('订单交易号为'.$tradeSn.'的订单已退款');
             return 'success';
         }
     }
 
 
-    /**
-     * 支付宝同步回调页面
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function alipaySyncCallback()
-    {
-        $this -> OperationLog('异步日志为'.json_encode(Input::all()));
-        if (!app('alipay.web')->verify()) {
-            Log::info('支付宝同步校验失败 ', [
-                'data' =>json_encode(Input::all())
-            ]);
-            abort(404);
-        }
-//        dump('aa');
-//        dd(Input::all());
-
-        if (Input::get('trade_status') == 'TRADE_SUCCESS' || Input::get('trade_status') == 'TRADE_FINISHED') {
-            $orderSn = Input::get('out_trade_no');
-            DB::table('orders')->where('orderSn', $orderSn)->update(['status'=>4]);
-            return redirect()->to('admin/order/orderList/3');
-        }
-    }
-
+//    /**
+//     * 支付宝同步回调页面
+//     *
+//     * @return \Illuminate\Http\Response
+//     */
+//    public function alipaySyncCallback()
+//    {
+//        $this -> OperationLog('同步日志为aaaaaa'.json_encode(Input::all()));
+//        if (!app('alipay.web')->verify()) {
+//            Log::info('支付宝同步校验失败 ', [
+//                'data' =>json_encode(Input::all())
+//            ]);
+//            abort(404);
+//        }
+//
+//        $resultDetails = explode('^',Input::get('result_details'));//交易号^退款金额^结果
+//        if ($resultDetails[2] == 'SUCCESS') {
+//            $tradeSn = $resultDetails[0]; //取出交易号
+//            DB::table('orders')->where('tradeSn', $tradeSn)->update(['status'=>4]);
+//            return redirect()->to('/admin/order/orderList/3');
+//        }
+//
+//    }
 
 
 //    public function alipayRefund($orderId){

@@ -1,20 +1,8 @@
 define(['PrimecloudPaas'], function(PrimecloudPaas) {
 
     var upload = avalon.define({
-        $id: "uploadController",
+        $id: "hotvideos",
 
-        //选择的所属parentId
-        parentId:function(id){
-            upload.parentId = id;
-        },
-
-
-        id:'',
-        selectid:'',
-        courseid:'',
-        title:'',
-        parentid:'',
-        isTrylearn:'',
 
         //视频上传部分
         progressBar: {
@@ -65,6 +53,10 @@ define(['PrimecloudPaas'], function(PrimecloudPaas) {
                                         upload.endUpload(model,'视频上传完成！');
                                         upload.uploadInfo[model].fileID = response.data.data.FileID;
                                     }, 1000);
+                                    var fileid = response.data.data.FileID;
+                                    console.log(fileid);
+                                    var str = '<input type="text" value="'+fileid+'"  name="coursePath"  class="fileButton" id="md5container">';
+                                    $('#yincang').html(str);
                                 } else {
                                     if (response.data.data.AllowUpload == 1) upload.paas[model].requestUpload({ url: response.data.data.UUrl, method: "POST", data: {"filedata": upload.file[model]} });
                                     console.log('文件上传进度： ' + parseInt(response.data.data.UploadLength / response.data.data.FileLenth * 100) + '%');
@@ -149,104 +141,6 @@ define(['PrimecloudPaas'], function(PrimecloudPaas) {
             upload.uploadTip[index] = tip || '';
         },
 
-
-        //提交
-        errormessagetitle:'',
-        errormessagebelong:'',
-        submit:function(id,courseid,selectid){
-            console.log(id);
-            console.log(courseid);
-            console.log(selectid);
-            upload.id = id;
-            upload.selectid = selectid;
-            if(selectid == 1){ //选择章
-                upload.title = $('#ttitle').val();
-                if(!$('#ttitle').val()){
-                    upload.errormessagetitle = '<span style="color: red;">请输入名称</span>';
-                    return false;
-                }else{
-                    var ttitle = $('#ttitle').val();
-                    if(ttitle.length > 20){
-                        upload.errormessagetitle = '<span style="color: red;">名称不超过20</span>';
-                        return false;
-                    }else{
-                        upload.errormessagetitle = '';
-                    }
-                }
-
-                $.ajax({
-                    type: "post",
-                    data:{id:id,courseid:courseid,title:upload.title,selectid:selectid},
-                    url: "/admin/specialCourse/doEditSpecialChapter",
-
-                    dataType: 'json',
-                    success: function (res) {
-                        console.log(res);
-                        if(res == 1){
-                            location.href= '/admin/specialCourse/specialChapterList/'+ courseid;
-                            alert('修改成功');
-                        }
-                    }
-                });
-            }else{
-                if(selectid == 2){ //选择节
-                    upload.isTrylearn = $('#istrylearn').val();
-                    if(!$('#belong').val()){
-                        upload.errormessagebelong = '<span style="color: red;">请选择所属章(如没有请先添加章)</span>';
-                        return false;
-                    }else{
-                        upload.errormessagebelong = '';
-                    }
-                    if(!$('#ttitle').val()){
-                        upload.errormessagetitle = '<span style="color: red;">请输入名称</span>';
-                        return false;
-                    }else{
-                        var ttitle = $('#ttitle').val();
-                        if(ttitle.length > 20){
-                            upload.errormessagetitle = '<span style="color: red;">名称不超过20</span>';
-                            return false;
-                        }else{
-                            upload.errormessagetitle = '';
-                        }
-                    }
-                    if(!upload.uploadInfo.low.fileID){
-                        upload.uploadStatus.low = 3;
-                        upload.uploadTip.low = '<span style="color: red;">请先上传视频</span>';
-                        return false;
-                    }
-                    if(!upload.uploadInfo.middle.fileID){
-                        upload.uploadStatus.middle = 3;
-                        upload.uploadTip.middle = '<span style="color: red;">请先上传视频</span>';
-                        return false;
-                    }
-                    if(!upload.uploadInfo.high.fileID){
-                        upload.uploadStatus.high = 3;
-                        upload.uploadTip.high = '<span style="color: red;">请先上传视频</span>';
-                        return false;
-                    }
-                    console.log(upload.uploadInfo.low.fileID);
-                    console.log(upload.uploadInfo.middle.fileID);
-                    console.log(upload.uploadInfo.high.fileID);
-
-                    $.ajax({
-                        type: "post",
-                        data:{id:id,courseid:courseid,title:upload.title,selectid:selectid,isTrylearn:upload.isTrylearn,courseLowPath:upload.uploadInfo.low.fileID,courseMediumPath:upload.uploadInfo.middle.fileID,courseHighPath:upload.uploadInfo.high.fileID},
-                        url: "/admin/specialCourse/doEditSpecialChapter",
-
-                        dataType: 'json',
-                        success: function (res) {
-                            console.log(res);
-                            if(res == 1){
-                                location.href= '/admin/specialCourse/specialChapterList/'+courseid;
-                                alert('修改成功');
-                            }
-                        }
-                    });
-                }
-            }
-
-
-        }
     })
 
     return upload;

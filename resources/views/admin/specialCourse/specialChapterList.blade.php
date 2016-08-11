@@ -240,7 +240,7 @@
 
         <!--弹窗显示详情-->
         <div id="videodetailpupUpback" class="videodetailpupUpback">
-            <div class="videopopup1" style="width: 700px;height: 400px;margin-top: -200px;">
+            <div class="videopopup1" style="width: 700px;height: 400px;margin-top: -150px;margin-left: -350px;">
                 <div class="videodetailtopbaner">
                     <div class="detailtitle" style="width: 650px;padding-left: 40px">视频</div>
                     <div class="deldetail" style="float: right"></div>

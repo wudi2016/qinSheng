@@ -121,7 +121,9 @@
             </div>
             <div class="clear"></div>
             <div class="teacher_con_more">
-                <a href="{{url('community/theteacher')}}"><div class="teacher_con_more_btn">查看更多名师信息</div></a>
+                <div class="teacher_con_more_c">
+                    <a href="{{url('community/theteacher')}}"><div class="teacher_con_more_btn">查看更多名师信息</div></a>
+                </div>
             </div>
         </div>
     </div>
@@ -170,7 +172,9 @@
             </div>
             <div class="clear"></div>
             <div class="recommend_con_more">
-                <a href="lessonSubject/list/1"><div class="teacher_con_more_btn">查看更多专题课程</div></a>
+                <div class="teacher_con_more_c">
+                    <a href="lessonSubject/list/1"><div class="teacher_con_more_btn">查看更多专题课程</div></a>
+                </div>
             </div>
         </div>
     </div>
@@ -220,7 +224,9 @@
             </div>
             <div class="clear"></div>
             <div class="recommend_con_more">
-                <a href="lessonSubject/list/2"><div class="teacher_con_more_btn">查看更多点评课程</div></a>
+                <div class="teacher_con_more_c">
+                    <a href="lessonSubject/list/2"><div class="teacher_con_more_btn">查看更多点评课程</div></a>
+                </div>
             </div>
         </div>
     </div>

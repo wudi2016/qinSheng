@@ -15,11 +15,12 @@ class VerifyCsrfToken extends BaseVerifier
         '/lessonComment/wxPayCallback',
         '/lessonComment/alipayAsyncCallback',
         '/lessonComment/alipaySyncCallback',
-        '/index/editHeadImg',
+        '/index/editHeadImg',                  //移动端头像编辑
 		'/lessonSubject/wxPayCallback',
 		'/lessonSubject/alipayAsyncCallback',
 		'/lessonSubject/alipaySyncCallback',
 		'/admin/order/alipayAsyncCallback',
-		'/admin/order/alipaySyncCallback',
+		'/index/getMessages',                  //移动端短信验证
+//		'/admin/order/alipaySyncCallback',
     ];
 }

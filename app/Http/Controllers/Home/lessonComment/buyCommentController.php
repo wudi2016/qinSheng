@@ -53,7 +53,7 @@ class buyCommentController extends Controller
         $result = DB::table('orders')->select('orderPrice', 'orderTitle', 'orderSn', 'id', 'orderType')->where(['id' => $orderID, 'userId' => \Auth::user()->id, 'isDelete' => 0, 'status' => 5])->first();
         $result || abort(404);
 		try {
-			$code_url = $this->makeUnifiedOrder($wxPay, $inputObj, $wxBase, $result, 'http://qinsheng.zuren8.com/lessonComment/wxPayCallback');
+			$code_url = $this -> makeUnifiedOrder($wxPay, $inputObj, $wxBase, $result, 'http://qinsheng.zuren8.com/lessonComment/wxPayCallback');
 			empty($code_url['code_url']) && abort(404);
 			return view('home.lessonComment.buyComment.scan')->with('orderID', $orderID)->with('orderInfo', $result)->with('url', $code_url['code_url']);
 		} catch (\Exception $e) {
@@ -185,8 +185,8 @@ class buyCommentController extends Controller
                 Log::debug(json_encode($xml) . " --- 订单校验失败");
             }
         } catch (\Exception $e) {
-            Log::debug($e->getMessage() . " --- try catch 抛出异常");
-            Log::debug(json_encode($xml) . " --- 异常数据");
+            Log::debug($e->getMessage() . " --- wxPayCallback 抛出异常");
+            Log::debug(json_encode($xml) . " --- wxPayCallback 异常数据");
         }
     }
 
@@ -232,7 +232,7 @@ class buyCommentController extends Controller
     {
         if (!app('alipay.web')->verify()) {
             Log::debug('支付宝同步校验失败 ', [
-                'data' => Input::all()
+                'data' => json_encode(Input::all())
             ]);
             abort(404);
         }
@@ -251,7 +251,6 @@ class buyCommentController extends Controller
                 DB::table('commentcourse') -> join('orders', 'commentcourse.id', '=', 'orders.courseId') -> where('orders.orderSn', $orderSn) -> increment('commentcourse.coursePlayView');
                 DB::table('commentcourse') -> join('orders', 'commentcourse.id', '=', 'orders.courseId') -> where('orders.orderSn', $orderSn) -> increment('commentcourse.courseStudyNum');
             }
-
             $order = DB::table('orders')->where('orderSn', $orderSn)->update($result);
             if ($order) {
                 return redirect()->to(Input::get('body'));
@@ -277,6 +276,7 @@ class buyCommentController extends Controller
         $alipay->setTotalFee($result->orderPrice / 100);
         $alipay->setSubject($result->orderTitle);
         $alipay->setBody($callback);
+        $alipay->setItBPay('10m');
         $alipay->setQrPayMode('2');
         return redirect()->to($alipay->getPayLink());
     }

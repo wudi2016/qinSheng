@@ -87,7 +87,7 @@ define(['PrimecloudPaas'], function(PrimecloudPaas) {
                                         upload.uploadInfo[model].fileID = response.data.data.FileID;
                                     }, 1000);
                                 } else {
-                                    if (response.data.data.AllowUpload == 1) upload.paas.requestUpload({ url: response.data.data.UUrl, method: "POST", data: {"filedata": upload.file[model]} });
+                                    if (response.data.data.AllowUpload == 1) upload.paas[model].requestUpload({ url: response.data.data.UUrl, method: "POST", data: {"filedata": upload.file[model]} });
                                     console.log('文件上传进度： ' + parseInt(response.data.data.UploadLength / response.data.data.FileLenth * 100) + '%');
                                     upload.progressBar[model] = 25 + response.data.data.UploadLength / response.data.data.FileLenth * 100 * 0.75;
                                     setTimeout(function() {

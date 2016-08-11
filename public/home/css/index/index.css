@@ -78,7 +78,8 @@
 .teacher{
 	width:100%;
 	min-width: 1200px;
-	height:860px;
+	/*height:860px;*/
+	height:916px;
 	background:#F5F5F5;
 }
 .teacher_con{
@@ -123,7 +124,8 @@
 }
 .teacher_con_con{
 	width:100%;
-	height:auto;
+	/*height:auto;*/
+	height:634px;
 }
 .teacher_con_con_li{
 	width:390px;
@@ -205,6 +207,13 @@
 	height:155px;
 	/*background:red;*/
 }
+.teacher_con_more_c{
+	width:400px;
+	height:60px;
+	position:relative;
+	left:50%;
+	margin-left:-200px;
+}
 .teacher_con_more_btn{
 	width:400px;
 	height:60px;
@@ -218,9 +227,9 @@
 	-moz-border-radius:10px;
 	-webkit-border-radius:10px;
 
-	position:relative;
-	left:50%;
-	margin-left:-200px;
+	/*position:relative;*/
+	/*left:50%;*/
+	/*margin-left:-200px;*/
 }
 
 

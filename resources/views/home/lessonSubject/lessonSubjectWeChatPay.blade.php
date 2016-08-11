@@ -25,6 +25,7 @@
             </div>
         </div>
     </div>
+    <div class="clear hr-8"></div>
 @endsection
 
 @section('js')

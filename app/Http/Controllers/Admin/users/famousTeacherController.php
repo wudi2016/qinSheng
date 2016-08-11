@@ -238,9 +238,9 @@ class famousTeacherController extends Controller
             if($rec = DB::table('teacher')->where('parentId',$id)->first()){
                 //名师表存在即可删除
                 DB::table('teacher')->where('id',$rec->id)->delete();
-                if(DB::table('hotteacher')->where('teacherId',$rec->id)->first()){
+                if(DB::table('hotteacher')->where('teacherId',$id)->first()){
                     //推荐名师存在，即可删除
-                    DB::table('hotteacher')->where('teacherId',$rec->id)->delete();
+                    DB::table('hotteacher')->where('teacherId',$id)->delete();
                 }
             }
             return redirect('admin/message')->with(['status'=>'删除名师成功','redirect'=>'users/famousTeacherList']);
@@ -264,7 +264,7 @@ class famousTeacherController extends Controller
 //            'price'=>'required|integer',
             'price'=>'required',
             'stock'=>'required|integer',
-            'intro'=>'required|max:120'
+            'intro'=>'required|max:200'
 
         ];
 
@@ -284,7 +284,7 @@ class famousTeacherController extends Controller
             'stock.required'=>'请输入点评名额',
             'stock.integer'=>'名额为整型',
             'intro.required'=>'请输入名师介绍',
-            'intro.max'=>'名师介绍不超过120字',
+            'intro.max'=>'名师介绍不超过200字',
         ];
 
         return \Validator::make($data, $rules, $messages);

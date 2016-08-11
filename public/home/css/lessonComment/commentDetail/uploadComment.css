@@ -30,7 +30,7 @@
 	height: 110px;
 	margin: 0px 0px 0px 44px;
 	color: rgb(153, 153, 153);
-	font-size: 15px;
+	font-size: 16px;
 }
 
 .add_video_top {
@@ -39,6 +39,7 @@
 	line-height: 36px;
 	text-align: center;
 	color: black;
+	font-size: 16px;
 }
 
 .add_video_top div {
@@ -99,7 +100,7 @@
 
 .progress_tip {
 	float: left;
-	margin-top: 8px;
+	margin-top: 14px;
 	margin-left: 30px;
 	font-size: 13px;
 }
@@ -132,6 +133,7 @@
 	height: 100%;
 	width: 85px;
 	line-height: 30px;
+	font-size: 16px;
 }
 
 .suit_level_content {
@@ -209,6 +211,7 @@
 	margin: 15px auto 0;
 	color: white;
 	cursor: pointer;
+	font-size: 16px;
 }
 
 
@@ -239,7 +242,7 @@
 	font-family: 微软雅黑;
 	padding: 0px 45px 0px 10px;
 	letter-spacing: 1px;
-	font-size: 13px;
+	font-size: 16px;
 }
 
 .works_title_number {
@@ -257,7 +260,7 @@
 	width: 800px;
 	height: 230px;
 	margin: 0px 0px 0px 44px;
-	font-size: 15px;
+	font-size: 16px;
 }
 
 .works_des textarea {
@@ -272,10 +275,11 @@
 	padding: 10px 15px 0px 10px;
 	border-bottom: none;
 	letter-spacing: 1px;
+	font-size: 16px;
 }
 
 .works_des_number {
-	width: 425px;
+	width: 440px;
 	height: 30px;
 	line-height: 30px;
 	text-align: right;
@@ -284,7 +288,8 @@
 	border: 1px solid silver;
 	border-top: none;
 	float: left;
-	padding-right: 20px;
+	padding-right: 5px;
+	margin-top: -1px;
 }
 
 

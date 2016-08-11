@@ -29,7 +29,20 @@
                                 <div class="palyinfo_detail_text">尊敬的用户：</div>
                                 <div class="palyinfo_detail_text">该课程无试学课程，请购买观看</div>
                             </div>
-                            @if (Auth::check())
+                            @if (Auth::check() && Auth::user()->type != 3)
+                                <a class="comment_button" style="margin: 30px auto 0; float: none; background: #1588E5; color: white; cursor: pointer; display: block;" ms-click="popUpSwitch('buyCourse')">立即购买</a>
+                            @else
+                                <a href="/index/login" class="overtime_tologin"><img src="{{asset('/home/image/lessonComment/commentDetail/gologin.png')}}" width="100%" height="100%"></a>
+                            @endif
+                        </div>
+                        <div class="overtime hide" ms-visible="tryLearnOver" style="height: 450px;">
+                            <div style="clear: both; height: 140px;"></div>
+                            <div class="overtime_detail">
+                                <img class="palyinfo_detail_img" style="margin-top: 7px;" src="/home/image/lessonComment/commentDetail/download_warning.png">
+                                <div class="palyinfo_detail_text">尊敬的用户：</div>
+                                <div class="palyinfo_detail_text">请购买后观看全部视频</div>
+                            </div>
+                            @if (Auth::check() && Auth::user()->type != 3)
                                 <a class="comment_button" style="margin: 30px auto 0; float: none; background: #1588E5; color: white; cursor: pointer; display: block;" ms-click="popUpSwitch('buyCourse')">立即购买</a>
                             @else
                                 <a href="/index/login" class="overtime_tologin"><img src="{{asset('/home/image/lessonComment/commentDetail/gologin.png')}}" width="100%" height="100%"></a>
@@ -54,24 +67,26 @@
                         <span class="study" ms-text="detailInfo.coursePlayView + '人学习'"></span>
                     </div>
                     <div class="contain_lessonDetail_top_video_right_btn">
-                        @if(Auth::check() && $mineType == '2')
-                            <span class="third">立即学习</span>
+                        @if(Auth::check() && Auth::user() -> type != 3)
+                            <span class="first hide" ms-click="popUpSwitch('buyCourse')" ms-visible="!detailInfo.isBuy && !detailInfo.isFree && !detailInfo.isTeacher">立即购买</span>
+                            <span class="second hide" ms-visible="!detailInfo.isBuy && detailInfo.isTryLearn && !detailInfo.isFree && !detailInfo.isTeacher" ms-click="tryLearn(detailInfo.chapterId);">立即试学</span>
+                            <span class="third hide" ms-visible="detailInfo.isBuy || detailInfo.isFree || detailInfo.isTeacher" ms-click="tryLearn(detailInfo.chapterId);">立即学习</span>
                         @else
-                            <span class="first hide" ms-click="popUpSwitch('buyCourse')" ms-if="!detailInfo.isBuy && !detailInfo.isFree">立即购买</span>
-                            <span class="second hide" ms-if="!detailInfo.isBuy && detailInfo.isTryLearn && !detailInfo.isFree" ms-click="tryLearn(detailInfo.chapterId);">立即试学</span>
-                            <span class="third hide" ms-if="detailInfo.isBuy || detailInfo.isFree">立即学习</span>
+                            <a href="/index/login"><span class="first hide" ms-visible="!detailInfo.isBuy && !detailInfo.isFree && !detailInfo.isTeacher">立即购买</span></a>
+                            <a href="/index/login"><span class="second hide" ms-visible="!detailInfo.isBuy && detailInfo.isTryLearn && !detailInfo.isFree && !detailInfo.isTeacher" ms-click="tryLearn(detailInfo.chapterId);">立即试学</span></a>
+                            <a href="/index/login"><span class="third hide" ms-visible="detailInfo.isBuy || detailInfo.isFree || detailInfo.isTeacher" ms-click="tryLearn(detailInfo.chapterId);">立即学习</span></a>
                         @endif
+
                     </div>
                     <div class="contain_lessonDetail_top_video_right_collect">
-                        <div ms-if="!detailInfo.isCollection" class="collect" ms-click="addCollect(detailInfo.id,detailInfo.isCollection);">收藏</div>
-                        <div ms-if="detailInfo.isCollection" class="collect_light" ms-click="popUpSwitch('quitCollection');">已收藏</div>
-                        @if(!Auth::check())
-                            <a href="/index/login"><div class="response">反馈</div></a>
-                        @elseif($mineType == '2')
-                            <div class="response" ms-click="popUpSwitch('feedback')">反馈</div>
+                        @if(Auth::check() && Auth::user() -> type != 3)
+                            <div class="collect hide" ms-visible="!detailInfo.isCollection" ms-click="addCollect(detailInfo.id,detailInfo.isCollection);">收藏</div>
+                            <div class="collect_light hide" ms-visible="detailInfo.isCollection" ms-click="popUpSwitch('quitCollection');">已收藏</div>
+                            <div class="response hide" ms-click="popUpSwitch('feedback')" ms-visible="detailInfo.isBuy || detailInfo.isFree || detailInfo.isTeacher">反馈</div>
+                            <div class="response hide" ms-visible="!detailInfo.isBuy">反馈</div>
                         @else
-                            <div class="response" ms-click="popUpSwitch('feedback')" ms-if="detailInfo.isBuy || detailInfo.isFree">反馈</div>
-                            <div class="response" ms-if="!detailInfo.isBuy">反馈</div>
+                            <a href="/index/login"><div class="collect">收藏</div></a>
+                            <a href="/index/login"><div class="response">反馈</div></a>
                         @endif
                         <!-- 锚点定位(评论回复) -->
                         <div id="input_content" style="width: 1px;height: 1px;position: absolute;z-index: 2;top: 580px;"></div>
@@ -129,12 +144,14 @@
                     </div>
                 </div>
                 <div name="comment" class="hide" ms-visible="changeOption == 'comment'">
-                    @if(Auth::check())
+                    @if(Auth::check() && Auth::user() -> type != 3)
                         <div ms-if="detailInfo.isBuy || detailInfo.isAuthor || detailInfo.isTeacher || detailInfo.isFree" class="contain_lessonDetail_bot_left_comment">
                             <textarea ms-duplex="commentContent" maxlength="100"></textarea>
                             <span ms-on-mouseout="descriptionSwitch('replyWarning', false)" ms-click="publishComment(detailInfo.id,commentContent);">发布</span>
                             <div class="teacherHomepage_detail_content_applyTip" ms-visible="replyWarning">请输入评论内容</div>
                         </div>
+                        <div ms-if="!detailInfo.isBuy && !detailInfo.isTeacher && !detailInfo.isFree" class="comment_textarea comment_textarea_nologin" style="line-height: 150px;"><a href="#" ms-click="popUpSwitch('buyCourse')" style="color: #3BA3FE;text-decoration: none;">请购买后发表评论</a></div>
+                        <div class="comment_button" style="background: none;"></div>
                     @else
                         <div class="comment_textarea comment_textarea_nologin" style="line-height: 150px;"><a href="/index/login" style="color: #3BA3FE;text-decoration: none;">请登录后发表评论</a></div>
                         <div class="comment_button" style="background: none;"></div>
@@ -151,16 +168,20 @@
                                 </div>
                                 <div class="center">
                                     <div class="content">
-                                        <span class="touser" ms-html="'@' + el.tousername + '&nbsp;&nbsp;&nbsp;'" ms-if="el.tousername"></span><span ms-html="el.commentContent"></span>
+                                        <span class="touser" ms-html="'@' + el.tousername + '&nbsp;&nbsp;&nbsp;'" ms-if="el.tousername"></span><span ms-text="el.commentContent"></span>
                                     </div>
                                 </div>
                                 <div class="bot">
-                                    <a href="#input_content" ms-if="(!el.isSelf && detailInfo.isBuy) || (!el.isSelf && detailInfo.isAuthor) || (detailInfo.isTeacher && !el.isSelf)" ms-click="replyComment(el.username,el.id);">
-                                        <span class="first">回复</span>
-                                    </a>
-                                    <span class="third" ms-if="el.isSelf" ms-click="deleteComment($index)">删除</span>
-                                    <span class="second" ms-click="addLike(el);" ms-if="!el.isLike">点赞（[-- el.likeTotal || 0--] )</span>
-                                    <span class="no_hover" ms-if="el.isLike">已赞（[-- el.likeTotal || 0--] )</span>
+                                    @if(Auth::check() && Auth::user() -> type != 3)
+                                        <a href="#input_content" ms-if="(!el.isSelf && detailInfo.isBuy) || (!el.isSelf && detailInfo.isAuthor) || (detailInfo.isTeacher && !el.isSelf) || (detailInfo.isFree && !el.isSelf)" ms-click="replyComment(el.username,el.id);">
+                                            <span class="first">回复</span>
+                                        </a>
+                                        <span class="third" ms-if="el.isSelf" ms-click="deleteComment($index)">删除</span>
+                                        <span class="second" ms-click="addLike(el);" ms-if="!el.isLike">点赞（[-- el.likeTotal || 0--] )</span>
+                                        <span class="no_hover" ms-if="el.isLike">已赞（[-- el.likeTotal || 0--] )</span>
+                                    @else
+                                        <a href="/index/login"><span class="second">点赞（[-- el.likeTotal || 0--] )</span></a>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -274,7 +295,9 @@
                     <div class="question"><span>2</span><span class="last">填写问题描述：</span><span style="color: red" ms-html="warnBackContent"></span>
                     </div>
                     <div class="content">
-                        <textarea name="" ms-duplex="backContent" maxlength="80" placeholder="详细描述一些你遇到的问题或建议"></textarea>
+                        <div class="textarea">
+                            <textarea name="" ms-duplex="backContent" maxlength="80" placeholder="详细描述一些你遇到的问题或建议"></textarea>
+                        </div>
                         <div><span ms-text="backContentLength">0</span>/80字&nbsp;&nbsp;</div>
                     </div>
                 </div>
@@ -369,14 +392,6 @@
                 detail.backContentLength = detail.backContent.length;
             })
             avalon.scan();
-        });
-        $(function(){
-            $('.contain_lessonDetail_top_video_right_btn .second').click(function(){
-                $('#mediaplayer_display_button_play').click();
-            })
-            $('.contain_lessonDetail_top_video_right_btn .third').click(function(){
-                $('#mediaplayer_display_button_play').click();
-            })
         });
     </script>
 @endsection

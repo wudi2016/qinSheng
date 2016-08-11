@@ -585,6 +585,7 @@ class perSpaceController extends Controller
             ->leftJoin('users as u','u.id','=','o.teacherId')
             ->select('o.id','o.userId','o.orderSn','o.userName','o.orderTitle','o.orderPrice','o.payPrice','o.orderType','o.courseId','o.status','o.payTime','u.realname','u.username')
             ->where(['o.userId'=>$id,'o.isDelete'=>0])
+            ->where('o.status','<>',5)
             ->orderBy('o.id','desc')
             ->skip($skip)
             ->take($pageSize)
@@ -593,6 +594,7 @@ class perSpaceController extends Controller
             ->leftJoin('users as u','u.id','=','o.teacherId')
             ->select('o.id','o.userId','o.orderSn','o.userName','o.orderTitle','o.orderPrice','o.payPrice','o.orderType','o.courseId','o.status','o.payTime','u.realname','u.username')
             ->where(['o.userId'=>$id,'o.isDelete'=>0])
+            ->where('o.status','<>',5)
             ->count();
 
         $seven = Carbon::now()->subDays(7);
@@ -603,6 +605,31 @@ class perSpaceController extends Controller
                 $data[$key]->realname || $data[$key]->realname = $data[$key]->username;
                 //0是超过七天，1是不超过7天
                 $data[$key]->seven = $seven <= $data[$key]->payTime ? 1 : 0;
+
+                if(\DB::table('refund')->where('orderSn', $data[$key]->orderSn)->first()){
+                    $data[$key]->isRefund = 1;
+                }else{
+                    $data[$key]->isRefund = 0;
+                }
+
+                //订单对应可退金额
+                if($data[$key]->orderType == 0 && $data[$key]->status == 2){
+                    //首先查到该课程所有付费章节总数
+                    $total = \DB::table('coursechapter')->where(['courseId' =>$data[$key]->courseId ?: 0,'status'=>0, 'isTrylearn' => 0])->where('parentId', '<>', 0)->count() ?: 1;
+                    $chapter = \DB::table('courseview as view')
+                        ->join('coursechapter as chapter','chapter.id','=','view.chapterId')
+                        ->where(['view.userId' => $data[$key]->userId, 'view.courseId' => $data[$key]->courseId ?: 0, 'view.courseType' => 0])
+                        ->where('chapter.isTrylearn','=',0)
+                        ->count();
+                    $chapter || $chapter = 0;
+                    //退款金额= 未学章节数/总的付费章节数*学员支付价格
+                    $data[$key]->price = (is_integer(($total - $chapter) / $total * $data[$key]->payPrice)
+                        ? ($total - $chapter) / $total * $data[$key]->payPrice : round(($total - $chapter) / $total * $data[$key]->payPrice,2)) ?: 0;
+                }else if($data[$key]->orderType == 2 && $data[$key]->status == 2){//购买别人点评课程
+                    $chapter = \DB::table('courseview as view')->join('coursechapter as chapter','chapter.id','=','view.chapterId')->where(['view.userId' =>  $data[$key]->userId, 'view.courseId' =>  $data[$key]->courseId ?: 0, 'view.courseType' => 1])->count();
+                    $data[$key]->price = $chapter ? 0 : $data[$key]->payPrice;
+                }
+
             }
 
 //              dd($data);
@@ -616,6 +643,58 @@ class perSpaceController extends Controller
 
 
 
+    //我的订单 -- 申请退款页面数据接口
+//
+//    public function applyRefund(Request $request)
+//    {
+//        //首先查到该课程所有付费章节总数
+//        $total = \DB::table('coursechapter')->where(['courseId' =>$request['courseId'],'status'=>0, 'isTrylearn' => 0])->where('parentId', '<>', 0)->count() ?: 1;
+//        //该用户看过的章节数
+//        $chapter = \DB::table('courseview as view')
+//            ->join('coursechapter as chapter','chapter.id','=','view.chapterId')
+//            ->where(['view.userId' => $request['userId'], 'view.courseId' => $request['courseId'], 'view.courseType' => 0])
+//            ->where('chapter.isTrylearn','=',0)
+//            ->count();
+//        $chapter || $chapter = 0;
+//
+//        //退款金额= 未学章节数/总的付费章节数*学员支付价格
+//        $price =is_integer(($total - $chapter) / $total * ($request['payPrice']/100)) ? ($total - $chapter) / $total * ($request['payPrice']/100) : round(($total - $chapter) / $total * ($request['payPrice']/100),2);
+//
+//        if($total - $chapter >= 0)
+//            return response()->json(['data'=>$price,'type'=>true]);
+//        else
+//            return response()->json(['data'=>'','type'=>false]);
+//    }
+
+
+
+    //我的订单 -- 提交退款申请
+
+    public function submitApply(Request $request)
+    {
+        $input = $request->except('id');
+        $input['created_at'] = $input['updated_at']  = Carbon::now();
+        $input['refundAmount'] *= 100;
+        $input['status'] = 0;
+//        dd($request->all());
+        //如果已申请过退款，通知用户。
+        if(\DB::table('refund')->where('orderSn',$request['orderSn'])->first()){
+            return response()->json(['type'=>false,'msg'=>'您已申请过退款，请等待结果！']);
+        }
+        //向退款表中插入数据。
+        $id = \DB::table('refund')->insertGetId($input);
+        if($id){
+            \DB::table('orders')->where('id',$request['id'])->update(['refundableAmount'=>$input['refundAmount'],'status'=>3]);
+            return response()->json(['type'=>true,'msg'=>'请等待申请结果！']);
+        }else {
+            return response()->json(['type'=>false,'msg'=>'申请退款失败']);
+
+        }
+    }
+
+
+
+
     /*
      * 名师 -- 待评点评
      */
@@ -624,21 +703,24 @@ class perSpaceController extends Controller
         $skip = ($pageNumber - 1) * $pageSize;
         $id = \Auth::user()->id;
         $data = \DB::table('orders as o')
-            ->leftJoin('commentcourse as cs','cs.orderSn','=','o.orderSn')
-            ->leftJoin('applycourse as app','app.orderSn','=','o.orderSn')
-            ->leftJoin('users as u','u.id','=','o.userId')
+            ->join('commentcourse as cs','cs.orderSn','=','o.orderSn')
+            ->join('applycourse as app','app.orderSn','=','o.orderSn')
+            ->join('users as u','u.id','=','o.userId')
             ->select('o.teacherName','o.status','app.courseTitle as applyTitle','app.id as applyId','cs.id as commentId','cs.created_at as time','cs.courseLowPath as low','cs.courseMediumPath as medium','cs.courseHighPath as high','cs.state as commentState','u.realname','u.username','app.state as applyState','app.created_at as applyTime')
             ->where(['o.teacherId'=>$id,'o.isDelete'=>0,'o.orderType'=>1,'o.status'=>1,'app.courseStatus'=>0,'app.courseIsDel'=>0,'app.state'=>2])
+            ->where('cs.state','<>',2)
             ->orderBy('app.created_at','desc')
             ->skip($skip)
             ->take($pageSize)
             ->get();
+//        dd($data);
         $count = \DB::table('orders as o')
             ->leftJoin('commentcourse as cs','cs.orderSn','=','o.orderSn')
             ->leftJoin('applycourse as app','app.orderSn','=','o.orderSn')
             ->leftJoin('users as u','u.id','=','o.userId')
             ->select('o.teacherName','o.status','app.courseTitle as applyTitle','app.id as applyId','cs.id as commentId','cs.created_at as time','cs.courseLowPath as low','cs.courseMediumPath as medium','cs.courseHighPath as high','cs.state as commentState','u.realname','u.username','app.state as applyState','app.created_at as applyTime')
             ->where(['o.teacherId'=>$id,'o.isDelete'=>0,'o.orderType'=>1,'o.status'=>1,'app.courseStatus'=>0,'app.courseIsDel'=>0,'app.state'=>2])
+            ->where('cs.state','<>',2)
             ->count();
 //        dd($data);
         foreach($data as $key => $value){
@@ -689,49 +771,6 @@ class perSpaceController extends Controller
     }
 
 
-
-    //我的订单 -- 申请退款页面数据接口
-
-    public function applyRefund(Request $request)
-    {
-        //首先查到该课程所有付费章节总数
-        $total = \DB::table('coursechapter')->where(['courseId' =>$request['courseId'],'status'=>0, 'isTrylearn' => 0])->where('parentId', '<>', 0)->count() ?: 1;
-        //该用户看过的章节数
-        $chapter = \DB::table('courseview as view')
-            ->join('coursechapter as chapter','chapter.id','=','view.chapterId')
-            ->where(['view.userId' => $request['userId'], 'view.courseId' => $request['courseId'], 'view.courseType' => 0])
-            ->where('chapter.isTrylearn','=',0)
-            ->count();
-        $chapter || $chapter = 0;
-
-        //退款金额= 未学章节数/总的付费章节数*学员支付价格
-        $price =is_integer(($total - $chapter) / $total * ($request['payPrice']/100)) ? ($total - $chapter) / $total * ($request['payPrice']/100) : round(($total - $chapter) / $total * ($request['payPrice']/100),2);
-
-        if($total - $chapter >= 0)
-            return response()->json(['data'=>$price,'type'=>true]);
-        else
-            return response()->json(['data'=>'','type'=>false]);
-    }
-
-
-
-    //我的订单 -- 提交退款申请
-
-    public function submitApply(Request $request)
-    {
-        $input = $request->except('id');
-        $input['created_at'] = $input['updated_at']  = Carbon::now();
-        $input['refundAmount'] *= 100;
-//        dd($input);
-        $id = \DB::table('refund')->insertGetId($input);
-        if($id){
-            \DB::table('orders')->where('id',$request['id'])->update(['refundableAmount'=>$input['refundAmount'],'status'=>3]);
-            return response()->json(['type'=>true,'msg'=>'请等待申请结果！']);
-        }else {
-            return response()->json(['type'=>false,'msg'=>'申请退款失败']);
-
-        }
-    }
 
 
 

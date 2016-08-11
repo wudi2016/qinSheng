@@ -98,27 +98,32 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
 
             if(value == 'applyRefund') {
                 sideBar.applyRefund = needId;
+                //window.location.hash = 'myOrders';
+                //console.log(window.location.hash);
+
                 //console.log(sideBar.applyRefund);
-                if(sideBar.applyRefund.orderType == 1) {
-                    //console.log(sideBar.applyRefund);
-                    $.ajax ({
-                        url      : '/member/applyRefund',
-                        type     : 'POST',
-                        dataType : 'json',
-                        data     : { courseId : sideBar.applyRefund.courseId, userId : sideBar.applyRefund.userId, payPrice : sideBar.applyRefund.payPrice},
-                        success  : function ( response ) {
-                            if ( response.type ) {
-                                sideBar.refundableAmount = response.data;
-                                //console.log(sideBar.applyRefund.refundableAmount);
-                            }else {
-                                sideBar.refundableAmount = 0;
-                            }
-                        }
-                    })
-                }else if (sideBar.applyRefund.orderType == 0 || sideBar.applyRefund.orderType == 2) {
-                    //console.log(sideBar.applyRefund);
-                    sideBar.refundableAmount = sideBar.applyRefund.payPrice;
-                }
+                //if(sideBar.applyRefund.orderType == 0) {
+                //    //console.log(sideBar.applyRefund);
+                //    $.ajax ({
+                //        url      : '/member/applyRefund',
+                //        type     : 'POST',
+                //        dataType : 'json',
+                //        data     : { courseId : sideBar.applyRefund.courseId, userId : sideBar.applyRefund.userId, payPrice : sideBar.applyRefund.payPrice},
+                //        success  : function ( response ) {
+                //            if ( response.type ) {
+                //                sideBar.refundableAmount = response.data;
+                //                //console.log(sideBar.applyRefund.refundableAmount);
+                //            }else {
+                //                sideBar.refundableAmount = 0;
+                //            }
+                //        }
+                //    })
+                //}else if ( sideBar.applyRefund.orderType == 2) {
+                //    //console.log(sideBar.applyRefund);
+                //    sideBar.refundableAmount = sideBar.applyRefund.payPrice;
+
+                //}
+                //console.log(sideBar.applyRefund);
 
             }
 
@@ -134,12 +139,11 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
                     url      : '/member/submitApply',
                     type     : 'POST',
                     dataType : 'json',
-                    data     : {id:sideBar.applyRefund.id ,refundType : sideBar.refundType,orderTitle:sideBar.applyRefund.orderTitle,orderSn:sideBar.applyRefund.orderSn,username:sideBar.applyRefund.userName,status:0,refundContent:sideBar.refundContent,refundAmount:sideBar.refundableAmount},
+                    data     : {id:sideBar.applyRefund.id ,refundType : sideBar.refundType,orderTitle:sideBar.applyRefund.orderTitle,orderSn:sideBar.applyRefund.orderSn,username:sideBar.applyRefund.userName,refundContent:sideBar.refundContent,refundAmount:sideBar.applyRefund.price},
                     success  : function ( response ) {
-
+                        alert( response.msg );
                         if ( response.type ) {
                             sideBar.popUp = false;
-                            alert( response.msg );
                             myOrdersStudent.myOrdersStudent.getMyOrdersInfo();
                             sideBar.refundableAmount = '';
                             sideBar.selectChange('');
@@ -148,7 +152,7 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
                             $('.bot_span_last').html('请选择退款原因');
                             $('.last').addClass('hide');
                         }else{
-                            sideBar.popUp = 'applyRefund';
+                            sideBar.popUp = false;
                         }
 
                     }
@@ -185,11 +189,13 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
                 notice.notice.noticeInfo.length == '0' ? notice.notice.getNoticeInfo(sideBar.mineUsername) : notice.notice.noticeInfo;
                 notice.notice.isRead ? notice.notice.changeNoticeStatus() : '';
                 notice.notice.isRead ? sideBar.findHaveNotice() : '';
+                sideBar.noReadNotice = false;
             }
             if(value == 'commentAnswer'){
                 comment.comment.commentInfo.length == '0' ? comment.comment.getCommentInfo(sideBar.mineUsername) : comment.comment.commentInfo;
                 comment.comment.isRead ? comment.comment.changeNoticeStatus() : '';
                 comment.comment.isRead ? sideBar.findHaveNotice() : '';
+                sideBar.noReadComment = false;
             }
             if(value == 'myFocus'){
                     myFocusTeacher.myFocusTeacher.myFocusList.length == '0' ? myFocusTeacher.myFocusTeacher.getMyFocusInfo() : myFocusTeacher.myFocusTeacher.myFocusList;

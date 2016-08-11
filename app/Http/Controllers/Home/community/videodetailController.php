@@ -3,13 +3,29 @@
 namespace App\Http\Controllers\Home\community;
 
 use Illuminate\Http\Request;
-
+use QrCode;
+use PaasUser;
+use PaasResource;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use DB;
+use App\Http\Controllers\Home\lessonComment\Gadget;
+
 
 class videodetailController extends Controller
 {
+
+
+    use Gadget;
+
+    public static $errMessage;
+
+    public function __construct()
+    {
+        PaasUser::apply();
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -29,6 +45,7 @@ class videodetailController extends Controller
         $getvideodetail = DB::table('hotvideo')->where('id',$id)->where('status',0)->get();
         if($getvideodetail){
             foreach ($getvideodetail as $k => $v) {
+                $v->coursePath = $this->getPlayUrl($v->coursePath);
                 $data['data'][] = [
                     'id' => $v->id,
                     'title' => $v->title,

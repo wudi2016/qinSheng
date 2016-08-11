@@ -24,7 +24,7 @@
 						<div class="palyinfo_detail_text">尊敬的用户：</div>
 						<div class="palyinfo_detail_text">试看已结束，请购买观看完整课程。</div>
 					</div>
-                    @if (Auth::check())
+                    @if (\Auth::check() && \Auth::user() -> type != 3)
     					<a class="comment_button" style="margin: 30px auto 0; float: none; background: #1588E5; color: white; cursor: pointer; display: block;" ms-click="popUpSwitch('buyLesson')">立即购买</a>
                     @else
                         <a href="/index/login" class="overtime_tologin"><img src="{{asset('/home/image/lessonComment/commentDetail/gologin.png')}}" width="100%" height="100%"></a>
@@ -35,8 +35,8 @@
 				<div class="video_bar_title" ms-html="videoType ? '演奏视频' : '点评视频'"></div>
 				<div class="video_bar_title hide" ms-visible="!bought && !videoType && teacherInfo.extra != '免费课程'" ms-click="popUpSwitch('buyLesson')" style="color: red; font-weight: bold; cursor: pointer;" ms-html="'￥' + teacherInfo.extra / 100"></div>
 				<div class="video_bar_title hide" ms-visible="!bought && !videoType && teacherInfo.extra == '免费课程'" style="color: red; font-weight: bold; cursor: pointer;" ms-html="teacherInfo.extra"></div>
-                @if (Auth::check())
-                    <div class="video_bar_icon hide" ms-visible='bought' ms-click="popUpSwitch('feedback')">
+                @if (\Auth::check() && \Auth::user() -> type != 3)
+                    <div class="video_bar_icon hide" ms-visible="bought || teacherInfo.extra == '免费课程'" ms-click="popUpSwitch('feedback')">
                         <img src="{{asset('/home/image/lessonComment/commentDetail/editor.png')}}">反馈
                     </div>
                     <div class="video_bar_icon hide" ms-visible="!isFollow" ms-click="followCourse()"><img src="{{asset('/home/image/lessonComment/commentDetail/collection.png')}}">收藏</div>
@@ -76,7 +76,7 @@
 				<a ms-attr-href="/lessonComment/teacher/[--teacherInfo.teacherId--]" class="palyinfo_detail_text" ms-html="teacherInfo.username"></a>
 				<div class="palyinfo_detail_time" ms-html="teacherInfo.created_at"></div>
 			</div>
-            @if (\Auth::check())
+            @if (\Auth::check() && \Auth::user() -> type != 3)
                  <a ms-attr-href="/lessonComment/teacher/[--teacherInfo.teacherId--]" class="palyinfo_button">我也要请老师点评</a>
             @else 
 			     <a href="/index/login" class="palyinfo_button">我也要请老师点评</a>
@@ -87,7 +87,7 @@
 		<div class="comment">
 			<div class="title" style="border: none; margin-top: 10px; text-indent: 0px; font-size: 18px;">评论</div>
 
-            @if (Auth::check())
+            @if (\Auth::check() && \Auth::user() -> type != 3)
                  <textarea ms-duplex="replayInfo.name" class="comment_textarea"></textarea>
                  <div class="comment_button" id="replayButton" ms-on-mouseout="descriptionSwitch('replyWarning', false)" ms-click="submitComment()">发布</div>
                  <div class="teacherHomepage_detail_content_applyTip" ms-visible="replyWarning">请输入评论内容</div>
@@ -178,37 +178,74 @@
         </div>
 
         <!-- 反馈意见弹出层 -->
-        <div class="feedback hide" ms-popup="popUp" value="feedback">
-            <div class="feedback_top">
-                <span class="left">意见反馈</span>
-                <span class="right" ms-click="popUpSwitch(false, 'feedback')"></span>
-            </div>
-            <div class="feedback_center">
-                <div class="top">
-                    <div class="question"><span>1</span><span class="last">选择问题类型：</span><span style="color: red" ms-visible="feedBackWarning.type">请选择问题类型</span></div>
-                    <div class="choose">
-                        <input type="radio" ms-duplex-string="feedBack.type" value="内容无关"/><span>内容无关</span>
-                        <input type="radio" ms-duplex-string="feedBack.type" value="播放不了"/><span>播放不了</span>
-                        <input type="radio" ms-duplex-string="feedBack.type" value="其他问题"/><span>其他问题</span>
-                    </div>
-                </div>
-                <div class="clear"></div>
-                <div class="center">
-                    <div class="question"><span>2</span><span class="last">填写问题描述：</span><span style="color: red" ms-visible="feedBackWarning.content">请填写80字数以内问题描述</span></div>
-                    <div class="content">
-                        <textarea style='border-bottom: 2px solid #ccc;' placeholder="详细描述一些你遇到的问题或建议" ms-duplex="feedBack.content"></textarea>
-                    </div>
-                </div>
-                <div class="feedback_center_last">
-                    <div class="question"><span>3</span><span class="last">留下联系方式：</span><span style="color: red" ms-visible="feedBackWarning.tel">请填写正确的联系方式</span></div>
-                    <div class="contact_way">
-                        <input type="text" class="method" placeholder="QQ/Email/手机号" ms-duplex="feedBack.tel"/>
-                    </div>
-                </div>
-                <div class="clear"></div>
-                <div class="feedback_btn" ms-click="submitFeedback()">提交反馈</div>
-            </div>
-        </div>
+        {{--<div class="feedback hide" ms-popup="popUp" value="feedback">--}}
+            {{--<div class="feedback_top">--}}
+                {{--<span class="left">意见反馈</span>--}}
+                {{--<span class="right" ms-click="popUpSwitch(false, 'feedback')"></span>--}}
+            {{--</div>--}}
+            {{--<div class="feedback_center">--}}
+                {{--<div class="top">--}}
+                    {{--<div class="question"><span>1</span><span class="last">选择问题类型：</span><span style="color: red" ms-visible="feedBackWarning.type">请选择问题类型</span></div>--}}
+                    {{--<div class="choose">--}}
+                        {{--<input type="radio" ms-duplex-string="feedBack.type" value="内容无关"/><span>内容无关</span>--}}
+                        {{--<input type="radio" ms-duplex-string="feedBack.type" value="播放不了"/><span>播放不了</span>--}}
+                        {{--<input type="radio" ms-duplex-string="feedBack.type" value="其他问题"/><span>其他问题</span>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+                {{--<div class="clear"></div>--}}
+                {{--<div class="center">--}}
+                    {{--<div class="question"><span>2</span><span class="last">填写问题描述：</span><span style="color: red" ms-visible="feedBackWarning.content">请填写80字数以内问题描述</span></div>--}}
+                    {{--<div class="content">--}}
+                        {{--<textarea style='border-bottom: 2px solid #ccc;' placeholder="详细描述一些你遇到的问题或建议" ms-duplex="feedBack.content"></textarea>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+                {{--<div class="feedback_center_last">--}}
+                    {{--<div class="question"><span>3</span><span class="last">留下联系方式：</span><span style="color: red" ms-visible="feedBackWarning.tel">请填写正确的联系方式</span></div>--}}
+                    {{--<div class="contact_way">--}}
+                        {{--<input type="text" class="method" placeholder="QQ/Email/手机号" ms-duplex="feedBack.tel"/>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+                {{--<div class="clear"></div>--}}
+                {{--<div class="feedback_btn" ms-click="submitFeedback()">提交反馈</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+		<!-- 反馈意见弹出层 -->
+		<div class="feedback hide" ms-popup="popUp" value="feedback">
+			<div class="feedback_top">
+				<span class="left">意见反馈</span>
+				<span class="right" ms-click="popUpSwitch(false, 'feedback')"></span>
+			</div>
+			<div class="feedback_center">
+				<div class="top">
+					<div class="question"><span>1</span><span class="last">选择问题类型：</span><span style="color: red" ms-visible="feedBackWarning.type">请选择问题类型</span></span>
+					</div>
+					<div class="choose">
+						<input type="radio" ms-duplex-string="feedBack.type" value="内容无关"/><span>内容无关</span>
+						<input type="radio" ms-duplex-string="feedBack.type" value="播放不了"/><span>播放不了</span>
+						<input type="radio" ms-duplex-string="feedBack.type" value="其他问题"/><span>其他问题</span>
+					</div>
+				</div>
+				<div class="clear"></div>
+				<div class="center">
+					<div class="question"><span>2</span><span class="last">填写问题描述：</span><span style="color: red" ms-visible="feedBackWarning.content">请填写80字数以内问题描述</span></div>
+					<div class="content">
+						<div class="textarea">
+							<textarea name="" ms-duplex="feedBack.content" maxlength="80" placeholder="详细描述一些你遇到的问题或建议"></textarea>
+						</div>
+						<div><span ms-text="backContentLength"></span>/80字&nbsp;&nbsp;</div>
+					</div>
+				</div>
+				<div class="feedback_center_last">
+					<div class="question"><span>3</span><span class="last">留下联系方式：</span><span style="color: red" ms-visible="feedBackWarning.tel">请填写正确的联系方式</span></span>
+					</div>
+					<div class="contact_way">
+						<input type="text" class="method" ms-duplex="feedBack.tel" placeholder="QQ/Email/手机号"/>
+					</div>
+				</div>
+				<div class="clear"></div>
+				<div class="feedback_btn" ms-click="submitFeedback()">提交反馈</div>
+			</div>
+		</div>
 
 		<!-- 反馈成功弹出层 -->
         <div class="feedback_success hide" ms-popup="popUp" value="feedbackSuccess">
@@ -270,8 +307,8 @@
             if (comment.mineType == 2) {
 				comment.bought = true;
 			}
-            console.log(comment.bought);
-            console.log(comment.orderType);
+            console.log("是否购买： " + comment.bought);
+            console.log("订单类型： " + comment.orderType);
 
             //  获取点评信息
             comment.getData('/lessonComment/getDetailInfo/'+comment.commentID+'/1', 'teacherInfo');
@@ -302,6 +339,15 @@
                     comment.feedBackWarning = {type: false, content: false, tel: false}
                 }
             });
+
+			comment.$watch('feedBack.content', function(value, oldValue) {
+				if (value.length <= 80) {
+					comment.backContentLength = value.length;
+				} else {
+					comment.feedBack.content = oldValue;
+					comment.backContentLength = oldValue.length;
+				}
+			});
 
             comment.$watch('payType', function(value) {
                 if ('number' === typeof value) {

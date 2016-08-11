@@ -81,9 +81,7 @@ define([], function() {
 					}
 					model == 'studentInfo' && comment.setVideo(function () {});
 				},
-				error: function(error) {
-					alert('数据加载失败，请重试');
-				}
+				error: function(error) {}
 			});
 		},
 		overtime: false,
@@ -217,6 +215,7 @@ define([], function() {
 		},
 		feedBack: {type: '', content: '', tel: ''},
 		feedBackWarning: {type: false, content: false, tel: false},
+		backContentLength: 0,
 		submitFeedback: function() {
 			for (var i in comment.feedBack) {
 				if (comment.feedBack[i].length <= 0) {
@@ -227,7 +226,11 @@ define([], function() {
 			if (comment.feedBack.content.length > 80) {
 				comment.feedBackWarning.content = true;
 				return false;
-			};
+			}
+			if (!comment.feedBack.tel.match(/1(3|5|7|8){1}[0-9]{9}/) && !comment.feedBack.tel.match(/[0-9a-zA-Z]{2,}@[0-9a-zA-Z]{2,}\.(com|net|cn){1}/) && !comment.feedBack.tel.match(/[0-9]{5,}/)) {
+				comment.feedBackWarning.tel = true;
+				return false;
+			}
 			comment.getData('/lessonComment/getFirst', 'feedBack', {table: 'coursefeedback', action: 2, data: {courseId: comment.commentID, courseType: 1, backType: comment.feedBack.type, backContent: comment.feedBack.content, tel: comment.feedBack.tel, username: comment.mineUsername}}, 'POST', function(response) {
 				response ? comment.popUpSwitch('feedbackSuccess') : popUpSwitch(false, 'feedback');
 			});

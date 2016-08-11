@@ -82,7 +82,7 @@
     <div class="head_head"></div>
     <!-- 联系客服 -->
 	<div class="online">
-		{{--<a target=blank href=http://wpa.qq.com/msgrd?V=3&uin=1449779625&Site=QQ客服&Menu=yes>--}}
+		<a target=blank href=http://wpa.qq.com/msgrd?V=3&uin=1449779625&Site=QQ客服&Menu=yes>
 		<div class="qq">
 			<div class="mmsg hide">
 				<div class="mmsg_tie">QQ客服</div>
@@ -95,7 +95,7 @@
 				</div>
 			</div>
 		</div>
-		{{--</a>--}}
+		</a>
 		<div class="wx">
 			<div class="mmsg hide">
 				<div class="mmsg_tie">微信公众号</div>

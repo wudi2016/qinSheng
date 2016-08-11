@@ -223,6 +223,7 @@ class SpecialCourseController extends Controller
     public function delSpecialCourse($id){
         $data = DB::table('course')->where('id',$id)->update(['courseIsDel'=>1]);
         if($data){
+            DB::table('hotcourse')->where('courseId',$id)->delete();
             $this -> OperationLog('删除了id为'.$id.'的专题课程');
             return redirect('admin/message')->with(['status'=>'专题课程删除成功','redirect'=>'specialCourse/specialCourseList']);
         }else{

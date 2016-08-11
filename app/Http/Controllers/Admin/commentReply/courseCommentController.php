@@ -38,6 +38,9 @@ class courseCommentController extends Controller
         $data->type = $request['type'];
         $data->beginTime = $request['beginTime'];
         $data->endTime = $request['endTime'];
+
+
+
         return view('admin.commentReply.courseCommentList')->with('data',$data);
     }
 

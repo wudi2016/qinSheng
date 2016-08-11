@@ -85,6 +85,7 @@ class hotvideoController extends Controller{
                 return redirect()->back()->withInput()->withErrors('文件在上传过程中出错');
             }
         }
+//        dd($input);
         //验证
         $validate = $this->validator($input);
         if($validate->fails()){
@@ -235,13 +236,13 @@ class hotvideoController extends Controller{
      */
     protected function validator_edit(array $data){
         $rules = [
-            'coursePath' => 'required',
+//            'coursePath' => 'required',
             'title' => 'required',
             'videoIntro' => 'required',
 //            'cover' => 'required'
         ];
         $messages = [
-            'coursePath.required' => '请上传视频',
+//            'coursePath.required' => '请上传视频',
             'title.required' => '请填写标题',
             'videoIntro.required' => '请填写内容',
 //            'cover.required' => '请上传封面'

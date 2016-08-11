@@ -92,6 +92,8 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
 
         //移动端头像上传接口
         Route::post('/editHeadImg', 'indexController@editHeadImg');
+        //获取手机验证码接口（移动端）
+        Route::post('/getMessages', 'indexController@getMessages');
     });
 
     /*
@@ -127,8 +129,8 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         //名师--点评完成
         Route::post('/completeComment/{pageNumber}/{pageSize}',['middleware' => 'check','uses'=>'perSpaceController@completeComment']);
 
-        //我的订单 -- 申请退款页面数据接口
-        Route::post('/applyRefund',['middleware' => 'check','uses'=>'perSpaceController@applyRefund']);
+//        //我的订单 -- 申请退款页面数据接口
+//        Route::post('/applyRefund',['middleware' => 'check','uses'=>'perSpaceController@applyRefund']);
 
         //我的订单 -- 提交退款申请
         Route::post('/submitApply',['middleware' => 'check','uses'=>'perSpaceController@submitApply']);
@@ -236,7 +238,7 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
     ||     -------------------------- 课程专题模块 ----------------------------
     ||--------------------------------------------------------------------------------------
      */
-    Route::group(['prefix' => '/lessonSubject', 'namespace' => 'lessonSubject'], function () {
+    Route::group(['prefix' => '/lessonSubject','namespace' => 'lessonSubject'], function () {
         // =============== return page ================
         // 专题课程列表页 type 为1是专题课程列表 为2是点评课程列表
         Route::get('/list/{type}', 'lessonSubjectController@lessonSubjectList');
@@ -370,7 +372,6 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
          */
         //	支付页面
         Route::get('/buy/{teacherID}', ['middleware' => 'check', 'uses' => 'buyCommentController@index']);
-        // Route::get('/buy/{teacherID}', ['middleware' => ['check', 'operation'], 'uses' => 'buyCommentController@index']);
         //  生成订单
         Route::post('/generateOrder', ['middleware' => 'check', 'uses' => 'buyCommentController@generateOrder']);
         //  微信扫码
@@ -385,9 +386,9 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         Route::post('/finishUpload', ['middleware' => 'check', 'uses' => 'buyCommentController@finishUpload']);
         
         //  pass平台上传资源
-        Route::post('/uploadResource', ['middleware' => 'check', 'uses' => 'buyCommentController@uploadResource']);
+        Route::post('/uploadResource', ['middleware' => 'check:true', 'uses' => 'buyCommentController@uploadResource']);
         //  pass平台资源转换
-        Route::post('/transformation', ['middleware' => 'check', 'uses' => 'buyCommentController@transformation']);
+        Route::post('/transformation', ['middleware' => 'check:true', 'uses' => 'buyCommentController@transformation']);
 
         //  微信支付回调地址
         Route::any('/wxPayCallback', 'buyCommentController@wxPayCallback');
@@ -442,10 +443,10 @@ Route::post('/admin/login', 'Auth\AuthController@adminLogin');
 
 
 
-//  支付宝异步回调页面
+//  支付宝异步回调退款
 Route::any('/admin/order/alipayAsyncCallback', 'Admin\order\orderController@alipayAsyncCallback');
 //  支付宝同步回调页面
-Route::any('/admin/order/alipaySyncCallback', 'Admin\order\orderController@alipaySyncCallback');
+//Route::any('/admin/order/alipaySyncCallback', 'Admin\order\orderController@alipaySyncCallback');
 
 
 
@@ -827,10 +828,6 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
         Route::get('weiXinRefund/{orderId}','orderController@weiXinRefund');
         //支付宝确认退款
         Route::any('alipayRefund/{orderId}','orderController@alipayRefund');
-//        //  支付宝异步回调页面
-//        Route::post('alipayAsyncCallback', 'orderController@alipayAsyncCallback');
-//        //  支付宝同步回调页面
-//        Route::post('alipaySyncCallback', 'orderController@alipaySyncCallback');
     });
 
 
@@ -949,6 +946,7 @@ Route::group(['prefix'=>'/contentManager','namespace'=>'contentManager'],functio
     Route::get('hotvideoStatus',['middleware' => 'permission:edit.contentManager', 'uses' => 'hotvideoController@hotvideoStatus']);
     //上传资源
     Route::post('dohotvideo','hotvideoController@dohotvideo');
+
 
 
     //社区名师推荐

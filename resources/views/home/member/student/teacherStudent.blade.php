@@ -153,18 +153,20 @@
                             <div class="repeat_time_whole" ms-text="el.payTime"></div>
                         </div>
 
-                        <div class="right_order_repeat_price" ms-text="el.orderPrice + ' 元 '"></div>
+                        {{--<div class="right_order_repeat_price" ms-if="el.status == 5" ms-text="el.orderPrice + ' 元 '"></div>--}}
+                        {{--<div class="right_order_repeat_price" ms-if="el.status != 5" ms-text="el.payPrice + ' 元 '"></div>--}}
+                        <div class="right_order_repeat_price" ms-text="el.payPrice + ' 元 '"></div>
 
-                        <div class="right_order_repeat_status" ms-if="el.status == 5">未付款</div>
+                        {{--<div class="right_order_repeat_status" ms-if="el.status == 5">未付款</div>--}}
                         <div class="right_order_repeat_status" ms-if="el.status == 0">已付款</div>
                         <div class="right_order_repeat_status" ms-if="el.status == 2">已完成</div>
                         <div class="right_order_repeat_status" ms-if="el.status == 3">退款中</div>
                         <div class="right_order_repeat_status" ms-if="el.status == 4">已退款</div>
 
-                        <div class="right_order_repeat_control" ms-if="el.status == 2 && el.seven == 1" ms-click="popUpSwitch('applyRefund',el)"><a
-                                    href="#">申请退款</a></div>
-                        <div class="right_order_repeat_control" ms-if="el.status == 5"><a
-                                    ms-attr-href="'/lessonSubject/WeChatPay/'+ el.id">去付款</a></div>
+                        <div class="right_order_repeat_control" ms-if="el.status == 2 && el.seven == 1 && el.price != 0 && el.isRefund == 0" ms-click="popUpSwitch('applyRefund',el)">
+                                    申请退款</div>
+                        {{--<div class="right_order_repeat_control" ms-if="el.status == 5"><a--}}
+                                    {{--ms-attr-href="'/lessonSubject/WeChatPay/'+ el.id">去付款</a></div>--}}
 
                     </div>
 
@@ -180,9 +182,11 @@
                             <div class="repeat_time_whole" ms-text="el.payTime"></div>
                         </div>
 
-                        <div class="right_order_repeat_price" ms-text="el.orderPrice + ' 元 '"></div>
+                        {{--<div class="right_order_repeat_price" ms-if="el.status == 5" ms-text="el.orderPrice + ' 元 '"></div>--}}
+                        {{--<div class="right_order_repeat_price" ms-if="el.status != 5" ms-text="el.payPrice + ' 元 '"></div>--}}
+                        <div class="right_order_repeat_price" ms-text="el.payPrice + ' 元 '"></div>
 
-                        <div class="right_order_repeat_status" ms-if="el.status == 5">未付款</div>
+                        {{--<div class="right_order_repeat_status" ms-if="el.status == 5">未付款</div>--}}
                         <div class="right_order_repeat_status" ms-if="el.status == 0">已付款</div>
                         <div class="right_order_repeat_status" ms-if="el.status == 1">待点评</div>
                         <div class="right_order_repeat_status" ms-if="el.status == 2">已完成</div>
@@ -191,8 +195,8 @@
 
                         <div class="right_order_repeat_control" ms-if="el.status == 0"><a
                                     ms-attr-href="'/lessonComment/buy/upload/'+el.id">去上传</a></div>
-                        <div class="right_order_repeat_control" ms-if="el.status == 5"><a
-                                    ms-attr-href="'/lessonComment/scan/'+ el.id">去付款</a></div>
+                        {{--<div class="right_order_repeat_control" ms-if="el.status == 5"><a--}}
+                                    {{--ms-attr-href="'/lessonComment/scan/'+ el.id">去付款</a></div>--}}
 
                     </div>
 
@@ -209,19 +213,21 @@
                             <div class="repeat_time_whole" ms-text="el.payTime"></div>
                         </div>
 
-                        <div class="right_order_repeat_price" ms-text="el.orderPrice + ' 元 '"></div>
+                        {{--<div class="right_order_repeat_price" ms-if="el.status == 5" ms-text="el.orderPrice + ' 元 '"></div>--}}
+                        {{--<div class="right_order_repeat_price" ms-if="el.status != 5" ms-text="el.payPrice + ' 元 '"></div>--}}
+                        <div class="right_order_repeat_price" ms-text="el.payPrice + ' 元 '"></div>
 
-                        <div class="right_order_repeat_status" ms-if="el.status == 5">未付款</div>
+                        {{--<div class="right_order_repeat_status" ms-if="el.status == 5">未付款</div>--}}
                         <div class="right_order_repeat_status" ms-if="el.status == 0">已付款</div>
                         <div class="right_order_repeat_status" ms-if="el.status == 2">已完成</div>
                         <div class="right_order_repeat_status" ms-if="el.status == 3">退款中</div>
                         <div class="right_order_repeat_status" ms-if="el.status == 4">已退款</div>
 
-                        <div class="right_order_repeat_control"  ms-if="el.status == 2 && el.seven == 1" ms-click="popUpSwitch('applyRefund',el)"><a
-                                    href="#">申请退款</a></div>
-                        <div class="right_order_repeat_control" ms-if="el.status == 5">
-                            <a ms-attr-href="'/lessonComment/scan/'+ el.id">去付款</a>
-                        </div>
+                        <div class="right_order_repeat_control"  ms-if="el.status == 2 && el.seven == 1 && el.price != 0 && el.isRefund == 0" ms-click="popUpSwitch('applyRefund',el)">
+                                    申请退款</div>
+                        {{--<div class="right_order_repeat_control" ms-if="el.status == 5">--}}
+                            {{--<a ms-attr-href="'/lessonComment/scan/'+ el.id">去付款</a>--}}
+                        {{--</div>--}}
                     </div>
                 </div>
                 <!--===================================//我的订单循环结束===================================-->
@@ -240,7 +246,7 @@
             <div class="center_right_top">
                 <div class="height50"></div>
                 <div class="center_right_information">我的关注</div>
-                <div class="center_right_count">共&nbsp;<span ms-text="total"></span>&nbsp;个关注</div>
+                <div class="center_right_count">共&nbsp;<span ms-text=" total "></span>&nbsp;个关注</div>
             </div>
             <div class="height20"></div>
 
@@ -275,7 +281,7 @@
             <div class="center_right_top">
                 <div class="height50"></div>
                 <div class="center_right_information">我的好友</div>
-                <div class="center_right_count">共&nbsp;<span ms-text="total"></span>&nbsp;个好友</div>
+                <div class="center_right_count">共&nbsp;<span ms-text=" total "></span>&nbsp;个好友</div>
             </div>
             <div class="height20"></div>
 
@@ -347,7 +353,7 @@
                         </div>
                         <div class="repeat_comment_time">
                             <div class="comment_time" ms-text="el.created_at"></div>
-                            <div class="comment_delete" ms-click="popUpSwitch('deleteNotice',el.id)"><a href="#">删除</a></div>
+                            <div class="comment_delete" ms-click="popUpSwitch('deleteNotice',el.id)">删除</div>
                         </div>
                     </div>
                 </div>
@@ -397,7 +403,7 @@
                         </div>
                         <div class="repeat_comment_time">
                             <div class="comment_time" ms-text="el.created_at"></div>
-                            <div class="comment_delete" ms-click="popUpSwitch('deleteComment',el.id)"><a href="#">删除</a></div>
+                            <div class="comment_delete" ms-click="popUpSwitch('deleteComment',el.id)">删除</div>
                         </div>
                     </div>
                 </div>
@@ -496,7 +502,7 @@
                         <a ms-attr-href="'/lessonSubject/detail/' + el.id"><img ms-attr-src="el.coursePic" alt="" width="280" height="180" class="img_big" ms-imgBig/></a>
                     </div>
                     <div class="comment_repeat_title" ms-text="el.courseTitle"></div>
-                    <div class="comment_repeat_period"><span ms-text="el.classHour + '课时'"></span> <span ms-text="el.coursePlayView + '人学过'"></span></div>
+                    <div class="comment_repeat_period"><span ms-text="el.classHour + '课时'"></span> <span class="period_course_span" ms-text="el.coursePlayView + '人学过'"></span></div>
                     <div class="comment_repeat_price" ms-text="'￥ ' + el.coursePrice" ms-if="el.coursePrice"></div>
                     <div class="comment_repeat_price" ms-text="'免费课程'" ms-if="!el.coursePrice"></div>
                 </div>
@@ -903,11 +909,11 @@
             <div class="buy_course_center">
                 <div class="top">
                     <span>订单名称&nbsp;:&nbsp;</span>
-                    <span class="orderName" ms-text="applyRefund.orderTitle"></span>
+                    <span class="orderName" ms-text="applyRefund.orderTitle" ms-attr-title="applyRefund.orderTitle"></span>
                 </div>
                 <div class="center">
                     <span>可退金额：</span>
-                    <span class="canMoney" ms-text="refundableAmount + ' 元'"></span>
+                    <span class="canMoney" ms-text="applyRefund.price + ' 元'"></span>
                     <div class="center_refundPrice">
                         (购买时价格&nbsp;:&nbsp;[--applyRefund.payPrice--]元,扣除已观看课程费用)
                     </div>
@@ -1018,7 +1024,8 @@
             if(window.location.hash){
                 sideBar.tab = window.location.hash.split('#')[1];
             }else{
-                sideBar.tab = 'basic';
+                console.log(window.location.href);
+                sideBar.tab = 'basicInfo';
             }
 
             if (sideBar.tab) {

@@ -29,7 +29,7 @@
             <div class="contain_lesson_center_data" ms-visible="changeOption == 'subject'">
                 <a ms-attr-href="detail + el.id" ms-repeat="subjectInfo">
                     <div class="contain_lesson_center_data_info">
-                        <img class="logo_hot hide" ms-visible="el.courseType == 1" ms-attr-src="{{asset('/home/image/index/course/[-- el.courseDiscount --].png')}}" alt="">
+                        <img class="logo_hot" ms-if="el.courseType == 1" ms-attr-src="{{asset('/home/image/index/course/[-- el.courseDiscount --].png')}}" alt="">
                         <img class="logo_hot hide" ms-visible="el.courseType == 2" src="{{asset('/home/image/index/course/hot.png')}}" alt="">
                         <img class="logo_hot hide" ms-visible="el.courseType == 3" src="{{asset('/home/image/index/course/new.png')}}" alt="">
                         <div class="contain_lesson_center_data_info_top" ms-if="el.coursePic">
@@ -57,7 +57,7 @@
             <div class="contain_lesson_center_data_comment hide" ms-visible="changeOption == 'comment'">
                 <div class="contain_lesson_center_data_info" ms-repeat="commentInfo">
                     <a ms-attr-href="commentDetail + el.id">
-                        <img class="logo_hot hide" ms-visible="el.courseType == 1" ms-attr-src="{{asset('/home/image/index/course/[-- el.courseDiscount --].png')}}" alt="">
+                        <img class="logo_hot" ms-if="el.courseType == 1" ms-attr-src="{{asset('/home/image/index/course/[-- el.courseDiscount --].png')}}" alt="">
                         <img class="logo_hot hide" ms-visible="el.courseType == 2" src="{{asset('/home/image/index/course/hot.png')}}" alt="">
                         <img class="logo_hot hide" ms-visible="el.courseType == 3" src="{{asset('/home/image/index/course/new.png')}}" alt="">
                         <div class="contain_lesson_center_data_info_top" ms-if="el.coursePic">

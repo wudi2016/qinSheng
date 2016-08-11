@@ -122,6 +122,7 @@ trait Gadget {
         $inputObj -> SetOut_trade_no($order -> orderSn);
         $inputObj -> SetTotal_fee(intval($order -> orderPrice));
         $inputObj -> SetSpbill_create_ip($_SERVER['REMOTE_ADDR']);
+        $inputObj -> SetTime_expire(date('YmdHis', time() + 60 * 10));
         $inputObj -> SetNotify_url($callback);
         $inputObj -> SetProduct_id($order -> orderType);
         $inputObj -> SetTrade_type('NATIVE');

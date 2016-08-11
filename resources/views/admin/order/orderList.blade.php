@@ -31,10 +31,12 @@
 
                     <select name="type" id="form-field-1" class="searchtype">
                         <option value="">--请选择--</option>
-                        <option value="1"  @if($data->type == 1) selected @endif>订单号</option>
-                        <option value="2"  @if($data->type == 2) selected @endif>订单名称</option>
-                        <option value="3"  @if($data->type == 3) selected @endif>购买用户ID</option>
-                        <option value="4"  @if($data->type == 4) selected @endif>购买用户</option>
+                        <option value="1"  @if($data->type == 1) selected @endif>ID</option>
+                        <option value="2"  @if($data->type == 2) selected @endif>订单号</option>
+                        <option value="3"  @if($data->type == 3) selected @endif>交易编号</option>
+                        <option value="4"  @if($data->type == 4) selected @endif>订单名称</option>
+                        <option value="5"  @if($data->type == 5) selected @endif>购买用户ID</option>
+                        <option value="6"  @if($data->type == 6) selected @endif>购买用户</option>
                         <option value="">全部</option>
                     </select>
                     <span class="input-icon">
@@ -209,7 +211,9 @@
                                                     <select id="selectCheck" class="col-xs-10 col-sm-2" onchange="selectCheck({{$order->id}},this.value,'{{$order->orderSn}}');" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">
                                                         <option value="44" selected></option>
                                                         <option value="0" >已付款</option>
-                                                        <option value="1" >待点评</option>
+                                                        @if($order->orderType != 0 && $order->orderType != 2)
+                                                            <option value="1" >待点评</option>
+                                                        @endif
                                                         <option value="2" >已完成</option>
                                                         <option value="3" >退款中</option>
                                                         <option value="4" >已退款</option>

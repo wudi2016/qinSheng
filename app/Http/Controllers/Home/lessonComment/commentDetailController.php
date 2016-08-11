@@ -30,7 +30,7 @@ class commentDetailController extends Controller
     public function index($commentID)
     {
         DB::table('commentcourse') -> select('id') -> where(['state' => 2, 'courseStatus' => 0, 'courseIsDel' => 0, 'id' => $commentID]) -> first() || abort(404);
-        if (\Auth::check()) {
+        if (\Auth::check() && \Auth::user() -> type != 3) {
             $mine = ['id' => \Auth::user() -> id, 'username' => \Auth::user() -> username, 'type' => \Auth::user() -> type, 'pic' => \Auth::user() -> pic];
             $result = DB::table('orders') -> join('commentcourse', 'orders.courseId', '=', 'commentcourse.id') -> select('orders.id', 'orders.orderType')
                     -> where(['orders.orderType' => 1, 'commentcourse.id' => $commentID, 'orders.userId' => \Auth::user() -> id, 'orders.status' => 2, 'orders.isDelete' => 0]) 

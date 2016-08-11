@@ -680,7 +680,7 @@
 .checkPhone_old_phone .old_phone_label_second span {
     display: block;
     float: right;
-    width: 110px;
+    width: 103px;
     height: 36px;
     background: #f5f5f5;
     line-height: 36px;
@@ -856,11 +856,13 @@
 .right_order_td .right_order_repeat_control {
     float: left;
     font-size: 16px;
+    cursor: pointer;
+    color:rgb(32, 158, 234);
+    margin-top:5px;
 }
 
 .right_order_repeat_control a {
     display: block;
-    margin-top: 5px;
     color: rgb(32, 158, 234);
     text-decoration: none;
 }
@@ -1030,9 +1032,12 @@
 
 .right_comment_repeat .comment_repeat_title {
     width: 97.5%;
-    height: auto;
+    height: 25px;
     margin-top: 20px;
     margin-left: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     font-size: 16px;
     color: rgb(34, 34, 34);
 }
@@ -1049,11 +1054,11 @@
     width: 97.5%;
     margin-left: 8px;
     height: auto;
-    margin-top: 5px;
+    /*margin-top: 5px;*/
 }
 
 .comment_repeat_period span:first-child {
-    width: 147px;
+    width: 140px;
     font-size: 14px;
     display: inline-block;
     color: rgb(156, 156, 156);
@@ -1066,14 +1071,48 @@
     width: 97.5%;
     margin-left: 8px;
     height: auto;
-    margin-top: 18px;
+    margin-top: 10px;
 }
 
 .right_comment_repeat .unchecked_diff {
-    margin-top: 5px;
+    margin-top: 0px;
 }
 
-.comment_repeat_name span:first-child, .comment_repeat_unchecked span:first-child {
+
+.comment_repeat_unchecked .unchecked_comment_first{
+    width: 120px;
+    height: 30px;
+    line-height:30px;
+    display: block;
+    float:left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    color: rgb(156, 156, 156);
+}
+.comment_repeat_unchecked .unchecked_comment_last{
+    width: 120px;
+    height: 30px;
+    line-height:30px;
+    display: block;
+    float:right;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right:8px;
+    margin-left:20px;
+    color: rgb(156, 156, 156);
+}
+
+.comment_repeat_unchecked .last_diff{
+    margin-left:15px;
+    width:115px;
+}
+
+
+.comment_repeat_name span:first-child {
     width: 147px;
     height: auto;
     display: inline-block;
@@ -1090,21 +1129,21 @@
     width: 120px;
 }
 
-.comment_repeat_period span:last-child {
+.comment_repeat_period .period_course_span {
     display: inline-block;
     font-size: 14px;
     color: rgb(156, 156, 156);
     background: url("/home/image/personCenter/study.png") no-repeat left;
     text-indent: 2em;
-    width: 120px;
+    width: 127px;
 }
 
-.comment_repeat_unchecked span:last-child {
-    display: inline-block;
-    font-size: 14px;
-    color: rgb(156, 156, 156);
-    width: 120px;
-}
+/*.comment_repeat_unchecked span:last-child {*/
+    /*display: inline-block;*/
+    /*font-size: 14px;*/
+    /*color: rgb(156, 156, 156);*/
+    /*width: 120px;*/
+/*}*/
 
 .comment_repeat_unchecked .unchecked_span {
     display: inline-block;
@@ -1132,23 +1171,27 @@
 }
 
 .comment_repeat_leader span:first-child {
-    display: inline-block;
+    display: block;
     width: 100px;
-    height: auto;
+    height: 20px;
     font-size: 14px;
     color: rgb(156, 156, 156);
-    background: url("/home/image/personCenter/startLogo.png") no-repeat left;
-    text-indent: 2em;
+    float:left;
+    background: url("/home/image/personCenter/startLogo.png") no-repeat 0 -1px;
+    text-indent: 2.5em;
     margin-left: -3px;
 }
 
 .comment_repeat_leader .repeat_leader_lastSpan {
-    display: inline-block;
+    display: block;
+    float:left;
+    width:100px;
+    height:20px;
     font-size: 14px;
     color: rgb(156, 156, 156);
-    margin-left: 48px;
+    margin-left: 50px;
     background: url("/home/image/personCenter/zan.png") no-repeat left;
-    text-indent: 2em;
+    text-indent: 2.5em;
 }
 
 /*//点评已评*/
@@ -1276,11 +1319,10 @@
     font-size: 16px;
     margin-top: 5px;
     float: right;
+    color: rgb(153, 153, 153);
+    cursor: pointer;
 }
 
-.comment_delete a {
-    color: rgb(153, 153, 153);
-}
 
 /*==================================================主体右边全部通知结束========================================*/
 .shadow {
@@ -1292,6 +1334,7 @@
     background-color: #252525;
     opacity: 0.8;
     filter: alpha(opacity=80);
+    z-index:10001;
 }
 
 /* ==== 购买课程 === */
@@ -1304,6 +1347,7 @@
     left: 50%;
     margin-left: -325px;
     margin-top: -290px;
+    z-index:10002;
 }
 
 .buy_course_top {
@@ -1362,7 +1406,7 @@
 }
 
 .buy_course_center .top .orderName {
-    width: 300px;
+    width: 380px;
     overflow: hidden;
     text-overflow: ellipsis;
     height: 45px;
@@ -1409,7 +1453,7 @@
     height: 15px;
     line-height: 15px;
     width: 78.89%;
-    margin-left: 85px;
+    margin-left: 95px;
     color: rgb(153, 153, 153);
     font-size: 14px;
     letter-spacing: 1px;
@@ -1437,13 +1481,15 @@
 }
 
 .buy_course_center .bot .bot_span_last {
-    width: 300px;
+    width: 304px;
     height: 36px;
-    border: 1px solid #f5f5f5;
+    border: 2px solid #f5f5f5;
+    font-size:16px;
     float: left;
     line-height: 36px;
     margin-top: 5px;
     text-indent: 0.5em;
+    overflow: hidden;
 }
 
 .buy_course_center .bot .select_require_msg {
@@ -1466,24 +1512,27 @@
 }
 
 .bot select {
-    width: 302px;
+    width: 307px;
     height: 36px;
     filter: alpha(opacity=0);
     -moz-opacity: 0;
     -khtml-opacity: 0;
     opacity: 0;
-    /*border-color:#f5f5f5;*/
-    font-size: 18px;
+    font-size: 16px;
     cursor: pointer;
     position: absolute;
     top: 5px;
     left: 93px;
+    border:none;
 }
 
 .bot select option {
     width: auto;
     height: 30px;
-    font-size: 18px;
+    font-size: 16px;
+    padding-top:6px;
+    padding-left:6px;
+    border: none;
 }
 
 .buy_course_center .bot .bot_select2_plugin {
@@ -1521,16 +1570,20 @@
 }
 
 .buy_course_center .last textarea {
-    width: 300px;
+    width: 297px;
     height: 100px;
     border: 2px solid #f5f5f5;
     color: rgb(34, 34, 34);
     resize: none;
     font-family: '微软雅黑';
     letter-spacing: 2px;
-    font-size: 17px;
+    font-size: 16px;
 }
 
+textarea[placeholder], *[placeholder] {
+    color:rgb(34, 34, 34) !important;
+    padding-left:6px;
+}
 .buy_course .pay_btn {
     width: 160px;
     height: 50px;
@@ -1546,8 +1599,11 @@
     /*font-weight:bold;*/
     font-size: 18px;
 }
+.pay_btn:hover{
+    background: rgb(44, 174, 252);
+}
 
-/* ==== 删除评论 === */
+    /* ==== 删除评论 === */
 .delete_comment {
     width: 380px;
     height: 200px;
@@ -1558,7 +1614,7 @@
     margin-top: -100px;
     background-color: white;
     border-radius: 10px;
-
+    z-index:10002;
 }
 
 .delete_comment .top {

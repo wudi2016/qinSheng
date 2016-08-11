@@ -85,7 +85,7 @@
                                         <th class="center">日志ID</th>
                                         <th class="center">用户名</th>
                                         <th class="center">操作类型</th>
-                                        <th class="center">操作动作</th>
+                                        <th class="center hidden-480">操作动作</th>
                                         <th class="center">客户端IP</th>
                                         <th class="center">创建时间</th>
                                         <th>操作</th>
@@ -98,7 +98,7 @@
                                             <td class="center">{{$value->id}}</td>
                                             <td>{{$value->username}}</td>
                                             <td>@if($value->type == 0)登录@elseif($value->type == 1)其他所有@endif</td>
-                                            <td>{{$value->action}}</td>
+                                            <td class="hidden-480">{{$value->action}}</td>
                                             <td>{{$value->client_ip}}</td>
                                             <td>{{date('Y-m-d H:i:s',$value->create_at)}}</td>
                                             <td>

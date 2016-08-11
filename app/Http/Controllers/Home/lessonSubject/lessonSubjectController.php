@@ -137,6 +137,7 @@ class lessonSubjectController extends Controller
                 'userId' => $value->userId,
                 'coursePic' => $value->coursePic,
                 'courseLowPath' => $value->courseLowPath,
+                'courseType' => $value->courseType,
                 'courseMediumPath' => $value->courseMediumPath,
                 'courseHighPath' => $value->courseHighPath,
                 'lastCheckTime' => $value->lastCheckTime,
@@ -185,7 +186,6 @@ class lessonSubjectController extends Controller
     // 专题课程详细页 数据接口
     public function getDetail($id)
     {
-        PaasUser::apply();
         // 课程详细信息
         $info = DB::table('course')->select()->where(['id' => $id, 'courseStatus' => 0, 'courseIsDel' => 0])->first();
         if (!$info) return response()->json(['status' => false]);
@@ -257,7 +257,6 @@ class lessonSubjectController extends Controller
     // 获取目录信息
     public function getCatalogInfo($id)
     {
-        PaasUser::apply();
         $info = DB::table('coursechapter')->select('id', 'title')->where(['status' => 0, 'parentId' => '0', 'courseId' => $id])->get();
         foreach ($info as $key => $value) {
             $info[$key]->section = (DB::table('coursechapter')->select('id', 'title', 'courseLowPath', 'courseMediumPath', 'courseHighPath', 'isTryLearn', 'coursePic')->where(['status' => 0, 'parentId' => $value->id, 'courseId' => $id])->get());
@@ -266,7 +265,7 @@ class lessonSubjectController extends Controller
                 $v->courseMediumPath = $this->getPlayUrl($v->courseMediumPath);
                 $v->courseHighPath = $this->getPlayUrl($v->courseHighPath);
                 $v->coursePic = $v->coursePic ? $this->getPlayUrl($v->coursePic) : '';
-                if(Auth::check()){
+                if(Auth::check() && Auth::user()->type != 3){
                     $mineUserId = Auth::user()->id;
                     $v->isLearn = DB::table('courseview')->where(['courseId' => $id, 'userId' => $mineUserId, 'chapterId' => $v->id])->first() ? true : false;
                 }else{
@@ -414,6 +413,10 @@ class lessonSubjectController extends Controller
 
         if (!empty($request->userId) && !empty($request->courseId) && !empty($request->chapterId)) {
             $view = DB::table('courseview')->where(['courseId' => $request->courseId, 'userId' => $request->userId, 'chapterId' => $request->chapterId])->first();
+            $isLearn = DB::table('courseview')->where(['courseId' => $request->courseId, 'userId' => $request->userId])->first();
+            if(!$isLearn){
+                DB::table('course')->where('id', $request->courseId)->increment('course.courseStudyNum');
+            }
             if(!$view){
                 $result = DB::table('courseview')->insertGetId($input);
             }else{
@@ -590,7 +593,6 @@ class lessonSubjectController extends Controller
             $result['payPrice'] = Input::get('total_fee') * 100;
             $result['tradeSn'] = Input::get('trade_no');
             $result['payTime'] = Carbon::now();
-
             if (preg_match('/^\/lessonSubject\/buySuccess\/[0-9]{1,}/', Input::get('body'))) {
                 $result['status'] = 2;
                 DB::table('course')->join('orders', 'course.id', '=', 'orders.courseId')->where('orders.orderSn', $orderSn)->increment('course.completecount');
@@ -621,6 +623,9 @@ class lessonSubjectController extends Controller
         $alipay->setSubject($result->orderTitle);
         $alipay->setBody($callback);
         $alipay->setQrPayMode('2');
+        $alipay->setItBPay('12h');
+        $alipay->setNotifyUrl('http://qinsheng.zuren8.com/lessonSubject/alipayAsyncCallback');//异步回调
+        $alipay->setReturnUrl('http://qinsheng.zuren8.com/lessonSubject/alipaySyncCallback');//同步回调
         return redirect()->to($alipay->getPayLink());
     }
 

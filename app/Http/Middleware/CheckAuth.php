@@ -33,12 +33,12 @@ class CheckAuth
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, $continue = false)
     {
-        if ($this->auth->check()) {
+        if ($this->auth->check() && ($continue || $this->auth->user()->type != 3)) {
             return $next($request);
         }
 
-       return abort(404);
+		return abort(404);
     }
 }

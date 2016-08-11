@@ -117,8 +117,9 @@
                         </div>
 
                         <div class="comment_repeat_title" ms-text="el.applyTitle"></div>
-                        <div class="comment_repeat_unchecked"><span ms-text="'点评讲师'+' : '+ el.teacherName"></span>
-                            <span ms-text="'发布者'+' : '+ el.username"></span>
+                        <div class="comment_repeat_unchecked">
+                            <span class="unchecked_comment_first" ms-attr-title=" el. teacherName " ms-text="'点评讲师'+' : '+ el.teacherName"></span>
+                            <span class="unchecked_comment_last" ms-attr-title=" el. username "  ms-text="'发布者'+' : '+ el.username"></span>
                         </div>
                     </div>
 
@@ -132,8 +133,9 @@
 
                         </div>
                         <div class="comment_repeat_title" ms-text="el.applyTitle"></div>
-                        <div class="comment_repeat_unchecked"><span ms-text="'点评讲师'+' : '+ el.teacherName"></span>
-                            <span ms-text="'发布者'+' : '+ el.username"></span>
+                        <div class="comment_repeat_unchecked">
+                            <span class="unchecked_comment_first" ms-attr-title=" el. teacherName " ms-text="'点评讲师'+' : '+ el.teacherName"></span>
+                            <span class="unchecked_comment_last" ms-attr-title=" el. username "  ms-text="'发布者'+' : '+ el.username"></span>
                         </div>
                     </div>
 
@@ -148,8 +150,9 @@
                             </a>
                         </div>
                         <div class="comment_repeat_title" ms-text="el.applyTitle"></div>
-                        <div class="comment_repeat_unchecked"><span ms-text="'点评讲师'+' : '+ el.teacherName"></span>
-                            <span ms-text="'发布者'+' : '+ el.username"></span>
+                        <div class="comment_repeat_unchecked">
+                            <span class="unchecked_comment_first" ms-attr-title=" el. teacherName " ms-text="'点评讲师'+' : '+ el.teacherName"></span>
+                            <span class="unchecked_comment_last" ms-attr-title=" el. username "  ms-text="'发布者'+' : '+ el.username"></span>
                         </div>
                     </div>
                 </div>
@@ -193,9 +196,12 @@
                     </div>
                     <div class="comment_repeat_title" ms-html="el.commentTitle"></div>
                     <div class="comment_repeat_unchecked unchecked_diff">
-                        <span ms-text="'点评讲师'+' : '+ el.teachername"></span>
-                        <span class="unchecked_span" ms-text="'发布者 '+' : '+ el.username"></span>
+                        {{--<span ms-text="'点评讲师'+' : '+ el.teachername"></span>--}}
+                        {{--<span class="unchecked_span" ms-text="'发布者 '+' : '+ el.username"></span>--}}
+                        <span class="unchecked_comment_first" ms-attr-title=" el.teacherName " ms-text="'点评讲师'+' : '+ el.teacherName"></span>
+                        <span class="unchecked_comment_last last_diff" ms-attr-title=" el.username "  ms-text="'发布者'+' : '+ el.username"></span>
                     </div>
+                    <div class="clear"></div>
                     <div class="comment_repeat_leader">
                         <span ms-html="el.view + ' 人'"></span>
                         <span class="repeat_leader_lastSpan" ms-html="el.fav + ' 人'"></span>
@@ -237,8 +243,8 @@
                         <a ms-attr-href="href + el.id"><img ms-imgBig class="img_big" ms-attr-src="el.coursePic" alt="" width="280" height="180"/></a>
                     </div>
                     <div class="comment_repeat_title" ms-text="el.courseTitle"></div>
-                    <div class="comment_repeat_period"><span ms-text="el.classHour + '课时'"></span> <span
-                                ms-text="el.coursePlayView + '人学过'"></span></div>
+                    <div class="comment_repeat_period"><span ms-text="el.classHour + '课时'"></span>
+                        <span class="period_course_span" ms-text="el.coursePlayView + '人学过'"></span></div>
                     <div class="comment_repeat_price" ms-text="'￥ ' + el.coursePrice" ms-if="el.coursePrice"></div>
                     <div class="comment_repeat_price" ms-text="'免费课程'" ms-if="!el.coursePrice"></div>
                 </div>
@@ -299,7 +305,7 @@
                         </div>
                         <div class="repeat_comment_time">
                             <div class="comment_time" ms-text="el.created_at"></div>
-                            <div class="comment_delete" ms-click="popUpSwitch('deleteNotice',el.id)"><a href="#">删除</a></div>
+                            <div class="comment_delete" ms-click="popUpSwitch('deleteNotice',el.id)">删除</div>
                         </div>
                     </div>
                 </div>
@@ -765,7 +771,7 @@
             if(window.location.hash){
                 sideBar.tab = window.location.hash.split('#')[1];
             }else{
-                sideBar.tab = 'basic';
+                sideBar.tab = 'basicInfo';
             }
 
             if (sideBar.tab) {

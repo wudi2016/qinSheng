@@ -65,12 +65,12 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 						}
 						if (model == 'finishUpload' || model == 'isReload') {
 							callback && callback(function () {
-								window.location.href = '/member/student/'+ upload.mineType +'#myOrders';
+								window.location.href = '/member/student/'+ upload.mineType +'#lessonComment';
 							});
 						}
 						if (model == 'comment') {
 							callback && callback(function () {
-								window.location.href = '/member/famousTeacher#sureComment';
+								window.location.href = '/member/famousTeacher#waitComment';
 							});
 						}
 						model == 'deleteMessage' && callback();

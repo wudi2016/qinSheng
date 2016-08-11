@@ -258,6 +258,7 @@ class teacherCourseController extends Controller
             return redirect()->back()->withInput()->withErrors('只有已退款的订单才可以删除');
         }
         $data = DB::table('commentcourse')->where('id',$id)->update(['courseIsDel'=>1]);
+        DB::table('hotreviewcourse')->where('courseId',$id)->delete();//关联删除首页推荐点评视频
         DB::table('orders')->where('orderSn',$orderSn)->update(['isDelete'=>1]); //已退款时关联删除订单表
         DB::table('applycourse')->where('orderSn',$orderSn)->update(['courseIsDel'=>1]); //已退款时关联删除演奏视频表
         if($data){
