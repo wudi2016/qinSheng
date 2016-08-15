@@ -46,7 +46,6 @@ avalon.directive('xueyuan', {
 
 
 
-
 //图片放大(热门视频)
 avalon.directive('bigimg', {
     update: function (value) {
@@ -70,14 +69,18 @@ avalon.directive('bigimg', {
  avalon.directive('showhideleft',{
      update: function (value){
          $('.newstudent').mouseover(function(){
-             $('.newstudent_left_img').removeClass('hide');
-             $('.newstudent_right_img').removeClass('hide');
-
+             var fenyeover = $('#fenyeover').val();
+             if(fenyeover > 6){
+                 $('.newstudent_left_img').removeClass('hide');
+                 $('.newstudent_right_img').removeClass('hide');
+             }
          })
          $('.newstudent').mouseout(function(){
-             $('.newstudent_left_img').addClass('hide');
-             $('.newstudent_right_img').addClass('hide');
-
+             var fenyeover = $('#fenyeover').val();
+             if(fenyeover > 6){
+                 $('.newstudent_left_img').addClass('hide');
+                 $('.newstudent_right_img').addClass('hide');
+             }
          })
      }
  });
@@ -132,7 +135,6 @@ define([],function(){
         //最新学员
         studentlist: [],
         getstudent:function(){
-
             $('#demo').pagination({
                 dataSource: function(done) {
                     $.ajax({
@@ -141,10 +143,11 @@ define([],function(){
                         dataType : 'json',
                         success: function(response) {
                             if(response.statuss){
-                                //console.log(response);
                                 done(response.data);
-                            }else{
-
+                                //console.log(response.data.length);
+                                var datalength = response.data.length;
+                                var str = '<input type="hidden" value="'+datalength+'"  id="fenyeover"  name="fenyeover"  class="fenyeover" >';
+                                $('#kongbai').html(str);
                             }
                         }
                     });

@@ -7,6 +7,7 @@ define([], function () {
         realInfo: false,
         total: '',
         waitComment:false,
+        display:true,
         waitCommentList: [],
         getCommentInfo: function () {
             $('#page_waitComment').pagination({
@@ -18,6 +19,9 @@ define([], function () {
                         success: function (response) {
                             waitCommentController.total = response.total;
                             if (response.type) {
+                                if(response.total <= 6 ){
+                                    waitCommentController.display = false;
+                                }
                                 var format = [];
                                 format['data'] = response.data;
                                 format['totalNumber'] = response.total;

@@ -140,7 +140,7 @@
                                             <td id="checks{{$value->id}}">@if($value->checks == 0)激活@elseif($value->checks == 1)<span style=" color:red">禁用</span>@endif</td>
                                             <td>{{$value->phone}}</td>
                                             <td>@if($value->type == 0)学生@elseif($value->type == 1)教师@else<span style="color:red">名师</span>@endif</td>
-                                            <td><img src="{{asset($value->pic)}}" alt="" width="40" height="40"></td>
+                                            <td><img src="{{asset($value->pic)}}" alt="" width="40" height="40" onerror="this.src='/admin/image/back.png'"></td>
                                             <td>{{$value->userId ? $value->userId : '无'}}</td>
                                             <td>{{$value->name ? $value->name : '无'}}</td>
                                             <td>{{$value->created_at}}</td>

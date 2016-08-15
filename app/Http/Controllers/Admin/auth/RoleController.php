@@ -164,7 +164,9 @@ class RoleController extends Controller
         $request['user'] = explode(',', $request['user']);
         foreach ($request['user'] as $key => $value) {
             $result = DB::table('role_user') -> insertGetId(['role_id' => $request['roleID'], 'user_id' => $value, 'created_at' => Carbon::now()]);
-            if (!$result) return Redirect() -> back() -> withInput($request -> except('_token')) -> withErrors('添加失败');
+            if (!$result) {
+				return Redirect() -> back() -> withInput($request -> except('_token')) -> withErrors('添加失败');
+			}
         }
         if ($result) {
             $this -> OperationLog('添加了“'. implode(', ', $request['user']) .'”角色用户');
@@ -205,7 +207,9 @@ class RoleController extends Controller
         $condition = intval($type) ? 'departId' : 'postId';
         $roleUser = DB::table('role_user') -> select('user_id') -> where('role_id', $roleID) -> get();
         $notIn = [];
-        foreach ($roleUser as $key => $value) $notIn[] = $value -> user_id;
+        foreach ($roleUser as $key => $value) {
+			$notIn[] = $value -> user_id;
+		}
         $result = DB::table('users') -> select('id', 'username') -> where([$condition => $id, 'type' => 3]) -> whereNotIn('id', array_unique($notIn)) -> get();
         $result || $result = [['username' => '暂无数据']];
         if ($result) {

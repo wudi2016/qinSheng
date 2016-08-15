@@ -177,38 +177,6 @@
             </div>
         </div>
 
-        <!-- 反馈意见弹出层 -->
-        {{--<div class="feedback hide" ms-popup="popUp" value="feedback">--}}
-            {{--<div class="feedback_top">--}}
-                {{--<span class="left">意见反馈</span>--}}
-                {{--<span class="right" ms-click="popUpSwitch(false, 'feedback')"></span>--}}
-            {{--</div>--}}
-            {{--<div class="feedback_center">--}}
-                {{--<div class="top">--}}
-                    {{--<div class="question"><span>1</span><span class="last">选择问题类型：</span><span style="color: red" ms-visible="feedBackWarning.type">请选择问题类型</span></div>--}}
-                    {{--<div class="choose">--}}
-                        {{--<input type="radio" ms-duplex-string="feedBack.type" value="内容无关"/><span>内容无关</span>--}}
-                        {{--<input type="radio" ms-duplex-string="feedBack.type" value="播放不了"/><span>播放不了</span>--}}
-                        {{--<input type="radio" ms-duplex-string="feedBack.type" value="其他问题"/><span>其他问题</span>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-                {{--<div class="clear"></div>--}}
-                {{--<div class="center">--}}
-                    {{--<div class="question"><span>2</span><span class="last">填写问题描述：</span><span style="color: red" ms-visible="feedBackWarning.content">请填写80字数以内问题描述</span></div>--}}
-                    {{--<div class="content">--}}
-                        {{--<textarea style='border-bottom: 2px solid #ccc;' placeholder="详细描述一些你遇到的问题或建议" ms-duplex="feedBack.content"></textarea>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-                {{--<div class="feedback_center_last">--}}
-                    {{--<div class="question"><span>3</span><span class="last">留下联系方式：</span><span style="color: red" ms-visible="feedBackWarning.tel">请填写正确的联系方式</span></div>--}}
-                    {{--<div class="contact_way">--}}
-                        {{--<input type="text" class="method" placeholder="QQ/Email/手机号" ms-duplex="feedBack.tel"/>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-                {{--<div class="clear"></div>--}}
-                {{--<div class="feedback_btn" ms-click="submitFeedback()">提交反馈</div>--}}
-            {{--</div>--}}
-        {{--</div>--}}
 		<!-- 反馈意见弹出层 -->
 		<div class="feedback hide" ms-popup="popUp" value="feedback">
 			<div class="feedback_top">
@@ -289,9 +257,9 @@
 @endsection
 
 @section('js')
-    <script src="http://api.html5media.info/1.1.8/html5media.min.js"></script>
+    <script src="{{asset('home/jplayer/html5media.min.js')}}"></script>
     <!--[if gt IE 9]>
-       <script src="jwplayerplayer.html5.js" type="text/javascript"></script>  
+	<script type="text/javascript" src="{{asset('home/jplayer/jwplayer.html5.js')}}" type="text/javascript"></script>
     <![endif]-->
     <script type="text/javascript" src="{{asset('home/jplayer/jwplayer.js')}}"></script>
 	<script type="text/javascript">

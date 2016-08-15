@@ -25,9 +25,9 @@ define([], function () {
         pageInfo: {
             'index': '/',
             'course': '/lessonSubject/list/1',
-            'lessonSubject': '/lessonSubject/list/1',
-            'video': '/home/image/lessonSubject/detail/video.jpg'
+            'lessonSubject': '/lessonSubject/list/1'
         },
+        mineUsername: '',mineUserId: '',mineType: '',minePic: '',detailId: '',
         //选项卡处理
         changeOption: 'course',
         changeSwitch: function (value) {
@@ -42,7 +42,7 @@ define([], function () {
         haveCourse : true,
         catalogInfo: [],
         downloadMsg: false, commentMsg: false, catalogMsg : false,
-        getData: function (url, type, data, model, callback) {
+        getData: function (url, type, data, model) {
             $.ajax({
                 url: url, type: type || 'GET', data: data || {}, dataType: 'json',
                 success: function (response) {
@@ -311,30 +311,34 @@ define([], function () {
         playFlag:1,
         setVideo: function (callback) {
             var model = detail.videoType ? 'detailInfo' : 'videoPath';
+            var list = [];
+            detail[model].courseHighPath && list.push({
+                label: "超清",
+                file: detail[model].courseHighPath,
+                height: 720,
+                width: 1280,
+                type: "mp4"
+            });
+            detail[model].courseMediumPath && list.push({
+                //default: true,
+                label: "高清",
+                file: detail[model].courseMediumPath,
+                height: 360,
+                width: 640,
+                type: "mp4"
+            });
+            detail[model].courseLowPath && list.push({
+                label: "标清",
+                file: detail[model].courseLowPath,
+                height: 180,
+                width: 320,
+                type: "mp4"
+            });
             detail.thePlayer = jwplayer('mediaplayer').setup({
-                flashplayer: 'jwplayer/jwplayer.flash.swf',
+                //flashplayer: 'jwplayer/jwplayer.flash.swf',
                 playlist: [{
                     image: detail[model].coursePic,
-                    sources: [{
-                        label: "超清",
-                        file: detail[model].courseHighPath || detail[model].courseMediumPath || detail[model].courseLowPath,
-                        height: 720,
-                        width: 1280,
-                        type: "mp4"
-                    }, {
-                        default: true,
-                        label: "高清",
-                        file: detail[model].courseMediumPath || detail[model].courseLowPath,
-                        height: 360,
-                        width: 640,
-                        type: "mp4"
-                    }, {
-                        label: "标清",
-                        file: detail[model].courseLowPath,
-                        height: 180,
-                        width: 320,
-                        type: "mp4"
-                    }]
+                    sources: list
                 }],
                 id: 'playerID',
                 width: '800',
@@ -342,7 +346,7 @@ define([], function () {
                 aspectratio: '16:9',
                 type: "mp4"
             });
-            typeof callback === 'function' && callback();
+            //typeof callback === 'function' && callback();
             if(detail.detailInfo.isTryLearn || detail.detailInfo.isTeacher || detail.detailInfo.isBuy || detail.detailInfo.isFree){ // 是名师或者已购买
                 if(!detail[model].courseHighPath && !detail[model].courseMediumPath && !detail[model].courseLowPath){ // 视频都不可观看
                     detail.thePlayer.remove();
@@ -407,6 +411,7 @@ define([], function () {
                 if(el.isTryLearn == 1){
                     detail.videoType = false;
                     detail.overtime = false;
+                    detail.tryLearnOver = false;
                     detail.videoPath = {
                         coursePic : el.coursePic,
                         courseHighPath: el.courseHighPath,

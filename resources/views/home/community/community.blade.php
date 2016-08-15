@@ -136,7 +136,7 @@
 
 
         <!-- 最新学员 -->
-        <div class="newstudent">
+        <div class="newstudent" >
             <!-- 标题 -->
             <div class="newstudent_title">
                 <div>
@@ -166,7 +166,7 @@
                     </div>
                 </div>
                 {{--下一页--}}
-                <div class="newstudent_right"  ms-showhideright >
+                <div class="newstudent_right"  ms-showhideleft >
                     <div class="newstudent_right_img hide ">
                         <img src="{{url('home/image/community/37.png')}}"  alt="">
                     </div>
@@ -204,8 +204,8 @@
         </div>
 
 
-        <div style="height:175px">
-            
+        <div style="height:175px" id="kongbai" >
+
         </div>
 
 
@@ -230,6 +230,10 @@
 
             avalon.scan();
         });
+
+
+
+
     </script>
 
 

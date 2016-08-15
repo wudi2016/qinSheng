@@ -198,35 +198,35 @@ class perSpaceController extends Controller
     public function getCourse($type, $flag, $pageNumber, $pageSize)
     {
         $skip = ($pageNumber - 1) * $pageSize;
-
+        $id = Auth::user()->id;
         if ($type == '1') { // 学员
             $flag == '1' ? $order = 'o.created_at' : $order = 'c.courseStudyNum';
-            $info = DB::table('course as c')->leftJoin('orders as o', 'c.id', '=', 'o.courseId')
-                ->select('c.id', 'c.courseTitle', 'c.coursePic', 'coursePrice', 'c.coursePlayView', 'c.courseDiscount','c.created_at','c.courseStudyNum')
-                ->where(['o.userId' => Auth::user()->id, 'o.orderType' => 0, 'c.courseStatus' => 0,'o.isDelete' => 0,'o.status' => 2])
-                ->orderBy($order, 'desc')->skip($skip)->take($pageSize)->get();
-            $count = DB::table('course as c')->leftJoin('orders as o', 'c.id', '=', 'o.courseId')
-                ->select('c.id', 'c.courseTitle', 'c.coursePic', 'coursePrice', 'c.coursePlayView', 'c.courseDiscount','c.created_at','c.courseStudyNum')
+//            $info = DB::table('course as c')->leftJoin('orders as o', 'c.id', '=', 'o.courseId')
+//                ->select('c.id', 'c.courseTitle', 'c.coursePic', 'coursePrice', 'c.coursePlayView', 'c.courseDiscount','c.created_at','c.courseStudyNum','c.completecount')
+//                ->where(['o.userId' => Auth::user()->id, 'o.orderType' => 0, 'c.courseStatus' => 0,'o.isDelete' => 0,'o.status' => 2])
+//                ->orderBy($order, 'desc')->skip($skip)->take($pageSize)->get();
+            $info = DB::select("SELECT c.id,c.courseTitle,c.coursePic,c.courseDiscount,c.coursePrice,c.courseStudyNum + c.completecount AS coursePlayView FROM course AS c LEFT JOIN orders AS o ON c.id = o.courseId WHERE c.courseStatus = 0 AND c.courseIsDel = 0 AND  o.userId = $id AND o.orderType = 0 AND o.isDelete = 0 AND o.status = 2 ORDER BY $order DESC limit $skip,$pageSize");
+            $count = DB::table('course as c')->leftJoin('orders as o', 'c.id', '=', 'o.courseId')->select('c.id')
                 ->where(['o.userId' => Auth::user()->id, 'o.orderType' => 0, 'c.courseStatus' => 0,'o.isDelete' => 0,'o.status' => 2])->count();
         } else { // 名师
             $flag == '1' ? $order = 'created_at' : $order = 'courseStudyNum';
-            $info = DB::table('course')->select('id', 'courseTitle', 'coursePic', 'coursePrice', 'coursePlayView','courseDiscount','created_at','courseStudyNum')
-                ->where(['teacherId' => Auth::user()->id, 'courseStatus' => '0'])->orderBy($order, 'desc')->skip($skip)->take($pageSize)->get();
-            $count = DB::table('course')->select('id', 'courseTitle', 'coursePic', 'coursePrice', 'coursePlayView','courseDiscount','created_at','courseStudyNum')
-                ->where(['teacherId' => Auth::user()->id, 'courseStatus' => '0'])->count();
+            $info = DB::select("SELECT id,courseTitle,coursePic,courseDiscount,coursePrice,courseStudyNum + completecount AS coursePlayView FROM course WHERE teacherId = $id AND courseStatus = 0 AND courseIsDel = 0 ORDER BY $order DESC limit $skip,$pageSize");
+//            $info = DB::table('course')->select('id', 'courseTitle', 'coursePic', 'coursePrice', 'coursePlayView','courseDiscount','created_at','courseStudyNum','completecount')
+//                ->where(['teacherId' => Auth::user()->id, 'courseStatus' => '0'])->orderBy($order, 'desc')->skip($skip)->take($pageSize)->get();
+            $count = DB::table('course')->select('id')->where(['teacherId' => Auth::user()->id, 'courseStatus' => '0'])->count();
         }
-        foreach ($info as $key => $value) {
-            if($info[$key]->courseDiscount){
-                $info[$key]->coursePrice = ceil(($info[$key]->courseDiscount/10000)*$info[$key]->coursePrice/100);
-            }else{
-                $info[$key]->coursePrice = ceil($info[$key]->coursePrice/100);
+        if($info){
+            foreach ($info as $key => $value) {
+                if($info[$key]->courseDiscount){
+                    $info[$key]->coursePrice = ceil(($value->courseDiscount/10000)*$value->coursePrice/100);
+                }else{
+                    $info[$key]->coursePrice = ceil($value->coursePrice/100);
+                }
+                $info[$key]->classHour = DB::table('coursechapter')->where(['courseId' => $value->id, 'status' => 0])->where('parentId', '<>', '0')->count();
+//                $info[$key]->coursePlayView = $value->courseStudyNum + $value->completecount;
             }
-            $info[$key]->classHour = DB::table('coursechapter')->where(['courseId' => $value->id, 'status' => 0])->where('parentId', '<>', '0')->count();
-            $info[$key]->coursePlayView = $info[$key]->courseStudyNum;
-        }
-        if ($info) {
             return response()->json(['status' => true, 'data' => $info, 'total' => $count]);
-        } else {
+        }else{
             return response()->json(['status' => false,'total' => $count]);
         }
     }
@@ -240,42 +240,42 @@ class perSpaceController extends Controller
             ->where('userId',$id)->whereIn('status',[1,2])->whereIn('orderType',[1,2])->where('isDelete',0)->orderBy('created_at','desc')
             ->skip($skip)->take($pageSize)->get();
         $count = DB::table('orders')->where('userId',$id)->whereIn('status',[1,2])->whereIn('orderType',[1,2])->where('isDelete',0)->count();
-        foreach($info as $key => $value){
-            if($value->orderType == 1){
-                if($value->status == 1){
-                    $data1 = DB::table('applycourse')->select('id','courseTitle','courseStatus','courseIsDel','state','created_at')->where('orderSn',$value->orderSn)->first();
-                    $info[$key] -> AId = $data1->id;
-                    $info[$key] -> ATitle = $data1->courseTitle;
-                    $info[$key] -> courseStatus = $data1->courseStatus;
-                    $info[$key] -> courseIsDel = $data1->courseIsDel;
-                    $info[$key] -> AState = $data1->state;
-                    $info[$key] -> ACreated = $data1->created_at;
-                    $result = DB::table('usermessage')->where(['actionId' => $data1->id,'username' => Auth::user()->username, 'type' => 0])->first();
-                    $info[$key]->messageID = $result ? $result->id : '';
+        if($info){
+            foreach($info as $key => $value){
+                if($value->orderType == 1){
+                    if($value->status == 1){
+                        $data1 = DB::table('applycourse')->select('id','courseTitle','courseStatus','courseIsDel','state','created_at')->where('orderSn',$value->orderSn)->first();
+                        $info[$key] -> AId = $data1->id;
+                        $info[$key] -> ATitle = $data1->courseTitle;
+                        $info[$key] -> courseStatus = $data1->courseStatus;
+                        $info[$key] -> courseIsDel = $data1->courseIsDel;
+                        $info[$key] -> AState = $data1->state;
+                        $info[$key] -> ACreated = $data1->created_at;
+                        $result = DB::table('usermessage')->where(['actionId' => $data1->id,'username' => Auth::user()->username, 'type' => 0])->first();
+                        $info[$key]->messageID = $result ? $result->id : '';
+                    }else{
+                        $data2 = DB::table('commentcourse')->select('courseTitle','coursePic','state','courseStatus','courseIsDel','coursePlayView','coursePrice')->where('id',$value->OCourseId)->first();
+                        $info[$key] -> CTitle = $data2->courseTitle;
+                        $info[$key] -> CPic = $data2->coursePic;
+                        $info[$key] -> CState = $data2->state;
+                        $info[$key] -> courseStatus = $data2->courseStatus;
+                        $info[$key] -> courseIsDel = $data2->courseIsDel;
+                        $info[$key] -> CPlayView = $data2->coursePlayView;
+                        $info[$key] -> CPrice = ceil($data2->coursePrice/100);
+                    }
                 }else{
-                    $data2 = DB::table('commentcourse')->select('courseTitle','coursePic','state','courseStatus','courseIsDel','coursePlayView','coursePrice')->where('id',$value->OCourseId)->first();
-                    $info[$key] -> CTitle = $data2->courseTitle;
-                    $info[$key] -> CPic = $data2->coursePic;
-                    $info[$key] -> CState = $data2->state;
-                    $info[$key] -> courseStatus = $data2->courseStatus;
-                    $info[$key] -> courseIsDel = $data2->courseIsDel;
-                    $info[$key] -> CPlayView = $data2->coursePlayView;
-                    $info[$key] -> CPrice = ceil($data2->coursePrice/100);
+                    $data = DB::table('commentcourse')->select('courseTitle','coursePic','state','courseStatus','courseIsDel','coursePlayView','coursePrice')->where('id',$value->OCourseId)->first();
+                    $info[$key] -> CTitle = $data->courseTitle;
+                    $info[$key] -> CPic = $data->coursePic;
+                    $info[$key] -> CState = $data->state;
+                    $info[$key] -> courseStatus = $data->courseStatus;
+                    $info[$key] -> courseIsDel = $data->courseIsDel;
+                    $info[$key] -> CPlayView = $data->coursePlayView;
+                    $info[$key] -> CPrice = ceil($data->coursePrice/100);
                 }
-            }else{
-                $data = DB::table('commentcourse')->select('courseTitle','coursePic','state','courseStatus','courseIsDel','coursePlayView','coursePrice')->where('id',$value->OCourseId)->first();
-                $info[$key] -> CTitle = $data->courseTitle;
-                $info[$key] -> CPic = $data->coursePic;
-                $info[$key] -> CState = $data->state;
-                $info[$key] -> courseStatus = $data->courseStatus;
-                $info[$key] -> courseIsDel = $data->courseIsDel;
-                $info[$key] -> CPlayView = $data->coursePlayView;
-                $info[$key] -> CPrice = ceil($data->coursePrice/100);
             }
-        }
-        if ($info) {
             return response()->json(['status' => true, 'data' => $info, 'total' => $count]);
-        } else {
+        }else{
             return response()->json(['status' => false, 'total' => $count]);
         }
     }
@@ -348,13 +348,12 @@ class perSpaceController extends Controller
             ->whereNotIn('u.type',[5,6])->count();
         if($info) {
             foreach ($info as $key => $value) {
+                $info[$key]->created_at ? $info[$key]->created_at = explode(' ',$info[$key]->created_at)[0] : '';
                 if ($value->type == '3') {
                     $result = DB::table('users')->where('id', $value->actionId)->select('type')->first();
                     $info[$key]->userType = $result ? $result->type : false;
                 }
             }
-        }
-        if($info){
             return response()->json(['data' => $info, 'status' => true,'count' => $count]);
         }else{
             return response()->json(['status' => false,'count' => $count]);
@@ -403,10 +402,11 @@ class perSpaceController extends Controller
         $skip = ($pageNumber - 1) * $pageSize;
         $info = DB::table('usermessage')->Where(['toUsername' => $request->username])->whereIn('type',[5,6])->orderBy('created_at','desc')->skip($skip)->take($pageSize)->get();
         $count = DB::table('usermessage')->Where(['toUsername' => $request->username])->whereIn('type',[5,6])->orderBy('created_at','desc')->count();
-        foreach($info as $key => $value){
-            $info[$key] -> content = '"'.$value->content.'"';
-        }
         if($info){
+            foreach($info as $key => $value){
+                $info[$key]->created_at ? $info[$key]->created_at = explode(' ',$info[$key]->created_at)[0] : '';
+                $info[$key] -> content = '"'.$value->content.'"';
+            }
             return response()->json(['data' => $info, 'status' => true, 'count' => $count]);
         }else{
             return response()->json(['status' => false, 'count' => $count]);
@@ -703,12 +703,14 @@ class perSpaceController extends Controller
         $skip = ($pageNumber - 1) * $pageSize;
         $id = \Auth::user()->id;
         $data = \DB::table('orders as o')
-            ->join('commentcourse as cs','cs.orderSn','=','o.orderSn')
-            ->join('applycourse as app','app.orderSn','=','o.orderSn')
-            ->join('users as u','u.id','=','o.userId')
-            ->select('o.teacherName','o.status','app.courseTitle as applyTitle','app.id as applyId','cs.id as commentId','cs.created_at as time','cs.courseLowPath as low','cs.courseMediumPath as medium','cs.courseHighPath as high','cs.state as commentState','u.realname','u.username','app.state as applyState','app.created_at as applyTime')
-            ->where(['o.teacherId'=>$id,'o.isDelete'=>0,'o.orderType'=>1,'o.status'=>1,'app.courseStatus'=>0,'app.courseIsDel'=>0,'app.state'=>2])
-            ->where('cs.state','<>',2)
+            ->leftJoin('commentcourse as cs','cs.orderSn','=','o.orderSn')
+            ->leftJoin('applycourse as app','app.orderSn','=','o.orderSn')
+            ->select('o.teacherName','o.status','app.courseTitle as applyTitle','app.id as applyId','cs.id as commentId','cs.created_at as time','cs.courseLowPath as low','cs.courseMediumPath as medium','cs.courseHighPath as high','cs.state as commentState','o.username','app.state as applyState','app.created_at as applyTime')
+//            ->where(['o.teacherId'=>$id,'o.isDelete'=>0,'o.orderType'=>1,'o.status'=>1,'app.courseStatus'=>0,'app.courseIsDel'=>0,'app.state'=>2])
+            ->where(['o.teacherId'=>$id,'o.isDelete'=>0,'o.orderType'=>1,'o.status'=>1,'app.courseStatus'=>0,'app.courseIsDel'=>0,'app.state'=>2,'cs.state'=>0])
+            ->orWhere(['o.teacherId'=>$id,'o.isDelete'=>0,'o.orderType'=>1,'o.status'=>1,'app.courseStatus'=>0,'app.courseIsDel'=>0,'app.state'=>2,'cs.state'=>1])
+            ->orWhere(['o.teacherId'=>$id,'o.isDelete'=>0,'o.orderType'=>1,'o.status'=>1,'app.courseStatus'=>0,'app.courseIsDel'=>0,'app.state'=>2,'cs.state'=>null])
+//            ->where('cs.state','!=','2')
             ->orderBy('app.created_at','desc')
             ->skip($skip)
             ->take($pageSize)
@@ -717,10 +719,11 @@ class perSpaceController extends Controller
         $count = \DB::table('orders as o')
             ->leftJoin('commentcourse as cs','cs.orderSn','=','o.orderSn')
             ->leftJoin('applycourse as app','app.orderSn','=','o.orderSn')
-            ->leftJoin('users as u','u.id','=','o.userId')
-            ->select('o.teacherName','o.status','app.courseTitle as applyTitle','app.id as applyId','cs.id as commentId','cs.created_at as time','cs.courseLowPath as low','cs.courseMediumPath as medium','cs.courseHighPath as high','cs.state as commentState','u.realname','u.username','app.state as applyState','app.created_at as applyTime')
-            ->where(['o.teacherId'=>$id,'o.isDelete'=>0,'o.orderType'=>1,'o.status'=>1,'app.courseStatus'=>0,'app.courseIsDel'=>0,'app.state'=>2])
-            ->where('cs.state','<>',2)
+//            ->where(['o.teacherId'=>$id,'o.isDelete'=>0,'o.orderType'=>1,'o.status'=>1,'app.courseStatus'=>0,'app.courseIsDel'=>0,'app.state'=>2])
+//            ->where('cs.state','<>',2)
+            ->where(['o.teacherId'=>$id,'o.isDelete'=>0,'o.orderType'=>1,'o.status'=>1,'app.courseStatus'=>0,'app.courseIsDel'=>0,'app.state'=>2,'cs.state'=>0])
+            ->orWhere(['o.teacherId'=>$id,'o.isDelete'=>0,'o.orderType'=>1,'o.status'=>1,'app.courseStatus'=>0,'app.courseIsDel'=>0,'app.state'=>2,'cs.state'=>1])
+            ->orWhere(['o.teacherId'=>$id,'o.isDelete'=>0,'o.orderType'=>1,'o.status'=>1,'app.courseStatus'=>0,'app.courseIsDel'=>0,'app.state'=>2,'cs.state'=>null])
             ->count();
 //        dd($data);
         foreach($data as $key => $value){
@@ -758,7 +761,6 @@ class perSpaceController extends Controller
             ->join('orders as o','o.orderSn','=','cs.orderSn')
             ->join('applycourse as app','app.orderSn','=','o.orderSn')
             ->join('users as u','u.id','=','cs.userId')
-            ->select('cs.teachername','cs.courseTitle as commentTitle','cs.id as commentId','cs.coursePlayView as view','cs.courseFav as fav','cs.created_at as commentTime','u.realname','u.username','cs.state','o.status','app.id as applyId','app.courseTitle as applayTitle','app.created_at as time')
             ->where(['cs.teacherId'=>$id,'cs.courseIsDel'=>0,'cs.courseStatus'=>0,'o.status'=>2,'o.orderType'=>1,'cs.state'=>2,'o.isDelete'=>0,'app.state'=>2])
             ->count();
 //        dd($data);

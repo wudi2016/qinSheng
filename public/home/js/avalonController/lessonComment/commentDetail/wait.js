@@ -51,7 +51,11 @@ define([], function() {
                 aspectratio: '16:9',
                 type: "mp4"
             });
-		}
+		},
+		//  blade模板使用的变量
+		commentID: null,
+		orderSn: null,
+		messageID: null
 	});
 
 	return comment;

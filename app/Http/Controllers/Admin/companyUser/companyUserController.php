@@ -217,6 +217,8 @@ class companyUserController extends Controller{
             'password' => 'sometimes|required|min:6|max:16',
             'phone' => 'required|digits:11',
             'email' => 'required',
+            'departId' => 'required',
+            'postId' => 'required',
         ];
         $messages = [
             'username.required' => '请输入用户名',
@@ -229,6 +231,8 @@ class companyUserController extends Controller{
             'phone.required' => '请输入手机号',
             'phone.digits' => '手机号为11位数字',
             'email.required' => '请输入邮箱',
+            'departId.required' => '请选择部门',
+            'postId.required' => '请选择岗位',
         ];
 
         return \Validator::make($data, $rules, $messages);
@@ -244,12 +248,16 @@ class companyUserController extends Controller{
             'realname' => 'required',
             'phone' => 'required|digits:11',
             'email' => 'required',
+            'departId' => 'required',
+            'postId' => 'required',
         ];
         $messages = [
             'realname.required' => '请输入姓名',
             'phone.required' => '请输入手机号',
             'phone.digits' => '手机号为11位数字',
             'email.required' => '请输入邮箱',
+            'departId.required' => '请选择部门',
+            'postId.required' => '请选择岗位',
         ];
 
         return \Validator::make($data, $rules, $messages);

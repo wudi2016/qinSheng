@@ -241,6 +241,11 @@ class teacherCourseController extends Controller
             }
         }
         if(DB::table('commentcourse')->where('id',$request['id'])->update($data)){
+            //修改点评标题时同时修改演奏表的标题
+            $state = DB::table('commentcourse')->where('id',$request['id'])->select('state','orderSn')->first();
+            if($state->state == 2){  //审核通过时修改
+                DB::table('applycourse')->where('orderSn',$state->orderSn)->update(['courseTitle'=>$request['courseTitle']]);
+            }
             $this -> OperationLog('修改了id为'.$request['id'].'的点评视频信息');
             return redirect('admin/message')->with(['status'=>'点评视频修改成功','redirect'=>'commentCourse/teacherCourseList']);
         }else{

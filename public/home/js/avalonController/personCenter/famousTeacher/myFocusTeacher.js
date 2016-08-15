@@ -7,6 +7,7 @@ define([], function () {
         realInfo: false,
         total: '',
         myFocus : false,
+        display:true,
         myFocusList: [],
         getMyFocusInfo: function () {
             $('#page_focus').pagination({
@@ -18,6 +19,9 @@ define([], function () {
                         success: function (response) {
                             myFocusTeacher.total = response.total;
                             if (response.type) {
+                                if(response.total <= 24){
+                                    myFocusTeacher.display = false;
+                                }
                                 var format = [];
                                 format['data'] = response.data;
                                 format['totalNumber'] = response.total;

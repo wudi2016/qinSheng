@@ -37,6 +37,8 @@ define([], function () {
         subjectInfo: [],
         // 点评课程
         commentInfo: [],
+        subjectDisplay: true,
+        commentDisplay: true,
         getSubjectInfo: function (type) {
             $('#page_subject').pagination({
                 dataSource: function (done) {
@@ -46,6 +48,9 @@ define([], function () {
                         dataType: "json",
                         success: function (response) {
                             if (response.status) {
+                                if(response.count < 16){
+                                    list.subjectDisplay = false;
+                                }
                                 var format = [];
                                 format['data'] = response.data;
                                 format['totalNumber'] = response.count;
@@ -86,6 +91,9 @@ define([], function () {
                         dataType: "json",
                         success: function (response) {
                             if (response.status) {
+                                if(response.count < 16){
+                                    list.commentDisplay = false;
+                                }
                                 var format = [];
                                 format['data'] = response.data;
                                 format['totalNumber'] = response.count;
@@ -125,13 +133,24 @@ define([], function () {
         },
         sort: function (type, changeOption) {
             changeOption == 'subject' ? list.getSubjectInfo(type) : list.getCommentInfo(type);
-            if (type == '1') { // 默认排序
-                $('.contain_lesson_center_tip_right span:nth-child(1)').addClass('default').siblings().removeClass('default');
-            } else if (type == '2') { // 最新排序
-                $('.contain_lesson_center_tip_right span:nth-child(3)').addClass('default').siblings().removeClass('default');
-            } else if (type == '3') { // 热门排序
-                $('.contain_lesson_center_tip_right span:nth-child(5)').addClass('default').siblings().removeClass('default');
+            if(changeOption == 'subject'){
+                if (type == '1') { // 默认排序
+                    $('.contain_lesson_center_tip_right span:nth-child(1)').addClass('default').siblings().removeClass('default');
+                } else if (type == '2') { // 最新排序
+                    $('.contain_lesson_center_tip_right span:nth-child(3)').addClass('default').siblings().removeClass('default');
+                } else if (type == '3') { // 热门排序
+                    $('.contain_lesson_center_tip_right span:nth-child(5)').addClass('default').siblings().removeClass('default');
+                }
+            }else{
+                if (type == '1') { // 默认排序
+                    $('.contain_lesson_center_tip_right_comment span:nth-child(1)').addClass('default').siblings().removeClass('default');
+                } else if (type == '2') { // 最新排序
+                    $('.contain_lesson_center_tip_right_comment span:nth-child(3)').addClass('default').siblings().removeClass('default');
+                } else if (type == '3') { // 热门排序
+                    $('.contain_lesson_center_tip_right_comment span:nth-child(5)').addClass('default').siblings().removeClass('default');
+                }
             }
+
         }
     });
     return list;

@@ -7,6 +7,7 @@ define([], function () {
         realInfo: false,
         total: '',
         myFans:false,
+        display:true,
         myFansList: [],
         getMyFansInfo: function () {
             $('#page_friend').pagination({
@@ -18,6 +19,9 @@ define([], function () {
                         success: function (response) {
                             myFansTeacher.total = response.total;
                             if (response.type) {
+                                if(response.total <= 24){
+                                    myFansTeacher.display = false;
+                                }
                                 var format = [];
                                 format['data'] = response.data;
                                 format['totalNumber'] = response.total;

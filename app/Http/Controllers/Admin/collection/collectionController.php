@@ -20,10 +20,10 @@ class collectionController extends Controller{
 
 
         if($request->type == 1){
-            $query = $query->where('c.courseTitle','like','%'.trim($request['search']).'%');
+            $query = $query->where('c.courseTitle','like','%'.trim($request['search']).'%')->where('col.type',0);
         }
         if($request->type == 2){
-            $query = $query->where('com.courseTitle','like','%'.trim($request['search']).'%');
+            $query = $query->where('com.courseTitle','like','%'.trim($request['search']).'%')->where('col.type',1);
         }
         if($request->type == 3){
             $query = $query->where('u.username','like','%'.trim($request['search']).'%');

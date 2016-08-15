@@ -90,30 +90,34 @@ define([], function() {
 		videoTime: {videoOne: 0, videoTow: 0},
 		setVideo: function(callback) {
 			var model = comment.videoType ? 'studentInfo' : 'teacherInfo';
+			var list = [];
+			comment[model].courseHighPath && list.push({
+				label: "超清",
+				file: comment[model].courseHighPath,
+				height: 720,
+				width: 1280,
+				type: "mp4"
+			});
+			comment[model].courseMediumPath && list.push({
+				default: true,
+				label: "高清",
+				file: comment[model].courseMediumPath,
+				height: 360,
+				width: 640,
+				type: "mp4"
+			});
+			comment[model].courseLowPath && list.push({
+				label: "标清",
+				file: comment[model].courseLowPath,
+				height: 180,
+				width: 320,
+				type: "mp4"
+			});
 			comment.thePlayer = jwplayer('mediaplayer').setup({
                 flashplayer: 'jwplayer/jwplayer.flash.swf',
                 playlist: [{
                     image: comment[model].coursePic,
-                    sources: [{
-                        label: "超清",
-                        file: comment[model].courseHighPath || comment[model].courseMediumPath || comment[model].courseLowPath,
-                        height: 720,
-                        width: 1280,
-                		type: "mp4"
-                    },{
-						default: true,
-                        label: "高清",
-                        file: comment[model].courseMediumPath || comment[model].courseLowPath,
-                        height: 360,
-                        width: 640,
-               	 		type: "mp4"
-                    },{
-                        label: "标清",
-                        file: comment[model].courseLowPath,
-                        height: 180,
-                        width: 320,
-                		type: "mp4"
-                    }]
+                    sources: list
                 }],
                 id: 'playerID',
                 width: '800',
@@ -260,7 +264,15 @@ define([], function() {
 					location.href = '/lessonComment/alipay/'+ response.data +'/lessonComment&detail&'+ comment.commentID;
 				};
 			});
-		}
+		},
+		//  blade模板使用的变量
+		commentID: null,
+		mineID: null,
+		mineUsername: null,
+		mineType: null,
+		minePic: null,
+		orderType: null,
+		bought: null
 	});
 
 	return comment;

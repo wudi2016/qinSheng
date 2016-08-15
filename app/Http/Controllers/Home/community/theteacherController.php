@@ -44,7 +44,7 @@ class theteacherController extends Controller
         }
 
 
-
+        //type == 0 查全部
         if($type == '0') {
             $gettheteacher = DB::table('teacher as t')
                 ->join('users as u', 'u.id', '=', 't.parentId')
@@ -66,9 +66,7 @@ class theteacherController extends Controller
         }
 
 
-
         if($gettheteacher){
-
             foreach($gettheteacher as $k => $v){
                 $data['data'][] = [
                     'id' => $v->id,

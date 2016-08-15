@@ -940,7 +940,11 @@
     width:90px;
     height:34px;
     margin-top:0;
+    font-size:16px;
     line-height:33px;
+    border:none;
+    color:#fff;
+    background: rgb(44,174,252);
 }
 
 
@@ -978,7 +982,6 @@
     right: 0;
     top: 0;
     cursor: pointer;
-    display: none;
 }
 
 .img_big {
@@ -1023,10 +1026,9 @@
     font-size: 14px;
     letter-spacing: 1px;
 }
-
-.commentTime_blue {
-    color: #209EEA;
-}
+/*.commentTime_blue {*/
+    /*color: #209EEA;*/
+/*}*/
 
 /*//===============================================视频审核未通过over=============================================*/
 
@@ -1120,7 +1122,7 @@
     color: rgb(156, 156, 156);
 }
 
-.comment_repeat_name span:last-child {
+.comment_repeat_name .repeat_name_last {
     display: inline-block;
     font-size: 14px;
     color: rgb(156, 156, 156);
@@ -1136,6 +1138,12 @@
     background: url("/home/image/personCenter/study.png") no-repeat left;
     text-indent: 2em;
     width: 127px;
+}
+.comment_repeat_period .repeat_name_last{
+    display: inline-block;
+    font-size: 14px;
+    color: rgb(156, 156, 156);
+    width: 120px;
 }
 
 /*.comment_repeat_unchecked span:last-child {*/
@@ -1156,7 +1164,7 @@
     width: 97.5%;
     height: auto;
     color: rgb(255, 0, 0);
-    font-size: 18px;
+    font-size: 16px;
     margin-top: 5px;
     margin-left: 8px;
     /*font-weight: bold;*/
@@ -1309,6 +1317,7 @@
     width: auto;
     height: auto;
     font-size: 14px;
+    letter-spacing:1px;
     color: rgb(153, 153, 153);
     float: left;
 }
@@ -1319,10 +1328,16 @@
     font-size: 16px;
     margin-top: 5px;
     float: right;
+    letter-spacing:1px;
     color: rgb(153, 153, 153);
     cursor: pointer;
 }
-
+.repeat_comment_time .comment_delete:hover{
+    color:rgb(44,174,252);
+    position: relative;
+    top:1px;
+    font-size: 15px;
+}
 
 /*==================================================主体右边全部通知结束========================================*/
 .shadow {

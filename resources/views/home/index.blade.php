@@ -90,7 +90,7 @@
                             <div class="teacher_con_con_li_foot_r" ms-text="el.org"></div>
                         </div>
                         <div style="height:10px;"></div>
-                        <div class="teacher_con_con_li_info_desc" ms-text="el.info">
+                        <div class="teacher_con_con_li_info_desc" ms-text="el.info | truncate(120, '...')">
                         </div>
                     </div>
                     </a>
@@ -149,6 +149,7 @@
                             <span class="right study" ms-text="el.countpeople+'人学过'"></span>
                         </div>
                         <span class="bot" ms-if="el.price" ms-text="'￥'+el.price"></span>
+                        {{--<span class="bot" ms-if="el.price" ms-text="el.price | currency()"></span>--}}
                         <span class="bot" ms-if="!el.price" ms-text="'免费课程'"></span>
                     </div>
                     <img class="logo_hot hide" ms-class="show:el.courseType == 1" ms-if="el.courseType == 1" ms-attr-src="{{asset('/home/image/index/course/[--el.courseDiscount--].png')}}" alt="">
@@ -200,6 +201,7 @@
                             <span class="right study" ms-text="el.countpeople+'人学过'"></span>
                         </div>
                         <span class="bot" ms-if="el.price" ms-text="'￥'+el.price"></span>
+                        {{--<span class="bot" ms-if="el.price" ms-text="el.price | currency()"></span>--}}
                         <span class="bot" ms-if="!el.price" ms-text="'免费课程'"></span>
                     </div>
                     <img class="logo_hot hide" ms-class="show:el.courseType == 1" ms-if="el.courseType == 1" ms-attr-src="{{asset('/home/image/index/course/[--el.courseDiscount--].png')}}" alt="">

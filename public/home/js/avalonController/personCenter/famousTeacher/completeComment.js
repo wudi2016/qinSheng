@@ -7,6 +7,7 @@ define([], function () {
         realInfo: false,
         total: '',
         sureComment:false,
+        display:true,
         type:'',
         completeCommentList: [],
         getCompleteCommentInfo: function (type) {
@@ -20,6 +21,9 @@ define([], function () {
                         success: function (response) {
                             completeCommentController.total = response.total;
                             if (response.type) {
+                                if(response.total <= 6 ){
+                                    completeCommentController.display = false;
+                                }
                                 var format = [];
                                 format['data'] = response.data;
                                 format['totalNumber'] = response.total;

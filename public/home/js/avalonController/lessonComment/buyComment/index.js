@@ -67,7 +67,12 @@ define([], function() {
 					location.href = '/lessonComment/alipay/'+ response.data +'/lessonComment&buySuccess&'+ response.data;
 				};
 			});
-		}
+		},
+		//  blade模板使用的变量
+		teacherID: null,
+		mineName: null,
+		mineID: null,
+		orderID: null
 	});
 
 	return comment;

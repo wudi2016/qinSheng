@@ -41,7 +41,6 @@ class videodetailController extends Controller
      * 热门视频详情数据接口
      */
     public function getvideodetail($id){
-
         $getvideodetail = DB::table('hotvideo')->where('id',$id)->where('status',0)->get();
         if($getvideodetail){
             foreach ($getvideodetail as $k => $v) {
@@ -58,7 +57,6 @@ class videodetailController extends Controller
         }else {
             $data['statuss'] = false;
         }
-//        dd($data);
         echo json_encode($data);
 
     }

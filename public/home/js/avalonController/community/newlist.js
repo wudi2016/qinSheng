@@ -3,9 +3,10 @@
  	var model = avalon.define({
  		$id : 'newlist',
  		lujing: '/community/newdetail/',
-
-         newlist :[],
+        page: false,
+        newlist :[],
          getDatas:function(){
+            model.page = false,
             $('#demo').pagination({
                 dataSource: function(done) {
                      $.ajax({
@@ -18,9 +19,11 @@
                                  format['data'] = response.data;
                                  format['totalNumber'] = response.count;
                                  done(format);
+                                 if(response.count / 10 > 1){
+                                     model.page = true;
+                                 }
                                  //console.log(format['data'])
                                  //console.log(format['totalNumber'])
-                                 //done(response.data);
                              }
                          }
                      });

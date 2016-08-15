@@ -233,7 +233,7 @@
                 <!--===================================//我的订单循环结束===================================-->
                 <div ms-visible="myOrders" class="warning_msg">暂无订单...</div>
             </div>
-            <div class="pagecon_parent">
+            <div ms-if="display" class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_orders"></div>
                 </div>
@@ -268,7 +268,7 @@
                 {{--===============================我的关注循环结束====================================--}}
                 <div ms-visible="myFocus" class="warning_info">暂无关注...</div>
             </div>
-            <div class="pagecon_parent">
+            <div ms-if="display" class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_focus"></div>
                 </div>
@@ -303,7 +303,7 @@
                 {{--===============================我的好友循环结束====================================--}}
                 <div ms-visible="myFans" class="warning_info">暂无好友...</div>
             </div>
-            <div class="pagecon_parent">
+            <div ms-if="display" class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_friend"></div>
                 </div>
@@ -361,7 +361,7 @@
                 <div ms-visible="noticeMsg" class="warning_msg">暂无通知消息...</div>
             </div>
             <div class="clear"></div>
-            <div class="pagecon_parent" style="margin-top:40px;">
+            <div ms-if="display" class="pagecon_parent" style="margin-top:40px;">
                 <div class="pagecon">
                     <div id="page_notice"></div>
                 </div>
@@ -410,7 +410,7 @@
                 {{--//回复循环结束--}}
                 <div ms-visible="answerMsg" class="warning_msg">暂无评论回复...</div>
             </div>
-            <div class="pagecon_parent">
+            <div ms-if="display" class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_comment"></div>
                 </div>
@@ -424,7 +424,7 @@
                 <div class="height50"></div>
                 <div class="center_right_information">点评课程</div>
                 <div class="center_right_count">
-                    <div class="right_count_left">共&nbsp;<span ms-text="total"></span>&nbsp;个视频</div>
+                    <div class="right_count_left">共&nbsp;<span ms-text=" total "></span>&nbsp;个视频</div>
                     <div class="right_count_right">
                         {{--<span ms-click="getCommentCourse('{{$mineUserId}}',1);">最新</span>&nbsp;-&nbsp;<span class="count_right_hot" ms-click="getCommentCourse('{{$mineUserId}}',2);">热门</span>--}}
                     </div>
@@ -466,15 +466,15 @@
                     <div class="comment_repeat_title" ms-text="el.CTitle" ms-if="el.orderType == 2 || (el.orderType == 1 && el.status == 2 && el.CState == '2')"></div>
                     <div class="comment_repeat_title" ms-text="el.ATitle" ms-if="el.orderType == '1' && el.CState != 2"></div>
 
-                    <div class="comment_repeat_name" ms-if="el.orderType == '1' && el.status == 2 && el.CState == '2'"><span ms-text="'讲师：' + el.OTeacherName"></span> <span ms-text="el.CPlayView + '人学过'"></span></div>
-                    <div class="comment_repeat_name" ms-if="el.orderType == '2'"><span ms-text="'讲师：' + el.OTeacherName"></span> <span ms-text="el.CPlayView + '人学过'"></span></div>
-                    <div class="comment_repeat_unchecked"  ms-if="el.orderType == '1' && el.CState != 2"><span ms-text="'点评讲师：' + el.OTeacherName"></span><span ms-text="'发布者：' + el.OUserName"></span></div>
+                    <div class="comment_repeat_name" ms-if="el.orderType == '1' && el.status == 2 && el.CState == '2'"><span ms-text="'讲师：' + el.OTeacherName"></span> <span class="repeat_name_last" ms-text="el.CPlayView + '人学过'"></span></div>
+                    <div class="comment_repeat_name" ms-if="el.orderType == '2'"><span ms-text="'讲师：' + el.OTeacherName"></span> <span class="repeat_name_last" ms-text="el.CPlayView + '人学过'"></span></div>
+                    <div class="comment_repeat_unchecked"  ms-if="el.orderType == '1' && el.CState != 2"><span class="unchecked_comment_first" ms-text="'点评讲师：' + el.OTeacherName"></span><span class="unchecked_comment_last last_diff" ms-text="'发布者：' + el.OUserName"></span></div>
                     <div class="comment_repeat_price" ms-if="el.orderType == '1' && el.status == 2 && el.CState == '2'" ms-text="'￥ ' + el.CPrice"></div>
                     <div class="comment_repeat_price" ms-if="el.orderType == '2'" ms-text="'￥ ' + el.CPrice"></div>
                 </div>
                 <div ms-visible="commentMsg" class="warning_msg">暂无相关课程...</div>
             </div>
-            <div class="pagecon_parent">
+            <div ms-if="display" class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_course_comment"></div>
                 </div>
@@ -509,7 +509,7 @@
                 {{--//专题课程循环结束--}}
                 <div ms-visible="subjectMsg" class="warning_msg">暂无相关课程...</div>
             </div>
-            <div class="pagecon_parent">
+            <div ms-if="display" class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_course"></div>
                 </div>
@@ -525,11 +525,13 @@
                 <div class="center_right_information">收藏课程</div>
                 <div class="center_right_count">
                     <div class="right_count_left">共&nbsp;<span ms-text="total"></span>&nbsp;个视频</div>
-                    <div class="right_count_right" ms-if="collectionInfo.size() > 0">
+                    {{--ms-if="collectionInfo.size() > 0"--}}
+                    <div class="right_count_right">
                         {{--<span ms-click="getCollectionInfo(1);">最新</span>&nbsp;-&nbsp;<span class="count_right_hot" ms-click="getCollectionInfo(2);">热门</span>--}}
-                        <div>
-                            <div class="count_right_store"><div class="right_store_store">删除收藏</div></div>
-                            <div class="count_right_store" style="display: none"><div class="right_store_store">完成</div></div>
+                        <div ms-if="collectionInfo.size() > 0">
+                            <div class="count_right_store"><button class="right_store_store" ms-click="changeStatus(true);">删除收藏</button></div>
+                            <div class="count_right_store" style="display: none"><button class="right_store_store" ms-click="changeStatus(false);
+                            ">完成</button></div>
                         </div>
                     </div>
                 </div>
@@ -541,16 +543,18 @@
                         <a ms-attr-href="el.href">
                             <img ms-attr-src="el.coursePic" alt="" width="280" height="180" class="img_big" ms-imgBig/>
                         </a>
-                        <span><img src="{{asset('home/image/personCenter/delete.png')}}" alt="" ms-click="deleteCollection(el.collectId,el.isCourse,el.id,$index);"></span>
+                        <span><img ms-if="isShow" src="{{asset('home/image/personCenter/delete.png')}}" alt="" ms-click="deleteCollection(el
+                        .collectId,el
+                        .isCourse,el.id,$index);"></span>
                     </div>
                     <div class="comment_repeat_title" ms-text="el.courseTitle"></div>
                     <div class="comment_repeat_period" ms-if="el.isCourse == '0'">
                         <span ms-text="el.classHour + '课时'"></span>
-                        <span ms-html="el.coursePlayView + '人学过'"></span>
+                        <span class="period_course_span" ms-html="el.coursePlayView + '人学过'"></span>
                     </div>
                     <div class="comment_repeat_name" ms-if="el.isCourse == '1'">
                         <span ms-text="'讲师：' + el.teachername"></span>
-                        <span ms-html="el.coursePlayView + '人学过'"></span>
+                        <span class="repeat_name_last" ms-html="el.coursePlayView + '人学过'"></span>
                     </div>
                     <div class="comment_repeat_price" ms-text="'￥ ' + el.coursePrice" ms-if="el.coursePrice"></div>
                     <div class="comment_repeat_price" ms-text="'免费课程'" ms-if="!el.coursePrice"></div>
@@ -558,7 +562,7 @@
                 {{--//收藏课程循环结束--}}
                 <div ms-visible="collectionMsg" class="warning_msg">暂无收藏课程...</div>
             </div>
-            <div class="pagecon_parent">
+            <div ms-if="display" class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_collection"></div>
                 </div>
@@ -1024,14 +1028,18 @@
             if(window.location.hash){
                 sideBar.tab = window.location.hash.split('#')[1];
             }else{
-                console.log(window.location.href);
+//                console.log(window.location.href);
                 sideBar.tab = 'basicInfo';
             }
 
             if (sideBar.tab) {
                 sideBar.tabStatus = sideBar.tab;
 
-                sideBar.changeTab(sideBar.tab);
+                if(sideBar.tabStatus == 'lessonStore' || sideBar.tabStatus == 'lessonSubject'){
+                    sideBar.changeTab(sideBar.tab,'student');
+                }else{
+                    sideBar.changeTab(sideBar.tab);
+                }
 
             }
 

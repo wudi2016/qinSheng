@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Messages;
 use Hash;
 use DB;
@@ -70,7 +71,7 @@ class indexController extends Controller
     {
         $courses = DB::table('hotcourse')
             ->leftJoin('course', 'course.id', '=', 'hotcourse.courseId')
-            ->select('course.id as id', 'course.coursePic as img', 'course.courseTitle as title','course.courseStudyNum as countpeople','course.coursePrice as price','course.courseType as courseType','course.courseDiscount as courseDiscount')
+            ->select('course.id as id', 'course.coursePic as img', 'course.courseTitle as title','course.courseStudyNum as countpeople','course.coursePrice as price','course.courseType as courseType','course.courseDiscount as courseDiscount','course.completecount')
             ->where('course.courseStatus',0)
             ->where('course.courseIsDel',0)
             ->where('hotcourse.sort','<>',0)
@@ -81,6 +82,7 @@ class indexController extends Controller
         if($courses){
             foreach ($courses as &$course){
                 $course -> counttime = DB::table('coursechapter')->where('courseId',$course->id)->where('parentId','<>',0)->where('status',0)->count();
+                $course -> countpeople = $course->countpeople + $course->completecount;
                 if($course->courseDiscount == 0){
                     $course -> price = ceil($course->price/100);
                 }else{
@@ -263,15 +265,44 @@ class indexController extends Controller
     /**
      * 获取手机验证码接口
      *
-     * @return json
+     * @return String
      */
     public function getMessage(Messages $message, $telephone)
     {
+//        $value = $request->cookie('code');
+//        if ($value) {
+//            dd($value);
+//        }
+//        $response = new Response('Hello Wudi');
+//        $response->withCookie('code', 'test', 1);
+//        return $response;
+
+
         $code    = $message::createCode();
         $content = '您好，欢迎注册琴晟艺术教育平台：您的手机验证码'.$code.'【琴晟教育】';
         $message::setInfo($telephone,$content);
         $result = $message::sendMsg();
-        return $message::response($result,$code);
+        //return $message::response($result,$code);
+        if($result > 1){
+            $response = new Response('Hello Wudi');
+            $response->withCookie('code', $code, 1.5);
+            return $response;
+        }
+    }
+
+    /**
+     * 手机验证码验证接口
+     *
+     * @return json
+     */
+    public function checkCode(Request $request,$code)
+    {
+        $value = $request->cookie('code');
+        if ($value == $code) {
+            echo 1;
+        }else{
+            echo 0;
+        }
     }
 
     /**
@@ -547,6 +578,7 @@ class indexController extends Controller
      */
     public function getCourseaa($search,$pageNumber,$pageSize,$order = 0)
     {
+        $search = trim($search);
         $skip = ($pageNumber-1) * $pageSize;
         $count = DB::table('course')
             ->select('id')
@@ -608,6 +640,7 @@ class indexController extends Controller
      */
     public function getCoursebb($search,$pageNumber,$pageSize,$order = 0)
     {
+        $search = trim($search);
         $skip = ($pageNumber-1) * $pageSize;
         $count = DB::table('commentcourse')
             ->select('id')

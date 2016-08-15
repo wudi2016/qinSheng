@@ -9,6 +9,7 @@ define([], function () {
         total: '',
         courseInfo: [],
         subjectMsg : false,
+        display: true,
         getCourseInfo: function (type,flag) {
             $('#page_course').pagination({
                 dataSource: function (done) {
@@ -19,6 +20,9 @@ define([], function () {
                         success: function (response) {
                             courseTeacher.total = response.total;
                             if (response.status) {
+                                if(response.total <= 6){
+                                    courseTeacher.display = false;
+                                }
                                 var format = [];
                                 format['data'] = response.data;
                                 format['totalNumber'] = response.total;

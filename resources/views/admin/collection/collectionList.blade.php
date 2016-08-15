@@ -28,7 +28,7 @@
 
                     <select name="type" id="form-field-1" class="searchtype">
                         <option value="">--请选择--</option>
-                        <option value="1" @if($collection->type == 1) selected @endif>专家课程名称</option>
+                        <option value="1" @if($collection->type == 1) selected @endif>专题课程名称</option>
                         <option value="2" @if($collection->type == 2) selected @endif>点评课程名称</option>
                         <option value="3" @if($collection->type == 3) selected @endif>收藏用户</option>
                         <option value="">全部</option>
@@ -114,7 +114,7 @@
                                             <td>{{$coll->id}}</td>
                                             <td>
                                                 @if($coll->type == 0)
-                                                    专家课程
+                                                    专题课程
                                                 @elseif($coll->type == 1)
                                                     点评课程
                                                 @endif

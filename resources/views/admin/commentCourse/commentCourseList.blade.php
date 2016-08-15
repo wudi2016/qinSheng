@@ -290,7 +290,7 @@
                         <div class="errortitle">审核未通过</div>
                         <div class="errormsg">
                             <lable>原因:</lable>
-                            <textarea name="content" maxlength="100"  placeholder="请输入审核未通过的原因(不超过50个汉字)..." id="errortext" cols="30" rows="10" required></textarea>
+                            <textarea name="content" maxlength="20"  placeholder="请输入审核未通过的原因(不超过20个汉字)..." id="errortext" cols="30" rows="10" required></textarea>
                         </div>
 
                     </div>

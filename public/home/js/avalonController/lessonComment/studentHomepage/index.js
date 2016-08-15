@@ -75,7 +75,7 @@ define([], function () {
 			if (user.jump != user.page[model] && user.jump <= user[model+'Count'] && user.jump != null && typeof user.jump === 'number' && user.jump != 0) {
 				user.page[model] = user.jump;
 				user.getData(user.videoUrl, model+'Lesson', {userid: user.userID, order: user.order[model], type: user.tabStatus, page: user.page[model]}, 'POST');
-			};
+			}
 			user.jump = null;
 		},
 		skip: function(model, direction) {
@@ -113,7 +113,13 @@ define([], function () {
 			unfollow && user.getData('/lessonComment/getFirst', 'isFollow', {table: 'friends', action: 3, data: {fromUserId: user.mineID, toUserId: user.userID}}, 'POST', function(response) {
 				response.type && user.fansNum--;
 			});
-		}
+		},
+		//  blade模板使用的变量
+		userID: null,
+		mineID: null,
+		mineName: null,
+		videoUrl: null,
+		checks: null
 	});
 
 	return user;

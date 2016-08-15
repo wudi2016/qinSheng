@@ -102,7 +102,7 @@
 						<div class="title" ms-html="el.courseTitle"></div>
 						<div class="detail">
 							<div class="time"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--el.extra--] 课时</div>
-							<div class="learned"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--parseInt(el.coursePlayView) + parseInt(el.courseStudyNum)--] 人学过</div>
+							<div class="learned"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--parseInt(el.completecount) + parseInt(el.courseStudyNum)--] 人学过</div>
 						</div>
 						<div class="price" ms-if="el.coursePrice > 0" ms-html="'￥ ' + el.coursePrice / 100"></div>
 						<div class="price" ms-if="el.coursePrice <= 0" ms-html="'免费课程'"></div>

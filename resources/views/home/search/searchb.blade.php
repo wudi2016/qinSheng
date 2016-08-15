@@ -133,7 +133,7 @@
 
                 <div class="clear"></div>
                 <div class="page">
-                    <div style="display: inline-block"><div id="demob"></div></div>
+                    <div style="display: inline-block"><div id="demob" class="hide"></div></div>
                 </div>
 
                 {{--无结果--}}

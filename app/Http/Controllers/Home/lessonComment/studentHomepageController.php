@@ -106,11 +106,17 @@ class studentHomepageController extends Controller
         $tableName = $request['type'] ? 'commentcourse' : 'course';
         $order = $request['order'] ? 'coursePlayView' : 'created_at';
 
-        $condition = ['orders.orderType', $tableName.'.id', $tableName.'.coursePrice', $tableName.'.courseTitle', $tableName.'.coursePic', $tableName.'.coursePlayView', $tableName.'.courseStudyNum'];
+        $condition = ['orders.orderType', $tableName.'.id', $tableName.'.coursePrice', $tableName.'.courseTitle', $tableName.'.coursePic', $tableName.'.courseStudyNum'];
         $where = ['orders.userId' => $request['userid'], $tableName.'.courseIsDel' => 0, $tableName.'.courseStatus' => 0, 'orders.status' => 2];
 
-        $request['type'] && array_push($condition, $tableName.'.teachername as extra');
-        $request['type'] ? $where['commentcourse.state'] = 2 : $where['orders.orderType'] = $request['type'];
+		if ($request['type']) {
+			array_push($condition, $tableName.'.teachername as extra');
+			array_push($condition, $tableName.'.coursePlayView');
+			$where['commentcourse.state'] = 2;
+		} else {
+			array_push($condition, $tableName.'.completecount');
+			$where['orders.orderType'] = $request['type'];
+		}
 
         $result = DB::table('orders') -> join($tableName, 'orders.courseId', '=', $tableName.'.id') -> select($condition) -> where($where) 
                 -> orderBy("{$tableName}.{$order}", "desc") -> skip($this -> getSkip($request['page'], $this -> number)) -> take($this -> number)-> get();

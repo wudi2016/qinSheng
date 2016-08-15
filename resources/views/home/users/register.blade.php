@@ -130,8 +130,8 @@
 <script type="text/javascript" src="{{asset('home/js/users/register.js') }}"></script>
 <script>
     jwplayer('myplayer').setup({
-        flashplayer: 'jwplayer/jwplayer.flash.swf',
-        file: '/uploads/video/introduce/default.mp4',
+//        flashplayer: '/home/jplayer/jwplayer.flash.swf',
+        file: '/uploads/uploads/video/introduce/default.mp4',
         image:'/home/image/index/vdo.png',
         width: '700',
         height: '400'});

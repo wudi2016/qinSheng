@@ -102,6 +102,35 @@
     font-size: 18px;
 }
 
+
+.contain_lesson_center_tip_right_comment {
+    float: right;
+    width: 160px;
+    text-align: center;
+    height: 60px;
+    line-height: 60px;
+    font-size: 16px;
+    font-family: 微软雅黑;
+}
+
+.contain_lesson_center_tip_right_comment span i {
+    display: block;
+    float: left;
+}
+
+.contain_lesson_center_tip_right_comment span:hover {
+    color: #209eea;
+}
+
+.contain_lesson_center_tip_right_comment span {
+    width: 40px;
+    cursor: pointer;
+}
+
+.contain_lesson_center_tip_right_comment i {
+    font-size: 18px;
+}
+
 .default {
     color: #209eea;
 }

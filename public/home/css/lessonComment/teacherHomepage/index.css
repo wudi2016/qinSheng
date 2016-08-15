@@ -289,7 +289,7 @@
 	font-size: 16px;
 	color: rgb(102, 102, 102);
 	line-height: 30px;
-	letter-spacing: 2px;
+	/*letter-spacing: 1px;*/
 	padding-top: 5px;
 	margin-bottom: 70px;
 }
@@ -344,12 +344,16 @@
 }
 
 .teacherHomepage_detail_video_block .title {
-	width: 100%;
+	width: 95%;
 	height: 40px;
 	line-height: 50px;
 	font-size: 16px;
 	color: black;
-	padding: 0px 10px;
+	/*padding: 0px 10px;*/
+	margin: 0 auto;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .teacherHomepage_detail_video_block .detail {

@@ -204,14 +204,14 @@
                                                     {{--<i class="icon-ok bigger-120"></i>--}}
                                                 {{--</button>--}}
 
-                                                @permission('edit.recycle')
+                                                @permission('edit.order')
                                                 <span class="btn btn-xs btn-primary" style="position: relative;display: inline-block;">
                                                     <strong>订单状态</strong>
                                                     <span class="icon-caret-down icon-on-right"></span>
                                                     <select id="selectCheck" class="col-xs-10 col-sm-2" onchange="selectCheck({{$order->id}},this.value,'{{$order->orderSn}}');" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">
                                                         <option value="44" selected></option>
-                                                        <option value="0" >已付款</option>
                                                         @if($order->orderType != 0 && $order->orderType != 2)
+                                                            <option value="0" >已付款</option>
                                                             <option value="1" >待点评</option>
                                                         @endif
                                                         <option value="2" >已完成</option>
@@ -342,7 +342,7 @@
 
         <!--弹窗显示详情-->
         <div id="detailpupUpback" class="detailpupUpback" ms-visible="popup">
-            <div class="popup1">
+            <div class="popup1" style="margin-top: -150px;margin-left: -350px;">
                 <div class="detailtopbaner">
                     <div class="detailtitle">备注</div>
                     <div class="deldetail" ms-click="deldetail"></div>

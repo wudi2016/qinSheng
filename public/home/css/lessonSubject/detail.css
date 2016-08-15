@@ -271,13 +271,13 @@
 .contain_lessonDetail_bot_left_info .data_content{
     color: rgb(102,102,102);
     display: block;
-    min-width: 120px;
     height: 18px;
     line-height: 18px;
     margin-left:20px;
     margin-top: 13px;
     cursor: pointer;
     float: left;
+    margin-right: 30px;
 }
 .contain_lessonDetail_bot_left_info .try{
     display: block;
@@ -291,6 +291,13 @@
     color: white;
     text-align: center;
 }
+.contain_lessonDetail_bot_left_info .center{
+    display: block;
+    width: 30px;
+    height: 25px;
+    float: left;
+    margin-top: 9px;
+}
 .contain_lessonDetail_bot_left_info .have{
     display: block;
     width: 50px;
@@ -302,7 +309,6 @@
     font-size:16px;
     color: white;
     text-align: center;
-    margin-left: 30px;
 }
 .contain_lessonDetail_bot_left_info .play{
     display: block;

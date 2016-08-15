@@ -8,6 +8,7 @@ define([], function () {
         total : '',
         isDelete: 0,
         myOrders: false,
+        display : true,
         myOrdersList: [],
         getMyOrdersInfo: function () {
             $('#page_orders').pagination({
@@ -19,12 +20,16 @@ define([], function () {
                         dataType: 'json',
                         success: function (response) {
                             if (response.type) {
+                                if(response.total <= 10){
+                                    //console.log(response.total);
+                                    myOrdersStudent.display = false;
+                                }
                                 var format = [];
                                 format['data'] = response.data;
                                 format['totalNumber'] = response.total;
                                 done(format);
                             }else{
-                                myOrdersStudent.myOrders = true;
+                                myOrdersStudent.myOrders = false;
                                 myOrdersStudent.myOrdersList = [];
                             }
                         },

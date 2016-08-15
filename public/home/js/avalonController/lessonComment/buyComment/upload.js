@@ -172,7 +172,9 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 					}
 				}
 				if (isReload) {
-					for (var i in upload.temp) upload.temp[i] == upload.uploadInfo[i] && delete upload.uploadInfo[i];
+					for (var i in upload.temp) {
+						upload.temp[i] == upload.uploadInfo[i] && delete upload.uploadInfo[i];
+					}
 					upload.uploadInfo.state = 1;
 					upload.getData('/lessonComment/getFirst', 'isReload', {data: upload.uploadInfo, table: 'applycourse', condition: {id: upload.applyID}, action: 4}, 'POST', function(callback) {
 						if (upload.messageID) {
@@ -227,7 +229,16 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 					upload.selectedLevel.push(avalon(this).attr('value'));
 				}
 			}
-		}
+		},
+		//  blade模板使用的变量
+		mineID: null,
+		mineType: null,
+		applyID: null,
+		temp: null,
+		messageID: null,
+		orderID: null,
+		selectedLevel: null,
+		commentID: null
 	});
 
 	return upload;

@@ -30,6 +30,7 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
         checkNewPhone:false,
         checkNewCode:false,
         sendAgainb:true,
+        //display:true,
         //弹出层
         popUp: false,
         noticeId : null,
@@ -295,16 +296,16 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
                     url: "/index/getMessage/"+sideBar.phone,
                     // async:false,
                     success: function(data){
-                        if(data.type== true){
-                            code = data.info;
-                        }else{
-                            alert('验证码获取失败');
-                        }
+                        // if(data.type== true){
+                            // code = data.info;
+                        // }else{
+                            // alert('验证码获取失败');
+                        // }
                     }
                 });
                 // console.log('点击');
                 //计数60s
-                var countdown = 60;
+                var countdown = 90;
                 sideBar.sendAgain = false;//重新发送按钮 不能点击
                 var myTime = setInterval(function() {
                     countdown--;
@@ -324,16 +325,16 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
                     url: "/index/getMessage/"+sideBar.newphone,
                     // async:false,
                     success: function(data){
-                        if(data.type== true){
-                            codeb = data.info;
-                        }else{
-                            alert('验证码获取失败');
-                        }
+                        // if(data.type== true){
+                            // codeb = data.info;
+                        // }else{
+                            // alert('验证码获取失败');
+                        // }
                     }
                 });
                 // console.log('点击');
                 //计数60s
-                var countdown = 60;
+                var countdown = 90;
                 sideBar.sendAgainb = false;//重新发送按钮 不能点击
                 var myTime = setInterval(function() {
                     countdown--;
@@ -386,32 +387,67 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
     })
 
     sideBar.$watch("code", function(a, b) {//a
-        if(a != code){
-            sideBar.checkCode = false;
-            $('.Msgbb').html('* 验证码错误');
-        }else{
-            sideBar.checkCode = true;
-            $('.Msgbb').html(' ');
+        if(a.length == 6){
+            console.log('hello');
+            $.ajax({
+                type: "get",
+                url: "/index/checkCode/"+a,
+                // async:false,
+                success: function(data){
+                    if(data == 1){
+                        sideBar.checkCode = true;
+                        $('.Msgbb').html(' ');
+                    }else{
+                        sideBar.checkCode = false;
+                        $('.Msgbb').html('* 验证码错误');
+                    }
+                }
+            });
         }
+        // if(a != code){
+        //     sideBar.checkCode = false;
+        //     $('.Msgbb').html('* 验证码错误');
+        // }else{
+        //     sideBar.checkCode = true;
+        //     $('.Msgbb').html(' ');
+        // }
     })
 
     sideBar.$watch("newphone", function(a, b) {//a
-        if(!a.match(/^1(3|5|8|7){1}[0-9]{9}$/)){
-            sideBar.checkNewPhone = false;
-            $('.Msgcc').html('* 手机号格式错误');
-        }else{
-            sideBar.checkHaveb(a);
+        if (a.length == 11) {
+            if (!a.match(/^1(3|5|8|7){1}[0-9]{9}$/)) {
+                sideBar.checkNewPhone = false;
+                $('.Msgcc').html('* 手机号格式错误');
+            } else {
+                sideBar.checkHaveb(a);
+            }
         }
     })
 
     sideBar.$watch("newcode", function(a, b) {//a
-        if(a != codeb){
-            sideBar.checkNewCode = false;
-            $('.Msgdd').html('* 验证码错误');
-        }else{
-            sideBar.checkNewCode = true;
-            $('.Msgdd').html(' ');
+        if(a.length == 6){
+            $.ajax({
+                type: "get",
+                url: "/index/checkCode/"+a,
+                // async:false,
+                success: function(data){
+                    if(data == 1){
+                        sideBar.checkNewCode = true;
+                        $('.Msgdd').html(' ');
+                    }else{
+                        sideBar.checkNewCode = false;
+                        $('.Msgdd').html('* 验证码错误');
+                    }
+                }
+            });
         }
+        // if(a != codeb){
+        //     sideBar.checkNewCode = false;
+        //     $('.Msgdd').html('* 验证码错误');
+        // }else{
+        //     sideBar.checkNewCode = true;
+        //     $('.Msgdd').html(' ');
+        // }
     })
 
     return sideBar;

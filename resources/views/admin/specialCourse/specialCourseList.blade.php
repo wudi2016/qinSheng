@@ -207,7 +207,7 @@
                                                     @endpermission
 
                                                     @permission('del.course')
-                                                        @if($special->courseStatus == 0)
+                                                        @if($special->courseStatus == 1)
                                                             <a href="{{url('/admin/specialCourse/delSpecialCourse/'.$special->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
                                                                 <i class="icon-trash bigger-120"></i>
                                                             </a>

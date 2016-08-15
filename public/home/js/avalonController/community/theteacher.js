@@ -19,11 +19,13 @@ define([], function () {
         teacherhomepage: '/lessonComment/teacher/',
         Yes: false,
         No: false,
+        page: false,
         //名师
         theteacherlist: [],
         gettheteacher: function (type) {
             model.Yes = false;
             model.No = false;
+            model.page = false,
             $('#page').pagination({
                 dataSource: function (done) {
                     $.ajax({
@@ -37,10 +39,11 @@ define([], function () {
                                 //format['data'] = [[{1:1},{1:1},{1:1}],[{1:2}],[{1:2}],[{1:3},{1:3},{1:3}]];
                                 format['data'] = response.data;
                                 format['totalNumber'] = response.count;
-                                //console.log(response.data);
                                 done(format);
-                                //done(response.data);
                                 model.Yes = true;
+                                if(response.count / 8 > 1){
+                                    model.page = true;
+                                }
                             } else {
                                 model.No = true;
                             }

@@ -73,9 +73,9 @@
                 <span class="span_hover"></span>
                 <div class="account_common" name="basicInfo" ms-click="changeTab('basicInfo')">基本信息</div>
                 <span class="span_hover"></span>
-                <div class="account_common" ms-click="changeTab('changePass')">密码修改</div>
+                <div class="account_common" name="changePass" ms-click="changeTab('changePass')">密码修改</div>
                 <span class="span_hover"></span>
-                <div class="account_common" ms-click="changeTab('changePhone')"><span>修改手机号</span></div>
+                <div class="account_common" name="changePhone" ms-click="changeTab('changePhone')"><span>修改手机号</span></div>
 
             </div>
             <div class="height10" style="background: #F5F5F5"></div>
@@ -161,7 +161,7 @@
 
             </div>
             <!--分页-->
-            <div class="pagecon_parent">
+            <div ms-if="display" class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_waitComment"></div>
                 </div>
@@ -190,28 +190,29 @@
                             <div class="repeat_img_unchecked">
                                 <div class="comment_video_unchecked" ms-html="'点评完成'"></div>
                                 <div class="comment_video_time" ms-html=" '发布时间：' + el.time"></div>
-                                <div class="comment_video_commentTime" ms-class="commentTime_blue : ($index+1)%2 == 1"  ms-html=" '点评时间：' + el.commentTime"></div>
+                                {{--ms-class="commentTime_blue : ($index+1)%2 == 1"--}}
+                                <div class="comment_video_commentTime" ms-html=" '点评时间：' + el.commentTime"></div>
                             </div>
                         </a>
                     </div>
                     <div class="comment_repeat_title" ms-html="el.commentTitle"></div>
-                    <div class="comment_repeat_unchecked unchecked_diff">
+                    <div class="comment_repeat_unchecked">
                         {{--<span ms-text="'点评讲师'+' : '+ el.teachername"></span>--}}
                         {{--<span class="unchecked_span" ms-text="'发布者 '+' : '+ el.username"></span>--}}
-                        <span class="unchecked_comment_first" ms-attr-title=" el.teacherName " ms-text="'点评讲师'+' : '+ el.teacherName"></span>
+                        <span class="unchecked_comment_first" ms-attr-title=" el.teachername " ms-text="'点评讲师'+' : '+ el.teachername"></span>
                         <span class="unchecked_comment_last last_diff" ms-attr-title=" el.username "  ms-text="'发布者'+' : '+ el.username"></span>
                     </div>
                     <div class="clear"></div>
-                    <div class="comment_repeat_leader">
-                        <span ms-html="el.view + ' 人'"></span>
-                        <span class="repeat_leader_lastSpan" ms-html="el.fav + ' 人'"></span>
-                    </div>
+                    {{--<div class="comment_repeat_leader">--}}
+                        {{--<span ms-html="el.view + ' 人'"></span>--}}
+                        {{--<span class="repeat_leader_lastSpan" ms-html="el.fav + ' 人'"></span>--}}
+                    {{--</div>--}}
                 </div>
                 {{--//点评课程循环结束--}}
                 <div ms-visible="sureComment" class="warning_msg">暂无已评课程...</div>
             </div>
             <!--分页-->
-            <div class="pagecon_parent">
+            <div ms-if="display" class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_sureComment"></div>
                 </div>
@@ -251,7 +252,7 @@
                 {{--//专题课程循环结束--}}
             </div>
             <div ms-visible="subjectMsg" class="warning_msg">暂无相关课程...</div>
-            <div class="pagecon_parent">
+            <div ms-if="display" class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_course"></div>
                 </div>
@@ -325,7 +326,7 @@
                 </div>
             </div>
             <div class="clear"></div>
-            <div class="pagecon_parent" style="margin-top:40px;">
+            <div ms-if="display" class="pagecon_parent" style="margin-top:40px;">
                 <div class="pagecon">
                     <div id="page_notice"></div>
                 </div>
@@ -340,11 +341,12 @@
                 <div class="center_right_information">收藏课程</div>
                 <div class="center_right_count">
                     <div class="right_count_left">共<span ms-html="'&nbsp;' + total + '&nbsp;'"></span>个视频</div>
-                    <div class="right_count_right" ms-if="collectionInfo.size() > 0">
+                    <div class="right_count_right">
                         {{--<span ms-click="getCollectionInfo(1);">最新</span>&nbsp;-&nbsp;<span class="count_right_hot" ms-click="getCollectionInfo(2);">热门</span>--}}
-                        <div>
-                            <div class="count_right_store"><div class="right_store_store">删除收藏</div></div>
-                            <div class="count_right_store" style="display: none"><div class="right_store_store">完成</div></div>
+                        <div ms-if="collectionInfo.size() > 0">
+                            <div class="count_right_store"><button class="right_store_store" ms-click="changeStatus(true);">删除收藏</button></div>
+                            <div class="count_right_store" style="display: none"><button class="right_store_store" ms-click="changeStatus(false);
+                            ">完成</button></div>
                         </div>
                     </div>
                 </div>
@@ -357,18 +359,19 @@
                         <a ms-attr-href="el.href">
                             <img ms-attr-src="el.coursePic" alt="" width="280" height="180" class="img_big" ms-imgBig>
                         </a>
-                        <span ms-click="deleteCollection(el.collectId,el.isCourse,el.id,$index)"><img ms-attr-src="pageInfo.deletePic" alt=""/></span>
+                        <span ms-if="isShow" ms-click="deleteCollection(el.collectId,el.isCourse,el.id,$index)"><img ms-attr-src="pageInfo.deletePic"
+                                                                                                       alt=""/></span>
                     </div>
                     <a ms-attr-href="el.href">
                         <div class="comment_repeat_title" ms-text="el.courseTitle"></div>
                     </a>
                     <div class="comment_repeat_period" ms-if="el.isCourse == '0'">
                         <span ms-text="el.classHour + '课时'"></span>
-                        <span ms-html="el.coursePlayView + '学过'"></span>
+                        <span class="period_course_span" ms-html="el.coursePlayView + '学过'"></span>
                     </div>
                     <div class="comment_repeat_name" ms-if="el.isCourse == '1'">
                         <span ms-text="'讲师：' + el.teachername"></span>
-                        <span ms-html="el.coursePlayView + '学过'"></span>
+                        <span class="repeat_name_last" ms-html="el.coursePlayView + '学过'"></span>
                     </div>
                     <div class="comment_repeat_price" ms-text="'￥ ' + el.coursePrice" ms-if="el.coursePrice"></div>
                     <div class="comment_repeat_price" ms-text="'免费课程'" ms-if="!el.coursePrice"></div>
@@ -376,7 +379,7 @@
                 {{--//收藏课程循环结束--}}
                 <div ms-visible="collectionMsg" class="warning_msg">暂无收藏课程...</div>
             </div>
-            <div class="pagecon_parent">
+            <div ms-if="display" class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_collection"></div>
                 </div>
@@ -411,7 +414,7 @@
                 {{--===============================我的粉丝循环结束====================================--}}
                 <div ms-visible="myFans" class="warning_info">暂无粉丝...</div>
             </div>
-            <div class="pagecon_parent">
+            <div ms-if="display" class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_friend"></div>
                 </div>
@@ -447,7 +450,7 @@
                 {{--===============================我的关注循环结束====================================--}}
                 <div ms-visible="myFocus" class="warning_info">暂无关注...</div>
             </div>
-            <div class="pagecon_parent">
+            <div ms-if="display" class="pagecon_parent">
                 <div class="pagecon">
                     <div id="page_focus"></div>
                 </div>
@@ -777,8 +780,11 @@
             if (sideBar.tab) {
                 sideBar.tabStatus = sideBar.tab;
 
-                sideBar.changeTab(sideBar.tab);
-
+                if(sideBar.tabStatus == 'lessonStore' || sideBar.tabStatus == 'lessonSubject'){
+                    sideBar.changeTab(sideBar.tab,'teacher');
+                }else{
+                    sideBar.changeTab(sideBar.tab);
+                }
             }
             avalon.directive('popup', {
                 update: function (value) {

@@ -134,7 +134,7 @@ var getMsg = function(){
         });
 
         //计数60s
-        var countdown = 60;
+        var countdown = 90;
         $(".getyzm").attr({ disabled: "disabled"});//重新发送按钮 不能点击
         var myTime = setInterval(function() {
             countdown--;
@@ -151,11 +151,28 @@ var getMsg = function(){
 //验证码验证
 $('.txtt').blur(function(){
     var ucode = $('.txtt').val();
+    var self = $(this);
     if(!ucode) {//为空
         $(this).parent().parent().next().html('* 请输入验证码');
         $(this).parent().siblings('.cuo').removeClass('hide');
         checkUcode  = false;
     }else{
+        $.ajax({
+            type: "get",
+            url: "/index/checkCode/"+ucode,
+            // async:false,
+            success: function(data){
+                if(data == 1){
+                    self.parent().siblings('.dui').removeClass('hide');
+                    checkUcode  = true;
+                }else{
+                    self.parent().siblings('.cuo').removeClass('hide');
+                    self.parent().parent().next().html('* 验证码错误');
+                    checkUcode  = false;
+                }
+            }
+        });
+        /*
         if (ucode == code) {//验证码正确
             $(this).parent().siblings('.dui').removeClass('hide');
             checkUcode  = true;
@@ -164,6 +181,7 @@ $('.txtt').blur(function(){
             $(this).parent().parent().next().html('* 验证码错误');
             checkUcode  = false;
         }
+        */
     }
 })
 

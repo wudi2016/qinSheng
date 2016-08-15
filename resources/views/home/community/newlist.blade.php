@@ -9,14 +9,14 @@
 
 @section('content')
 
-	<div class="background">
+	<div class="background"  ms-controller="newlist">
 
 
 
 		<div style="height:15px"></div>
 
 		<!-- 主体 -->
-		<div class="main" ms-controller="newlist">
+		<div class="main" >
 			<!-- 面包屑导航 -->
 			<div class="crumbs">
 				<a href="{{asset('/community')}}">社区</a><span>></span><a href="#">新闻资讯</a>
@@ -49,7 +49,7 @@
 		<div style="height:175px">
 			<div style="height:50px;"></div>
 			<div class="pagecon">
-				<div style="display: inline-block"><div id="demo"></div></div>
+				<div style="display: inline-block"><div id="demo" ms-if="page" ></div></div>
 			</div>
 			<div style="height:100px;">
 			</div>

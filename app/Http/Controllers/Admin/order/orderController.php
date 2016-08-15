@@ -403,7 +403,6 @@ class orderController extends Controller
         $alipay->setRefundDate(date('Y-m-d H:i:s'));//退款请求时间
         $alipay->setBatchNo(date('Ymd').time());  //退款批次号
         $alipay->setBatchNum(1);//总笔数
-        $alipay->setBatchNum(1);//总笔数
         $aa = $order->tradeSn.'^'.($order->refundAmount / 100).'^'.'正常退款'; //交易号^退款金额^退款理由
         $alipay->setDetailData($aa);//单笔数据集
 //        $alipay->setReturnUrl('http://qinsheng.zuren8.com/admin/order/alipaySyncCallback');//同步回调

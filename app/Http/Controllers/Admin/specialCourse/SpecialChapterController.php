@@ -58,6 +58,8 @@ class SpecialChapterController extends Controller
                     }else{
                         $val->courseLowPathurl = Cache::get($val->courseLowPath);
                     }
+                }else{
+                    $val->courseLowPathurl = null;
                 }
 
             }

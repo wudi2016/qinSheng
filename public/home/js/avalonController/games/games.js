@@ -5,6 +5,7 @@ define([], function () {
         datas: [],
         Msg: false,
         Con: false,
+        page:false,
         getdata:function(para){
             games.Msg = false;
             games.Con = false;
@@ -21,6 +22,9 @@ define([], function () {
                                 done(format);
                                 // done(response.data);
                                 games.Con = true;
+                                if(response.count / 7 > 1){
+                                    games.page = true;
+                                }
                             }else{
                                 games.Msg = true;
                             }

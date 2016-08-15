@@ -25,6 +25,7 @@ $('.selOrd').click(function(){
 
 var geta = false;
 var getb = false;
+var pagea,pageb;
 
 function getdata(para,ord){
     $('#demo').pagination({
@@ -40,7 +41,7 @@ function getdata(para,ord){
                         format['totalNumber'] = response.count;
                         done(format);
                         // done(response.data);
-
+                        pagea = response.count/8;
                         $('.con_con_top_a').removeClass('hide');
                     }else{
                         $('.con_con_top_a').addClass('hide');
@@ -95,7 +96,7 @@ function getdatab(para,ord){
                         format['totalNumber'] = response.count;
                         done(format);
                         // done(response.data);
-
+                        pageb = response.count/8;
                         $('.con_con_top_b').removeClass('hide');
                     }else{
                         $('.con_con_top_b').addClass('hide');
@@ -139,10 +140,14 @@ function getdatab(para,ord){
 var morecourse = function(para){
     if(para == 1){
         $('.bb').addClass('hide');
-        $('.pageaa').removeClass('hide');
+        if(pagea > 1) {
+            $('.pageaa').removeClass('hide');
+        }
     }else{
         $('.aa').addClass('hide');
-        $('.pagebb').removeClass('hide');
+        if(pageb > 1) {
+            $('.pagebb').removeClass('hide');
+        }
     }
 
 }

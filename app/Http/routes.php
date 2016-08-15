@@ -77,6 +77,8 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         Route::post('/getCheckUphone', 'indexController@getCheckUphone');
         //获取手机验证码接口
         Route::get('/getMessage/{phone}', 'indexController@getMessage');
+        //手机验证码验证接口
+        Route::get('/checkCode/{code}', 'indexController@checkCode');
         //邀请码验证接口
         Route::get('/getInviteCode/{code}', 'indexController@getInviteCode');
         //获取省接口

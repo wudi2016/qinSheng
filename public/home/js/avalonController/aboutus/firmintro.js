@@ -137,7 +137,7 @@ define([], function (){
 				 $.ajax({
 					 url : '/aboutUs/getListone/' ,
 					 type : 'get',
-					 dataType : 'json',
+					 //dataType : 'json',
 					 success: function(response){
 						 if(response){
 							 model.aboutus1 = response.data;

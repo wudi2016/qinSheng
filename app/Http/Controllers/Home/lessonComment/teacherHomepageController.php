@@ -59,15 +59,17 @@ class teacherHomepageController extends Controller
         $tableName = $request['type'] ? 'commentcourse' : 'course';
         $order = $request['order'] ? $tableName.'.coursePlayView' : $tableName.'.id';
 
-        $condition = [$tableName.'.id', $tableName.'.coursePrice', $tableName.'.courseTitle', $tableName.'.coursePic', $tableName.'.coursePlayView', $tableName.'.courseStudyNum'];
+        $condition = [$tableName.'.id', $tableName.'.coursePrice', $tableName.'.courseTitle', $tableName.'.coursePic', $tableName.'.courseStudyNum'];
         $where = [$tableName.'.courseIsDel' => 0, $tableName.'.courseStatus' => 0];
 
 		if ($request['type']) {
 			array_push($condition, $tableName.'.teachername as extra');
+			array_push($condition, $tableName.'.coursePlayView');
 			$where = array_merge($where, ['orders.teacherId' => $request['userid'], 'orders.status' => 2, 'orders.orderType' => 1, 'commentcourse.state' => 2]);
 			$result = DB::table('orders') -> join($tableName, 'orders.courseId', '=', $tableName.'.id') -> select($condition) -> where($where)
 					-> orderBy($order, "desc") -> skip($this -> getSkip($request['page'], $this->number)) -> take($this -> number) -> get();
 		} else {
+			array_push($condition, $tableName.'.completecount');
 			$where[$tableName.'.teacherId'] = $request['userid'];
 			$result = DB::table($tableName) -> select($condition) -> where($where) -> orderBy($order, "desc") -> skip($this -> getSkip($request['page'], $this->number)) -> take($this -> number) -> get();
 			if ($result) {

@@ -75,5 +75,4 @@ class newlistController extends Controller
     }
 
 
-
 }

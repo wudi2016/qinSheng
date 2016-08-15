@@ -65,7 +65,12 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 标题 </label>
 
                             <div class="col-sm-9">
-                                <input type="text" readonly name="courseTitle" id="form-field-1" placeholder="标题" class="col-xs-10 col-sm-5" value="{{$data->courseTitle}}" />
+                                {{--审核能过后可以编辑标题--}}
+                                @if($data->state == 2)
+                                    <input type="text" name="courseTitle" id="form-field-1" placeholder="标题" class="col-xs-10 col-sm-5" value="{{$data->courseTitle}}" />
+                                @else
+                                    <input type="text" readonly name="courseTitle" id="form-field-1" placeholder="标题" class="col-xs-10 col-sm-5" value="{{$data->courseTitle}}" />
+                                @endif
                             <span class="help-inline col-xs-12 col-sm-7">
                                 <label class="middle">
                                     <span class="lbl"></span>

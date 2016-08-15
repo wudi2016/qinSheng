@@ -137,7 +137,7 @@
                                             <td>{{$special->username}}</td>
                                             <td>
                                                 {{--<a id="example2-2" href="{{asset($comcourse->coursePic)}}">查看--}}
-                                                <img src="{{asset($special->coursePic)}}" alt="" width="50px" height="50px">
+                                                <img src="{{asset($special->coursePic)}}" alt="" width="50px" height="50px" onerror="this.src='/admin/image/back.png'">
                                                 {{--</a>--}}
                                             </td>
                                             <td>{{$special->courseDiscount}} 折</td>

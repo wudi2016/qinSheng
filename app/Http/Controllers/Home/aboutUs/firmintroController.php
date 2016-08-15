@@ -19,118 +19,59 @@ class firmintroController extends Controller{
 
     //公司介绍
     public function getListone(){
-        $firmintro = DB::table('about')->where('type',0)->get();
-            if($firmintro){
-                foreach($firmintro as $k => $v){
-                    $data['data'][] = [
-                        'id' => $v->id,
-                        'title' => $v->title,
-                        'content' => $v->content,
-                    ];
-                }
-                $data['statuss'] = true;
+        $data = DB::table('about')->select('id','title','content')->where('type',0)->get();
+            if($data){
+                return response()->json(['statuss'=>true,'data'=>$data]);
             }else{
-                $data['statuss'] = false;
+                return response()->json(['statuss'=>false]);
+
             }
-            echo json_encode($data);
     }
 
     //联系我们
     public function getListtwo(){
-        $firmintro = DB::table('about')->where('type',1)->get();
-            if($firmintro){
-                foreach($firmintro as $k => $v){
-                    $data['data'][] = [
-                        'id' => $v->id,
-                        'title' => $v->title,
-                        'content' => $v->content,
-                    ];
-                }
-                $data['statuss'] = true;
-            }else{
-                $data['statuss'] = false;
-            }
-            echo json_encode($data);
+        $data = DB::table('about')->select('id','title','content')->where('type',1)->get();
+        if($data){
+            return response()->json(['statuss'=>true,'data'=>$data]);
+        }else{
+            return response()->json(['statuss'=>false]);
+
+        }
     }
 
     //常见问题
     public function getListthree(){
-        $firmintro = DB::table('about')->where('type',2)->get();
-        if($firmintro){
-            foreach($firmintro as $k => $v){
-                $data['data'][] = [
-                    'id' => $v->id,
-                    'title' => $v->title,
-                    'content' => $v->content,
-                ];
-            }
-            $data['statuss'] = true;
+        $data = DB::table('about')->select('id','title','content')->where('type',2)->get();
+        if($data){
+            return response()->json(['statuss'=>true,'data'=>$data]);
         }else{
-            $data['statuss'] = false;
+            return response()->json(['statuss'=>false]);
+
         }
-        echo json_encode($data);
     }
 
 
     //用户协议
     public function getListfour(){
-        $firmintro = DB::table('about')->where('type',3)->get();
-        if($firmintro){
-            foreach($firmintro as $k => $v){
-                $data['data'][] = [
-                    'id' => $v->id,
-                    'title' => $v->title,
-                    'content' => $v->content,
-                ];
-            }
-            $data['statuss'] = true;
+        $data = DB::table('about')->select('id','title','content')->where('type',3)->get();
+        if($data){
+            return response()->json(['statuss'=>true,'data'=>$data]);
         }else{
-            $data['statuss'] = false;
+            return response()->json(['statuss'=>false]);
+
         }
-        echo json_encode($data);
     }
 
     //友情链接
     public function getListfive(){
-        $link = DB::table('link')->where('status',0)->orderBy('id','asc')->get();
-        if($link){
-            foreach($link as $k => $v){
-                $data['data'][] = [
-                    'id' => $v->id,
-                    'title' => $v->title,
-                    'url' => $v->url,
-                    'path' => $v->path
-                ];
-            }
-            $data['statuss'] = true;
+        $data = DB::table('link')->select('id','title','url','path')->where('status',0)->orderBy('id','asc')->get();
+        if($data){
+            return response()->json(['statuss'=>true,'data'=>$data]);
         }else{
-            $data['statuss'] = false;
+            return response()->json(['statuss'=>false]);
+
         }
-//        dd($data);
-        echo json_encode($data);
     }
-
-
-    //意见反馈
-    public function getListsix(){
-        $firmintro = DB::table('about')->where('type',4)->get();
-        if($firmintro){
-            foreach($firmintro as $k => $v){
-                $data['data'][] = [
-                    'id' => $v->id,
-                    'title' => $v->title,
-                    'content' => $v->content,
-                ];
-            }
-            $data['statuss'] = true;
-        }else{
-            $data['statuss'] = false;
-        }
-        echo json_encode($data);
-    }
-
-
-
 
 
     

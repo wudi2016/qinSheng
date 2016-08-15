@@ -10,7 +10,7 @@
 
 @section('content')
 
-	<div class="background">
+	<div class="background"  ms-controller="theteacher">
 
 
 
@@ -18,7 +18,7 @@
 		
 
 		<!-- 主体div -->
-		<div class="main"  ms-controller="theteacher" >
+		<div class="main"   >
 
 				<!-- 面包屑导航 -->
 				<div class="crumbs">
@@ -86,9 +86,8 @@
 
 		<div style="height:25px"></div>
 		<div class="pagecon" >
-			<div style="display: inline-block"><div id="page"></div></div>
+			<div style="display: inline-block"><div id="page" ms-if="page"></div></div>
 		</div>
-
 
 		<div style="height:35px">
 

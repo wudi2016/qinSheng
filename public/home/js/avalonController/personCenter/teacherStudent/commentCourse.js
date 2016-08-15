@@ -7,6 +7,7 @@ define([], function () {
         commentCourseInfo: [],
         total: '',
         commentMsg : false,
+        display: true,
         getCommentCourse: function (userId,type) {
             $('#page_course_comment').pagination({
                 dataSource: function (done) {
@@ -18,6 +19,9 @@ define([], function () {
                         success: function (response) {
                             commentCourse.total = response.total;
                             if (response.status) {
+                                if(response.total <= 6){
+                                    commentCourse.display = false;
+                                }
                                 var format = [];
                                 format['data'] = response.data;
                                 format['totalNumber'] = response.total;

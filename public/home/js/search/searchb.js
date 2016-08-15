@@ -34,6 +34,9 @@ function getdatab(para,ord){
                         format['totalNumber'] = response.count;
                         done(format);
                         // done(response.data);
+                        if(response.count/8 > 1){
+                            $('#demob').removeClass('hide');
+                        }
                     }else{
                         $('.nofindbb').removeClass('hide');
                     }

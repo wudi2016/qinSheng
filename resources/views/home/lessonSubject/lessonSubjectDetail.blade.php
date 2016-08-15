@@ -19,7 +19,6 @@
             </div>
             <div class="contain_lessonDetail_top_video" ms-if="haveCourse">
                 <div class="contain_lessonDetail_top_video_left">
-                    {{--<img ms-attr-src="pageInfo.video"/>--}}
                     <div class="video_block" style="height: 450px;">
                         <div class="videobox" id="mediaplayer" ms-visible="!overtime"></div>
                         <div class="overtime hide" ms-visible="overtime" style="height: 450px;">
@@ -59,8 +58,8 @@
                     </div>
                 </div>
                 <div class="contain_lessonDetail_top_video_right">
-                    <div class="contain_lessonDetail_top_video_right_name" ms-text="detailInfo.courseTitle" ms-attr-title="detailInfo.courseTitle">钢琴演奏基础课程</div>
-                    <div class="contain_lessonDetail_top_video_right_price" ms-if="!detailInfo.isFree">价格：<span ms-text="'￥' + detailInfo.coursePrice + '元'"></span></div>
+                    <div class="contain_lessonDetail_top_video_right_name" ms-text="detailInfo.courseTitle" ms-attr-title="detailInfo.courseTitle"></div>
+                    <div class="contain_lessonDetail_top_video_right_price" ms-if="!detailInfo.isFree"><span ms-text="'价格：￥' + detailInfo.coursePrice + '元'"></span></div>
                     <div class="contain_lessonDetail_top_video_right_price" ms-if="detailInfo.isFree"><span ms-text="'免费课程'"></span></div>
                     <div class="contain_lessonDetail_top_video_right_detail">
                         <span class="classes" ms-text="detailInfo.classHour + '课时'"></span>
@@ -131,6 +130,7 @@
                                         </span>
                                     </a>
                                     <span ms-if="el.isTryLearn == 1" class="try">试学</span>
+                                    <span ms-if="el.isTryLearn == 1" class="center"></span>
                                     <span ms-if="el.isLearn" class="have">已学</span>
                                     <a href="#changeVideo">
                                         <span class="play"

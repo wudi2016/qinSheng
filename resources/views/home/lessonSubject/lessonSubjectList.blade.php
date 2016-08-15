@@ -20,7 +20,10 @@
                     <span class="change_active" name="special" ms-onLight ms-click="changeSwitch('subject');">专题课程</span>
                     <span class="second" name="comment" ms-onLight ms-click="changeSwitch('comment');">点评课程</span>
                 </div>
-                <div class="contain_lesson_center_tip_right">
+                <div class="contain_lesson_center_tip_right" ms-visible="changeOption == 'subject'">
+                    <span class="default" ms-click="sort(1,changeOption);">默认</span><span> - </span><span ms-click="sort(2,changeOption);">最新</span><span> - </span><span ms-click="sort(3,changeOption);">热门</span>
+                </div>
+                <div class="contain_lesson_center_tip_right_comment hide" ms-visible="changeOption == 'comment'">
                     <span class="default" ms-click="sort(1,changeOption);">默认</span><span> - </span><span ms-click="sort(2,changeOption);">最新</span><span> - </span><span ms-click="sort(3,changeOption);">热门</span>
                 </div>
             </div>
@@ -48,7 +51,7 @@
                 </a>
             </div>
             <div class="clear hr_10" ms-visible="changeOption == 'subject'"></div>
-            <div class="pagecon_parent" ms-visible="changeOption == 'subject'">
+            <div ms-if="subjectDisplay" class="pagecon_parent" ms-visible="changeOption == 'subject'">
                 <div class="pagecon">
                     <div id="page_subject"></div>
                 </div>
@@ -75,7 +78,7 @@
                 </div>
             </div>
             <div class="clear hr_10" ms-visible="changeOption == 'comment'"></div>
-            <div class="pagecon_parent" ms-visible="changeOption == 'comment'">
+            <div ms-if="commentDisplay" class="pagecon_parent" ms-visible="changeOption == 'comment'">
                 <div class="pagecon">
                     <div id="page_comment"></div>
                 </div>

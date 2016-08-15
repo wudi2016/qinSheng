@@ -115,12 +115,11 @@ $(function(){
     //})
     $('.right_count_right div .count_right_store').click(function(){
         $(this).css('display','none').siblings().css('display','inline-block');
-        if($(this).text() == '删除收藏'){
-            $(".comment_repeat_img span").css('display','block');
-        }else{
-            $(".comment_repeat_img span").css('display','none');
-
-        }
+        //if($(this).text() == '删除收藏'){
+        //    $(".comment_repeat_img span").css('display','block');
+        //}else{
+        //    $(".comment_repeat_img span").css('display','none');
+        //}
     })
 
 

@@ -7,6 +7,7 @@ define([], function () {
         commentInfo: [],
         answerMsg : false,
         isRead : true,
+        display: true,
         getCommentInfo: function (username) {
             $('#page_comment').pagination({
                 dataSource: function (done) {
@@ -17,6 +18,9 @@ define([], function () {
                         data : {username:username},
                         success: function (response) {
                             if (response.status) {
+                                if(response.count <= 10){
+                                    comment.display = false;
+                                }
                                 var format = [];
                                 format['data'] = response.data;
                                 format['totalNumber'] = response.count;
