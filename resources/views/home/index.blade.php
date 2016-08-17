@@ -47,7 +47,7 @@
                     <div class="activity_con_l_r">
                         <div style="height:65px;"></div>
                         <div class="activity_con_l_r_t">专题课程</div>
-                        <div class="activity_con_l_r_c">通过权威专家的细致讲解，针对钢琴演奏过程中的重点进行教学演示，有效帮助学员提高钢琴演奏水平。</div>
+                        <div class="activity_con_l_r_c">通过名师专家的细致讲解，针对器乐演奏过程中的难点进行教学演示，帮助学员有效提升器乐演奏水平。</div>
                     </div>
                 </div>
             </a>
@@ -57,7 +57,7 @@
                 <div class="activity_con_l_r">
                     <div style="height:65px;"></div>
                     <div class="activity_con_l_r_t">活动赛事</div>
-                    <div class="activity_con_l_r_c">点评网将承办各类艺术教育赛事与活动，让艺术大师走进您的身边，为广大教师与学员提供知识分享与经验交流的舞台。</div>
+                    <div class="activity_con_l_r_c">借助各类艺术教育活动赛事，让名师走近您的身边，并为您与广大学员打造知识分享与经验交流的平台。</div>
                 </div>
                 </a>
             </div>
@@ -252,17 +252,4 @@
             avalon.scan(document.body);
         });
     </script>
-
-    <script>
-
-        var width = $(".teacher").width();
-        console.log(width);
-        if(width > 1400){
-            $(".teacher").width();
-        }else{
-            $(".teacher").width(980);
-        }
-
-    </script>
-
 @endsection

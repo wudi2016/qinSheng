@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-	<div class="buyController" style="" ms-controller="buyController">
+	<div class="buyController ms-controller" style="" ms-controller="buyController">
 		<div class="crumbs">
 			<a href="/">首页</a> >
 			<a href="/community">名师介绍</a> >

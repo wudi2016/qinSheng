@@ -191,14 +191,19 @@
             }
 
             if(model.currentIndex == 1){
+                model.getData1();
                 $('.us1').addClass('intro').siblings().removeClass('intro');
             }else if(model.currentIndex == 2){
+                model.getData2();
                 $('.us2').addClass('intro').siblings().removeClass('intro');
             }else if(model.currentIndex == 3){
+                model.getData3();
                 $('.us3').addClass('intro').siblings().removeClass('intro');
             }else if(model.currentIndex == 4){
+                model.getData4();
                 $('.us4').addClass('intro').siblings().removeClass('intro');
             }else if(model.currentIndex == 5){
+                model.getData5();
                 $('.us5').addClass('intro').siblings().removeClass('intro');
             }
 

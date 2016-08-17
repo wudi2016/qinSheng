@@ -119,14 +119,19 @@ define([], function (){
 
 			//实现蓝色背景效果
 			if(index == 1){
+				model.getData1();
 				$(this).addClass('intro').siblings().removeClass('intro');
 			}else if(index == 2){
+				model.getData2();
 				$(this).addClass('intro').siblings().removeClass('intro');
 			}else if(index == 3){
+				model.getData3();
 				$(this).addClass('intro').siblings().removeClass('intro');
 			}else if(index == 4){
+				model.getData4();
 				$(this).addClass('intro').siblings().removeClass('intro');
 			}else if(index == 5){
+				model.getData5();
 				$(this).addClass('intro').siblings().removeClass('intro');
 			}
 		},
@@ -135,7 +140,7 @@ define([], function (){
 		aboutus1 : [],
         getData1:function(){
 				 $.ajax({
-					 url : '/aboutUs/getListone/' ,
+					 url : '/aboutUs/getListone' ,
 					 type : 'get',
 					 //dataType : 'json',
 					 success: function(response){
@@ -150,7 +155,7 @@ define([], function (){
 		aboutus2 : [],
 		getData2:function(){
 			$.ajax({
-				url : '/aboutUs/getListtwo/' ,
+				url : '/aboutUs/getListtwo' ,
 				type : 'get',
 				dataType : 'json',
 				success: function(response){
@@ -165,7 +170,7 @@ define([], function (){
 		aboutus3 : [],
 		getData3:function(){
 			$.ajax({
-				url : '/aboutUs/getListthree/' ,
+				url : '/aboutUs/getListthree' ,
 				type : 'get',
 				dataType : 'json',
 				success: function(response){
@@ -181,7 +186,7 @@ define([], function (){
 		aboutus4 : [],
 		getData4:function(){
 			$.ajax({
-				url : '/aboutUs/getListfour/' ,
+				url : '/aboutUs/getListfour' ,
 				type : 'get',
 				dataType : 'json',
 				success: function(response){
@@ -227,7 +232,7 @@ define([], function (){
 
 
 			$.ajax({
-				url : '/aboutUs/getListfive/' ,
+				url : '/aboutUs/getListfive' ,
 				type : 'get',
 				dataType : 'json',
 				success: function(response){
@@ -245,9 +250,9 @@ define([], function (){
 
 	});
 	model.getData1();
-	model.getData2();
-	model.getData3();
-	model.getData4();
-	model.getData5();
+	//model.getData2();
+	//model.getData3();
+	//model.getData4();
+	//model.getData5();
 	return model;
 });

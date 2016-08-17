@@ -70,7 +70,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 模板名称 </label>
                             <div class="col-sm-9">
-                                <input type="text" name="tempName" id="form-field-1" placeholder="模板名称" class="col-xs-10 col-sm-5" value="{{$data->tempName}}" style="text-indent: 12px;" />
+                                <input type="text" name="tempName" id="form-field-1" maxlength="10" placeholder="模板名称" class="col-xs-10 col-sm-5" value="{{$data->tempName}}" style="text-indent: 12px;" />
                             <span class="help-inline col-xs-12 col-sm-7">
                                 <label class="middle">
                                     <span class="lbl"></span>

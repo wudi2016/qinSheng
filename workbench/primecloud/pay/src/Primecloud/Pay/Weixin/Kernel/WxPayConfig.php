@@ -39,6 +39,8 @@ class WxPayConfig
 	 */
 	const SSLCERT_PATH = '../Cert/apiclient_cert.pem';
 	const SSLKEY_PATH = '../Cert/apiclient_key.pem';
+	// const SSLCERT_PATH = '/var/www/html/qinSheng/workbench/primecloud/pay/src/Primecloud/Pay/Weixin/Cert/apiclient_cert.pem';
+        // const SSLKEY_PATH = '/var/www/html/qinSheng/workbench/primecloud/pay/src/Primecloud/Pay/Weixin/Cert/apiclient_key.pem';
 	
 	//=======【curl代理设置】===================================
 	/**

@@ -102,7 +102,7 @@ define([], function () {
 						actionId: user.mineID,
 						fromUsername: user.mineName,
 						toUsername: user.userInfo.username,
-						content: '刚刚关注了您,点击进入该用户个人公开主页。'
+						content: '刚刚关注了您，点击进入该用户个人公开主页。'
 					}}, 'POST');
 				});
 			}

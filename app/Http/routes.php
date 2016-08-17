@@ -60,7 +60,8 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         //搜索
         Route::post('/search', 'indexController@search');
 
-
+        //介绍视频接口
+        Route::get('/introVdo', 'indexController@introVdo');
         //获取赛事接口
         Route::get('/getgames/{type}/{pageNumber}/{pageSize}', 'indexController@getgames');
         //名师介绍接口
@@ -145,25 +146,25 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
 
 
         // 个人中心 专题课程 type => 1 => 学员 type => 2 => 名师 flag => 1 => 最新 flag => 2 => 热门
-        Route::get('/getCourse/{type}/{flag}/{pageNumber}/{pageSize}','perSpaceController@getCourse');
+        Route::get('/getCourse/{type}/{flag}/{pageNumber}/{pageSize}',['middleware' => 'check','uses'=>'perSpaceController@getCourse']);
         // 个人中心 点评课程 type => 1 => 最新 flag => 2 => 热门
-        Route::post('/getCommentCourse/{pageNumber}/{pageSize}','perSpaceController@getCommentCourse');
+        Route::post('/getCommentCourse/{pageNumber}/{pageSize}',['middleware' => 'check','uses'=>'perSpaceController@getCommentCourse']);
         // 个人中心 我的收藏
-        Route::get('/getCollectionInfo/{pageNumber}/{pageSize}', 'perSpaceController@getCollectionInfo');
+        Route::get('/getCollectionInfo/{pageNumber}/{pageSize}', ['middleware' => 'check','uses'=>'perSpaceController@getCollectionInfo']);
         // 个人中心 删除收藏
-        Route::post('/deleteCollection', 'perSpaceController@deleteCollection');
+        Route::post('/deleteCollection', ['middleware' => 'check','uses'=>'perSpaceController@deleteCollection']);
         // 个人中心 全部通知
-        Route::post('/getNoticeInfo/{pageNumber}/{pageSize}','perSpaceController@getNoticeInfo');
+        Route::post('/getNoticeInfo/{pageNumber}/{pageSize}',['middleware' => 'check','uses'=>'perSpaceController@getNoticeInfo']);
         // 个人中心 删除通知
-        Route::post('/deleteNotice','perSpaceController@deleteNotice');
+        Route::post('/deleteNotice',['middleware' => 'check','uses'=>'perSpaceController@deleteNotice']);
         // 个人中心 更改通知状态
-        Route::get('/changeNoticeStatus/{type}','perSpaceController@changeNoticeStatus');
+        Route::get('/changeNoticeStatus/{type}',['middleware' => 'check','uses'=>'perSpaceController@changeNoticeStatus']);
         // 个人中心 查看是否有通知消息
-        Route::post('/findHaveNotice','perSpaceController@findHaveNotice');
+        Route::post('/findHaveNotice',['middleware' => 'check','uses'=>'perSpaceController@findHaveNotice']);
         // 个人中心 评论回复
-        Route::post('/getCommentInfo/{pageNumber}/{pageSize}', 'perSpaceController@getCommentInfo');
+        Route::post('/getCommentInfo/{pageNumber}/{pageSize}', ['middleware' => 'check','uses'=>'perSpaceController@getCommentInfo']);
         // 个人中心 评论删除
-        Route::post('/deleteComment', 'perSpaceController@deleteComment');
+        Route::post('/deleteComment', ['middleware' => 'check','uses'=>'perSpaceController@deleteComment']);
 
 
 
@@ -802,21 +803,25 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
         //删除订单
         Route::get('delOrder/{id}/{status}',['middleware' => 'permission:del.order','uses' =>'orderController@delOrder']);
         //添加订单备注
-        Route::post('remark','orderController@remark');
+        Route::post('remark',['middleware' => 'permission:check.order','uses' =>'orderController@remark']);
         //修改应退金额
-        Route::get('editRefundmoney/{id}/{status}','orderController@editRefundmoney');
+        Route::get('editRefundmoney/{id}/{status}',['middleware' => 'permission:edit.Refundmoney','uses' =>'orderController@editRefundmoney']);
         //执行确认应退金额
-        Route::post('doRefundmoney','orderController@doRefundmoney');
+        Route::post('doRefundmoney',['middleware' => 'permission:edit.Refundmoney','uses' =>'orderController@doRefundmoney']);
         //修改已退金额
-        Route::get('editRetiredmoney/{id}/{status}','orderController@editRetiredmoney');
+        Route::get('editRetiredmoney/{id}/{status}',['middleware' => 'permission:edit.Retiredmoney','uses' =>'orderController@editRetiredmoney']);
         //执行确认已退金额
-        Route::post('doRetiredmoney','orderController@doRetiredmoney');
+        Route::post('doRetiredmoney',['middleware' => 'permission:edit.Retiredmoney','uses' =>'orderController@doRetiredmoney']);
         //备注列表
-        Route::get('remarkList/{id}/{status?}','orderController@remarkList');
+        Route::get('remarkList/{id}/{status?}',['middleware' => 'permission:check.order','uses' =>'orderController@remarkList']);
         //删除备注
-        Route::get('delRemark/{orderid}/{id}','orderController@delRemark');
+        Route::get('delRemark/{orderid}/{id}/{status?}','orderController@delRemark');
         //清除垃圾订单
-        Route::get('deleteOrders','orderController@deleteOrders');
+        Route::get('deleteOrders',['middleware' => 'permission:del.order','uses' =>'orderController@deleteOrders']);
+        //修改实付金额
+        Route::get('editPaymoney/{id}/{status}',['middleware' => 'permission:edit.Paymoney','uses' =>'orderController@editPaymoney']);
+        //执行修改实付金额
+        Route::post('doEditPaymoney',['middleware' => 'permission:edit.Paymoney','uses' =>'orderController@doEditPaymoney']);
 
 
         //退款列表
@@ -1202,8 +1207,10 @@ Route::group(['prefix'=>'/contentManager','namespace'=>'contentManager'],functio
 
         //后台日志管理列表
         Route::get('logList', ['middleware' => 'permission:logs.list', 'uses' => 'indexController@logList']);
-        //日志删除
+        //日志删除(单删除)
         Route::get('deleteLog/{tableName}/{id}/{time?}', ['middleware' => 'permission:delete.log', 'uses' => 'indexController@destroy']);
+        //日志删除(多删除)
+        Route::post('multiDelete/{tableName}/{time?}', ['middleware' => 'permission:delete.log', 'uses' => 'indexController@delete']);
 
     });
 
@@ -1225,6 +1232,27 @@ Route::group(['prefix'=>'/contentManager','namespace'=>'contentManager'],functio
 
         //专题课程播放统计
         Route::get('specialCountList','countController@specialCountList');
+    });
+
+    /*
+       ||--------------------------------------------------------------------------------------
+       ||     -------------------------- 后台登录视频推荐 ------------------------------
+       ||--------------------------------------------------------------------------------------
+       */
+
+    Route::group(['prefix'=>'/loginVideo','namespace'=>'loginVideo'],function(){
+        //登录页面视频推荐列表
+        Route::get('loginVideoList','loginVideoController@loginVideoList');
+        //添加
+        Route::get('addLoginVideo','loginVideoController@addLoginVideo');
+        Route::post('doAddLoginVideo','loginVideoController@doAddLoginVideo');
+        //上传
+        Route::post('doUploadfile','loginVideoController@doUploadfile');
+        //修改
+        Route::get('editLoginVideo/{id}','loginVideoController@editLoginVideo');
+        Route::post('doEditLoginVideo','loginVideoController@doEditLoginVideo');
+        //删除
+        Route::get('delLoginVideo/{id}','loginVideoController@delLoginVideo');
     });
 });
 

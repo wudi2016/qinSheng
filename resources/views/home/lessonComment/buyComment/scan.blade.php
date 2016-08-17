@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-	<div class="puy_success">
+	<div class="puy_success ms-controller">
 		<div style="clear: both; height: 60px;"></div>
 
 		<div class="weixin_scan">

@@ -32,6 +32,10 @@ class commentCourseController extends Controller
         if($request['endTime']){ //上传的起止时间
             $query = $query->where('a.created_at','<=',$request['endTime']);
         }
+        //审核状态
+        if($request['state'] === '0' || $request['state'] === '1' || $request['state'] === '2'){
+            $query = $query->where('a.state',$request['state']);
+        }
         if($request['type'] == 1){
             $query = $query->where('a.id','like','%'.trim($request['search']).'%');
         }
@@ -109,6 +113,7 @@ class commentCourseController extends Controller
             }
         }
         $data->type = $request['type'];
+        $data->status = $request['state'];
         $data->beginTime = $request['beginTime'];
         $data->endTime = $request['endTime'];
 //        dd($data);
@@ -225,6 +230,9 @@ class commentCourseController extends Controller
      *审核未通过时向学员发送信息
      */
     public function noPassMsg(Request $request){
+        if(DB::table('usermessage')->where(['username'=>$request['username'],'actionId'=>$request['actionId'],'type'=>0])->first()){
+            DB::table('usermessage')->where(['username'=>$request['username'],'actionId'=>$request['actionId'],'type'=>0])->delete();
+        }
         $data['username'] = $request['username'];
         $data['actionId'] = $request['actionId'];
         $data['fromUsername'] = $request['fromUsername'];
@@ -285,6 +293,9 @@ class commentCourseController extends Controller
      */
     public function sendMessage(Messages $message,Request $request)
     {
+        if(DB::table('usermessage')->where(['username'=>$request['username'],'actionId'=>$request['actionId'],'type'=>7])->first()){
+            DB::table('usermessage')->where(['username'=>$request['username'],'actionId'=>$request['actionId'],'type'=>7])->delete();
+        }
         //审核通过后给名师发送个人通知
         $data['username'] = $request['username'];
         $data['actionId'] = $request['actionId'];

@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-	<div class="commentDetail" ms-controller="commentController">
+	<div class="commentDetail ms-controller" ms-controller="commentController">
 		<div class="crumbs">
 			<a href="/">首页</a> >
             <a href="/lessonSubject/list/2">点评课程</a> >
@@ -117,8 +117,8 @@
                         <div class="bottom" ms-if="el.fromUserId == {{$mine['id']}}" ms-click="deleteComment($index)">删除</div>
                         <div class="bottom" ms-class="islike: el.isLike" ms-click="clickLike(el)">点赞( [--el.likeNum || 0--] )</div>
                     @else
-                        <a class="bottom" href="/index/login">回复</a>
-                        <a class="bottom" href="/index/login">点赞</a>
+                        {{--<a class="bottom" href="/index/login">回复</a>--}}
+                        <a class="bottom" href="/index/login">点赞( [--el.likeNum || 0--] )</a>
                     @endif
 				</div>
 			</div>

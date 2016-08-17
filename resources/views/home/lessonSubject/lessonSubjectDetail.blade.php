@@ -63,7 +63,7 @@
                     <div class="contain_lessonDetail_top_video_right_price" ms-if="detailInfo.isFree"><span ms-text="'免费课程'"></span></div>
                     <div class="contain_lessonDetail_top_video_right_detail">
                         <span class="classes" ms-text="detailInfo.classHour + '课时'"></span>
-                        <span class="study" ms-text="detailInfo.coursePlayView + '人学习'"></span>
+                        <span class="study" ms-text="detailInfo.coursePlayView + '人学过'"></span>
                     </div>
                     <div class="contain_lessonDetail_top_video_right_btn">
                         @if(Auth::check() && Auth::user() -> type != 3)
@@ -82,7 +82,7 @@
                             <div class="collect hide" ms-visible="!detailInfo.isCollection" ms-click="addCollect(detailInfo.id,detailInfo.isCollection);">收藏</div>
                             <div class="collect_light hide" ms-visible="detailInfo.isCollection" ms-click="popUpSwitch('quitCollection');">已收藏</div>
                             <div class="response hide" ms-click="popUpSwitch('feedback')" ms-visible="detailInfo.isBuy || detailInfo.isFree || detailInfo.isTeacher">反馈</div>
-                            <div class="response hide" ms-visible="!detailInfo.isBuy">反馈</div>
+                            {{--<div class="response hide" ms-visible="detailInfo.isBuy">反馈</div>--}}
                         @else
                             <a href="/index/login"><div class="collect">收藏</div></a>
                             <a href="/index/login"><div class="response">反馈</div></a>

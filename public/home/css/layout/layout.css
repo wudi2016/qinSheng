@@ -36,8 +36,7 @@ input,button,select,textarea{outline:none;filter:chroma(color=#000000);}
 /* =============== 去除a、button链接点击后的黑色框线 ================== */
 
 
-.ms-controller,
-.ms-important {
+.ms-controller, .ms-important {
     visibility: hidden !important;
 }
 .hide{

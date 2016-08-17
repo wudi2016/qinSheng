@@ -22,6 +22,10 @@ class SpecialFeedbackController extends Controller
         if($request['endTime']){ //上传的起止时间
             $query = $query->where('f.created_at','<=',$request['endTime']);
         }
+        //审核状态
+        if($request['status'] === '0' || $request['status'] === '1'){
+            $query = $query->where('f.status',$request['status']);
+        }
         if($request['type'] == 1){
             $query = $query->where('f.id','like','%'.trim($request['search']).'%');
         }
@@ -43,6 +47,7 @@ class SpecialFeedbackController extends Controller
             ->orderBy('f.id','desc')
             ->paginate(15);
         $data->type = $request['type'];
+        $data->status = $request['status'];
         $data->beginTime = $request['beginTime'];
         $data->endTime = $request['endTime'];
         $data->courseType = $courseType;

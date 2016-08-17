@@ -38,6 +38,12 @@
                         </span>
                     </span>
                 </form>
+
+                {{--//多删除--}}
+                {{--<form action="{{url('admin/logs/multiDelete/'.$tableName.'/'.($search['time']?:''))}}" method="post" class="form-search">--}}
+                    {{--{{csrf_field()}}--}}
+                    {{--<input type="hidden" name="multiDelete"/>--}}
+                {{--</form>--}}
             </div><!-- #nav-search -->
         </div>
 
@@ -50,6 +56,7 @@
                         日志列表
                     </small>
                 </h1>
+
             </div><!-- /.page-header -->
 
             @if (session('status'))
@@ -78,10 +85,20 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="table-responsive">
-
+                            <form action="{{url('admin/logs/multiDelete/'.$tableName.'/'.($search['time']?:''))}}" method="post" class="form-search" onsubmit="return confirm('确定要删除该日志记录？');">
+                                {{csrf_field()}}
                                 <table id="sample-table-1" class="table table-striped table-bordered table-hover center">
                                     <thead>
                                     <tr>
+                                        <th class="hidden-480 center" style="position: relative;left:35px;">
+                                            <input type="hidden" name="currentPage" value="{{$currentPage}}">
+                                            <input type="hidden" name="lastPage" value="{{$lastPage}}">
+                                            <input type="hidden" name="count" value="{{$count}}">
+                                            @if(count($data) > 0)
+                                            <input type="checkbox" name="multiple">
+                                            <input type="submit" style="display:inline-block;width:60px;height:20px;line-height: 20px;text-align:center;cursor: pointer;font-size:13px;margin-left:8px;letter-spacing: 2px;border:none;background:#209EEA; color:#fff;" value="多删除">
+                                            @endif
+                                        </th>
                                         <th class="center">日志ID</th>
                                         <th class="center">用户名</th>
                                         <th class="center">操作类型</th>
@@ -95,6 +112,7 @@
                                     <tbody>
                                     @foreach($data as $value)
                                         <tr>
+                                            <td class="center"><input type="checkbox" name="check[]" value="{{$value->id}}"></td>
                                             <td class="center">{{$value->id}}</td>
                                             <td>{{$value->username}}</td>
                                             <td>@if($value->type == 0)登录@elseif($value->type == 1)其他所有@endif</td>
@@ -118,6 +136,7 @@
 
                                     </tbody>
                                 </table>
+                                </form>
                                 {!! $data -> appends( app('request') -> all() ) -> render() !!}
                                 {{--@permission('user.list')--}}
                                 {{--@if(count($excels))--}}
@@ -140,4 +159,39 @@
 @section('js')
     <script language="javascript" type="text/javascript" src="{{asset('DatePicker/WdatePicker.js') }}"></script>
     <script language="javascript" type="text/javascript" src="{{asset('admin/js/searchtype.js') }}"></script>
+    <script type="text/javascript">
+        $(function(){
+            $("input[name='multiple']").click(function(){
+                if($(this).prop('checked') == true){
+                    $("input[name='check[]']").prop('checked',true);
+                }else{
+                    $("input[name='check[]']").prop('checked',false);
+                }
+            })
+
+            $("input[name='check[]']").click(function(){
+                if($(this).prop('checked') != true){
+                    $("input[name='multiple']").prop('checked',false);
+                }else{
+//                    console.log($(this).attr('value'));
+                    var total = 0;
+                    var obj = $("input[name='check[]']");
+                    var check = true;
+                    for(var i=0;i<obj.length;i++){
+                        if(obj[i].checked == true){//判断选中的个数
+                           total += 1;
+                        }
+                    }
+                    if(total == 15){//是否和本页显示的15条相等
+                        $("input[name='multiple']").prop('checked',true);
+                    }else{
+                        $("input[name='multiple']").prop('checked',false);
+                    }
+
+                }
+            })
+
+
+        })
+    </script>
 @endsection

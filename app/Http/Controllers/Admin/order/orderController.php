@@ -53,7 +53,7 @@ class orderController extends Controller
 
         //导出数据
         $query = $query
-            ->select('id','orderSn as 订单号','tradeSn as 交易编号','orderTitle as 订单名称','orderPrice as 订单价格','payPrice as 实付金额','payType as 支付方式(0:支付宝1:微信)','userId as 购买用户ID','userName as 购买用户','teacherId as 邀请人ID','teacherName as 邀请人','orderType as 订单类型(0:购买专题订单1:点评申请订单2:购买点评订单)','courseId as 专题课程ID(订单类型为0或1时为点评课程ID)','refundableAmount as 应退金额','refundAmount as 已退金额','payTime as 付款时间','status as 订单状态(0:已付款1:待点评2:已完成3:退款中4:已退款5:未付款)')
+            ->select('id','orderSn as 订单号','tradeSn as 交易编号','orderTitle as 订单名称','orderPrice as 订单价格','payPrice as 实付金额','payType as 支付方式(0:支付宝1:微信2:其它)','userId as 购买用户ID','userName as 购买用户','teacherId as 邀请人ID','teacherName as 邀请人','orderType as 订单类型(0:购买专题订单1:点评申请订单2:购买点评订单)','courseId as 专题课程ID(订单类型为0或1时为点评课程ID)','refundableAmount as 应退金额','refundAmount as 已退金额','payTime as 付款时间','status as 订单状态(0:已付款1:待点评2:已完成3:退款中4:已退款5:未付款)')
             ->where('isDelete',0);
         if($status == 8){
             $query = $query;
@@ -68,7 +68,13 @@ class orderController extends Controller
             $value->实付金额 = $value->实付金额 / 100;
             $value->应退金额 = $value->应退金额 / 100;
             $value->已退金额 = $value->已退金额 / 100;
+
+            //取出备注
+            $remarks = DB::table('remarks')->where('orderid',$value->id)->lists('content');
+            $remarks = implode('/',$remarks);
+            $value->备注 = $remarks;//导出备注
         }
+//        dd($excel);
         $excel = json_encode($excel);
 
         $query = $query->where('isDelete',0);
@@ -247,26 +253,64 @@ class orderController extends Controller
     }
 
     /**
+     *修改实付金额
+     */
+    public function editPaymoney($id,$status){
+        $data = DB::table('orders')->where('id',$id)->select('id','orderSn','payPrice','payType')->first();
+        $data->payPrice = $data->payPrice / 100;
+        $data->status = $status;
+        return view('admin.order.editPaymoney',['data'=>$data]);
+    }
+    /**
+     *执行修改实付金额
+     */
+    public function doEditPaymoney(Request $request){
+//       $this->validate($request,[
+//           'payPrice'=>'integer'
+//       ],[
+//           'payPrice.integer'=>'实付金额必须为整型'
+//       ]);
+        $orderPrice = DB::table('orders')->where('id',$request['id'])->pluck('orderPrice'); //订单价格
+        $orderPrice = $orderPrice / 100;
+        if($request['payPrice'] > $orderPrice){
+            return Redirect()->back()->withInput()->withErrors('实付金额不能大于订单价格');
+        }
+        $data = $request->except('_token','status');
+        $data['payPrice'] = $request['payPrice'] * 100;
+        $data['payType'] = $request['payType'];
+        $data['payTime'] = Carbon::now();
+        $data['updated_at'] = Carbon::now();
+        if(DB::table('orders')->where('id',$request['id'])->update($data)){
+            $this -> OperationLog('修改了id为'.$request['id'].'的订单实付金额');
+            return redirect('admin/message')->with(['status'=>'成功','redirect'=>'order/orderList/'.$request['status']]);
+        }else{
+            return redirect('admin/message')->with(['status'=>'失败','redirect'=>'order/orderList/'.$request['status']]);
+        }
+    }
+
+
+    /**
      *备注列表
      */
-    public function remarkList($id){
+    public function remarkList($id,$staus){
         $data = DB::table('remarks as r')
             ->leftJoin('orders as o','r.orderid','=','o.id')
             ->select('r.*','o.id as orderid','o.orderSn')
             ->where('orderid',$id)
             ->paginate(15);
+        $data->status = $staus;
         return view('admin.order.remarkList',['data'=>$data]);
     }
 
     /**
      *删除备注
      */
-    public function delRemark($orderid,$id){
+    public function delRemark($orderid,$id,$status){
         if(DB::table('remarks')->where('id',$id)->delete()){
             $this -> OperationLog('删除了id为'.$id.'的订单备注');
-            return redirect('admin/message')->with(['status'=>'备注删除成功','redirect'=>'order/remarkList/'.$orderid]);
+            return redirect('admin/message')->with(['status'=>'备注删除成功','redirect'=>'order/remarkList/'.$orderid.'/'.$status]);
         }else{
-            return redirect('admin/message')->with(['status'=>'备注删除失败','redirect'=>'order/remarkList/'.$orderid]);
+            return redirect('admin/message')->with(['status'=>'备注删除失败','redirect'=>'order/remarkList/'.$orderid.'/'.$status]);
         }
     }
 

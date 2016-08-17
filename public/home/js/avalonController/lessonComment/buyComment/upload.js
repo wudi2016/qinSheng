@@ -237,7 +237,6 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 		temp: null,
 		messageID: null,
 		orderID: null,
-		selectedLevel: null,
 		commentID: null
 	});
 

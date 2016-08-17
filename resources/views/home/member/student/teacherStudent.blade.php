@@ -329,7 +329,7 @@
                         </div>
                         <div class="repeat_comment_text" ms-if="el.type == 0 && el.tempId != 0">
                             <!-- 审核未通过 -->
-                            <span class="span_light" ms-text="el.tempName" ms-if="el.tempName" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 150px;display: block;float: left;" ms-attr-title="el.tempName"></span>
+                            <span class="span_light" ms-text="el.tempName + '&nbsp;'" ms-if="el.tempName" style="float: left;display: block;" ms-attr-title="el.tempName"></span>
                             <span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 400px;display: block;float: left;" ms-text="el.content" ms-attr-title="el.content"></span>
                         </div>
                         <!-- 注册加入消息 -->

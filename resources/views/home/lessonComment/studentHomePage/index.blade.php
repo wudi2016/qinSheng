@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-	<div class="teacherHomepage" ms-controller="userHomepage">
+	<div class="teacherHomepage ms-controller" ms-controller="userHomepage">
 		<div class="teacherHomepage_crumbs">
 			<a href="/">首页</a> >
 			<a>学员主页</a>

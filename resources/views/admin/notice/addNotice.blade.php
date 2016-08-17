@@ -58,19 +58,35 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1" style="text-align: right"> 接收用户 </label>
                             <div class="col-sm-9">
+
                                 <div id="form-field-1" name="student" class="col-xs-10 col-sm-5">
+                                    <div style="width: 100%;float: left;margin-top: 5px;">
+                                        <input type="checkbox" name="selectAll"/><span style="margin-left: 8px;">全选</span>
+                                    </div>
                                     @foreach($student as $value)
-                                        <div style="width: 150px;float: left;margin-top: 5px;"><input type="checkbox" name="username[]" value="{{$value->username}}" /> <span style="margin-left: 8px;">{{$value->username}}</span></div>
+                                        <div style="width: 150px;float: left;margin-top: 5px;">
+                                            <input type="checkbox" onclick="allCheck(this);" name="username[]" value="{{$value->username}}" /> <span style="margin-left: 8px;">{{$value->username}}</span>
+                                        </div>
                                     @endforeach
                                 </div>
                                 <div id="form-field-1" name="teacher" class="col-xs-10 col-sm-5 hide">
+                                    <div style="width: 100%;float: left;margin-top: 5px;">
+                                        <input type="checkbox" name="selectAll"/><span style="margin-left: 8px;">全选</span>
+                                    </div>
                                     @foreach($teacher as $value)
-                                        <div style="width: 150px;float: left;margin-top: 5px;"><input type="checkbox" name="username[]" value="{{$value->username}}" /> <span style="margin-left: 8px;">{{$value->username}}</span></div>
+                                        <div style="width: 150px;float: left;margin-top: 5px;">
+                                            <input type="checkbox" onclick="allCheck(this);" name="username[]" value="{{$value->username}}" /> <span style="margin-left: 8px;">{{$value->username}}</span>
+                                        </div>
                                     @endforeach
                                 </div>
                                 <div id="form-field-1" name="famous" class="col-xs-10 col-sm-5 hide">
+                                    <div style="width: 100%;float: left;margin-top: 5px;">
+                                        <input type="checkbox" name="selectAll"/><span style="margin-left: 8px;">全选</span>
+                                    </div>
                                     @foreach($famous as $value)
-                                        <div style="width: 150px;float: left;margin-top: 5px;"><input type="checkbox" name="username[]" value="{{$value->username}}" /> <span style="margin-left: 8px;">{{$value->username}}</span></div>
+                                        <div style="width: 150px;float: left;margin-top: 5px;">
+                                            <input type="checkbox" onclick="allCheck(this);" name="username[]" value="{{$value->username}}" /> <span style="margin-left: 8px;">{{$value->username}}</span>
+                                        </div>
                                     @endforeach
                                 </div>
                                 <span class="help-inline col-xs-12 col-sm-7">
@@ -130,9 +146,19 @@
 @endsection
 @section('js')
     <script>
+        function allCheck(obj) {
+            var num = $(obj).parent().siblings().size();
+            var num_checked = $(obj).parent('div').siblings('div').children('input:checked').size() + 1; //选中个数
+            if (num == num_checked) {
+                $("input[name='selectAll']").prop("checked","checked");
+            } else {
+                $("input[name='selectAll']").removeAttr("checked");
+            }
+        }
         $(function(){
             $("select[name='pointAt']").change(function(){
                 var obj = $("select[name='pointAt']").val();
+                $("input[name='selectAll']").removeAttr("checked").parent('div').siblings('div').children('input').removeAttr("checked");
                 if(obj == '0'){
                     $("div[name='student']").removeClass('hide').siblings('div').addClass('hide');
                     $('#studentTem').removeClass('hide').siblings('select').addClass('hide');
@@ -147,6 +173,14 @@
                     $("input[name='userType']").val('1');
                 }
             })
+            $("input[name='selectAll']").click(function(){
+                if(this.checked){
+                    $(this).parent('div').siblings('div').children('input').prop("checked","checked");
+                }else{
+                    $(this).parent('div').siblings('div').children('input').removeAttr("checked");
+                }
+            })
         })
+
     </script>
 @endsection

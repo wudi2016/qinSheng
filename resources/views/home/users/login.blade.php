@@ -80,11 +80,30 @@
 <script type="text/javascript" src="{{asset('home/js/layout/jquery.min.js') }}"></script>
 <script type="text/javascript" src="{{asset('home/js/users/login.js') }}"></script>
 <script>
-    jwplayer('myplayer').setup({
-//        flashplayer: '/home/jplayer/jwplayer.flash.swf',
-        file: '/uploads/uploads/video/introduce/default.mp4',
-        image:'/home/image/index/vdo.png',
-        width: '700',
-        height: '400'});
+    $.ajax({
+        type: "get",
+        url: "/index/introVdo",
+        async:false,
+        success: function(data){
+            jwplayer('myplayer').setup({
+                file: data.video,
+                image:data.pic,
+                width: '700',
+                height: '400'
+            });
+        }
+    });
+
+//    jwplayer('myplayer').setup({
+//        file: '/uploads/uploads/video/introduce/default.mp4',
+//        image:'/home/image/index/vdo.png',
+//        width: '700',
+//        height: '400',
+//        levels:[
+//            {label: "标清",file:'/uploads/uploads/video/introduce/default.mp4',},
+//            {label: "高清",file:'/uploads/uploads/video/introduce/default.mp4',},
+//            {label: "超清",file:'/uploads/uploads/video/introduce/default.mp4',}
+//        ]
+//    });
 </script>
 </html>

@@ -104,7 +104,7 @@ define([],function(){
         theteacherlist: [],
         getteacher:function(){
             $.ajax({
-                url : '/community/getteacher/',
+                url : '/community/getteacher',
                 type : 'get',
                 dataType : 'json',
                 success: function(response){
@@ -120,7 +120,7 @@ define([],function(){
         newlist :[],
         getnewData:function(){
             $.ajax({
-                url : '/community/getlist/',
+                url : '/community/getlist',
                 type : 'get',
                 dataType : 'json',
                 success: function(response){
@@ -139,7 +139,7 @@ define([],function(){
                 dataSource: function(done) {
                     $.ajax({
                         type: 'GET',
-                        url : '/community/getstudent/',
+                        url : '/community/getstudent',
                         dataType : 'json',
                         success: function(response) {
                             if(response.statuss){
@@ -185,7 +185,7 @@ define([],function(){
         gethotData:function(){
             model.Yes = false;
             $.ajax({
-                url : '/community/gethotvideo/',
+                url : '/community/gethotvideo',
                 type : 'get',
                 dataType : 'json',
                 success: function(response){

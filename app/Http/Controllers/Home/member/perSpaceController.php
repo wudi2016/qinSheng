@@ -201,18 +201,12 @@ class perSpaceController extends Controller
         $id = Auth::user()->id;
         if ($type == '1') { // 学员
             $flag == '1' ? $order = 'o.created_at' : $order = 'c.courseStudyNum';
-//            $info = DB::table('course as c')->leftJoin('orders as o', 'c.id', '=', 'o.courseId')
-//                ->select('c.id', 'c.courseTitle', 'c.coursePic', 'coursePrice', 'c.coursePlayView', 'c.courseDiscount','c.created_at','c.courseStudyNum','c.completecount')
-//                ->where(['o.userId' => Auth::user()->id, 'o.orderType' => 0, 'c.courseStatus' => 0,'o.isDelete' => 0,'o.status' => 2])
-//                ->orderBy($order, 'desc')->skip($skip)->take($pageSize)->get();
             $info = DB::select("SELECT c.id,c.courseTitle,c.coursePic,c.courseDiscount,c.coursePrice,c.courseStudyNum + c.completecount AS coursePlayView FROM course AS c LEFT JOIN orders AS o ON c.id = o.courseId WHERE c.courseStatus = 0 AND c.courseIsDel = 0 AND  o.userId = $id AND o.orderType = 0 AND o.isDelete = 0 AND o.status = 2 ORDER BY $order DESC limit $skip,$pageSize");
             $count = DB::table('course as c')->leftJoin('orders as o', 'c.id', '=', 'o.courseId')->select('c.id')
                 ->where(['o.userId' => Auth::user()->id, 'o.orderType' => 0, 'c.courseStatus' => 0,'o.isDelete' => 0,'o.status' => 2])->count();
         } else { // 名师
             $flag == '1' ? $order = 'created_at' : $order = 'courseStudyNum';
             $info = DB::select("SELECT id,courseTitle,coursePic,courseDiscount,coursePrice,courseStudyNum + completecount AS coursePlayView FROM course WHERE teacherId = $id AND courseStatus = 0 AND courseIsDel = 0 ORDER BY $order DESC limit $skip,$pageSize");
-//            $info = DB::table('course')->select('id', 'courseTitle', 'coursePic', 'coursePrice', 'coursePlayView','courseDiscount','created_at','courseStudyNum','completecount')
-//                ->where(['teacherId' => Auth::user()->id, 'courseStatus' => '0'])->orderBy($order, 'desc')->skip($skip)->take($pageSize)->get();
             $count = DB::table('course')->select('id')->where(['teacherId' => Auth::user()->id, 'courseStatus' => '0'])->count();
         }
         if($info){
@@ -223,7 +217,6 @@ class perSpaceController extends Controller
                     $info[$key]->coursePrice = ceil($value->coursePrice/100);
                 }
                 $info[$key]->classHour = DB::table('coursechapter')->where(['courseId' => $value->id, 'status' => 0])->where('parentId', '<>', '0')->count();
-//                $info[$key]->coursePlayView = $value->courseStudyNum + $value->completecount;
             }
             return response()->json(['status' => true, 'data' => $info, 'total' => $count]);
         }else{
@@ -292,7 +285,6 @@ class perSpaceController extends Controller
             foreach ($info as $key => $value) {
                 if ($value->type == 0) { // 收藏课程为专题课程
                     $course[$key] = DB::table('course')->select('id', 'courseTitle', 'coursePic', 'coursePlayView', 'coursePrice', 'courseDiscount','courseStudyNum')->where('id', $value->courseId)->first();
-
                     if($course[$key]->courseDiscount){
                         $course[$key]->coursePrice = ceil(($course[$key]->courseDiscount/10000)*$course[$key]->coursePrice/100);
                     }else{
@@ -373,7 +365,6 @@ class perSpaceController extends Controller
     public function changeNoticeStatus($type)
     {
         $isRead['isRead'] = 1;
-        if(!Auth::check()) return response()->json(['status' => false]);
         if($type == 0){
             $result = DB::table('usermessage')->where(['username' => Auth::user()->username])->whereNotIn('type',[5,6])->update($isRead);
         }else{

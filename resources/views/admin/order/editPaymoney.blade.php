@@ -15,17 +15,17 @@
                 <li>
                     <a href="{{url('/admin/order/orderList')}}">订单管理</a>
                 </li>
-                <li class="active">应退金额</li>
+                <li class="active">实付金额</li>
             </ul><!-- .breadcrumb -->
         </div>
 
         <div class="page-content">
             <div class="page-header">
                 <h1>
-                    应退金额
+                    实付金额
                     <small>
                         <i class="icon-double-angle-right"></i>
-                        应退金额
+                        实付金额
                     </small>
                 </h1>
             </div><!-- /.page-header -->
@@ -44,7 +44,7 @@
                 <div class="col-xs-12">
                     <!-- PAGE CONTENT BEGINS -->
 
-                    <form action="{{url('admin/order/doRefundmoney')}}" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
+                    <form action="{{url('admin/order/doEditPaymoney')}}" method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
                         <input type="hidden" name="id" value="{{$data->id}}">
                         <input type="hidden" name="status" value="{{$data->status}}">
                         <div class="space-4"></div>
@@ -65,10 +65,10 @@
                         <div class="space-4"></div>
 
                         <div class="form-group">
-                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 应退金额 </label>
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 实付金额 </label>
 
                             <div class="col-sm-9">
-                                <input type="text" name="refundableAmount" id="form-field-1" placeholder="应退金额" class="col-xs-10 col-sm-5" value="{{$data->refundableAmount}}" />
+                                <input type="text" name="payPrice" id="form-field-1" placeholder="实付金额" class="col-xs-10 col-sm-5" value="{{$data->payPrice}}" />
                             <span class="help-inline col-xs-12 col-sm-7">
                                 <label class="middle">
                                     <span class="lbl"></span>
@@ -76,6 +76,26 @@
                             </span>
                             </div>
                         </div>
+
+                        <div class="space-4"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 支付方式 </label>
+
+                            <div class="col-sm-9">
+                                <select name="payType" id="form-field-1"class="col-xs-10 col-sm-5">
+                                    <option value="0" @if($data->payType == 0) selected @endif>支付宝</option>
+                                    <option value="1" @if($data->payType == 1) selected @endif>微信</option>
+                                    <option value="2" @if($data->payType == 2) selected @endif>其它</option>
+                                </select>
+                                <span class="help-inline col-xs-12 col-sm-7">
+                                    <label class="middle">
+                                        <span class="lbl"></span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+
 
 
                         <div class="clearfix form-actions">
@@ -99,5 +119,6 @@
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.page-content -->
+
     </div><!-- /.main-content -->
 @endsection

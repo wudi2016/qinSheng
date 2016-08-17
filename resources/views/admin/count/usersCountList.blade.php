@@ -50,6 +50,12 @@
                 </h1>
             </div><!-- /.page-header -->
 
+            <div style="width: 1000px;float: left;">
+                <div style="float: right;font-size: 9px;font-weight: bold">总数：<span class="totalCount"></span></div>
+            </div>
+            <div style="width: 1000px;float: left;">
+                <div style="float: right;font-size: 9px;font-weight: bold">当前月总数：<span class="nowMonthCount"></span></div>
+            </div>
             <div id="main" style="width: 1100px;height:400px;"></div>
 
             <form action="{{url('admin/excel/userCountExport')}}" method="post">

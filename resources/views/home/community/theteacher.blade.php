@@ -84,7 +84,7 @@
 
 		</div>
 
-		<div style="height:25px"></div>
+		<div style="height:225px"></div>
 		<div class="pagecon" >
 			<div style="display: inline-block"><div id="page" ms-if="page"></div></div>
 		</div>

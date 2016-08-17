@@ -31,6 +31,7 @@ a{
 .table_loop{
 	width:1200px;
 	height:auto;
+	margin:0 auto;
 	min-height:255px;
 	/*height:510px;*/
 }

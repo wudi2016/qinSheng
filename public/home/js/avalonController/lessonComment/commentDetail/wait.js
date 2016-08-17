@@ -20,30 +20,34 @@ define([], function() {
 		},
 		thePlayer: {},
 		setVideo: function(callback) {
+			var list = [];
+			comment.studentInfo.courseHighPath && list.push({
+				label: "超清",
+				file: comment.studentInfo.courseHighPath,
+				height: 720,
+				width: 1280,
+				type: "mp4"
+			});
+			comment.studentInfo.courseMediumPath && list.push({
+				default: true,
+				label: "高清",
+				file: comment.studentInfo.courseMediumPath,
+				height: 360,
+				width: 640,
+				type: "mp4"
+			});
+			comment.studentInfo.courseLowPath && list.push({
+				label: "标清",
+				file: comment.studentInfo.courseLowPath,
+				height: 180,
+				width: 320,
+				type: "mp4"
+			});
 			comment.thePlayer = jwplayer('mediaplayer').setup({
                 flashplayer: 'jwplayer/jwplayer.flash.swf',
                 playlist: [{
                     image: comment.studentInfo.coursePic,
-                    sources: [{
-                        label: "超清",
-                        file: comment.studentInfo.courseHighPath || comment.studentInfo.courseMediumPath || comment.studentInfo.courseLowPath,
-                        height: 720,
-                        width: 1280,
-                		type: "mp4"
-                    },{
-						default: true,
-                        label: "高清",
-                        file: comment.studentInfo.courseMediumPath || comment.studentInfo.courseLowPath,
-                        height: 360,
-                        width: 640,
-               	 		type: "mp4"
-                    },{
-                        label: "标清",
-                        file: comment.studentInfo.courseLowPath,
-                        height: 180,
-                        width: 320,
-                		type: "mp4"
-                    }]
+                    sources: list
                 }],
                 id: 'playerID',
                 width: '800',

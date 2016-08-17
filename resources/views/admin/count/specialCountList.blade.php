@@ -32,7 +32,6 @@
                         <option value="">--请选择--</option>
                         <option value="1" @if($data->type == 1) selected @endif>ID</option>
                         <option value="2" @if($data->type == 2) selected @endif>课程名称</option>
-                        <option value="3" @if($data->type == 3) selected @endif>时间筛选</option>
                         <option value="">全部</option>
                     </select>
                     <span class="input-icon">

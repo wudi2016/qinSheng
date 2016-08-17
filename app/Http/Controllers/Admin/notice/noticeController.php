@@ -55,11 +55,12 @@ class noticeController extends Controller
             'username.required' => '请选择接收消息的用户',
             'content.required' => '请输入通知内容'
         ]);
+
         $username = $request->username;
         $userType = $request->userType;
         $stuTempId = $request->stuTempId;
         $teaTempId = $request->teaTempId;
-        $data = $request->except('_token','pointAt','username','userType','stuTempId','teaTempId');
+        $data = $request->except('_token','pointAt','username','userType','stuTempId','teaTempId','selectAll');
         if($userType == 0){
             $data['tempId'] = $stuTempId;
         }else{
@@ -137,12 +138,14 @@ class noticeController extends Controller
     // 执行添加
     public function doAddNoticeTem(Request $request)
     {
+
         $this->validate($request, [
             'type' => 'required',
-            'tempName' => 'required'
+            'tempName' => 'required|max:10'
         ], [
             'type.required' => '请选择针对对象',
-            'tempName.required' => '请输入模板名称'
+            'tempName.required' => '请输入模板名称',
+            'tempName.max' => '模板名称长度不超过10'
         ]);
         $data = $request->except('_token');
         $result = DB::table('usermessagetem')->insertGetId($data);
@@ -177,10 +180,11 @@ class noticeController extends Controller
     {
         $this->validate($request, [
             'type' => 'required',
-            'tempName' => 'required'
+            'tempName' => 'required|max:10'
         ], [
             'type.required' => '请选择针对对象',
-            'tempName.required' => '请输入模板名称'
+            'tempName.required' => '请输入模板名称',
+            'tempName.max' => '模板名称长度不超过10'
         ]);
         $data = $request->except('_token');
         if (DB::table('usermessagetem')->where('id', $request['id'])->update($data)) {

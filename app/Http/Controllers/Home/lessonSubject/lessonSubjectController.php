@@ -94,36 +94,16 @@ class lessonSubjectController extends Controller
         if ($type == 1 && Auth::check()) {
             $pianoGrade = Auth::user()->pianoGrade ? Auth::user()->pianoGrade : '';
             switch ($pianoGrade) {
-                case '钢琴一级':
-                    $pianoGrade = 1;
-                    break;
-                case '钢琴二级':
-                    $pianoGrade = 2;
-                    break;
-                case '钢琴三级':
-                    $pianoGrade = 3;
-                    break;
-                case '钢琴四级':
-                    $pianoGrade = 4;
-                    break;
-                case '钢琴五级':
-                    $pianoGrade = 5;
-                    break;
-                case '钢琴六级':
-                    $pianoGrade = 6;
-                    break;
-                case '钢琴七级':
-                    $pianoGrade = 7;
-                    break;
-                case '钢琴八级':
-                    $pianoGrade = 8;
-                    break;
-                case '钢琴九级':
-                    $pianoGrade = 9;
-                    break;
-                case '钢琴十级':
-                    $pianoGrade = 10;
-                    break;
+                case '钢琴一级':$pianoGrade = 1;break;
+                case '钢琴二级':$pianoGrade = 2;break;
+                case '钢琴三级':$pianoGrade = 3;break;
+                case '钢琴四级':$pianoGrade = 4;break;
+                case '钢琴五级':$pianoGrade = 5;break;
+                case '钢琴六级':$pianoGrade = 6;break;
+                case '钢琴七级':$pianoGrade = 7;break;
+                case '钢琴八级':$pianoGrade = 8;break;
+                case '钢琴九级':$pianoGrade = 9;break;
+                case '钢琴十级':$pianoGrade = 10;break;
             }
         }
         if ($type == 1) {
@@ -205,9 +185,9 @@ class lessonSubjectController extends Controller
         // 课程详细信息
         $info = DB::table('course')->select()->where(['id' => $id, 'courseStatus' => 0, 'courseIsDel' => 0])->first();
         if (!$info) return response()->json(['status' => false]);
-        if (Auth::check()) {
-            $isBuy = DB::table('orders')->select('id')->where(['userId' => Auth::user()->id, 'orderType' => '0', 'courseId' => $id])->whereIn('status', [0, 2])->first();
-            $isCollection = DB::table('collection')->select('id')->where(['courseId' => $info->id, 'userId' => Auth::user()->id])->first();
+        if (\Auth::check()) {
+            $isBuy = DB::table('orders')->select('id')->where(['userId' => \Auth::user()->id, 'orderType' => '0', 'courseId' => $id])->whereIn('status', [0, 2])->first();
+            $isCollection = DB::table('collection')->select('id')->where(['courseId' => $info->id, 'userId' => \Auth::user()->id])->first();
             $isTeacher = Auth::user()->type == '2' ? true : false;
         } else {
             $isBuy = false;
@@ -482,7 +462,7 @@ class lessonSubjectController extends Controller
         return $this->returnResult($result);
     }
 
-    // 增加课程观看完成数
+    // 增加课程观看数
     public function addCompleteCount(Request $request)
     {
         $result = DB::table('course')->where('id', $request->id)->increment('coursePlayView');

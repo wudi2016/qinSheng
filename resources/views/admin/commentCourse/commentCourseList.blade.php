@@ -29,6 +29,13 @@
                         <input type="text" name="endTime" id="form-field-1" placeholder="结束时间" class="col-xs-10 col-sm-5" value="{{$data->endTime}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;margin-left:10px;background:url('{{asset("admin/image/2.png")}}') no-repeat;background-position:right;"/>
                     </span>
 
+                    <select name="state" id="form-field-1">
+                        <option value="">--请选择--</option>
+                        <option value="0" @if($data->status === '0') selected @endif>审核未通过</option>
+                        <option value="1" @if($data->status === '1') selected @endif>审核中</option>
+                        <option value="2" @if($data->status === '2') selected @endif>审核通过</option>
+                    </select>
+
                     <select name="type" id="form-field-1" class="searchtype">
                         <option value="">--请选择--</option>
                         <option value="1"  @if($data->type == 1) selected @endif>ID</option>
@@ -184,17 +191,17 @@
                                                 </span>
                                                 @endpermission
 
-                                                @permission('edit.commentcourse')
-                                                <span class="btn btn-xs btn-inverse" style="position: relative;display: inline-block;">
-                                                    <strong>课程状态</strong>
-                                                    <span class="icon-caret-down icon-on-right"></span>
-                                                    <select id="" class="col-xs-10 col-sm-2" onchange="courseCheck({{$comcourse->id}},this.value);" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">
-                                                        <option value="44" selected></option>
-                                                        <option value="0" >激活</option>
-                                                        <option value="1" >锁定</option>
-                                                    </select>
-                                                </span>
-                                                @endpermission
+                                                {{--@permission('edit.commentcourse')--}}
+                                                {{--<span class="btn btn-xs btn-inverse" style="position: relative;display: inline-block;">--}}
+                                                    {{--<strong>课程状态</strong>--}}
+                                                    {{--<span class="icon-caret-down icon-on-right"></span>--}}
+                                                    {{--<select id="" class="col-xs-10 col-sm-2" onchange="courseCheck({{$comcourse->id}},this.value);" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">--}}
+                                                        {{--<option value="44" selected></option>--}}
+                                                        {{--<option value="0" >激活</option>--}}
+                                                        {{--<option value="1" >锁定</option>--}}
+                                                    {{--</select>--}}
+                                                {{--</span>--}}
+                                                {{--@endpermission--}}
 
                                                 @permission('edit.commentcourse')
                                                 <a href="{{url('/admin/commentCourse/editCommentCourse/'.$comcourse->id)}}" class="btn btn-xs btn-info">

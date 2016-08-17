@@ -32,11 +32,11 @@
                 	<div class="persapce_li">
 						<div class="persapce_li_con_per">
 							@if(\Auth::user()->type == 0)
-								<a href="{{url('/member/student/0/#basicInfo')}}">个人中心</a>
+								<a href="{{url('/member/student/0/#myOrders')}}">个人中心</a>
 							@elseif(\Auth::user()->type == 1)
-								<a href="{{url('/member/student/1/#basicInfo')}}">个人中心</a>
+								<a href="{{url('/member/student/1/#myOrders')}}">个人中心</a>
 							@elseif(\Auth::user()->type == 2)
-								<a href="{{url('/member/famousTeacher/#basicInfo')}}">个人中心</a>
+								<a href="{{url('/member/famousTeacher/#waitComment')}}">个人中心</a>
 							@endif
 						</div>
 					</div>
@@ -128,7 +128,7 @@
 				    <div style="height:30px;"></div>
 					<div class="mmsg_con_con">
 						<div class="mmmsg_con_con_l"></div>
-						<div class="mmmsg_con_con_r">qinsheng@188.com</div>
+						<div class="mmmsg_con_con_r">service@musicdp.com</div>
 					</div>
 				</div>
 			</div>

@@ -157,7 +157,15 @@
                                         <td>{{$order->orderTitle}}</td>
                                         <td>{{$order->orderPrice}}</td>
                                         <td>{{$order->payPrice}}</td>
-                                        <td>{{$order->payType ? '微信支付' : '支付宝'}}</td>
+                                        <td>
+                                            @if($order->payType == 0)
+                                                支付宝
+                                            @elseif($order->payType == 1)
+                                                微信
+                                            @elseif($order->payType == 2)
+                                                其它
+                                            @endif
+                                        </td>
                                         <td>{{$order->userId}}</td>
                                         <td>{{$order->userName}}</td>
                                         <td>{{$order->teacherId}}</td>
@@ -236,6 +244,15 @@
                                                     <a href="{{url('/admin/order/remarkList/'.$order->id).'/'.$data->status}}" class="btn btn-xs btn-warning">
                                                         <i class=""></i>查看备注
                                                     </a>
+                                                @endpermission
+
+                                                @permission('edit.Paymoney')
+                                                {{--未付款的订单修改实付金额--}}
+                                                @if($order->status == 5)
+                                                    <a href="{{url('/admin/order/editPaymoney/'.$order->id.'/'.$data->status)}}" class="btn btn-xs btn-info">
+                                                        <i class="icon-pencil bigger-120"></i>编辑实付金额
+                                                    </a>
+                                                @endif
                                                 @endpermission
 
                                                 @permission('del.order')
@@ -352,7 +369,7 @@
                         <div class="errortitle" style="height: 30px"></div>
                         <div class="errormsg">
                             <lable>备注:</lable>
-                            <textarea name="content" maxlength="100"  placeholder="请填写备注..." id="errortext" cols="30" rows="13" required ms-duplex="content"></textarea>
+                            <textarea name="content" maxlength="100"  placeholder="请填写备注..." id="errortext" cols="30" rows="13" ms-duplex="content" required></textarea>
                         </div>
 
                     </div>

@@ -28,8 +28,30 @@ class ExcelController extends Controller
      */
     public function userInfoTemplate()
     {
-        $megs = ['用户账号', '用户姓名', '性别sex(1:男,2:女)', '手机号phone', '钢琴等级(例:钢琴一级)', '学琴年限(例如:2016)', '学琴月份(例如:5)','省code(省管理)', '市code(市管理)','出生年份(例:1996)', '出生月份(例:5)', '出生日(例:25)', '用户身份(学生:0,教师:1)', '所在单位(例:中央音乐学院)', '毕业院校(例:中央音乐学院)', '学历(例:大学)', '职称(例:教授)'];
-        $this->template('users', '用户信息导入模板', $megs);
+        //省市信息
+        $info = \DB::table('city')->join('province','province.code','=','city.provincecode')->select('city.code as 市code','city.name as 市name','province.name as 省name','province.code as 省code')->where('city.status','0')->orderBy('provinceCode')->get();
+        foreach ($info as $v) {
+            $data[] = get_object_vars($v);
+        }
+//        dd($data);
+        $titles = array_keys($data[0]);
+        $titles = array_combine($titles, $titles);
+        array_unshift($data, $titles);
+        //用户模板字段
+        $megs = ['用户账号', '用户姓名', '性别sex(1:男,2:女)', '手机号phone', '钢琴等级(例:钢琴一级)', '学琴年限(例如:2016)', '学琴月份(例如:5)','省code(参考sheet1)', '市code(参考sheet1)','出生年份(例:1996)', '出生月份(例:5)', '出生日(例:25)', '用户身份(学生:0,教师:1)', '所在单位(例:中央音乐学院)', '毕业院校(例:中央音乐学院)', '学历(例:大学)', '职称(例:教授)'];
+        $data1 = $this->template('users', $megs);
+        //生成导入模板
+        Excel::create(iconv('UTF-8', 'GBK','用户信息导入模板'), function ($excel) use ($data1,$data) {
+            //sheet
+            $excel->sheet('sheet', function ($sheet) use ($data1) {
+                $sheet->rows($data1);
+            });
+            //sheet1
+            $excel->sheet('sheet1', function ($sheet) use ($data) {
+                $sheet->rows($data);
+            });
+        })->download('xlsx');
+
     }
 
     /**
@@ -260,9 +282,9 @@ class ExcelController extends Controller
     }
 
     /**
-     *封装模板
+     *封装模板所需数据
      */
-    public function template($table, $title, $msg)
+    public function template($table, $msg)
     {
         $info = DB::select("select column_name from information_schema.columns where `TABLE_SCHEMA` = 'qinsheng' and `TABLE_NAME` = ? ", [$table]);
         foreach ($info as $val) {
@@ -324,11 +346,12 @@ class ExcelController extends Controller
         $data[] = $array;
         $messages = array_combine($array, $msg);
         $data[1] = $messages;
-        Excel::create(iconv('UTF-8', 'GBK',$title), function ($excel) use ($data) {
-            $excel->sheet('sheet', function ($sheet) use ($data) {
-                $sheet->rows($data);
-            });
-        })->download('xlsx');
+        return  $data;
+//        Excel::create(iconv('UTF-8', 'GBK',$title), function ($excel) use ($data) {
+//            $excel->sheet('sheet', function ($sheet) use ($data) {
+//                $sheet->rows($data);
+//            });
+//        })->download('xlsx');
     }
 
 

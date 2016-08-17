@@ -129,11 +129,18 @@
 <script type="text/javascript" src="{{asset('home/js/layout/jquery.min.js') }}"></script>
 <script type="text/javascript" src="{{asset('home/js/users/register.js') }}"></script>
 <script>
-    jwplayer('myplayer').setup({
-//        flashplayer: '/home/jplayer/jwplayer.flash.swf',
-        file: '/uploads/uploads/video/introduce/default.mp4',
-        image:'/home/image/index/vdo.png',
-        width: '700',
-        height: '400'});
+    $.ajax({
+        type: "get",
+        url: "/index/introVdo",
+        async:false,
+        success: function(data){
+            jwplayer('myplayer').setup({
+                file: data.video,
+                image:data.pic,
+                width: '700',
+                height: '400'
+            });
+        }
+    });
 </script>
 </html>

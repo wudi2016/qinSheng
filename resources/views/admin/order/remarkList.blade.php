@@ -132,7 +132,7 @@
 
 
                                                 @permission('del.order')
-                                                <a href="{{url('/admin/order/delRemark/'.$remark->orderid.'/'.$remark->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
+                                                <a href="{{url('/admin/order/delRemark/'.$remark->orderid.'/'.$remark->id.'/'.$data->status)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
                                                     <i class="icon-trash bigger-120"></i>
                                                 </a>
                                                 @endpermission

@@ -184,6 +184,17 @@ class indexController extends Controller
     }
 
     /**
+     * 介绍视频接口
+     *
+     * @return json
+     */
+    public function introVdo()
+    {
+        $data = DB::table('loginvideo')->select('pic','video')->orderBy('id','desc')->first();
+        return response()->json($data);
+    }
+
+    /**
      * 登陆验证接口
      *
      * @return result

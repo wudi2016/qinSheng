@@ -21,7 +21,10 @@ function fetchData(cb) {
                     categories: data.categories,
                     data:data.data
                 });
+                $('.totalCount').html(data.totalCount);
+                $('.nowMonthCount').html(data.nowMonthCount);
                 $("input[name='excels']").val(JSON.stringify(data));
+
             }
         });
     })
@@ -35,6 +38,8 @@ function fetchData(cb) {
                 data:data.data
             });
             console.log(JSON.stringify(data));
+            $('.totalCount').html(data.totalCount);
+            $('.nowMonthCount').html(data.nowMonthCount);
             $("input[name='excels']").val(JSON.stringify(data));
         }
     });

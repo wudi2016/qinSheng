@@ -42,7 +42,7 @@ define([], function () {
         haveCourse : true,
         catalogInfo: [],
         downloadMsg: false, commentMsg: false, catalogMsg : false,
-        getData: function (url, type, data, model) {
+        getData: function (url, type, data, model, callback) {
             $.ajax({
                 url: url, type: type || 'GET', data: data || {}, dataType: 'json',
                 success: function (response) {
@@ -346,7 +346,7 @@ define([], function () {
                 aspectratio: '16:9',
                 type: "mp4"
             });
-            //typeof callback === 'function' && callback();
+            typeof callback === 'function' && callback();
             if(detail.detailInfo.isTryLearn || detail.detailInfo.isTeacher || detail.detailInfo.isBuy || detail.detailInfo.isFree){ // 是名师或者已购买
                 if(!detail[model].courseHighPath && !detail[model].courseMediumPath && !detail[model].courseLowPath){ // 视频都不可观看
                     detail.thePlayer.remove();
@@ -359,28 +359,27 @@ define([], function () {
             detail.thePlayer.onPlaylistComplete(function(){
 
                 detail.getData('/lessonSubject/addCompleteCount', 'POST', {id: detail.detailId}, 'addCompleteCount');
+                if(detail.playFlag < detail.playListLength){
+                    detail.videoType = false;
+                    detail.videoPath = {
+                        courseHighPath: detail.playList[detail.playFlag].courseHighPath,
+                        courseMediumPath: detail.playList[detail.playFlag].courseMediumPath,
+                        courseLowPath: detail.playList[detail.playFlag].courseLowPath
+                    };
+                    detail.setVideo(function () {
+                        detail.noresourse = false;
+                        detail.thePlayer.play(true);
+                    });
+                    detail.getData('/lessonSubject/addCourseView', 'POST', {
+                        chapterId: detail.playList[detail.playFlag].id,
+                        userId: detail.mineUserId,
+                        courseId: detail.detailId
+                    }, 'addCourseView');
+                    detail.playFlag = detail.playFlag + 1;
+                }
                 if(detail.detailInfo.isTryLearn && !detail.detailInfo.isBuy && !detail.detailInfo.isFree && !detail.detailInfo.isTeacher){
                     detail.thePlayer.remove();
                     detail.tryLearnOver = true;
-                }else{
-                    if(detail.playFlag < detail.playListLength){
-                        detail.videoType = false;
-                        detail.videoPath = {
-                            courseHighPath: detail.playList[detail.playFlag].courseHighPath,
-                            courseMediumPath: detail.playList[detail.playFlag].courseMediumPath,
-                            courseLowPath: detail.playList[detail.playFlag].courseLowPath
-                        };
-                        detail.setVideo(function () {
-                            detail.noresourse = false;
-                            detail.thePlayer.play(true);
-                        });
-                        detail.getData('/lessonSubject/addCourseView', 'POST', {
-                            chapterId: detail.playList[detail.playFlag].id,
-                            userId: detail.mineUserId,
-                            courseId: detail.detailId
-                        }, 'addCourseView');
-                        detail.playFlag = detail.playFlag + 1;
-                    }
                 }
             });
         },

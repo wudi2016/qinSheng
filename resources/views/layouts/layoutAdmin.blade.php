@@ -564,6 +564,13 @@
 									</a>
 								</li>
 
+								<li class="loginvideologinvideo">
+									<a href="{{url('/admin/loginVideo/loginVideoList')}}">
+										<i class="icon-double-angle-right"></i>
+										登录视频推荐列表
+									</a>
+								</li>
+
 
 
 							</ul>
@@ -990,47 +997,29 @@
 					$('.' + auth + route.slice(0, -4)).addClass('active');
 				} else if (route.match(/\//g).length == '3') {
 					remarks = route.split('/')[0] + route.split('/')[1] + route.split('/')[3];
+					console.log(remarks);
+					status = route.split('/')[3];
 					//用户管理
 					if(remarks == 'usersresetpassu1' || remarks == 'usersshowu1' || remarks == 'usersfocuslistu1' || remarks == 'usersfriendslistu1'){
 						$('.usersuser').parent().parent().addClass('open');
 						$('.usersuser').parent().css('display', 'block');
 						$('.usersuser').addClass('active');
 					}
-					//订单
-					if(orderroute == 'orderorderlist8'){
-						$('.orderorderlist8').parent().parent().addClass('open');
-						$('.orderorderlist8').parent().css('display', 'block');
-						$('.orderorderlist8').addClass('active');
+
+					if(remarks == 'orderremarklist'+status || remarks == 'ordereditretiredmoney'+status || remarks == 'ordereditrefundmoney'+status || remarks == 'orderrefundlist'+status){
+						$('.orderorderlist'+status).parent().parent().addClass('open');
+						$('.orderorderlist'+status).parent().css('display', 'block');
+						$('.orderorderlist'+status).addClass('active');
 					}
-					if(remarks == 'orderremarklist5'){
-						$('.orderorderlist5').parent().parent().addClass('open');
-						$('.orderorderlist5').parent().css('display', 'block');
-						$('.orderorderlist5').addClass('active');
+					if(remarks == 'orderremarklist'+status || remarks == 'orderrefundlist'+status){
+						$('.orderorderlist'+status).parent().parent().addClass('open');
+						$('.orderorderlist4'+status).parent().css('display', 'block');
+						$('.orderorderlist4'+status).addClass('active');
 					}
-					if(remarks == 'orderremarklist0'){
-						$('.orderorderlist0').parent().parent().addClass('open');
-						$('.orderorderlist0').parent().css('display', 'block');
-						$('.orderorderlist0').addClass('active');
-					}
-					if(remarks == 'orderremarklist1'){
-						$('.orderorderlist1').parent().parent().addClass('open');
-						$('.orderorderlist1').parent().css('display', 'block');
-						$('.orderorderlist1').addClass('active');
-					}
-					if(remarks == 'orderremarklist2'){
-						$('.orderorderlist2').parent().parent().addClass('open');
-						$('.orderorderlist2').parent().css('display', 'block');
-						$('.orderorderlist2').addClass('active');
-					}
-					if(remarks == 'orderremarklist3' || remarks == 'ordereditretiredmoney3' || remarks == 'ordereditrefundmoney3' || remarks == 'orderrefundlist3'){
-						$('.orderorderlist3').parent().parent().addClass('open');
-						$('.orderorderlist3').parent().css('display', 'block');
-						$('.orderorderlist3').addClass('active');
-					}
-					if(remarks == 'orderremarklist4' || remarks == 'orderrefundlist4'){
-						$('.orderorderlist4').parent().parent().addClass('open');
-						$('.orderorderlist4').parent().css('display', 'block');
-						$('.orderorderlist4').addClass('active');
+					if(remarks == 'ordereditpaymoney'+status || remarks == 'ordereditpaymoney'+status){
+						$('.orderorderlist'+status).parent().parent().addClass('open');
+						$('.orderorderlist'+status).parent().css('display', 'block');
+						$('.orderorderlist'+status).addClass('active');
 					}
 
 				}

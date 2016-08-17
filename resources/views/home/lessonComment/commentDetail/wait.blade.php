@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-	<div class="commentDetail" ms-controller="waitCommentController">
+	<div class="commentDetail ms-controller" ms-controller="waitCommentController">
 		<div class="crumbs">
 			@if(\Auth::user() -> type == 2)
 				<a href="/member/student/{{\Auth::user() -> id}}">个人中心</a> >

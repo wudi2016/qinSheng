@@ -57,10 +57,34 @@ class userCountController extends Controller
             }
 
         }
+
+        //计算当前月的总数
+        if($time != 'null'){
+            $nowMonthCount = $time;
+        }else{
+            $nowMonthCount = date('Y-m',time());
+        }
+        $firstMonthDay = $nowMonthCount.'-01 00:00:00';
+        $endMonthDay = date('Y-m-d H:i:s',strtotime($days.' days'.$firstMonthDay));
+       if($orders == 'orders'){
+           $montbCount = DB::table('orders')->whereBetween('created_at',[$firstMonthDay,$endMonthDay])->where('isDelete',0)->whereIn('status',[0,1,2,3,4])->count();
+       }else{
+           $montbCount = DB::table('users')->whereIn('type',[0,1])->whereBetween('created_at',[$firstMonthDay,$endMonthDay])->count();
+       }
+
+        //总数
+        if($orders == 'orders'){
+            $totalCount = DB::table('orders')->where('isDelete',0)->whereIn('status',[0,1,2,3,4])->count();
+        }else{
+            $totalCount = DB::table('users')->whereIn('type',[0,1])->count();
+        }
+
 //        dump($count);
 //        dd($date);
         $data['categories'] = array_values($date);
         $data['data'] = array_values($count);
+        $data['nowMonthCount'] = $montbCount;
+        $data['totalCount'] = $totalCount;
         return response()->json($data);
     }
 

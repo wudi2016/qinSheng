@@ -32,6 +32,10 @@ class teacherCourseController extends Controller
         if($request['endTime']){ //上传的起止时间
             $query = $query->where('a.created_at','<=',$request['endTime']);
         }
+        //审核状态
+        if($request['state'] === '0' || $request['state'] === '1' || $request['state'] === '2'){
+            $query = $query->where('a.state',$request['state']);
+        }
         if($request['type'] == 1){
             $query = $query->where('a.id','like','%'.trim($request['search']).'%');
         }
@@ -123,6 +127,7 @@ class teacherCourseController extends Controller
             }
         }
         $data->type = $request['type'];
+        $data->status = $request['state'];
         $data->beginTime = $request['beginTime'];
         $data->endTime = $request['endTime'];
 //        dd($data);
@@ -300,6 +305,11 @@ class teacherCourseController extends Controller
     public function sendStudentMessage(Messages $message,Request $request){
         //名师点评视频通过后将订单表状态改为已完成
         DB::table('orders')->where('orderSn',$request['orderSn'])->update(['status'=>2]);
+
+        //删除已有的通知
+        if(DB::table('usermessage')->where(['username'=>$request['username'],'actionId'=>$request['actionId'],'type'=>2])->first()){
+            DB::table('usermessage')->where(['username'=>$request['username'],'actionId'=>$request['actionId'],'type'=>2])->delete();
+        }
 
         //名师视频审核通过后消息中心发送消息
         $data['actionId'] = $request['actionId'];
