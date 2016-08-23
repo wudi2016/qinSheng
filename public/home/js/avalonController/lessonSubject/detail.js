@@ -173,7 +173,7 @@ define([], function () {
         },
         // 弹窗处理
         popUp: false,path : '', dataName : '',
-        popUpSwitch: function (value, id, path, name, isTeacher) {
+        popUpSwitch: function (value, id, path, name, isTeacher,isFree) {
             if (id == 'delComment') {
                 detail.getData('/lessonSubject/deleteComment', 'POST', {
                     id: detail.commentInfo[detail.deleteIndex].id,
@@ -185,12 +185,12 @@ define([], function () {
                 });
             }
             if (value == 'dataDownload') {
-                if (id || isTeacher) {
+                if (id || isTeacher || isFree) {
                     detail.popUp = 'downloadData';
                     detail.path = path;
                     detail.dataName = name;
                     return;
-                } else {
+                }else{
                     detail.popUp = false;
                 }
             }

@@ -60,6 +60,14 @@ class commentCourseController extends Controller
             ->orderBy('a.id','desc')
             ->paginate(15);
         foreach($data as &$val){
+            //查看是否有相应的点评视频
+            $com = DB::table('commentcourse')->where('orderSn',$val->orderSn)->first();
+            if($com){
+                $val->comstatus = true;
+            }else{
+                $val->comstatus = false;
+            }
+
             if($val->courseLowPath){
                 if(!Cache::get($val->courseLowPath)){
                     $val->courseLowPathurl = $this->getPlayUrl($val->courseLowPath);
@@ -132,6 +140,14 @@ class commentCourseController extends Controller
 //            DB::table('orders')->where('orderSn',$request['orderSn'])->update(['status'=>0]);
             $arr = array('state'=>'0','msg'=>'审核未通过');
         }elseif($request['state'] == 1){
+            //如是是审核中时将发给名师的消息删除
+            if(DB::table('usermessage')->where(['username'=>$request['teachername'],'actionId'=>$request['id'],'type'=>7])->first()){
+                DB::table('usermessage')->where(['username'=>$request['teachername'],'actionId'=>$request['id'],'type'=>7])->delete();
+            }
+            //将发给学员的未通过原因删除
+            if(DB::table('usermessage')->where(['username'=>$request['username'],'actionId'=>$request['id'],'type'=>0])->first()){
+                DB::table('usermessage')->where(['username'=>$request['username'],'actionId'=>$request['id'],'type'=>0])->delete();
+            }
 //            DB::table('orders')->where('orderSn',$request['orderSn'])->update(['status'=>0]);
             $arr = array('state'=>'1','msg'=>'审核中');
         }elseif($request['state'] == 2){

@@ -90,7 +90,7 @@
                             <!-- 介绍 -->
                             <div class="content_introduce">
                                 <a ms-attr-href="teacherhomepage + el.userId">
-                                    <div ms-html="el.intro" ms-theteacheryincang></div>
+                                    <div ms-html="el.intro | truncate(70, '...')" ms-theteacheryincang></div>
                                 </a>
                             </div>
                         </div>

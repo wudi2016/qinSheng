@@ -70,6 +70,7 @@ $('.uname').blur(function(){
 
 // 手机号验证
 $('.uphone').blur(function(){
+    console.log('触发手机号验证');
     var self = $(this);
 
     $(this).parent().parent().next().html('');
@@ -114,38 +115,43 @@ $('.uphone').blur(function(){
 
 //获取验证码
 var getMsg = function(){
-    if(!checkUphone){//手机号验证没通过
-        $('.uphone').trigger('blur');
-    }else{//手机号验证通过
+    setTimeout(function(){
 
-        //获取验证码
-        var phone = $('.uphone').val();
-        $.ajax({
-            type: "get",
-            url: "/index/getMessage/"+phone,
-            // async:false,
-            success: function(data){
-                if(data.type== true){
-                    code = data.info;
-                }else{
-                    code = data.info;
+        if(!checkUphone){//手机号验证没通过
+            // $('.uphone').trigger('blur');
+            return false;
+        }else{//手机号验证通过
+
+            //获取验证码
+            var phone = $('.uphone').val();
+            $.ajax({
+                type: "get",
+                url: "/index/getMessage/"+phone,
+                // async:false,
+                success: function(data){
+                    if(data.type== true){
+                        code = data.info;
+                    }else{
+                        code = data.info;
+                    }
                 }
-            }
-        });
+            });
 
-        //计数60s
-        var countdown = 90;
-        $(".getyzm").attr({ disabled: "disabled"});//重新发送按钮 不能点击
-        var myTime = setInterval(function() {
-            countdown--;
-            $('.getyzm').html(countdown); // 通知视图模型的变化
-            if(countdown == 0){
-                $('.getyzm').html('重发').removeAttr("disabled");//重新发送按钮 可以点击
-                clearInterval(myTime);
-            }
-        }, 1000);
+            //计数60s
+            var countdown = 90;
+            $(".getyzm").attr({ disabled: "disabled"});//重新发送按钮 不能点击
+            var myTime = setInterval(function() {
+                countdown--;
+                $('.getyzm').html(countdown); // 通知视图模型的变化
+                if(countdown == 0){
+                    $('.getyzm').html('重发').removeAttr("disabled");//重新发送按钮 可以点击
+                    clearInterval(myTime);
+                }
+            }, 1000);
 
-    }
+        }
+    }, 900);
+
 }
 
 //验证码验证

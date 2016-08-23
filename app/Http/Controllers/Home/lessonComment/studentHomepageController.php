@@ -112,6 +112,7 @@ class studentHomepageController extends Controller
 		if ($request['type']) {
 			array_push($condition, $tableName.'.teachername as extra');
 			array_push($condition, $tableName.'.coursePlayView');
+			array_push($condition, $tableName.'.courseDiscount');
 			$where['commentcourse.state'] = 2;
 		} else {
 			array_push($condition, $tableName.'.completecount');

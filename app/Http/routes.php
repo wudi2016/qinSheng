@@ -112,31 +112,31 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
                 ||--------------------------------------------------------------------------------------
                  */
         //学员个人中心主页    0 学生学员&&    1  教师学员
-        Route::get('/student/{personID}',['middleware' => 'check','uses'=>'perSpaceController@index']);
+        Route::get('/student/{personID}',['middleware' => 'online','uses'=>'perSpaceController@index']);
         //	名师个人中心主页  type 为 2
-        Route::get('/famousTeacher', ['middleware' => 'check','uses'=>'perSpaceController@famousTeacher']);
+        Route::get('/famousTeacher', ['middleware' => 'online','uses'=>'perSpaceController@famousTeacher']);
 
 
         //个人中心我的关注
-        Route::get('/myFocus/{pageNumber}/{pageSize}',['middleware' => 'check','uses'=>'perSpaceController@myFocus']);
+        Route::get('/myFocus/{pageNumber}/{pageSize}',['middleware' => 'online','uses'=>'perSpaceController@myFocus']);
 
         //个人中心我的粉丝&&我的好友（暂定 谁关注我就是我的好友）
-        Route::get('/myFriends/{pageNumber}/{pageSize}',['middleware' => 'check','uses'=>'perSpaceController@myFriends']);
+        Route::get('/myFriends/{pageNumber}/{pageSize}',['middleware' => 'online','uses'=>'perSpaceController@myFriends']);
 
         //学员--我的订单
-        Route::post('/myOrders/{pageNumber}/{pageSize}',['middleware' => 'check','uses'=>'perSpaceController@myOrders']);
+        Route::post('/myOrders/{pageNumber}/{pageSize}',['middleware' => 'online','uses'=>'perSpaceController@myOrders']);
 
         //名师--待评点评
-        Route::post('/waitComment/{pageNumber}/{pageSize}',['middleware' => 'check','uses'=>'perSpaceController@waitComment']);
+        Route::post('/waitComment/{pageNumber}/{pageSize}',['middleware' => 'online','uses'=>'perSpaceController@waitComment']);
 
         //名师--点评完成
-        Route::post('/completeComment/{pageNumber}/{pageSize}',['middleware' => 'check','uses'=>'perSpaceController@completeComment']);
+        Route::post('/completeComment/{pageNumber}/{pageSize}',['middleware' => 'online','uses'=>'perSpaceController@completeComment']);
 
 //        //我的订单 -- 申请退款页面数据接口
 //        Route::post('/applyRefund',['middleware' => 'check','uses'=>'perSpaceController@applyRefund']);
 
         //我的订单 -- 提交退款申请
-        Route::post('/submitApply',['middleware' => 'check','uses'=>'perSpaceController@submitApply']);
+        Route::post('/submitApply',['middleware' => 'online','uses'=>'perSpaceController@submitApply']);
 
 
 
@@ -146,25 +146,25 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
 
 
         // 个人中心 专题课程 type => 1 => 学员 type => 2 => 名师 flag => 1 => 最新 flag => 2 => 热门
-        Route::get('/getCourse/{type}/{flag}/{pageNumber}/{pageSize}',['middleware' => 'check','uses'=>'perSpaceController@getCourse']);
+        Route::get('/getCourse/{type}/{flag}/{pageNumber}/{pageSize}',['middleware' => 'online','uses'=>'perSpaceController@getCourse']);
         // 个人中心 点评课程 type => 1 => 最新 flag => 2 => 热门
-        Route::post('/getCommentCourse/{pageNumber}/{pageSize}',['middleware' => 'check','uses'=>'perSpaceController@getCommentCourse']);
+        Route::post('/getCommentCourse/{pageNumber}/{pageSize}',['middleware' => 'online','uses'=>'perSpaceController@getCommentCourse']);
         // 个人中心 我的收藏
-        Route::get('/getCollectionInfo/{pageNumber}/{pageSize}', ['middleware' => 'check','uses'=>'perSpaceController@getCollectionInfo']);
+        Route::get('/getCollectionInfo/{pageNumber}/{pageSize}', ['middleware' => 'online','uses'=>'perSpaceController@getCollectionInfo']);
         // 个人中心 删除收藏
-        Route::post('/deleteCollection', ['middleware' => 'check','uses'=>'perSpaceController@deleteCollection']);
+        Route::post('/deleteCollection', ['middleware' => 'online','uses'=>'perSpaceController@deleteCollection']);
         // 个人中心 全部通知
-        Route::post('/getNoticeInfo/{pageNumber}/{pageSize}',['middleware' => 'check','uses'=>'perSpaceController@getNoticeInfo']);
+        Route::post('/getNoticeInfo/{pageNumber}/{pageSize}',['middleware' => 'online','uses'=>'perSpaceController@getNoticeInfo']);
         // 个人中心 删除通知
-        Route::post('/deleteNotice',['middleware' => 'check','uses'=>'perSpaceController@deleteNotice']);
+        Route::post('/deleteNotice',['middleware' => 'online','uses'=>'perSpaceController@deleteNotice']);
         // 个人中心 更改通知状态
-        Route::get('/changeNoticeStatus/{type}',['middleware' => 'check','uses'=>'perSpaceController@changeNoticeStatus']);
+        Route::get('/changeNoticeStatus/{type}',['middleware' => 'online','uses'=>'perSpaceController@changeNoticeStatus']);
         // 个人中心 查看是否有通知消息
-        Route::post('/findHaveNotice',['middleware' => 'check','uses'=>'perSpaceController@findHaveNotice']);
+        Route::post('/findHaveNotice',['middleware' => 'online','uses'=>'perSpaceController@findHaveNotice']);
         // 个人中心 评论回复
-        Route::post('/getCommentInfo/{pageNumber}/{pageSize}', ['middleware' => 'check','uses'=>'perSpaceController@getCommentInfo']);
+        Route::post('/getCommentInfo/{pageNumber}/{pageSize}', ['middleware' => 'online','uses'=>'perSpaceController@getCommentInfo']);
         // 个人中心 评论删除
-        Route::post('/deleteComment', ['middleware' => 'check','uses'=>'perSpaceController@deleteComment']);
+        Route::post('/deleteComment', ['middleware' => 'online','uses'=>'perSpaceController@deleteComment']);
 
 
 
@@ -835,6 +835,9 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
         Route::get('weiXinRefund/{orderId}','orderController@weiXinRefund');
         //支付宝确认退款
         Route::any('alipayRefund/{orderId}','orderController@alipayRefund');
+
+        //批量删除已退订单
+        Route::post('deletes','orderController@deletes');
     });
 
 

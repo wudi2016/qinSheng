@@ -256,12 +256,12 @@
                 <div class="right_focus_repeat" ms-repeat="myFocusList">
                     {{--名师--}}
                     <a ms-if="el.type == 2" ms-attr-href="'/lessonComment/teacher/'+el.id">
-                        <img ms-attr-src="el.pic" alt="" width="84" height="84">
+                        <img ms-attr-src="el.pic" alt="" width="84" height="84" onerror="this.src='/home/image/layout/default.png'">
                         <div class="focus_repeat_name" ms-text="el.username"></div>
                     </a>
                     {{--学员--}}
                     <a ms-if="el.type != 2" ms-attr-href="'/lessonComment/student/'+el.id">
-                        <img ms-attr-src="el.pic" alt="" width="84" height="84">
+                        <img ms-attr-src="el.pic" alt="" width="84" height="84" onerror="this.src='/home/image/layout/default.png'">
                         <div class="focus_repeat_name" ms-text="el.username"></div>
                     </a>
                 </div>
@@ -321,36 +321,47 @@
             <div class="center_right_notice">
                 {{--//通知循环开始--}}
                 <div class="right_notice_repeat" ms-repeat="noticeInfo">
+                    <div style="width:100%;height:12px;"></div>
                     <div class="notice_repeat_comment">
                         <!-- 后台发送消息 -->
+                        <div class="notice"></div>
                         <div class="repeat_comment_text" ms-if="el.type == 0 && el.actionId">
                             <!-- 审核未通过 -->
-                            <a ms-attr-href="'/lessonComment/reUpload/' + el.actionId + '/' + el.id"><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 600px;display: block" ms-text="'上传视频审核未通过，原因：' + el.content" ms-attr-title=""></span></a>
+                            <a ms-attr-href="'/lessonComment/reUpload/' + el.actionId + '/' + el.id">
+                                <span style="display: block;float:left;" ms-text="'上传视频审核未通过，原因：' + el.content" ms-attr-title=""></span>
+                            </a>
                         </div>
                         <div class="repeat_comment_text" ms-if="el.type == 0 && el.tempId != 0">
                             <!-- 审核未通过 -->
+                            {{--<span class="notice"></span>--}}
                             <span class="span_light" ms-text="el.tempName + '&nbsp;'" ms-if="el.tempName" style="float: left;display: block;" ms-attr-title="el.tempName"></span>
-                            <span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 400px;display: block;float: left;" ms-text="el.content" ms-attr-title="el.content"></span>
+                            <span ms-text="el.content" ms-attr-title="el.content"></span>
                         </div>
                         <!-- 注册加入消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '1'">
+                            {{--<span class="notice"></span>--}}
                             <span ms-text="el.content"></span>
                         </div>
                         <!-- 本人被点评消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '2'">
-                            <span ms-text="el.fromUsername + '&nbsp;&nbsp;'" class="span_light"></span>老师点评了您上传的作品，<span><a class="span_light" ms-attr-href="'/lessonComment/detail/' + el.actionId">快去看看吧 >></a></span>
+                            {{--<span class="notice"></span>--}}
+                            <span ms-text="el.fromUsername + '&nbsp;&nbsp;'" class="span_light"></span><span>老师点评了您上传的作品，</span><span><a class="span_light" ms-attr-href="'/lessonComment/detail/' + el.actionId">快去看看吧 >></a></span>
                         </div>
                         <!-- 本人被关注消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '3' && el.userType != '2'">
+                            {{--<span class="notice"></span>--}}
                             <span ms-text="el.fromUsername" class="span_light"></span><a ms-attr-href="'/lessonComment/student/' + el.actionId"><span ms-text="el.content" style="margin-left: 10px;"></span></a>
                         </div>
                         <div class="repeat_comment_text" ms-if="el.type == '3' && el.userType == '2'">
+                            {{--<span class="notice"></span>--}}
                             <span ms-text="el.fromUsername" class="span_light"></span><a ms-attr-href="'/lessonComment/teacher/' + el.actionId"><span ms-text="el.content" style="margin-left: 10px;"></span></a>
                         </div>
                         <!-- 关注用户被点评消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '4'">
-                            <span ms-text="el.fromUsername + '&nbsp;&nbsp;'" class="span_light"></span>老师点评了<span ms-text="'&nbsp;'+el.toUsername + '&nbsp;'" class="span_light"></span>的作品，<a class="span_light" ms-attr-href="'/lessonComment/detail/' + el.actionId">快去看看吧 >></a>
+                            {{--<span class="notice"></span>--}}
+                            <span ms-text="el.fromUsername + '&nbsp;&nbsp;'" class="span_light"></span><span>老师点评了</span><span ms-text="'&nbsp;'+el.toUsername + '&nbsp;'" class="span_light"></span>的作品，<a class="span_light" ms-attr-href="'/lessonComment/detail/' + el.actionId">快去看看吧 >></a>
                         </div>
+                        <div class="clear"></div>
                         <div class="repeat_comment_time">
                             <div class="comment_time" ms-text="el.created_at"></div>
                             <div class="comment_delete" ms-click="popUpSwitch('deleteNotice',el.id)">删除</div>
@@ -379,7 +390,9 @@
             <div class="center_right_notice">
                 {{--//回复循环开始--}}
                 <div class="right_notice_repeat" ms-repeat="commentInfo">
+                    <div style="width:100%;height:12px;"></div>
                     <div class="notice_repeat_comment">
+                        <div class="notice"></div>
                         <div class="repeat_comment_text" ms-if="el.type == '5'">
                             <div style="float: left">
                                 <span class="span_light" ms-text="el.fromUsername"></span>
@@ -401,6 +414,7 @@
                                 <span class="comment_content span_light" ms-attr-title="el.content" ms-text="el.content"></span>
                             </a>
                         </div>
+                        <div class="clear"></div>
                         <div class="repeat_comment_time">
                             <div class="comment_time" ms-text="el.created_at"></div>
                             <div class="comment_delete" ms-click="popUpSwitch('deleteComment',el.id)">删除</div>
@@ -469,8 +483,10 @@
                     <div class="comment_repeat_name" ms-if="el.orderType == '1' && el.status == 2 && el.CState == '2'"><span ms-text="'讲师：' + el.OTeacherName"></span> <span class="repeat_name_last" ms-text="el.CPlayView + '人学过'"></span></div>
                     <div class="comment_repeat_name" ms-if="el.orderType == '2'"><span ms-text="'讲师：' + el.OTeacherName"></span> <span class="repeat_name_last" ms-text="el.CPlayView + '人学过'"></span></div>
                     <div class="comment_repeat_unchecked"  ms-if="el.orderType == '1' && el.CState != 2"><span class="unchecked_comment_first" ms-text="'点评讲师：' + el.OTeacherName"></span><span class="unchecked_comment_last last_diff" ms-text="'发布者：' + el.OUserName"></span></div>
-                    <div class="comment_repeat_price" ms-if="el.orderType == '1' && el.status == 2 && el.CState == '2'" ms-text="'￥ ' + el.CPrice"></div>
-                    <div class="comment_repeat_price" ms-if="el.orderType == '2'" ms-text="'￥ ' + el.CPrice"></div>
+                    <div class="comment_repeat_price" ms-if="el.orderType == '1' && el.status == 2 && el.CState == '2' && el.CPrice" ms-text="'￥ ' + el.CPrice"></div>
+                    <div class="comment_repeat_price" ms-if="el.orderType == '1' && el.status == 2 && el.CState == '2' && !el.CPrice" ms-text="'免费课程'"></div>
+                    <div class="comment_repeat_price" ms-if="el.orderType == '2' && el.CPrice" ms-text="'￥ ' + el.CPrice"></div>
+                    <div class="comment_repeat_price" ms-if="el.orderType == '2' && !el.CPrice" ms-text="'免费课程'"></div>
                 </div>
                 <div ms-visible="commentMsg" class="warning_msg">暂无相关课程...</div>
             </div>

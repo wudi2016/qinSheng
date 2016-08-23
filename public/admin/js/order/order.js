@@ -31,3 +31,56 @@ function refundCheck(id,courseStatus){
         }
     })
 }
+
+
+//多选
+$(function() {
+    $("#checkAll").click(function() {
+        if($(this).prop('checked')){
+            $('input[name="id[]"]').prop('checked',true);
+        }else{
+            $('input[name="id[]"]').prop('checked',false);
+        }
+    });
+
+    $('input[name="id[]"]').click(function(){
+        var chknum = $('input[name="id[]"]').size();
+        var chk = 0;
+        $('input[name="id[]"]').each(function(){
+            if($(this).prop('checked') == true){
+                chk++;
+            }
+        });
+        if(chknum == chk){
+            $("#checkAll").prop('checked',true);
+        }else{
+            $("#checkAll").prop('checked',false);
+        }
+    });
+
+
+    //批量删除
+    $('#alldelete').click(function(){
+        var ids = [];
+        $(':checkbox:checked').each(function(){
+            ids.push($(this).val());
+        });
+        if(ids[0] == 'on'){
+            ids.splice(0,1);
+        }
+        console.log(ids);
+        $.ajax({
+            type: "post",
+            data:{id:ids},
+            url: "/admin/order/deletes",
+            dataType: 'json',
+            success: function (data) {
+                if(data == 1){
+                    alert('批量删除成功');
+                    location.reload();
+                }
+            }
+        });
+    })
+
+});

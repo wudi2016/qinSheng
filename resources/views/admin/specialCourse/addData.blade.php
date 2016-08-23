@@ -131,14 +131,15 @@
                 console.log(file);
                 console.log(data);
                 console.log(response);
-                evaluatPic = '<input type="hidden" name="dataPath" value="'+data+'">';
-                $('#uploadurl').html(evaluatPic);
                 if(data){
                     if(data == '文件格式不正确'){
                         setTimeout('addErrormeg()',2000);
                         return false;
+                    }else{
+                        evaluatPic = '<input type="hidden" name="dataPath" value="'+data+'">';
+                        $('#uploadurl').html(evaluatPic);
+                        setTimeout('addMsg()',4000);
                     }
-                    setTimeout('addMsg()',4000);
                 }
             }
         });

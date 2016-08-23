@@ -19,7 +19,7 @@ define([], function () {
                         success: function (response) {
                             myFansTeacher.total = response.total;
                             if (response.type) {
-                                if(response.total <= 24){
+                                if(response.total <= 20){
                                     myFansTeacher.display = false;
                                 }
                                 var format = [];
@@ -44,7 +44,7 @@ define([], function () {
                         }
                     });
                 },
-                pageSize: 24,
+                pageSize: 20,
                 pageNumber: 1,
                 totalNumber: 1,
                 className: "paginationjs-theme-blue",

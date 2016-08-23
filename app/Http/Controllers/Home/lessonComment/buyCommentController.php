@@ -57,8 +57,8 @@ class buyCommentController extends Controller
 			empty($code_url['code_url']) && abort(404);
 			return view('home.lessonComment.buyComment.scan')->with('orderID', $orderID)->with('orderInfo', $result)->with('url', $code_url['code_url']);
 		} catch (\Exception $e) {
-			DB::table('orders') -> where('id', $orderID) -> delete();
-			return redirect() -> back();
+            DB::table('orders') -> where('id', $orderID) -> delete();
+            return redirect() -> back();
 		}
     }
 
@@ -179,10 +179,10 @@ class buyCommentController extends Controller
                         echo "SUCCESS";
                     }
                 } else {
-                    Log::debug(json_encode($xml) . " --- 订单支付未成功");
+                    Log::debug(json_encode($xml) . " --- wxPayCallback 订单支付未成功");
                 }
             } else {
-                Log::debug(json_encode($xml) . " --- 订单校验失败");
+                Log::debug(json_encode($xml) . " --- wxPayCallback 订单校验失败");
             }
         } catch (\Exception $e) {
             Log::debug($e->getMessage() . " --- wxPayCallback 抛出异常");

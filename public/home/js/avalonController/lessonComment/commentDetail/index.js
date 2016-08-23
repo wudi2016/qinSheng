@@ -57,7 +57,7 @@ define([], function() {
 					if (model == 'teacherInfo') {
 						if (parseInt(response.data.extra) > 0) {
 							if (response.data.courseDiscount > 0) {
-								response.data.extra = response.data.extra * (response.data.courseDiscount / 10000);
+								response.data.extra = Math.ceil(response.data.extra * (response.data.courseDiscount / 10000));
 							}
 						} else {
 							response.data.extra = '免费课程';
@@ -225,7 +225,7 @@ define([], function() {
 				if (comment.feedBack[i].length <= 0) {
 					comment.feedBackWarning[i] = true;
 					return false;
-				};
+				}
 			}
 			if (comment.feedBack.content.length > 80) {
 				comment.feedBackWarning.content = true;
@@ -253,6 +253,7 @@ define([], function() {
 				teacherId: comment.teacherInfo.teacherId,
 				teacherName: comment.teacherInfo.username,
 				orderType: 2,
+				//orderPrice: Math.ceil(comment.teacherInfo.extra / 100) * 100,
 				orderPrice: comment.teacherInfo.extra,
 				orderTitle: '学员'+ comment.mineUsername +'购买'+ comment.studentInfo.extra +'点评课程。',
 				courseId: comment.commentID

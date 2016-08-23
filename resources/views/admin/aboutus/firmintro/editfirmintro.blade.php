@@ -96,7 +96,7 @@
                         <div class="space-4"></div>
 
 
-
+                        @if($data->id <7 )
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1">  </label>
 
@@ -106,7 +106,31 @@
                         </div>
 
                         <div class="space-4"></div>
+                        @endif
 
+                        @if($data->id == 7 )
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1">  </label>
+
+                                <div class="col-sm-9">
+                                    <span style="color:red">将www.sina.com直接替换为自己网址即可</span>
+                                </div>
+                            </div>
+
+                            <div class="space-4"></div>
+                        @endif
+
+                        @if($data->id == 8 )
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1">  </label>
+
+                                <div class="col-sm-9">
+                                    <span style="color:red">按例子标准替换为自己二维码</span>
+                                </div>
+                            </div>
+
+                            <div class="space-4"></div>
+                        @endif
 
 
 

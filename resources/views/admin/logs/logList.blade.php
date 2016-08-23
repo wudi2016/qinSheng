@@ -39,11 +39,6 @@
                     </span>
                 </form>
 
-                {{--//多删除--}}
-                {{--<form action="{{url('admin/logs/multiDelete/'.$tableName.'/'.($search['time']?:''))}}" method="post" class="form-search">--}}
-                    {{--{{csrf_field()}}--}}
-                    {{--<input type="hidden" name="multiDelete"/>--}}
-                {{--</form>--}}
             </div><!-- #nav-search -->
         </div>
 
@@ -87,25 +82,25 @@
                             <div class="table-responsive">
                             <form action="{{url('admin/logs/multiDelete/'.$tableName.'/'.($search['time']?:''))}}" method="post" class="form-search" onsubmit="return confirm('确定要删除该日志记录？');">
                                 {{csrf_field()}}
-                                <table id="sample-table-1" class="table table-striped table-bordered table-hover center">
+                                <table id="sample-table-1" class="table table-striped table-bordered table-hover center" style="table-layout:fixed">
                                     <thead>
                                     <tr>
-                                        <th class="hidden-480 center" style="position: relative;left:35px;">
-                                            <input type="hidden" name="currentPage" value="{{$currentPage}}">
-                                            <input type="hidden" name="lastPage" value="{{$lastPage}}">
-                                            <input type="hidden" name="count" value="{{$count}}">
-                                            @if(count($data) > 0)
-                                            <input type="checkbox" name="multiple">
-                                            <input type="submit" style="display:inline-block;width:60px;height:20px;line-height: 20px;text-align:center;cursor: pointer;font-size:13px;margin-left:8px;letter-spacing: 2px;border:none;background:#209EEA; color:#fff;" value="多删除">
-                                            @endif
-                                        </th>
-                                        <th class="center">日志ID</th>
-                                        <th class="center">用户名</th>
-                                        <th class="center">操作类型</th>
-                                        <th class="center hidden-480">操作动作</th>
+                                        @if(count($data) > 0)
+                                        <input type="submit"  style="display:inline-block;width:80px;height:30px;line-height: 30px;text-align:center;cursor: pointer;font-size:13px;margin-bottom:10px;letter-spacing: 2px;border:none;background:#209EEA; color:#fff;" value="多删除">
+                                        @endif
+                                        {{--表单所需隐藏域--}}
+                                        <input type="hidden" name="currentPage" value="{{$currentPage}}">
+                                        <input type="hidden" name="lastPage" value="{{$lastPage}}">
+                                        <input type="hidden" name="count" value="{{$count}}">
+
+                                        <th class="center" style="width:5%;"><input type="checkbox" name="multiple"></th>
+                                        <th class="center" style="width:8%;">日志ID</th>
+                                        <th class="center" style="width:10%;">用户名</th>
+                                        <th class="center" style="width:8%;">操作类型</th>
+                                        <th class="center" style="width:30%;">操作动作</th>
                                         <th class="center">客户端IP</th>
                                         <th class="center">创建时间</th>
-                                        <th>操作</th>
+                                        <th style="width:8%;">操作</th>
                                     </tr>
                                     </thead>
 
@@ -116,7 +111,7 @@
                                             <td class="center">{{$value->id}}</td>
                                             <td>{{$value->username}}</td>
                                             <td>@if($value->type == 0)登录@elseif($value->type == 1)其他所有@endif</td>
-                                            <td class="hidden-480">{{$value->action}}</td>
+                                            <td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;" title="{{$value->action}}">{{$value->action}}</td>
                                             <td>{{$value->client_ip}}</td>
                                             <td>{{date('Y-m-d H:i:s',$value->create_at)}}</td>
                                             <td>
@@ -182,11 +177,22 @@
                            total += 1;
                         }
                     }
-                    if(total == 15){//是否和本页显示的15条相等
-                        $("input[name='multiple']").prop('checked',true);
+                    //获取总数
+                    var count = $("input[name='count']").val();
+                    if(count % 15 != 0){
+                        if(total == (count % 15)){//是否和本页显示的15条相等
+                            $("input[name='multiple']").prop('checked',true);
+                        }else{
+                            $("input[name='multiple']").prop('checked',false);
+                        }
                     }else{
-                        $("input[name='multiple']").prop('checked',false);
+                        if(total == 15){//是否和本页显示的15条相等
+                            $("input[name='multiple']").prop('checked',true);
+                        }else{
+                            $("input[name='multiple']").prop('checked',false);
+                        }
                     }
+
 
                 }
             })

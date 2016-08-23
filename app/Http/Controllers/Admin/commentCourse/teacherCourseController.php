@@ -146,6 +146,26 @@ class teacherCourseController extends Controller
             DB::table('orders')->where('orderSn',$request['orderSn'])->update(['status'=>1]);
             $arr = array('state'=>'0','msg'=>'审核未通过');
         }elseif($request['state'] == 1){
+            //将发给名师的未通过原因删除
+            if(DB::table('usermessage')->where(['username'=>$request['teachername'],'actionId'=>$request['id'],'type'=>0])->first()){
+                DB::table('usermessage')->where(['username'=>$request['teachername'],'actionId'=>$request['id'],'type'=>0])->delete();
+            }
+
+            //如是是审核中时将发给学员的消息删除
+            if(DB::table('usermessage')->where(['username'=>$request['username'],'actionId'=>$request['id'],'type'=>2])->first()){
+                DB::table('usermessage')->where(['username'=>$request['username'],'actionId'=>$request['id'],'type'=>2])->delete();
+            }
+            //给学员的所有粉丝发送的消息一并删除
+            $fans = DB::table('friends')->where('toUserId',$request['userId'])->get();
+            if($fans){
+                foreach ($fans as $val) {
+                    $fansname = DB::table('users')->where('id',$val->fromUserId)->where('checks',0)->select('username')->first();//取出粉丝的用户名
+                    //删除已有的通知
+                    if(DB::table('usermessage')->where(['username'=>$fansname->username,'actionId'=>$request['id'],'type'=>4])->first()){
+                        DB::table('usermessage')->where(['username'=>$fansname->username,'actionId'=>$request['id'],'type'=>4])->delete();
+                    }
+                }
+            }
             DB::table('orders')->where('orderSn',$request['orderSn'])->update(['status'=>1]);
             $arr = array('state'=>'1','msg'=>'审核中');
         }elseif($request['state'] == 2){
@@ -332,6 +352,10 @@ class teacherCourseController extends Controller
                 $data['content'] = $request['fromUsername'].'老师点评了'.$request['username'].'的作品 点击可进入该点评视频详情页面';
                 $data['type'] = 4;
                 $data['toUsername'] = $request['username'];
+                //删除已有的通知
+                if(DB::table('usermessage')->where(['username'=>$fansname->username,'actionId'=>$request['actionId'],'type'=>4])->first()){
+                    DB::table('usermessage')->where(['username'=>$fansname->username,'actionId'=>$request['actionId'],'type'=>4])->delete();
+                }
                 DB::table('usermessage')->insert($data);
             }
         }

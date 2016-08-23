@@ -126,6 +126,7 @@
                                         <th class="center">用户头像</th>
                                         <th class="center">邀请人ID</th>
                                         <th class="center">邀请人</th>
+                                        <th class="center">邀请码</th>
                                         <th class="center">创建时间</th>
                                         <th class="center">最近登录时间</th>
                                         <th>操作</th>
@@ -143,6 +144,7 @@
                                             <td><img src="{{asset($value->pic)}}" alt="" width="40" height="40" onerror="this.src='/admin/image/back.png'"></td>
                                             <td>{{$value->userId ? $value->userId : '无'}}</td>
                                             <td>{{$value->name ? $value->name : '无'}}</td>
+                                            <td>{{$value->inviteCode ? $value->inviteCode : '无'}}</td>
                                             <td>{{$value->created_at}}</td>
                                             <td>{{$value->updated_at}}</td>
                                             <td>

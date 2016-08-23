@@ -156,11 +156,15 @@ class orderController extends Controller
      */
     public function deleteOrders(){
         $data = DB::table('orders')->where(['status'=>5,'isDelete'=>0])->get();
+        $count = 0;
         foreach($data as &$val){
             if($val->created_at < Carbon::now()->subDay(1)){ //如果未付款订单超过一天则删除 subDay(1) 一天前
-                DB::table('orders')->where('id',$val->id)->delete();
-                $this -> OperationLog('清除了垃圾订单');
+                $da = DB::table('orders')->where('id',$val->id)->delete();
+                $count += $da;
             }
+        }
+        if($count){
+            $this -> OperationLog('共清除了'.$count.'条垃圾订单');
         }
         return redirect()->back()->withInput()->with(['status'=>'垃圾订单已清除']);
     }
@@ -375,6 +379,30 @@ class orderController extends Controller
         }else{
             return redirect('admin/message')->with(['status'=>'退款删除失败','redirect'=>'order/refundList/'.$orderSn]);
         }
+    }
+
+    /**
+     * 批量删除已退订单
+     */
+    public function deletes(Request $request){
+        $ids = $request['id'];
+        $count = 0;
+        foreach($ids as $id){
+            $count = DB::table('orders')->where('id',$id)->update(['isDelete'=>1]);
+            $count += $count ;
+            DB::table('remarks')->where('orderid',$id)->delete();//删除订单备注表
+
+            $orderSn = DB::table('orders')->where('id',$id)->pluck('orderSn');
+            DB::table('applycourse')->where('orderSn',$orderSn)->update(['courseIsDel'=>1]); //同时删除演奏视频
+            DB::table('commentcourse')->where('orderSn',$orderSn)->update(['courseIsDel'=>1]);//同时删除点评视频
+        }
+        $this -> OperationLog('批量删除了'.$count.'条订单');
+        if($count){
+            echo '1';
+        }else{
+            echo '0';
+        }
+
     }
 
 

@@ -96,7 +96,9 @@ class SpecialDataController extends Controller
     {
         if($request->hasFile('Filedata')){ //判断文件是否存在
             $entension = $request->file('Filedata')->getClientOriginalExtension();//上传文件的后缀
-            if($entension != 'mp4' || $entension != 'fiv' || $entension != 'avi' || $entension != 'rmvb' || $entension != 'wmv' || $entension != 'mkv'){
+            if($entension == 'mp4' || $entension == 'fiv' || $entension == 'avi' || $entension == 'rmvb' || $entension == 'wmv' || $entension == 'mkv'){
+                echo '文件格式不正确';
+            }else{
                 if($request->file('Filedata')->isValid()){ //判断文件在上传过程中是否出错
                     $name = $request->file('Filedata')->getClientOriginalName();//获取图片名
                     $newname = md5(date('ymdhis'.$name)).'.'.$entension;//拼接新的图片名
@@ -108,8 +110,6 @@ class SpecialDataController extends Controller
                 }else{
                     echo '文件上传出错';
                 }
-            }else{
-                echo '文件格式不正确';
             }
 
         }

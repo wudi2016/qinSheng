@@ -100,6 +100,13 @@
                 </div>
             @endif
 
+            @permission('del.order')
+            @if($data->status == 4)
+                <div class="btn btn-xs btn-info" id="alldelete" onclick="return confirm('确定要批量删除订单吗?');">
+                    批量删除
+                </div>
+            @endif
+            @endpermission
 
             <div class="row">
                 <div class="col-xs-12">
@@ -111,12 +118,14 @@
                                 <table id="sample-table-1" class="table table-striped table-bordered table-hover">
                                     <thead>
                                     <tr>
-                                        {{--<th class="center">--}}
-                                            {{--<label>--}}
-                                                {{--<input type="checkbox" class="ace" />--}}
-                                                {{--<span class="lbl"></span>--}}
-                                            {{--</label>--}}
-                                        {{--</th>--}}
+                                        @if($data->status == 4)
+                                        <th class="center">
+                                            <label>
+                                                <input type="checkbox" class="ace" id="checkAll" />
+                                                <span class="lbl"></span>
+                                            </label>
+                                        </th>
+                                        @endif
                                         <th>ID</th>
                                         <th>订单号</th>
                                         <th>交易编号</th>
@@ -142,12 +151,14 @@
                                     <tbody>
                                     @foreach($data as $order)
                                         <tr>
-                                        {{--<td class="center">--}}
-                                            {{--<label>--}}
-                                                {{--<input type="checkbox" class="ace" />--}}
-                                                {{--<span class="lbl"></span>--}}
-                                            {{--</label>--}}
-                                        {{--</td>--}}
+                                            @if($data->status == 4)
+                                            <td class="center">
+                                                <label>
+                                                    <input type="checkbox" class="ace" name="id[]" value="{{$order->id}}"/>
+                                                    <span class="lbl"></span>
+                                                </label>
+                                            </td>
+                                            @endif
 
                                         <td>
                                             <a href="#">{{$order->id}}</a>
@@ -396,5 +407,6 @@
          require(['/order/order'], function (detail) {
              avalon.scan();
         });
+
     </script>
 @endsection

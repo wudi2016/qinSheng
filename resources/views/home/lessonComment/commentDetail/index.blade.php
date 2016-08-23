@@ -33,7 +33,7 @@
 			</div>
 			<div class="video_bar">
 				<div class="video_bar_title" ms-html="videoType ? '演奏视频' : '点评视频'"></div>
-				<div class="video_bar_title hide" ms-visible="!bought && !videoType && teacherInfo.extra != '免费课程'" ms-click="popUpSwitch('buyLesson')" style="color: red; font-weight: bold; cursor: pointer;" ms-html="'￥' + teacherInfo.extra / 100"></div>
+				<div class="video_bar_title hide" ms-visible="!bought && !videoType && teacherInfo.extra != '免费课程'" ms-click="popUpSwitch('buyLesson')" style="color: red; font-weight: bold; cursor: pointer;" ms-html="'￥' + Math.ceil(teacherInfo.extra / 100)"></div>
 				<div class="video_bar_title hide" ms-visible="!bought && !videoType && teacherInfo.extra == '免费课程'" style="color: red; font-weight: bold; cursor: pointer;" ms-html="teacherInfo.extra"></div>
                 @if (\Auth::check() && \Auth::user() -> type != 3)
                     <div class="video_bar_icon hide" ms-visible="bought || teacherInfo.extra == '免费课程'" ms-click="popUpSwitch('feedback')">
@@ -133,7 +133,7 @@
 					<div class="recommend_detail_teacher" ms-html="'讲师：' + el.teachername"></div>
 					<div class="recommend_detail_learned"><img src="{{asset('/home/image/lessonComment/commentDetail/study.png')}}">[--el.coursePlayView--]人学过</div>
 				</div>
-				<div class="recommend_price" ms-visible="el.coursePrice > 0" ms-html="'￥ ' + el.coursePrice / 100"></div>
+				<div class="recommend_price" ms-visible="el.coursePrice > 0" ms-html="'￥ ' + Math.ceil(el.coursePrice / 100)"></div>
 				<div class="recommend_price" ms-visible="el.coursePrice <= 0" ms-html="'免费课程'"></div>
 			</a>
             <div style="width: 100%; height: 200px; line-height: 200px; text-align: center; display: none;" ms-visible="recommendlist.size() < 1">暂无数据</div>
@@ -151,7 +151,7 @@
             </div>
             <div class="buy_course_center">
                 <div class="top" ms-html="'课程名称：' + studentInfo.extra"></div>
-                <div class="center">课程价格：<span ms-html="'￥ ' + teacherInfo.extra / 100 + ' 元'"></span></div>
+                <div class="center">课程价格：<span ms-html="'￥ ' + Math.ceil(teacherInfo.extra / 100) + ' 元'"></span></div>
                 <div class="bot">
                     <div>支付方式：</div>
                     <div class="aliPay"><input type="radio" ms-duplex-number='payType' value='0'/><span></span></div>

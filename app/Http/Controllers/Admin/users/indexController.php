@@ -96,7 +96,7 @@ class indexController extends Controller
 
 
         //列表页展示数据
-        $data = $query->select('u.id','u.username','u.checks','u.phone','u.type','u.pic','u.fromyaoqingma as userId','u.yaoqingma as name','u.created_at','u.updated_at')->paginate();
+        $data = $query->select('u.id','u.username','u.checks','u.phone','u.type','u.pic','u.fromyaoqingma as userId','u.yaoqingma as inviteCode','u.created_at','u.updated_at')->paginate();
         foreach($data as $key=>$value){
             if($data[$key]->userId){
                 $user = User::where('yaoqingma',$data[$key]->userId)->select('id','username')->first();

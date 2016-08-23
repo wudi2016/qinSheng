@@ -62,7 +62,7 @@
 				<div class="teacherHomepage_detail_content_image" style="font-size: 18px; margin-top: 0;"><img ms-attr-src="userInfo.cover" width="100%" height="100%"></div>
 				<div class="teacherHomepage_detail_content_comment">点评费用</div>
 				<div class="teacherHomepage_detail_content_comment hide" ms-visible='userInfo.price' style="margin-bottom: 22px;">
-					￥<span style="color: red;" ms-html="userInfo.price/100"></span> / 次
+					￥<span style="color: red;" ms-html="Math.ceil(userInfo.price / 100)"></span> / 次
 				</div>
 				<div class="teacherHomepage_detail_content_comment">点评类型</div>
 				<div class="teacherHomepage_detail_content_comment" style="font-size: 18px; color: rgb(102, 102, 102); margin-bottom: 22px;">
@@ -104,7 +104,7 @@
 							<div class="time"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--el.extra--] 课时</div>
 							<div class="learned"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--parseInt(el.completecount) + parseInt(el.courseStudyNum)--] 人学过</div>
 						</div>
-						<div class="price" ms-if="el.coursePrice > 0" ms-html="'￥ ' + el.coursePrice / 100"></div>
+						<div class="price" ms-if="el.coursePrice > 0" ms-html="'￥ ' + Math.ceil(el.coursePrice / 100)"></div>
 						<div class="price" ms-if="el.coursePrice <= 0" ms-html="'免费课程'"></div>
 					</a>
 				</div>
@@ -137,7 +137,8 @@
 							<div class="time">讲师：[--el.extra--]</div>
 							<div class="learned"><img src="/home/image/lessonComment/teacherHomepage/classes.png">[--parseInt(el.coursePlayView) + parseInt(el.courseStudyNum)--] 人学过</div>
 						</div>
-						<div class="price" ms-if="el.coursePrice > 0" ms-html="'￥ ' + el.coursePrice / 100"></div>
+						<div class="price" ms-if="el.coursePrice > 0 && el.courseDiscount == 0" ms-html="'￥ ' + Math.ceil(el.coursePrice / 100)"></div>
+						<div class="price" ms-if="el.coursePrice > 0 && el.courseDiscount > 0" ms-html="'￥ ' + Math.ceil((el.coursePrice * (el.courseDiscount / 10000)) / 100)"></div>
 						<div class="price" ms-if="el.coursePrice <= 0" ms-html="'免费课程'"></div>
 					</a>
 				</div>

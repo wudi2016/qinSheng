@@ -142,7 +142,7 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
                     dataType : 'json',
                     data     : {id:sideBar.applyRefund.id ,refundType : sideBar.refundType,orderTitle:sideBar.applyRefund.orderTitle,orderSn:sideBar.applyRefund.orderSn,username:sideBar.applyRefund.userName,refundContent:sideBar.refundContent,refundAmount:sideBar.applyRefund.price},
                     success  : function ( response ) {
-                        alert( response.msg );
+                        //alert( response.msg );
                         if ( response.type ) {
                             sideBar.popUp = false;
                             myOrdersStudent.myOrdersStudent.getMyOrdersInfo();

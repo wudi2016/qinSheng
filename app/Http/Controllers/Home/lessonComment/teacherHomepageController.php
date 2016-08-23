@@ -65,6 +65,7 @@ class teacherHomepageController extends Controller
 		if ($request['type']) {
 			array_push($condition, $tableName.'.teachername as extra');
 			array_push($condition, $tableName.'.coursePlayView');
+            array_push($condition, $tableName.'.courseDiscount');
 			$where = array_merge($where, ['orders.teacherId' => $request['userid'], 'orders.status' => 2, 'orders.orderType' => 1, 'commentcourse.state' => 2]);
 			$result = DB::table('orders') -> join($tableName, 'orders.courseId', '=', $tableName.'.id') -> select($condition) -> where($where)
 					-> orderBy($order, "desc") -> skip($this -> getSkip($request['page'], $this->number)) -> take($this -> number) -> get();

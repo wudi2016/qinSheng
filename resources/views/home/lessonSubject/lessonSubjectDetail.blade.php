@@ -82,7 +82,7 @@
                             <div class="collect hide" ms-visible="!detailInfo.isCollection" ms-click="addCollect(detailInfo.id,detailInfo.isCollection);">收藏</div>
                             <div class="collect_light hide" ms-visible="detailInfo.isCollection" ms-click="popUpSwitch('quitCollection');">已收藏</div>
                             <div class="response hide" ms-click="popUpSwitch('feedback')" ms-visible="detailInfo.isBuy || detailInfo.isFree || detailInfo.isTeacher">反馈</div>
-                            {{--<div class="response hide" ms-visible="detailInfo.isBuy">反馈</div>--}}
+                            {{--<div class="response hide" ms-visible="!detailInfo.isBuy">反馈</div>--}}
                         @else
                             <a href="/index/login"><div class="collect">收藏</div></a>
                             <a href="/index/login"><div class="response">反馈</div></a>
@@ -195,7 +195,11 @@
                             <div style="width: 100%;height: 5px"></div>
                             <div class="contain_lessonDetail_bot_left_info_div">
                                 <div class="data" ms-repeat="dataDownload">
-                                    <span class="spot"></span><span class="data_download_content" ms-html="el.dataName" ms-click="popUpSwitch('dataDownload',detailInfo.isBuy,el.dataPath,el.dataName,detailInfo.isTeacher);"></span>
+                                    @if(\Auth::check() && \Auth::user() -> type != 3)
+                                    <span class="spot"></span><span class="data_download_content" ms-html="el.dataName" ms-click="popUpSwitch('dataDownload',detailInfo.isBuy,el.dataPath,el.dataName,detailInfo.isTeacher,detailInfo.isFree);"></span>
+                                    @else
+                                        <a href="{{url('/index/login')}}"><span class="spot"></span><span class="data_download_content" ms-html="el.dataName"></span></a>
+                                    @endif
                                 </div>
                             </div>
                         </div>

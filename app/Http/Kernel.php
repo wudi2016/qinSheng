@@ -36,5 +36,6 @@ class Kernel extends HttpKernel
         'users' => \App\Http\Middleware\CheckUsersMiddleware::class,
         'admins' => \App\Http\Middleware\CheckAdminsMiddleware::class,
         'adminauth'=> \App\Http\Middleware\adminAuth::class,
+        'online' => \App\Http\Middleware\Online::class,
     ];
 }

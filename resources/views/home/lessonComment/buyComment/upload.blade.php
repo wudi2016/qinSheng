@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-	<div class="uploadComment ms-controller" style="" ms-controller="uploadController">
+	<div class="uploadComment ms-controller" ms-controller="uploadController">
 		<div class="crumbs">
 			<a href="/">首页</a> >
 			<a href="/lessonComment/teacher/{{$info -> teacherId}}">名师主页</a> >

@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-	<div class="puy_success ms-controller">
+	<div class="puy_success">
 		<div class="crumbs">
 			<a href="/">首页</a> >
 			<a href="/lessonSubject/list/1">课程</a> >

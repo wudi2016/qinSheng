@@ -7,7 +7,7 @@ function selectCheck(id,checkid,username,teachername,teacherPhone,orderSn){
     var orderSn = orderSn;
     $.ajax({
         type: "get",
-        data:{'id':id,'state':stateid,'orderSn':orderSn},
+        data:{'id':id,'state':stateid,'orderSn':orderSn,'username':username,'teachername':teachername},
         url: "/admin/commentCourse/commentState",
 
         dataType: 'json',
@@ -49,13 +49,10 @@ $('#suer_btn0').click(function(){
         url: "/admin/commentCourse/sendMessage",
         dataType: 'json',
         success: function (res) {
-            console.log(res);return;
-            if(res == true){
-            }
+            location.reload();
         }
     });
-    $('#pupUpback').css({'display':'none'});
-    location.reload();
+    //$('#pupUpback1').css({'display':'none'});
 });
 
 //判断错误原因是否填写

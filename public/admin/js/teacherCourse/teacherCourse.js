@@ -4,7 +4,7 @@ function selectCheck(id,checkid,userId,username,teachername,studentPhone,orderSn
     var stateid = checkid;
     $.ajax({
         type: "get",
-        data:{'id':id,'state':stateid,'orderSn':orderSn},
+        data:{'id':id,'state':stateid,'orderSn':orderSn,'username':username,'userId':userId,'teachername':teachername},
         url: "/admin/commentCourse/teacherState",
 
         dataType: 'json',
@@ -48,12 +48,11 @@ $('#suer_btn0').click(function(){
         url: "/admin/commentCourse/sendStudentMessage",
         dataType: 'json',
         success: function (res) {
-            if(res == true){
-            }
+            location.reload();
         }
     });
-    $('#pupUpback').css({'display':'none'});
-    location.reload();
+    //$('#pupUpback1').css({'display':'none'});
+
 });
 
 //判断错误原因是否填写

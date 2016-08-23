@@ -7,12 +7,12 @@
 @endsection
 
 @section('content')
-	<div class="puy_success ms-controller">
+	<div class="puy_success ms-controller"  ms-controller="buyController">
 		<div style="clear: both; height: 60px;"></div>
 
 		<div class="weixin_scan">
 			<div style="clear: both; height: 100px;"></div>
-			<div class="scan_price">实付金额：<span>{{$orderInfo -> orderPrice / 100}}元</span></div>
+			<div class="scan_price">实付金额：<span>{{ceil($orderInfo -> orderPrice / 100)}}元</span></div>
 			<div class="scan_code">
 				{!! \QrCode::encoding('UTF-8') -> size(200) -> generate($url) !!}
 			</div>

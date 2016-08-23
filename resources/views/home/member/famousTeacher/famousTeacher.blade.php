@@ -273,7 +273,9 @@
             <div class="center_right_notice">
                 {{--//通知循环开始--}}
                 <div class="right_notice_repeat" ms-repeat="noticeInfo">
+                    <div style="width:100%;height:12px;"></div>
                     <div class="notice_repeat_comment">
+                        <div class="notice"></div>
                         <!-- 后台发送消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == 0 && el.actionId">
                             <!-- 审核未通过 -->
@@ -304,6 +306,7 @@
                         <div class="repeat_comment_text" ms-if="el.type == '7'">
                             <span>学员&nbsp;&nbsp;</span><span ms-text="el.fromUsername + '&nbsp;&nbsp;'" class="span_light"></span>向您发起点评邀请，<a class="span_light" ms-attr-href="'/lessonComment/wait/' + el.actionId + '/' + el.id">快去看看吧 >></a>
                         </div>
+                        <div class="clear"></div>
                         <div class="repeat_comment_time">
                             <div class="comment_time" ms-text="el.created_at"></div>
                             <div class="comment_delete" ms-click="popUpSwitch('deleteNotice',el.id)">删除</div>

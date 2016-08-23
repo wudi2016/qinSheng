@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-	<div class="buyController ms-controller" style="" ms-controller="buyController">
+	<div class="buyController ms-controller" ms-controller="buyController">
 		<div class="crumbs">
 			<a href="/">首页</a> >
 			<a href="/community">名师介绍</a> >
@@ -32,10 +32,10 @@
 			<div class="buy_title">订单支付</div>
 			<div class="buy_bottom_money">
 				<div class="buy_bottom_left">订单金额</div>
-				<span class="hide" ms-visible="teacherInfo.price" ms-html="'￥' + teacherInfo.price / 100 + '元'"></span>
+				<span class="hide" ms-visible="teacherInfo.price" ms-html="'￥' + Math.ceil(teacherInfo.price / 100) + '元'"></span>
 			</div>
 			<div class="buy_bottom_buyway">
-				<div class="buy_bottom_left">订单金额</div>
+				<div class="buy_bottom_left">支付类型</div>
 				<input type="radio" ms-duplex-number='payType' value='0'>
 				<img src="{{asset('/home/image/lessonComment/commentDetail/zhifubao.png')}}" ms-click="selectPayType(0)">
 				<input type="radio" ms-duplex-number='payType' value='1'>
@@ -56,7 +56,7 @@
 			comment.mineName = '{{\Auth::user() -> username}}' || null;
 			comment.mineID = {{\Auth::user() -> id}} || null;
 			//	获取用户信息
-			comment.getData('/lessonComment/getTeacherInfo/' + comment.teacherID, 'teacherInfo');
+			comment.getData('/lessonComment/getTeacherInfo/' + comment.teacherID,   'teacherInfo');
             avalon.scan();
 		});
 	</script>

@@ -1219,7 +1219,11 @@
     float: left;
     margin-bottom: 73px;
 }
-
+.right_focus_repeat a{
+    display:block;
+    width: 84px;
+    height: 84px;
+}
 .right_focus_repeat img {
     border: none;
     width: 84px;
@@ -1233,46 +1237,65 @@
     height: 30px;
     line-height: 30px;
     text-align: center;
-    font-size: 18px;
+    font-size: 14px;
     color: rgb(34, 34, 34);
     overflow: hidden;
+    text-overflow : ellipsis;
+    word-wrap: normal;
+    margin-top:5px;
 }
 
 /*==================================================主体右边我的关注、我的好友结束========================================*/
 /*==================================================主体右边全部通知开始========================================*/
 .center_right .center_right_notice {
     width: 100%;
-    height: 950px;
+    min-height: 910px;
     /*margin-left:107px;*/
 }
 
 .center_right_notice .right_notice_repeat {
     width: 95.8333%;
-    height: 85px;
+    height: auto;
     margin-left: 36px;
-    border-bottom: 2px solid #f5f5f5;
+    /*padding-bottom:3px;*/
+    border-top: 2px solid #f5f5f5;
+    /*border:1px solid #ccc;*/
 }
 
-.center_right_notice div:last-child {
-    border: none;
+.center_right_notice div:first-child {
+    border:none;
 }
+
 
 .right_notice_repeat .notice_repeat_comment {
     width: 90.7960%;
     height: 100%;
     margin-left: 74px;
-    margin-top: 12px;
 }
 
 .notice_repeat_comment .repeat_comment_text {
-    width: 100%;
-    height: 50px;
-    line-height: 50px;
+    width: 82%;
+    height: auto;
+    line-height: 35px;
+    margin-left:8px;
+    float:left;
     font-size: 16px;
     color: rgb(34, 34, 34);
-    background: url("/home/image/personCenter/notice.png") no-repeat 0 13px;
+    /*background: url("/home/image/personCenter/notice.png") no-repeat 0 13px;*/
 }
-
+.notice_repeat_comment .notice{
+    width:42px;
+    height:42px;
+    display: block;
+    position: relative;
+    top:-10px;
+    float:left;
+    background: url("/home/image/personCenter/notice.png") no-repeat 0 13px;;
+}
+/*.repeat_comment_text a span{*/
+    /*display:block;*/
+    /*float:left;*/
+/*}*/
 .repeat_comment_text .comment_text_diff {
     color: rgb(34, 34, 34);
 }
@@ -1282,35 +1305,29 @@
     letter-spacing: 1px;
 }
 
-.repeat_comment_text span:first-child {
-    margin-left: 55px;
-}
+/*.repeat_comment_text span:first-child {*/
+    /*margin-left: 55px;*/
+/*}*/
 
-.repeat_comment_text .content {
-    width: 330px;
-    display: block;
-    text-align: left;
-    float: right;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
+/*.repeat_comment_text .content {*/
+    /*width: 330px;*/
+    /*display: block;*/
+    /*text-align: left;*/
+    /*float: right;*/
+
+/*}*/
 
 .comment_content {
-    width: 360px;
-    text-align: left;
-    display: block;
-    margin-left: 10px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    margin-left: 10px;
+    width: 100%;
+    height:auto;
+
 }
 
 .notice_repeat_comment .repeat_comment_time {
     width: 84%;
     height: 35px;
     margin-left: 66px;
+    /*margin-top:8px;*/
 }
 
 .repeat_comment_time .comment_time {

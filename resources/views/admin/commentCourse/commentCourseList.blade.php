@@ -179,16 +179,24 @@
                                                 {{--</button>--}}
 
                                                 @permission('edit.commentcourse')
-                                                <span class="btn btn-xs btn-primary" style="position: relative;display: inline-block;">
-                                                    <strong>审核状态</strong>
-                                                    <span class="icon-caret-down icon-on-right"></span>
-                                                    <select id="selectCheck" class="col-xs-10 col-sm-2" onchange="selectCheck({{$comcourse->id}},this.value,'{{$comcourse->username}}','{{$comcourse->teacherusername}}','{{$comcourse->teacherPhone}}','{{$comcourse->orderSn}}');" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">
-                                                        <option value="44" selected></option>
-                                                        <option value="0" >审核未通过</option>
-                                                        <option value="1" >审核中</option>
-                                                        <option value="2" >审核通过</option>
-                                                    </select>
-                                                </span>
+                                                    {{--如果已有点评视频且点评视频是已审核通过则不可修改演奏视频的状态--}}
+                                                    @if($comcourse->comstatus)
+                                                        <span class="btn btn-xs btn-" style="position: relative;display: inline-block;">
+                                                            <strong>审核状态</strong>
+                                                            <span class="icon-caret-down icon-on-right"></span>
+                                                        </span>
+                                                    @else
+                                                        <span class="btn btn-xs btn-primary" style="position: relative;display: inline-block;">
+                                                            <strong>审核状态</strong>
+                                                            <span class="icon-caret-down icon-on-right"></span>
+                                                            <select id="selectCheck" class="col-xs-10 col-sm-2" onchange="selectCheck({{$comcourse->id}},this.value,'{{$comcourse->username}}','{{$comcourse->teacherusername}}','{{$comcourse->teacherPhone}}','{{$comcourse->orderSn}}');" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">
+                                                                <option value="44" selected></option>
+                                                                <option value="0" >审核未通过</option>
+                                                                <option value="1" >审核中</option>
+                                                                <option value="2" >审核通过</option>
+                                                            </select>
+                                                        </span>
+                                                    @endif
                                                 @endpermission
 
                                                 {{--@permission('edit.commentcourse')--}}
