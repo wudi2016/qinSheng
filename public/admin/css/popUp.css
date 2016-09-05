@@ -9,8 +9,8 @@
     display: none;
 }
 .popup{
-    width: 650px;
-    height: 400px;
+    width: 500px;
+    height: 350px;
     background: #ffffff;
     position: absolute;
     left: 50%;
@@ -34,9 +34,9 @@
 .content{
     float: left;
     width: 100%;
-    height: 280px;
-    line-height: 280px;
-    font-size: 35px;
+    height: 210px;
+    line-height: 210px;
+    font-size: 24px;
     text-align: center;
 }
 .bottom{
@@ -55,8 +55,8 @@
     letter-spacing: 2px;
     text-align: center;
     border-radius: 4px;
-    margin-left: 245px;
-    margin-top: 0px;
+    margin-left: 180px;
+    margin-top: 10px;
     cursor: pointer;
     font-weight:bold;
     font-size:20px;
@@ -65,21 +65,21 @@
 .contenterror{
     float: left;
     width: 100%;
-    height: 280px;
+    height: 210px;
     text-align: center;
 }
 .errortitle{
     width: 100%;
-    height: 80px;
-    line-height: 80px;
-    font-size: 35px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 24px;
 }
 .errormsg{
     width: 100%;
     font-size: 20px;
 }
 #errortext{
-    width: 400px;
+    width: 300px;
     resize:none;
 }
 

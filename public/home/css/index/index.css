@@ -366,6 +366,7 @@
 }
 .flinks{
 	width:100%;
+	min-width: 1200px;
 	height:155px;
 	/*padding-top:30px;*/
 	text-align: center;

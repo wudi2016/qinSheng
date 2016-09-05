@@ -37,11 +37,11 @@
                 </div>
             </div>
         </div>
-        <div style="height:50px;"></div>
+        <div style="height:50px;width:100%;min-width: 1200px;"></div>
         <div class="pagecon">
             <div style="display: inline-block"><div id="page" ms-if="page"></div></div>
         </div>
-        <div style="height:100px;">
+        <div style="height:100px;width:100%;min-width: 1200px;">
         </div>
     </div>
 @endsection

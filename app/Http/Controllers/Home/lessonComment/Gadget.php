@@ -7,6 +7,7 @@ use PaasResource;
 use PaasUser;
 use Primecloud\Pay\Weixin\Kernel\WxPayConfig;
 use Log;
+use Exception;
 
 trait Gadget {
 
@@ -46,8 +47,8 @@ trait Gadget {
 			} else {
 				return false;
 			}
-		} catch (\Exception $e) {
-			Log::debug($e -> getMessage().'getPlayUrl 抛出异常');
+		} catch (Exception $e) {
+			Log::debug($e -> getMessage().' --- getPlayUrl 抛出异常');
 			return false;
 		}
     }
@@ -64,8 +65,8 @@ trait Gadget {
 			if (!PaasUser::apply()) return Response() -> json(["type" => false, 'status' => '401']);
 			$recourse = PaasResource::getuploadstatus("/?md5=". $request['md5'] ."&filename=". $request['filename'] ."&directory=". $request['directory']);
 			return $this -> returnResult($recourse);
-		} catch (\Exception $e) {
-			Log::debug($e -> getMessage().'uploadResource 抛出异常');
+		} catch (Exception $e) {
+			Log::debug($e -> getMessage().' --- uploadResource 抛出异常');
 			return false;
 		}
     }
@@ -82,8 +83,8 @@ trait Gadget {
 			if (!PaasUser::apply()) return Response() -> json(["type" => false, 'status' => '401']);
 			$recourse = PaasResource::transformation("?fileid=". $request['fileID']);
 			return $this -> returnResult($recourse);
-		} catch (\Exception $e) {
-			Log::debug($e -> getMessage().'transformation 抛出异常');
+		} catch (Exception $e) {
+			Log::debug($e -> getMessage().' --- transformation 抛出异常');
 			return false;
 		}
     }
@@ -99,8 +100,8 @@ trait Gadget {
 			if (!PaasUser::apply()) return Response() -> json(["type" => false, 'status' => '401']);
 			$recourse = PaasResource::transformation("?fileid=". $fileID);
 			return $recourse;
-		} catch (\Exception $e) {
-			Log::debug($e -> getMessage().'transformations 抛出异常');
+		} catch (Exception $e) {
+			Log::debug($e -> getMessage().' --- transformations 抛出异常');
 			return false;
 		}
     }

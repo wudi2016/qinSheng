@@ -3,6 +3,8 @@
 <head>
 	<title>@yield('title')</title>
 	<meta charset="utf-8">
+	{{--<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">--}}
+	{{--<meta name="apple-mobile-web-app-capable" content="yes" />--}}
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<link rel="stylesheet" type="text/css" href="{{asset('home/css/layout/layout.css')}}">
 	@yield('css')
@@ -72,7 +74,7 @@
 					<form method="post" action="{{url('/index/search')}}">
 						<input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
 						<input type="hidden" name="type" value="all">
-						<input type="text" name="search" class="sear">
+						<input type="text" name="search" placeholder="请输入您要查找的课程名称" class="sear">
 						<input type="image" src="{{asset('home/image/layout/search.png')}}" class="sbtn">
 					</form>
 				</div>
@@ -82,7 +84,7 @@
     <div class="head_head"></div>
     <!-- 联系客服 -->
 	<div class="online">
-		<a target=blank href=http://wpa.qq.com/msgrd?V=3&uin=1449779625&Site=QQ客服&Menu=yes>
+		<a target=blank href=http://wpa.qq.com/msgrd?V=3&uin=3429065020&Site=QQ客服&Menu=yes>
 		<div class="qq">
 			<div class="mmsg hide">
 				<div class="mmsg_tie">QQ客服</div>
@@ -101,7 +103,7 @@
 				<div class="mmsg_tie">微信公众号</div>
 				<div class="mmsg_con">
 				    <div style="height:15px;"></div>
-					<img src="{{asset('home/image/layout/gzh.png')}}" style="margin-left:80px;">
+					<img  width="80px" height="80px" src="{{asset('home/image/layout/wxgzh.jpg')}}" style="margin-left:80px;">
 				</div>
 			</div>
 		</div>
@@ -116,7 +118,7 @@
 				    </div>
 				    <div class="mmsg_con_li">
 				    	<div class="mmsg_con_li_left">联系电话 : </div>
-				    	<div class="mmsg_con_li_right">400-000-0001</div>
+				    	<div class="mmsg_con_li_right">010-82159455</div>
 				    </div>
 				</div>
 			</div>
@@ -144,45 +146,60 @@
     </div>
     <!-- body体结束 -->
 
-    <!-- 底部开始 -->
-    <div class="foot">
-    	<div class="foot_con">
-    	    <div class="foot_con_l">
-    	        <div style="height:40px;"></div>
-    	    	<div class="foot_con_l_a"><img src="{{asset('home/image/layout/logo.png')}}"></div>
-    	    	<div class="foot_con_l_b">琴晟艺术点评网</div>
-    	    	<div class="foot_con_l_c">Copyright © 2016-2025 pianodianping</div>
-    	    	<div class="foot_con_l_d">京ICP备123456789号</div>
-    	    </div>
-    	    <div class="foot_con_m">
-    	    	<div style="height:40px;"></div>
-    	    	<div class="foot_con_m_a">关于我们</div>
-    	    	<div style="height:20px;"></div>
-    	    	<div class="foot_con_m_b"><a href="/aboutUs/firmintro/1">公司介绍</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="/aboutUs/firmintro/4">用户协议</a></div>
-    	    	<div class="foot_con_m_b"><a href="/aboutUs/firmintro/2">联系我们</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="/aboutUs/firmintro/5">友情链接</a></div>
-    	    	<div class="foot_con_m_b"><a href="/aboutUs/firmintro/3">常见问题</a> &nbsp;&nbsp;&nbsp;&nbsp;
-					{{--<a href="/aboutUs/firmintro/6">意见反馈</a>--}}
+	<div class="foot">
+		<div class="foot_con">
+			<div class="foot_con_l">
+				<div style="height:40px;"></div>
+				<div class="foot_con_l_a"><img src="{{asset('home/image/layout/logo.png')}}"></div>
+				<div class="foot_con_l_b">琴晟艺术点评网</div>
+				<div class="foot_con_l_c">Copyright © 2016-2025 pianodianping</div>
+				<div class="foot_con_l_d">京ICP备123456789号</div>
+			</div>
+			<div class="foot_con_m">
+				<div style="height:40px;"></div>
+				<div class="foot_con_m_a">关于我们</div>
+				<div style="height:20px;"></div>
+				<div class="foot_con_m_b"><a href="/aboutUs/firmintro/1">公司介绍</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="{{url($weibo)}}" title="官方微博">新浪微博</a></div>
+				<div class="foot_con_m_b"><a href="/aboutUs/firmintro/2">联系我们</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="/aboutUs/firmintro/4">用户协议</a></div>
+				<div class="foot_con_m_b"><a href="/aboutUs/firmintro/3">常见问题</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="/aboutUs/firmintro/5">友情链接</a></div>
+			</div>
+			<div class="foot_con_r">
+				<div class="foot_con_r_l">
+					<div style="height:40px;"></div>
+					<div class="foot_con_r_l_a">官方微信</div>
+					<div style="height:30px;"></div>
+					<div class="weima">{!! $weixin !!}</div>
 				</div>
-    	    </div>
-    	    <div class="foot_con_r">
-	    	    <div style="height:40px;"></div>
-    	    	<div class="foot_con_m_a">关注我们</div>
-	    	    <div style="height:35px;"></div>
-    	    	<div class="foot_con_r_con">
-					<a href="{{url($weibo)}}" title="官方微博"><img class="lxlogoa" src="{{asset('home/image/layout/weibo.png')}}"></a>&nbsp;&nbsp;
-    	    		<img class="lxlogob" src="{{asset('home/image/layout/weixin.png')}}">
-    	    	</div>
+				<div class="foot_con_r_r">
+					<div style="height:40px;"></div>
+					<div class="foot_con_r_l_a">APP下载</div>
+					<div style="height:30px;"></div>
+					<img class="weima" src="{{asset('home/image/layout/wxgzh.jpg')}}" alt="">
+				</div>
+				{{--<div style="height:40px;"></div>--}}
+				{{--<div class="foot_con_m_a">关注我们</div>--}}
+				{{--<div style="height:35px;"></div>--}}
+				{{--<div class="foot_con_r_con">--}}
+				{{--<a href="{{url($weibo)}}" title="官方微博"><img class="lxlogoa" src="{{asset('home/image/layout/weibo.png')}}"></a>&nbsp;&nbsp;--}}
+				{{--<img class="lxlogob" src="{{asset('home/image/layout/weixin.png')}}">--}}
+				{{--</div>--}}
 				{{--<div class="lxfsb hide"><img src="{{asset('home/image/layout/gzh.png')}}" alt=""></div>--}}
-				<div class="lxfsb hide">{!! $weixin !!}</div>
-    	    </div>
-    	</div>
-    </div>
-    <!-- 底部结束 -->
+				{{--<div class="lxfsb hide">{!! $weixin !!}</div>--}}
+			</div>
+		</div>
+	</div>
+	<!-- 底部结束 -->
+
 </body>
 <script type="text/javascript" src="{{asset('home/js/layout/jquery.min.js') }}"></script>
 <script type="text/javascript" src="{{asset('home/js/layout/layout.js')}}"></script>
 @yield('selectjs')
 <script type="text/javascript" src="{{asset('avalon/avalon.js')}}"></script>
 <script type="text/javascript" src="{{asset('home/js/layout/avalonConfig.js')}}"></script>
+
+{{--<script>--}}
+	{{--$("body").height( $(window).height() );--}}
+
+{{--</script>--}}
 @yield('js')
 </html>

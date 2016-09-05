@@ -12,6 +12,7 @@ define([], function() {
 		recommendlist: [],
 		commentlist: [],
 		isFollow: false,
+        buying: false,
 		followCourse: function() {
 			if (comment.isFollow) {
 				comment.popUp = 'unfollow'
@@ -81,13 +82,16 @@ define([], function() {
 					}
 					model == 'studentInfo' && comment.setVideo(function () {});
 				},
-				error: function(error) {}
+				error: function(error) {
+                    comment.buying = false;
+                }
 			});
 		},
 		overtime: false,
 		thePlayer: {},
 		videoType: true,
 		videoTime: {videoOne: 0, videoTow: 0},
+		playFlag: false,
 		setVideo: function(callback) {
 			var model = comment.videoType ? 'studentInfo' : 'teacherInfo';
 			var list = [];
@@ -125,7 +129,6 @@ define([], function() {
                 aspectratio: '16:9',
                 type: "mp4"
             });
-            typeof callback === 'function' && callback();
             (!comment.videoType && !comment.bought && comment.teacherInfo.extra != '免费课程') && comment.thePlayer.onTime(function() {
 	            if (comment.thePlayer.getPosition() >= 60) {
 	                comment.thePlayer.play(false);
@@ -137,10 +140,16 @@ define([], function() {
 				var data = {courseId: comment.commentID, courseType: 1, userId: comment.mineID, chapterId: comment.commentID};
 				comment.getData('/lessonComment/getFirst', 'selectCourseView', {table: 'courseview', action: 1, data: data}, 'POST', function(response) {
 					if (!response) {
-						comment.getData('/lessonComment/getFirst', 'courseview', {table: 'courseview', action: 2, create_time: 1, data: data}, 'POST');
+						comment.thePlayer.onTime(function() {
+							if (comment.thePlayer.getPosition() >= 60 && !comment.playFlag) {
+								comment.playFlag = true;
+								comment.getData('/lessonComment/getFirst', 'courseview', {table: 'courseview', action: 2, create_time: 1, data: data}, 'POST');
+							}
+						});
 					}
 				});
 			}
+			'function' === typeof callback && callback();
 		},
 		changeVideo: function() {
 			comment.overtime = false;
@@ -185,7 +194,7 @@ define([], function() {
 			comment.getData('/lessonComment/getFirst', 'submitComment', {table: 'applycoursecomment', action: 2, data: data}, 'POST', function(response) {
 				comment.commentlist.unshift({
 					commentContent: data.commentContent,
-					created_at: '一秒前',
+					created_at: '1秒前',
 					id: response,
 					isLike: false,
 					likeNum: 0,
@@ -242,29 +251,32 @@ define([], function() {
 		payType: '',
 		payWarning: false,
 		pay: function() {
-			if (comment.payType === '') {
-				comment.payWarning = true;
-				return false;
-			}
-			var data = {
-				payType: comment.payType, 
-				userName: comment.mineUsername, 
-				userId: comment.mineID,
-				teacherId: comment.teacherInfo.teacherId,
-				teacherName: comment.teacherInfo.username,
-				orderType: 2,
-				//orderPrice: Math.ceil(comment.teacherInfo.extra / 100) * 100,
-				orderPrice: comment.teacherInfo.extra,
-				orderTitle: '学员'+ comment.mineUsername +'购买'+ comment.studentInfo.extra +'点评课程。',
-				courseId: comment.commentID
-			};
-			comment.getData('/lessonComment/generateOrder', 'orderInfo', data, 'POST', function(response) {
-				if (comment.payType) {
-					location.href = '/lessonComment/scan/'+ response.data;
-				} else {
-					location.href = '/lessonComment/alipay/'+ response.data +'/lessonComment&detail&'+ comment.commentID;
-				};
-			});
+            if (comment.payType === '') {
+                comment.payWarning = true;
+                return false;
+            }
+			if (!comment.buying) {
+                comment.buying = true;
+                var data = {
+                    payType: comment.payType,
+                    userName: comment.mineUsername,
+                    userId: comment.mineID,
+                    teacherId: comment.teacherInfo.teacherId,
+                    teacherName: comment.teacherInfo.username,
+                    orderType: 2,
+                    //orderPrice: Math.ceil(comment.teacherInfo.extra / 100) * 100,
+                    orderPrice: comment.teacherInfo.extra,
+                    orderTitle: '学员'+ comment.mineUsername +'购买'+ comment.studentInfo.extra +'点评课程。',
+                    courseId: comment.commentID
+                };
+                comment.getData('/lessonComment/generateOrder', 'orderInfo', data, 'POST', function(response) {
+                    if (comment.payType) {
+                        location.href = '/lessonComment/scan/'+ response.data;
+                    } else {
+                        location.href = '/lessonComment/alipay/'+ response.data +'/lessonComment&detail&'+ comment.commentID;
+                    };
+                });
+            }
 		},
 		//  blade模板使用的变量
 		commentID: null,

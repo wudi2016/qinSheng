@@ -296,7 +296,7 @@
                                                     @if($order->status == 3)
                                                         {{--支付宝支付--}}
                                                         @if($order->payType == 0)
-                                                            <a href="{{url('/admin/order/alipayRefund/'.$order->id)}}" class="btn btn-xs btn-danger">
+                                                            <a href="{{url('/admin/order/alipayRefund/'.$order->id)}}" target="_blank" class="btn btn-xs btn-danger">
                                                                 <i class="icon- bigger-120"></i>确认退款
                                                             </a>
                                                         {{--微信支付--}}

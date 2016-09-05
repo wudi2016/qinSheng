@@ -279,16 +279,18 @@
                         <!-- 后台发送消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == 0 && el.actionId">
                             <!-- 审核未通过 -->
-                            <a ms-attr-href="'/lessonComment/reUploadComment/' + el.actionId + '/' + el.id"><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 600px;display: block" ms-text="'上传视频审核未通过，原因：' + el.content" ms-attr-title=""></span></a>
+                            <a ms-attr-href="'/lessonComment/reUploadComment/' + el.actionId + '/' + el.id">
+                                <span style="width:600px;height:auto;display:block;word-break: break-all;" ms-text="'上传视频审核未通过，原因：' + el.content" ms-attr-title="el.content"></span>
+                            </a>
                         </div>
                         <div class="repeat_comment_text" ms-if="el.type == 0 && el.tempId != 0">
                             <!-- 审核未通过 -->
-                            <span class="span_light" ms-text="el.tempName + '&nbsp;'" ms-if="el.tempName" style="display: block;float: left;" ms-attr-title="el.tempName"></span>
-                            <span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 400px;display: block;float: left;" ms-text="el.content" ms-attr-title="el.content"></span>
+                            <span class="span_light" ms-text="el.tempName + '&nbsp;'" ms-if="el.tempName" style="width:auto;display: block;float: left;-ms-word-break: break-all;word-break: break-all;" ms-attr-title="el.tempName"></span>
+                            <span style="width:600px;height:auto;display:block;word-break: break-all" ms-text="el.content" ms-attr-title="el.content"></span>
                         </div>
                         <!-- 注册加入消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '1'">
-                            <span ms-text="el.content"></span>
+                            <span ms-text="el.content" style="width:600px;height:auto;display:block;word-break: break-all;" ></span>
                         </div>
                         <!-- 本人被点评消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '2'">
@@ -296,7 +298,8 @@
                         </div>
                         <!-- 本人被关注消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '3'">
-                            <span ms-text="el.fromUsername" class="span_light"></span><a ms-attr-href="'/lessonComment/student/' + el.actionId"><span ms-text="el.content" style="margin-left: 10px;"></span></a>
+                            <span ms-text="el.fromUsername" class="span_light"></span>
+                            <a ms-attr-href="'/lessonComment/student/' + el.actionId"><span ms-text="el.content" style="margin-left: 10px;"></span></a>
                         </div>
                         <!-- 关注用户被点评消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '4'">
@@ -406,12 +409,12 @@
                     {{--名师--}}
                     <a ms-if="el.type == 2" ms-attr-href="'/lessonComment/teacher/'+el.id">
                         <img ms-attr-src="el.pic" alt="" width="84" height="84">
-                        <div class="focus_repeat_name" ms-text="el.username"></div>
+                        <div class="focus_repeat_name" ms-attr-title="el.username" ms-text="el.username"></div>
                     </a>
                     {{--学员--}}
                     <a ms-if="el.type != 2" ms-attr-href="'/lessonComment/student/'+el.id">
                         <img ms-attr-src="el.pic" alt="" width="84" height="84">
-                        <div class="focus_repeat_name" ms-text="el.username"></div>
+                        <div class="focus_repeat_name" ms-attr-title="el.username" ms-text="el.username"></div>
                     </a>
                 </div>
                 {{--===============================我的粉丝循环结束====================================--}}
@@ -442,12 +445,12 @@
                     {{--名师--}}
                     <a ms-if="el.type == 2" ms-attr-href="'/lessonComment/teacher/'+el.id">
                         <img ms-attr-src="el.pic" alt="" width="84" height="84">
-                        <div class="focus_repeat_name" ms-text="el.username"></div>
+                        <div class="focus_repeat_name" ms-attr-title="el.username" ms-text="el.username"></div>
                     </a>
                     {{--学员--}}
                     <a ms-if="el.type != 2" ms-attr-href="'/lessonComment/student/'+el.id">
                         <img ms-attr-src="el.pic" alt="" width="84" height="84">
-                        <div class="focus_repeat_name" ms-text="el.username"></div>
+                        <div class="focus_repeat_name" ms-attr-title="el.username" ms-text="el.username"></div>
                     </a>
                 </div>
                 {{--===============================我的关注循环结束====================================--}}

@@ -92,8 +92,11 @@
     <script type="text/javascript" src="{{asset('home/js/games/pagination.js')}}"></script>
     <script>
         require(['/lessonSubject/list'], function (list) {
-            list.getSubjectInfo(1);
-            list.getCommentInfo(1);
+            if(location.href.split('/').pop() == '1'){
+                list.getSubjectInfo(1);
+            }else{
+                list.getCommentInfo(1);
+            }
             avalon.scan();
         });
     </script>

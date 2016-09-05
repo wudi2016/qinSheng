@@ -617,7 +617,8 @@ class perSpaceController extends Controller
                     $data[$key]->price = (is_integer(($total - $chapter) / $total * $data[$key]->payPrice)
                         ? ($total - $chapter) / $total * $data[$key]->payPrice : round(($total - $chapter) / $total * $data[$key]->payPrice,2)) ?: 0;
                 }else if($data[$key]->orderType == 2 && $data[$key]->status == 2){//购买别人点评课程
-                    $chapter = \DB::table('courseview as view')->join('coursechapter as chapter','chapter.id','=','view.chapterId')->where(['view.userId' =>  $data[$key]->userId, 'view.courseId' =>  $data[$key]->courseId ?: 0, 'view.courseType' => 1])->count();
+//                    $chapter = \DB::table('courseview as view')->join('coursechapter as chapter','chapter.id','=','view.chapterId')->where(['view.userId' =>  $data[$key]->userId, 'view.courseId' =>  $data[$key]->courseId ?: 0, 'view.courseType' => 1])->count();
+                    $chapter = \DB::table('courseview as view')->where(['view.userId' =>  $data[$key]->userId, 'view.courseId' =>  $data[$key]->courseId, 'view.courseType' => 1])->count();
                     $data[$key]->price = $chapter ? 0 : $data[$key]->payPrice;
                 }
 

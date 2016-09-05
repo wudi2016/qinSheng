@@ -4,6 +4,7 @@ define([], function() {
 		$id: 'buyController',
 		teacherInfo: [],
 		commentType: '钢琴演奏',
+        buying: false,
 		getData: function(url, model, data, method, callback) {
 			$.ajax({
 				type: method || 'GET',
@@ -35,7 +36,9 @@ define([], function() {
 						comment[model] = response.data;
 					}
 				},
-				error: function(error) {}
+				error: function(error) {
+                    comment.buying = false;
+                }
 			});
 		},
 		payType: null,
@@ -46,27 +49,31 @@ define([], function() {
 			comment.payWarning = false;
 		},
 		submit: function() {
-			if (comment.payType === null) {
-				comment.payWarning = true;
-				return false;
-			}
-			var data = {
-				payType: comment.payType, 
-				userName: comment.mineName, 
-				userId: comment.mineID,
-				teacherId: comment.teacherInfo.id,
-				teacherName: comment.teacherInfo.username,
-				orderType: 1,
-				orderPrice: comment.teacherInfo.price,
-				orderTitle: '学员'+ comment.mineName +'申请'+ comment.teacherInfo.username +'老师点评。'
-			};
-			comment.getData('/lessonComment/generateOrder', 'orderInfo', data, 'POST', function(response) {
-				if (comment.payType) {
-					location.href = '/lessonComment/scan/'+ response.data;
-				} else {
-					location.href = '/lessonComment/alipay/'+ response.data +'/lessonComment&buySuccess&'+ response.data;
-				};
-			});
+            if (comment.payType === null) {
+                comment.payWarning = true;
+                return false;
+            }
+            if (!comment.buying) {
+                comment.buying = true;
+                var data = {
+                    payType: comment.payType,
+                    userName: comment.mineName,
+                    userId: comment.mineID,
+                    teacherId: comment.teacherInfo.id,
+                    teacherName: comment.teacherInfo.username,
+                    orderType: 1,
+                    //orderPrice: Math.ceil(comment.teacherInfo.price / 100) * 100,
+                    orderPrice: comment.teacherInfo.price,
+                    orderTitle: '学员'+ comment.mineName +'申请'+ comment.teacherInfo.username +'老师点评。'
+                };
+                comment.getData('/lessonComment/generateOrder', 'orderInfo', data, 'POST', function(response) {
+                    if (comment.payType) {
+                        location.href = '/lessonComment/scan/'+ response.data;
+                    } else {
+                        location.href = '/lessonComment/alipay/'+ response.data +'/lessonComment&buySuccess&'+ response.data;
+                    }
+                });
+            }
 		},
 		//  blade模板使用的变量
 		teacherID: null,

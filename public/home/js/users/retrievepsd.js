@@ -47,49 +47,72 @@ $('.uphone').blur(function(){
 
 //获取验证码
 var getMsg = function(){
-    if(!checkUphone){//手机号验证没通过
-        $('.uphone').trigger('blur');
-    }else{//手机号验证通过
+    setTimeout(function(){
 
-        //获取验证码
-        var phone = $('.uphone').val();
-        $.ajax({
-            type: "get",
-            url: "/index/getMessage/"+phone,
-            // async:false,
-            success: function(data){
-                if(data.type== true){
-                    code = data.info;
-                }else{
-                    code = data.info;
+        if(!checkUphone){//手机号验证没通过
+            // $('.uphone').trigger('blur');
+            return false;
+        }else{//手机号验证通过
+
+            //获取验证码
+            var phone = $('.uphone').val();
+            $.ajax({
+                type: "get",
+                url: "/index/getMessage/"+phone,
+                // async:false,
+                success: function(data){
+                    if(data.type== true){
+                        code = data.info;
+                    }else{
+                        code = data.info;
+                    }
                 }
-            }
-        });
+            });
 
-        //计数60s
-        var countdown = 60;
-        $(".getyzm").attr({ disabled: "disabled"});//重新发送按钮 不能点击
-        var myTime = setInterval(function() {
-            countdown--;
-            $('.getyzm').html(countdown); // 通知视图模型的变化
-            if(countdown == 0){
-                $('.getyzm').html('重发').removeAttr("disabled");//重新发送按钮 可以点击
-                clearInterval(myTime);
-            }
-        }, 1000);
+            //计数60s
+            var countdown = 60;
+            $(".getyzm").attr({ disabled: "disabled"});//重新发送按钮 不能点击
+            var myTime = setInterval(function() {
+                countdown--;
+                $('.getyzm').html(countdown); // 通知视图模型的变化
+                if(countdown == 0){
+                    $('.getyzm').html('重发').removeAttr("disabled");//重新发送按钮 可以点击
+                    clearInterval(myTime);
+                }
+            }, 1000);
 
-    }
+        }
+    }, 900);
+
 }
 
 
 //验证码验证
 $('.txtt').blur(function(){
     var ucode = $('.txtt').val();
+    var self = $(this);
+
     if(!ucode) {//为空
         $(this).parent().parent().next().html('* 请输入验证码');
         $(this).parent().siblings('.cuo').removeClass('hide');
         checkUcode  = false;
     }else{
+        $.ajax({
+            type: "get",
+            url: "/index/checkCode/"+ucode,
+            // async:false,
+            success: function(data){
+                if(data == 1){
+                    self.parent().siblings('.dui').removeClass('hide');
+                    checkUcode  = true;
+                }else{
+                    self.parent().siblings('.cuo').removeClass('hide');
+                    self.parent().parent().next().html('* 验证码错误');
+                    checkUcode  = false;
+                }
+            }
+        });
+        /*
         if (ucode == code) {//验证码正确
             $(this).parent().siblings('.dui').removeClass('hide');
             checkUcode  = true;
@@ -98,19 +121,24 @@ $('.txtt').blur(function(){
             $(this).parent().parent().next().html('* 验证码错误');
             checkUcode  = false;
         }
+        */
     }
 })
 
 
 var nextCheck = function(){
-    if(checkUphone && checkUcode){
-        var phone = $('.uphone').val();
-        window.location.href = '/index/resetpsd/'+phone;
-    }else{
-        $('.uphone').trigger('blur');
-        $('.txtt').trigger('blur');
-        return false;
-    }
+    setTimeout(function(){
+
+        if(checkUphone && checkUcode){
+            var phone = $('.uphone').val();
+            window.location.href = '/index/resetpsd/'+phone;
+        }else{
+            $('.uphone').trigger('blur');
+            $('.txtt').trigger('blur');
+            return false;
+        }
+    }, 500);
+
 }
 
 

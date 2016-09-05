@@ -12,6 +12,7 @@
            margin-top: -20px;
             margin-left: -24px;
         }
+
     </style>
 
 @endsection

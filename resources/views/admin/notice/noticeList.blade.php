@@ -103,7 +103,7 @@
                                             <td>{{$type -> created_at}}</td>
                                             <td>
                                                 <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
-                                                    @if ($type -> tempId == '')
+                                                    @if ($type -> tempId == 0)
                                                         @permission('edit.notice')
                                                             <a onclick="alert('系统自动发送消息,不可编辑');" class="btn btn-xs btn-info">
                                                                 <i class="icon-edit bigger-120"></i>

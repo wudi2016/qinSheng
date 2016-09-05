@@ -67,13 +67,13 @@
                     </div>
                     <div class="contain_lessonDetail_top_video_right_btn">
                         @if(Auth::check() && Auth::user() -> type != 3)
-                            <span class="first hide" ms-click="popUpSwitch('buyCourse')" ms-visible="!detailInfo.isBuy && !detailInfo.isFree && !detailInfo.isTeacher">立即购买</span>
-                            <span class="second hide" ms-visible="!detailInfo.isBuy && detailInfo.isTryLearn && !detailInfo.isFree && !detailInfo.isTeacher" ms-click="tryLearn(detailInfo.chapterId);">立即试学</span>
-                            <span class="third hide" ms-visible="detailInfo.isBuy || detailInfo.isFree || detailInfo.isTeacher" ms-click="tryLearn(detailInfo.chapterId);">立即学习</span>
+                            <span class="first hide" ms-click="popUpSwitch('buyCourse')" ms-visible="detailInfo.buyNow">立即购买</span>
+                            <span class="second hide" ms-visible="detailInfo.tryNow" ms-click="tryLearn(detailInfo.chapterId);">立即试学</span>
+                            <span class="third hide" ms-visible="detailInfo.studyNow" ms-click="tryLearn(detailInfo.chapterId);">立即学习</span>
                         @else
-                            <a href="/index/login"><span class="first hide" ms-visible="!detailInfo.isBuy && !detailInfo.isFree && !detailInfo.isTeacher">立即购买</span></a>
-                            <a href="/index/login"><span class="second hide" ms-visible="!detailInfo.isBuy && detailInfo.isTryLearn && !detailInfo.isFree && !detailInfo.isTeacher" ms-click="tryLearn(detailInfo.chapterId);">立即试学</span></a>
-                            <a href="/index/login"><span class="third hide" ms-visible="detailInfo.isBuy || detailInfo.isFree || detailInfo.isTeacher" ms-click="tryLearn(detailInfo.chapterId);">立即学习</span></a>
+                            <a href="/index/login"><span class="first" ms-if="detailInfo.buyNow">立即购买</span></a>
+                            <a href="/index/login"><span class="second" ms-if="detailInfo.tryNow" ms-click="tryLearn(detailInfo.chapterId);">立即试学</span></a>
+                            <a href="/index/login"><span class="third" ms-if="detailInfo.studyNow" ms-click="tryLearn(detailInfo.chapterId);">立即学习</span></a>
                         @endif
 
                     </div>
@@ -81,7 +81,7 @@
                         @if(Auth::check() && Auth::user() -> type != 3)
                             <div class="collect hide" ms-visible="!detailInfo.isCollection" ms-click="addCollect(detailInfo.id,detailInfo.isCollection);">收藏</div>
                             <div class="collect_light hide" ms-visible="detailInfo.isCollection" ms-click="popUpSwitch('quitCollection');">已收藏</div>
-                            <div class="response hide" ms-click="popUpSwitch('feedback')" ms-visible="detailInfo.isBuy || detailInfo.isFree || detailInfo.isTeacher">反馈</div>
+                            <div class="response hide" ms-click="popUpSwitch('feedback')" ms-visible="detailInfo.studyNow">反馈</div>
                             {{--<div class="response hide" ms-visible="!detailInfo.isBuy">反馈</div>--}}
                         @else
                             <a href="/index/login"><div class="collect">收藏</div></a>
@@ -146,7 +146,7 @@
                 <div name="comment" class="hide" ms-visible="changeOption == 'comment'">
                     @if(Auth::check() && Auth::user() -> type != 3)
                         <div ms-if="detailInfo.isBuy || detailInfo.isAuthor || detailInfo.isTeacher || detailInfo.isFree" class="contain_lessonDetail_bot_left_comment">
-                            <textarea ms-duplex="commentContent" maxlength="100"></textarea>
+                            <textarea ms-duplex="commentContent"></textarea>
                             <span ms-on-mouseout="descriptionSwitch('replyWarning', false)" ms-click="publishComment(detailInfo.id,commentContent);">发布</span>
                             <div class="teacherHomepage_detail_content_applyTip" ms-visible="replyWarning">请输入评论内容</div>
                         </div>
@@ -184,7 +184,9 @@
                                     @endif
                                 </div>
                             </div>
+                            <div class="clear"></div>
                         </div>
+
                     </div>
                     <div ms-visible="commentMsg" class="comment_msg">暂无相关评论...</div>
                 </div>

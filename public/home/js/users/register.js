@@ -115,6 +115,8 @@ $('.uphone').blur(function(){
 
 //获取验证码
 var getMsg = function(){
+    $(".getyzm").attr({ disabled: "disabled"});//重新发送按钮 不能点击
+    console.log('获取验证码...');
     setTimeout(function(){
 
         if(!checkUphone){//手机号验证没通过
@@ -139,7 +141,7 @@ var getMsg = function(){
 
             //计数60s
             var countdown = 90;
-            $(".getyzm").attr({ disabled: "disabled"});//重新发送按钮 不能点击
+            // $(".getyzm").attr({ disabled: "disabled"});//重新发送按钮 不能点击
             var myTime = setInterval(function() {
                 countdown--;
                 $('.getyzm').html(countdown); // 通知视图模型的变化

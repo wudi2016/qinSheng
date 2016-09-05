@@ -125,7 +125,7 @@
                                 <label class="col-sm-3 control-label no-padding-right" for="form-field-1">  </label>
 
                                 <div class="col-sm-9">
-                                    <span style="color:red">按例子标准替换为自己二维码</span>
+                                    <span style="color:red">按例子标准替换为自己二维码(二维码图片大小 100 * 100)</span>
                                 </div>
                             </div>
 

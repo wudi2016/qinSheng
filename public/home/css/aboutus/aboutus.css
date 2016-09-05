@@ -5,6 +5,7 @@
 
 .background{
     width:100%;
+    min-width:1200px;
     /*height:1275px;*/
     /*height:auto;*/
     min-height:900px;

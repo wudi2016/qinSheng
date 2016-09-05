@@ -53,12 +53,12 @@ class buyCommentController extends Controller
         $result = DB::table('orders')->select('orderPrice', 'orderTitle', 'orderSn', 'id', 'orderType')->where(['id' => $orderID, 'userId' => \Auth::user()->id, 'isDelete' => 0, 'status' => 5])->first();
         $result || abort(404);
 		try {
-			$code_url = $this -> makeUnifiedOrder($wxPay, $inputObj, $wxBase, $result, 'http://qinsheng.zuren8.com/lessonComment/wxPayCallback');
+			$code_url = $this->makeUnifiedOrder($wxPay, $inputObj, $wxBase, $result, 'http://qinsheng.zuren8.com/lessonComment/wxPayCallback');
 			empty($code_url['code_url']) && abort(404);
 			return view('home.lessonComment.buyComment.scan')->with('orderID', $orderID)->with('orderInfo', $result)->with('url', $code_url['code_url']);
 		} catch (\Exception $e) {
-            DB::table('orders') -> where('id', $orderID) -> delete();
-            return redirect() -> back();
+            DB::table('orders')->where('id', $orderID)->delete();
+            return redirect()->back();
 		}
     }
 
@@ -86,7 +86,7 @@ class buyCommentController extends Controller
         PaasUser::apply();
         $result = DB::table('orders')->select('id', 'orderSn', 'teacherId')->where(['id' => $orderID, 'userId' => \Auth::user()->id, 'status' => 0])->first();
         $result || abort(404);
-        return view('home.lessonComment.buyComment.upload') -> with('info', $result) -> with('mineID', \Auth::user() -> id);
+        return view('home.lessonComment.buyComment.upload')->with('info', $result)->with('mineID', \Auth::user()->id);
     }
 
 
@@ -98,12 +98,11 @@ class buyCommentController extends Controller
     public function reUpload($applyID, $messageID = null)
     {
         PaasUser::apply();
-        $result = DB::table('applycourse')->select('id', 'courseTitle', 'message')
-            ->where(['id' => $applyID, 'userId' => \Auth::user()->id, 'state' => 0, 'courseStatus' => 0, 'courseIsDel' => 0])->first();
+        $result = DB::table('applycourse')->select('id', 'courseTitle', 'message')->where(['id' => $applyID, 'userId' => \Auth::user()->id, 'state' => 0, 'courseStatus' => 0, 'courseIsDel' => 0])->first();
         $result || abort(404);
         $messageID || $messageID = 0;
-        return view('home.lessonComment.buyComment.reUpload') -> with('applyID', $result -> id) -> with('courseTitle', $result -> courseTitle)
-               -> with('message', $result -> message) -> with('mineID', \Auth::user() -> id) -> with('messageID', $messageID);
+        return view('home.lessonComment.buyComment.reUpload')->with('applyID', $result->id)->with('courseTitle', $result->courseTitle)
+              ->with('message', $result->message)->with('mineID', \Auth::user()->id)->with('messageID', $messageID);
     }
 
 
@@ -114,10 +113,15 @@ class buyCommentController extends Controller
      */
     public function generateOrder(Request $request)
     {
-        $request['orderSn'] = date('Ymd', time()) . uniqid();
-        $request['created_at'] = Carbon::now();
-        $request['updated_at'] = Carbon::now();
-        $result = DB::table('orders')->insertGetId($request->all());
+        $flag = DB::table('orders')->select('id')->where(['userId' => $request['userId'], 'courseId' => $request['courseId'], 'status' => 5, 'orderType' => $request['orderType']])->first();
+        if(!$flag){
+            $request['orderSn'] = date('Ymd', time()) . uniqid();
+            $request['created_at'] = Carbon::now();
+            $request['updated_at'] = Carbon::now();
+            $result = DB::table('orders')->insertGetId($request->all());
+        }else{
+            $result = $flag->id;
+        }
         return $this->returnResult($result);
     }
 
@@ -138,7 +142,9 @@ class buyCommentController extends Controller
         $data['courseTitle'] = str_replace(' ', '', $data['courseTitle']);
 		isset($data['message']) ? $data['message'] = str_replace(' ', '', $data['message']) : $data['message'] = '';
         $result = DB::table('applycourse')->insertGetId($data);
-        if (!$result) return $this->returnResult(false);
+        if (!$result) {
+            return $this->returnResult(false);
+        }
         DB::table('orders')->where('id', $request['orderID'])->update(['status' => 1]) || $result = !(DB::table('applycourse')->where('id', $result)->delete());
         return $this->returnResult($result);
     }
@@ -169,8 +175,8 @@ class buyCommentController extends Controller
                             break;
                         case 2:
                             $result['status'] = 2;
-                            DB::table('commentcourse') -> join('orders', 'commentcourse.id', '=', 'orders.courseId') -> where('orders.orderSn', $orderSn) -> increment('commentcourse.coursePlayView');
-							DB::table('commentcourse') -> join('orders', 'commentcourse.id', '=', 'orders.courseId') -> where('orders.orderSn', $orderSn) -> increment('commentcourse.courseStudyNum');
+                            DB::table('commentcourse')->join('orders', 'commentcourse.id', '=', 'orders.courseId')->where('orders.orderSn', $orderSn)->increment('commentcourse.coursePlayView');
+							DB::table('commentcourse')->join('orders', 'commentcourse.id', '=', 'orders.courseId')->where('orders.orderSn', $orderSn)->increment('commentcourse.courseStudyNum');
                             break;
                     }
 
@@ -245,11 +251,11 @@ class buyCommentController extends Controller
 
             if (preg_match('/^\/lessonComment\/buySuccess\/[0-9]{1,}/', Input::get('body'))) {
                 $result['status'] = 0;
-                DB::table('teacher') -> join('orders', 'teacher.parentId', '=', 'orders.teacherId') -> where('orders.orderSn', $orderSn) -> decrement('teacher.stock');
+                DB::table('teacher')->join('orders', 'teacher.parentId', '=', 'orders.teacherId')->where('orders.orderSn', $orderSn)->decrement('teacher.stock');
             } else if (preg_match('/^\/lessonComment\/detail\/[0-9]{1,}/', Input::get('body'))) {
                 $result['status'] = 2;
-                DB::table('commentcourse') -> join('orders', 'commentcourse.id', '=', 'orders.courseId') -> where('orders.orderSn', $orderSn) -> increment('commentcourse.coursePlayView');
-                DB::table('commentcourse') -> join('orders', 'commentcourse.id', '=', 'orders.courseId') -> where('orders.orderSn', $orderSn) -> increment('commentcourse.courseStudyNum');
+                DB::table('commentcourse')->join('orders', 'commentcourse.id', '=', 'orders.courseId')->where('orders.orderSn', $orderSn)->increment('commentcourse.coursePlayView');
+                DB::table('commentcourse')->join('orders', 'commentcourse.id', '=', 'orders.courseId')->where('orders.orderSn', $orderSn)->increment('commentcourse.courseStudyNum');
             }
             $order = DB::table('orders')->where('orderSn', $orderSn)->update($result);
             if ($order) {

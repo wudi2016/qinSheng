@@ -12,6 +12,7 @@ use DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
+
 class indexController extends Controller
 {
     //用户列表
@@ -30,17 +31,32 @@ class indexController extends Controller
             ->orderBy('u.id','desc');
         //用户名
         if($request->type == 8){
-            $query = $query->where('u.username','like','%'.trim($request->search).'%');
+            if($request->search){
+                $query = $query->where('u.username','like','%'.trim($request->search).'%');
+            }else{
+                $query = $query;
+            }
+
             $search['type'] = 8;
         }
         //姓名
         if($request->type == 1){
-            $query = $query->where('u.realname','like','%'.trim($request->search).'%');
+
+            if($request->search){
+                $query = $query->where('u.realname','like','%'.trim($request->search).'%');
+            }else{
+                $query = $query;
+            }
             $search['type'] = 1;
         }
         //手机号
         if($request->type == 2){
-            $query = $query->where('u.phone','like','%'.trim($request->search).'%');
+            if($request->search){
+                $query = $query->where('u.phone','like','%'.trim($request->search).'%');
+            }else{
+                $query = $query;
+            }
+
             $search['type'] = 2;
         }
         //学生学员
@@ -52,6 +68,22 @@ class indexController extends Controller
         if($request->type == 4){
             $query = $query->where('u.type','=',1);
             $search['type'] = 4;
+        }
+
+        //邀请人
+        if($request->type == 5){
+            //查询出对应邀请人邀请码
+            if($request->search){
+                $user = User::where('username',$request->search)->first();
+                if($user){
+                    $query = $query->where('u.fromyaoqingma',$user->yaoqingma);
+                }else{
+                    $query = $query->where('u.fromyaoqingma','无');
+                }
+            }else{
+                $query = $query;
+            }
+            $search['type'] = 5;
         }
         //时间筛选
 

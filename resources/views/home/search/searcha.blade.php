@@ -97,7 +97,7 @@
                     </div>
                     <div style="width:0px;height:30px;border:1px solid #dddddd;float: left;margin-top:10px;margin-left:5px;"></div>
                     <div class="con_top_con_sbar_m">
-                        <input class="txt" name="search" type="text" value="{{$search}}">
+                        <input class="txt" name="search" type="text" placeholder="请输入您要查找的课程名称" value="{{$search}}">
                     </div>
                     <div class="con_top_con_sbar_r">
                         <button type="submit">搜索</button>

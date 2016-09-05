@@ -129,11 +129,15 @@ define([], function () {
         onLight: '',
         changeOption: (location.href.split('/').pop() == '1') ? 'subject' : 'comment',
         changeSwitch: function (value) {
-            list.changeOption = value;
+            if(value == 'comment'){
+                location.href = '/lessonSubject/list/2';
+            }else{
+                location.href = '/lessonSubject/list/1';
+            }
         },
         sort: function (type, changeOption) {
-            changeOption == 'subject' ? list.getSubjectInfo(type) : list.getCommentInfo(type);
             if(changeOption == 'subject'){
+                list.getSubjectInfo(type);
                 if (type == '1') { // 默认排序
                     $('.contain_lesson_center_tip_right span:nth-child(1)').addClass('default').siblings().removeClass('default');
                 } else if (type == '2') { // 最新排序
@@ -142,6 +146,7 @@ define([], function () {
                     $('.contain_lesson_center_tip_right span:nth-child(5)').addClass('default').siblings().removeClass('default');
                 }
             }else{
+                list.getCommentInfo(type);
                 if (type == '1') { // 默认排序
                     $('.contain_lesson_center_tip_right_comment span:nth-child(1)').addClass('default').siblings().removeClass('default');
                 } else if (type == '2') { // 最新排序

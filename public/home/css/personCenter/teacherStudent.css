@@ -37,6 +37,7 @@
     width: 1200px;
     height: auto;
     margin: 0 auto;
+    min-width:1200px;
 }
 
 /*==================================================主体左边部分========================================*/
@@ -359,7 +360,7 @@
     /*width:100%;*/
     width: 471px;
     height: 100%;
-    boder: none;
+    border: none;
 }
 
 #center_right_textarea_con_top_text {

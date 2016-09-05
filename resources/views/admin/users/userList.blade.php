@@ -21,7 +21,7 @@
             <div class="nav-search" id="nav-search" style="width:770px;">
                 <form action="" method="get" class="form-search">
                     <input type="text" style="width:180px;padding-left:5px; padding-right: 5px;background:#fff url('/admin/image/2.png') no-repeat 153px 3px" name="beginTime"  placeholder="开始时间" class="col-xs-10 col-sm-5" value="{{$search['beginTime'] ? $search['beginTime'] : ''}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
-                    <input type="text" style="width:180px;padding-left:5px;padding-right: 5px;margin-left:5px;background:#fff url('/admin/image/2.png') no-repeat 153px 3px" name="endTime"  placeholder="线束时间" class="col-xs-10 col-sm-5" value="{{$search['endTime'] ? $search['endTime'] : ''}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;" />
+                    <input type="text" style="width:180px;padding-left:5px;padding-right: 5px;margin-left:5px;background:#fff url('/admin/image/2.png') no-repeat 153px 3px" name="endTime"  placeholder="结束时间" class="col-xs-10 col-sm-5" value="{{$search['endTime'] ? $search['endTime'] : ''}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width:170px;" />
 
                     <select name="type" id="form-field-1" class="searchtype input-select" style="margin-left:5px;">
                         <option value=""{{$search['type'] == '' ? 'selected':''}}>-请选择-</option>
@@ -30,6 +30,7 @@
                         <option value="2" {{$search['type'] == 2 ? 'selected':''}}>手机号</option>
                         <option value="3" style="color:red" {{$search['type'] == 3 ? 'selected':''}}>学生学员</option>
                         <option value="4" style="color:red" {{$search['type'] == 4 ? 'selected':''}}>教师学员</option>
+                        <option value="5" {{$search['type'] == 5 ? 'selected':''}}>邀请人</option>
                         <option value="7" {{$search['type'] == 7 ? 'selected':''}}>全部</option>
                     </select>
                     <span class="input-icon">

@@ -41,6 +41,13 @@ define([], function () {
         },
         haveCourse : true,
         catalogInfo: [],
+        // 获取详细数据
+        detailInfo: {
+            courseTitle : '',
+            coursePrice : '',
+            classHour : '',
+            coursePlayView : '',
+        },
         downloadMsg: false, commentMsg: false, catalogMsg : false,
         getData: function (url, type, data, model, callback) {
             $.ajax({
@@ -76,18 +83,6 @@ define([], function () {
                 }, error: function (error) {
                 }
             })
-        },
-        // 获取详细数据
-        detailInfo: {
-            courseTitle : '',
-            coursePrice : '',
-            classHour : '',
-            coursePlayView : '',
-            isFree: false,
-            isTeacher : false,
-            isBuy: false,
-            isTryLearn: true,
-            isCollection: false
         },
         getDetail: function (id) {
             detail.getData('/lessonSubject/getDetail/' + id, '', {}, 'detailInfo');

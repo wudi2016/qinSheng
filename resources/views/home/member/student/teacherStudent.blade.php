@@ -257,12 +257,12 @@
                     {{--名师--}}
                     <a ms-if="el.type == 2" ms-attr-href="'/lessonComment/teacher/'+el.id">
                         <img ms-attr-src="el.pic" alt="" width="84" height="84" onerror="this.src='/home/image/layout/default.png'">
-                        <div class="focus_repeat_name" ms-text="el.username"></div>
+                        <div class="focus_repeat_name" ms-attr-title="el.username"  ms-text="el.username"></div>
                     </a>
                     {{--学员--}}
                     <a ms-if="el.type != 2" ms-attr-href="'/lessonComment/student/'+el.id">
                         <img ms-attr-src="el.pic" alt="" width="84" height="84" onerror="this.src='/home/image/layout/default.png'">
-                        <div class="focus_repeat_name" ms-text="el.username"></div>
+                        <div class="focus_repeat_name" ms-attr-title="el.username"  ms-text="el.username"></div>
                     </a>
                 </div>
                 {{--===============================我的关注循环结束====================================--}}
@@ -292,12 +292,12 @@
                     {{--名师--}}
                     <a ms-if="el.type == 2" ms-attr-href="'/lessonComment/teacher/'+el.id">
                         <img ms-attr-src="el.pic" alt="" width="84" height="84">
-                        <div class="focus_repeat_name" ms-text="el.username"></div>
+                        <div class="focus_repeat_name" ms-attr-title="el.username" ms-text="el.username"></div>
                     </a>
                     {{--学员--}}
                     <a ms-if="el.type != 2" ms-attr-href="'/lessonComment/student/'+el.id">
                         <img ms-attr-src="el.pic" alt="" width="84" height="84">
-                        <div class="focus_repeat_name" ms-text="el.username"></div>
+                        <div class="focus_repeat_name" ms-attr-title="el.username" ms-text="el.username"></div>
                     </a>
                 </div>
                 {{--===============================我的好友循环结束====================================--}}
@@ -328,14 +328,14 @@
                         <div class="repeat_comment_text" ms-if="el.type == 0 && el.actionId">
                             <!-- 审核未通过 -->
                             <a ms-attr-href="'/lessonComment/reUpload/' + el.actionId + '/' + el.id">
-                                <span style="display: block;float:left;" ms-text="'上传视频审核未通过，原因：' + el.content" ms-attr-title=""></span>
+                                <span style="width:600px;height:auto;display:block;word-break: break-all;" ms-text="'上传视频审核未通过，原因：' + el.content" ms-attr-title=""></span>
                             </a>
                         </div>
                         <div class="repeat_comment_text" ms-if="el.type == 0 && el.tempId != 0">
                             <!-- 审核未通过 -->
                             {{--<span class="notice"></span>--}}
                             <span class="span_light" ms-text="el.tempName + '&nbsp;'" ms-if="el.tempName" style="float: left;display: block;" ms-attr-title="el.tempName"></span>
-                            <span ms-text="el.content" ms-attr-title="el.content"></span>
+                            <span style="width:600px;height:auto;display:block;word-break: break-all;" ms-text="el.content" ms-attr-title="el.content"></span>
                         </div>
                         <!-- 注册加入消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '1'">

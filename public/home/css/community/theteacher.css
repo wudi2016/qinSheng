@@ -162,12 +162,14 @@ a{
 .content_introduce{
 	width:860px;
 	height:90px;
+	word-break: break-all;
 }
 .content_introduce div{
 	color:rgb(153,153,153);
 	font-size:16px;
 	font-family:"微软雅黑";
 	line-height:30px;
+	word-break: break-all;
 	/*display:block;*/
 	/*white-space:nowrap;*/
 	/*overflow:hidden;*/

@@ -47,7 +47,7 @@
 
 			<div class="content_bottom">
 				<div class="content_bottom_provision">
-					<input type="checkbox" ms-duplex-checked='submitDisable' value='true'>我已阅读并同意<a>作品上传服务条款</a>
+					<input type="checkbox" ms-duplex-checked='submitDisable' value='true'>我已阅读并同意<a href="/aboutUs/firmintro/1#4">作品上传服务条款</a>
 				</div>
 				<div class="content_bottom_button" ms-css-cursor='submitDisable ? "pointer" : "not-allowed"' ms-css-background="submitDisable ? '#1A9FEB' : 'silver'" ms-click='submit("reComment")'>
 					完成并发布

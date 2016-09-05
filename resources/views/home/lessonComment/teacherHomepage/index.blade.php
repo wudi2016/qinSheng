@@ -43,7 +43,7 @@
 					<img src="{{asset('/home/image/lessonComment/teacherHomepage/location.png')}}" width="100%" height="100%" style="width: 20px; height: 24px;">
 					<div ms-html="userInfo.city"></div>
 				</div>
-				<div id="nostock" class="teacherHomepage_introduce_bottom_block" style="width: 250px;">
+				<div id="nostock" class="teacherHomepage_introduce_bottom_block" ms-attr-title="'已加入点评网' + userInfo.created_at + '天'" style="width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
 					<img src="{{asset('/home/image/lessonComment/teacherHomepage/time.png')}}" width="100%" height="100%">
 					<div ms-text="'已加入点评网' + userInfo.created_at + '天'"></div>
 				</div>

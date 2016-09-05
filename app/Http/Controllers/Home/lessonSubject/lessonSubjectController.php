@@ -232,6 +232,21 @@ class lessonSubjectController extends Controller
             $info->isAuthor = false;
             $info->isTeacher = false;
         }
+        if(!$info->isBuy && !$info->isFree && !$info->isTeacher){
+            $info->buyNow = true;
+        }else{
+            $info->buyNow = false;
+        }
+        if(!$info->isBuy && !$info->isFree && !$info->isTeacher && $info->isTryLearn){
+            $info->tryNow = true;
+        }else{
+            $info->tryNow = false;
+        }
+        if($info->isBuy || $info->isFree || $info->isTeacher){
+            $info->studyNow = true;
+        }else{
+            $info->studyNow = false;
+        }
         return $this->returnResult($info);
     }
 
@@ -476,10 +491,15 @@ class lessonSubjectController extends Controller
      */
     public function addOrder(Request $request)
     {
-        $request['orderSn'] = date('Ymd', time()) . uniqid();
-        $request['created_at'] = Carbon::now();
-        $request['updated_at'] = Carbon::now();
-        $result = DB::table('orders')->insertGetId($request->all());
+        $flag = DB::table('orders')->select('id')->where(['userId' => $request['userId'], 'courseId' => $request['courseId'], 'status' => 5, 'orderType' => $request['orderType']])->first();
+        if(!$flag){
+            $request['orderSn'] = date('Ymd', time()) . uniqid();
+            $request['created_at'] = Carbon::now();
+            $request['updated_at'] = Carbon::now();
+            $result = DB::table('orders')->insertGetId($request->all());
+        }else{
+            $result = $flag->id;
+        }
         return $this->returnResult($result);
     }
 

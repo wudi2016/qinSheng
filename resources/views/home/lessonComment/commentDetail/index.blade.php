@@ -296,10 +296,10 @@
                     comment.replayInfo.lengths = 0;
                     return;
                 }
-                if (value.length > (100 + comment.replayInfo.lengths)) {
-                    comment.replayInfo.name = oldVlaue
-                    return;
-                }
+//                if (value.length > (100 + comment.replayInfo.lengths)) {
+//                    comment.replayInfo.name = oldVlaue
+//                    return;
+//                }
             });
 
             comment.$watch('feedBack.*', function(value, oldValue) {

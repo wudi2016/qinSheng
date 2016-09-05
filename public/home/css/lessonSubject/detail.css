@@ -1,8 +1,7 @@
 .contain_lessonDetail{
     width: 100%;
-    background-color: #F5F5F5;
     margin: 0 auto;
-    min-height: auto;
+    height: auto;
 }
 .contain_lessonDetail_top_breadcrumb{
     margin: 0 auto;
@@ -89,7 +88,6 @@
     text-align: center;
 }
 .contain_lessonDetail_top_video_right_btn .first{
-    display: block;
     float: left;
     width: 150px;
     height: 50px;
@@ -103,7 +101,6 @@
     background-color: rgb(44,174,252);
 }
 .contain_lessonDetail_top_video_right_btn .second{
-    display: block;
     float: left;
     margin-left: 35px;
     width: 116px;
@@ -471,7 +468,7 @@
 }
 .contain_lessonDetail_bot_left_comment_content{
     width: 735px;
-    height: 150px;
+    min-height: 150px;
     margin-left: 30px;
     border-top: 2px solid #f5f5f5;
 }
@@ -485,7 +482,7 @@
 }
 .contain_lessonDetail_bot_left_comment_content .right{
     width: 640px;
-    height: 150px;
+    min-height: 150px;
     float: right;
 }
 .contain_lessonDetail_bot_left_comment_content .right .top{
@@ -520,7 +517,7 @@
     font-size: 16px;
     color: #222222;
     width: 630px;
-    height: 70px;
+    min-height: 70px;
     margin-top: 15px;
     margin-left: 25px;
     letter-spacing:1px;
@@ -537,8 +534,8 @@
 }
 .contain_lessonDetail_bot_left_comment_content .right .center .content{
     line-height: 22px;
-    width: 600px;
-    height: 50px;
+    width: 550px;
+    min-height: 50px;
     word-wrap:break-word;
 }
 .contain_lessonDetail_bot_left_comment_content .right .bot{
@@ -546,7 +543,7 @@
     height: 15px;
     line-height:15px;
     float: right;
-    margin-top: 5px;
+    margin-bottom: 15px;
 }
 
 .contain_lessonDetail_bot_left_comment_content .right .bot span{

@@ -1,5 +1,6 @@
 .cont{
     width:100%;
+    min-width: 1200px;
     height:100%;
     background:#F5F5F5;
 }
@@ -13,7 +14,7 @@
 }
 .cont_con{
     width:1200px;
-    min-height:600px;
+    /*min-height:600px;*/
     height:auto;
     margin:0 auto;
     background:#ffffff;

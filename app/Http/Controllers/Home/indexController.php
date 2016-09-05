@@ -719,7 +719,7 @@ class indexController extends Controller
                     $entension = $request->file('img')->getClientOriginalExtension();//上传文件的后缀
                     $newname = md5(date('ymdhis' . $name)) . '.' . $entension;//拼接新的图片名
                     if ($request->file('img')->move('uploads/heads', $newname)) {
-                        $path = 'uploads/heads/' . $newname;
+                        $path = '/uploads/heads/' . $newname;
                         if (DB::table('users')->where('id', $uid)->update(['pic' => $path])) {
                             return response()->json(['state' => 1, 'message' => '成功', 'filepath' => $path]);
                         } else {
