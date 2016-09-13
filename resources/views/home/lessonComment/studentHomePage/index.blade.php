@@ -17,11 +17,11 @@
 		<div class="teacherHomepage_introduce">
 			<div class="teacherHomepage_introduce_header"><img ms-attr-src="userInfo.pic" width="100%" height="100%"></div>
 			<div class="teacherHomepage_introduce_name" ms-html="userInfo.username"></div>
-			<div class="studentHomepage_introduce_compant hide" style="margin-top: 92px;" ms-visible="userInfo.type < 2">
+			<div class="studentHomepage_introduce_compant hide" style="margin-top: 92px;" ms-visible="userInfo.type == 0">
 				<img src="{{asset('/home/image/lessonComment/studentHomepage/student.png')}}">普通学员
 			</div>
-			<div class="studentHomepage_introduce_compant hide" style="margin-top: 92px;" ms-visible="userInfo.type == 2">
-				<img src="{{asset('/home/image/lessonComment/studentHomepage/teacher.png')}}">教师学员
+			<div class="studentHomepage_introduce_compant hide" style="margin-top: 92px;" ms-visible="userInfo.type == 1">
+				<img src="{{asset('/home/image/lessonComment/studentHomepage/teacher.png')}}">教师会员
 			</div>
 			<div class="teacherHomepage_introduce_videoNumber">
 				<div class="teacherHomepage_introduce_number_img"><img src="{{asset('/home/image/lessonComment/teacherHomepage/fans.png')}}" width="100%" height="100%"></div>
@@ -68,7 +68,7 @@
 				</div>
 				<div style="width: 100%; height: 300px; line-height: 300px; text-align: center; display: none; font-size: 16px;" ms-visible='specialLesson.size() < 1 && !loading'>暂无数据</div>
 				<div class="teacherHomepage_detail_video hide" ms-visible="!loading">
-					<a class="teacherHomepage_detail_video_block" ms-repeat="specialLesson" ms-attr-href="'/lessonSubject/detail/' + el.id">
+					<a target="_blank" class="teacherHomepage_detail_video_block" ms-repeat="specialLesson" ms-attr-href="'/lessonSubject/detail/' + el.id">
 						<div class='img' style='overflow: hidden; position: relative;'>
 							<img class='img_big' ms-attr-src="el.coursePic" width='285' height='182' ms-imgbig>
 						</div>
@@ -98,7 +98,7 @@
 				</div>
 				<div style="width: 100%; height: 300px; line-height: 300px; text-align: center; display: none; font-size: 16px;" ms-visible='commentLesson.size() < 1 && !loading'>暂无数据</div>
 				<div class="teacherHomepage_detail_video hide" ms-visible="!loading">
-					<a class="teacherHomepage_detail_video_block" ms-repeat="commentLesson" ms-attr-href="'/lessonComment/detail/' + el.id">
+					<a target="_blank" class="teacherHomepage_detail_video_block" ms-repeat="commentLesson" ms-attr-href="'/lessonComment/detail/' + el.id">
 						<div class='img' style='overflow: hidden; position: relative;'>
 							<img class='img_big' ms-attr-src="el.coursePic" width='285' height='182' ms-imgbig>
 						</div>

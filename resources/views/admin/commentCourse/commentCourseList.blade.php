@@ -181,20 +181,30 @@
                                                 @permission('edit.commentcourse')
                                                     {{--如果已有点评视频且点评视频是已审核通过则不可修改演奏视频的状态--}}
                                                     @if($comcourse->comstatus)
-                                                        <span class="btn btn-xs btn-" style="position: relative;display: inline-block;">
+                                                        <span class="btn btn-xs btn-" style="position: relative;display: inline-block;width: 80px;height: 22px;">
                                                             <strong>审核状态</strong>
                                                             <span class="icon-caret-down icon-on-right"></span>
                                                         </span>
                                                     @else
                                                         <span class="btn btn-xs btn-primary" style="position: relative;display: inline-block;">
-                                                            <strong>审核状态</strong>
-                                                            <span class="icon-caret-down icon-on-right"></span>
-                                                            <select id="selectCheck" class="col-xs-10 col-sm-2" onchange="selectCheck({{$comcourse->id}},this.value,'{{$comcourse->username}}','{{$comcourse->teacherusername}}','{{$comcourse->teacherPhone}}','{{$comcourse->orderSn}}');" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">
-                                                                <option value="44" selected></option>
-                                                                <option value="0" >审核未通过</option>
-                                                                <option value="1" >审核中</option>
-                                                                <option value="2" >审核通过</option>
-                                                            </select>
+                                                            {{--<strong>审核状态</strong>--}}
+                                                            {{--<span class="icon-caret-down icon-on-right"></span>--}}
+                                                            {{--<select id="selectCheck" class="col-xs-10 col-sm-2" onchange="selectCheck({{$comcourse->id}},this.value,'{{$comcourse->username}}','{{$comcourse->teacherusername}}','{{$comcourse->teacherPhone}}','{{$comcourse->orderSn}}');" style="filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0;opacity: 0;position:absolute;top:-2px;left:0;z-index: 2;cursor: pointer;height:23px;width:73px;">--}}
+                                                                {{--<option value="44" selected></option>--}}
+                                                                {{--<option value="0" >审核未通过</option>--}}
+                                                                {{--<option value="1" >审核中</option>--}}
+                                                                {{--<option value="2" >审核通过</option>--}}
+                                                            {{--</select>--}}
+
+                                                            <span data-toggle="dropdown" class="btn btn-xs btn-primary" style="border: 0;width: 70px;height: 17px;line-height: 17px;">
+                                                                审核状态
+                                                                <span class="icon-caret-down icon-on-right"></span>
+                                                            </span>
+                                                            <ul class="dropdown-menu dropdown-inverse" style="width: 20px;color: #000;">
+                                                                <li onclick="selectCheck({{$comcourse->id}},this.value,'{{$comcourse->username}}','{{$comcourse->teacherusername}}','{{$comcourse->teacherPhone}}','{{$comcourse->orderSn}}');" value="0">审核未通过</li>
+                                                                {{--<li value="1">审核中</li>--}}
+                                                                <li onclick="selectCheck({{$comcourse->id}},this.value,'{{$comcourse->username}}','{{$comcourse->teacherusername}}','{{$comcourse->teacherPhone}}','{{$comcourse->orderSn}}');" value="2">审核通过</li>
+                                                            </ul>
                                                         </span>
                                                     @endif
                                                 @endpermission
@@ -281,17 +291,21 @@
         <!--审核通过弹窗-->
         <div id="pupUpback1" class="pupUpback">
             <div class="popup">
-                <div class="topbaner">审核结果</div>
+                <div class="topbaner">
+                    <div class="topleft">审核结果</div>
+                    <div class="topright" id="closepass"></div>
+                </div>
                 <div class="content">审核通过!</div>
                 <div class="bottom">
                     <input type="hidden" name="actionId" class="redactionId" value="">
+                    <input type="hidden" name="state" class="redstate" value="">
                     <input type="hidden" name="fromUsername" class="redfromUsername" value="">
                     <input type="hidden" name="username" class="redusername" value="">
                     <input type="hidden" name="redtoUsername" class="redtoUsername" value="{{\Auth::user()->username}}">
                     <input type="hidden" name="_token" class="token" value="{{ csrf_token() }}">
 
                     <input type="hidden" class="teacherPhone" value="">
-                    <input type="hidden" class="orderSn" value="">
+                    <input type="hidden" class="redorderSn" value="">
                     <div class="suer_btn" id="suer_btn0">确认</div>
                 </div>
             </div>
@@ -299,8 +313,11 @@
         <!--审核未通过弹窗-->
         <div id="pupUpback2" class="pupUpback">
             <div class="popup">
-                <div class="topbaner">审核结果</div>
-                <form action="{{url('/admin/commentCourse/noPassMsg')}}" method="post">
+                <div class="topbaner">
+                    <div class="topleft">审核结果</div>
+                    <div class="topright" id="closenopass"></div>
+                </div>
+                {{--<form action="{{url('/admin/commentCourse/noPassMsg')}}" method="post">--}}
                     <div class="contenterror">
                         <div class="errortitle">审核未通过</div>
                         <div class="errormsg">
@@ -310,17 +327,19 @@
 
                     </div>
                     <input type="hidden" name="actionId" class="actionId"  value="">
+                    <input type="hidden" name="state" class="state"  value="">
+                    <input type="hidden" name="orderSn" class="orderSn"  value="">
                     <input type="hidden" name="username" class="username" value="">
                     <input type="hidden" name="toUsername" class="toUsername" value="">
-                    <input type="hidden" name="fromUsername" value="{{\Auth::user()->username}}">
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="fromUsername" class="fromUsername" value="{{\Auth::user()->username}}">
+                    <input type="hidden" name="_token" class="_token" value="{{ csrf_token() }}">
                     <div class="bottom" id="surebtn">
-                        <button class="suer_btn">确认</button>
+                        <button class="suer_btn" id="nobtn">确认</button>
                     </div>
                     {{--<div class="bottom" id="hiddenbtn">--}}
                     {{--<div class="suer_btn">确认</div>--}}
                     {{--</div>--}}
-                </form>
+                {{--</form>--}}
             </div>
         </div>
 

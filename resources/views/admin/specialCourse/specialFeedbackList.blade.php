@@ -154,7 +154,7 @@
                                                     @endpermission
 
                                                     @permission('del.course')
-                                                    <a href="{{url('/admin/specialCourse/delSpecialFeedback/'.$feedback->id)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
+                                                    <a href="{{url('/admin/specialCourse/delSpecialFeedback/'.$feedback->id.'/'.$feedback->courseType)}}" class="btn btn-xs btn-danger" onclick="return confirm('确定要删除吗?');">
                                                         <i class="icon-trash bigger-120"></i>
                                                     </a>
                                                     @endpermission

@@ -213,10 +213,42 @@ class lessonSubjectController extends Controller
             $result = DB::table('coursechapter')->where(['courseId' => $id, 'status' => 0])->where('parentId', '<>', '0')->first();
         }
         $isTryLearn = DB::table('coursechapter')->where(['courseId' => $id, 'status' => 0, 'isTryLearn' => 1])->where('parentId', '<>', '0')->first();
-
-        $info->courseLowPath = $result ? $this->getPlayUrl($result->courseLowPath) : '';
-        $info->courseMediumPath = $result ? $this->getPlayUrl($result->courseMediumPath) : '';
-        $info->courseHighPath = $result ? $this->getPlayUrl($result->courseHighPath) : '';
+        if($result) {
+            if ($result->courseLowPath) {
+                if (!Cache::get('courseLowPath')) {
+                    $info->courseLowPath = $this->getPlayUrl($result->courseLowPath);
+                    Cache::put('courseLowPath', $info->courseLowPath, 1800);
+                } else {
+                    $info->courseLowPath = Cache::get('courseLowPath');
+                }
+            } else {
+                $info->courseLowPath = '';
+            }
+            if ($result->courseMediumPath) {
+                if (!Cache::get('courseMediumPath')) {
+                    $info->courseMediumPath = $this->getPlayUrl($result->courseMediumPath);
+                    Cache::put('courseMediumPath', $info->courseMediumPath, 1800);
+                } else {
+                    $info->courseMediumPath = Cache::get('courseMediumPath');
+                }
+            } else {
+                $info->courseMediumPath = '';
+            }
+            if ($result->courseHighPath) {
+                if (!Cache::get('courseLowPath')) {
+                    $info->courseHighPath = $this->getPlayUrl($result->courseHighPath);
+                    Cache::put('courseLowPath', $info->courseHighPath, 1800);
+                } else {
+                    $info->courseHighPath = Cache::get('courseHighPath');
+                }
+            } else {
+                $info->courseHighPath = '';
+            }
+        }else{
+            $info->courseLowPath = '';
+            $info->courseMediumPath = '';
+            $info->courseHighPath = '';
+        }
         $info->chapterId = $result ? $result->id : '';
         $info->isTryLearn = $isTryLearn ? true : false;
         $info->classHour = DB::table('coursechapter')->where(['courseId' => $id, 'status' => 0])->where('parentId', '<>', '0')->count();
@@ -652,6 +684,21 @@ class lessonSubjectController extends Controller
         return redirect()->to($alipay->getPayLink());
     }
 
+    // 课程锁定页
+    public function lessonFalse()
+    {
+        return view('home.lessonSubject.lessonFalse');
+    }
+
+    // 获取课程状态
+    public function getLessonStatus($commentId){
+        $result = DB::table('commentcourse')->select('id')->where(['id' => $commentId, 'state' => 2, 'courseStatus' => 0, 'courseIsDel' => 0])->first();
+        if ($result) {
+            return Response()->json(["status" => true]);
+        } else {
+            return Response()->json(["status" => false]);
+        }
+    }
 //     二维数组按照value排序
     function mySort($arrays, $sort_key, $sort_order = SORT_DESC, $sort_type = SORT_NUMERIC)
     {

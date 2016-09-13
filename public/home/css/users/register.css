@@ -39,12 +39,12 @@ body{
 .center{
     width:1200px;
     height:600px;
-    position: absolute;
-    top:50%;
-    left:50%;
-    margin-top:-300px;
-    margin-left: -600px;
-    /*background:#dddddd;                      !*tmp*!*/
+    margin: 100px auto;
+    /*position: absolute;*/
+    /*top:50%;*/
+    /*left:50%;*/
+    /*margin-top:-300px;*/
+    /*margin-left: -600px;*/
 }
 
 .teacher_con_top{
@@ -187,7 +187,7 @@ body{
     text-indent:10px;
 }
 .center_con_r_bar_m .txtt{
-    width:194px;
+    width:195px;
     height:34px;
     display: block;
     float: left;
@@ -199,7 +199,7 @@ body{
     text-indent:10px;
 }
 .getyzm{
-    width:100px;
+    width:98px;
     height:34px;
     display: block;
     float: left;

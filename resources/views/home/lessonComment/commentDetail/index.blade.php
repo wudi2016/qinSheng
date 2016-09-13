@@ -16,7 +16,29 @@
 
 		<div class="current_video">
 			<div class="video_block">
-                <div class="videobox" id="mediaplayer" ms-visible="!overtime"></div>
+                <div class="overtime" style="background: black; position: absolute; z-index: 999; float: left;" ms-visible="!overtime && playLoading">
+                    <div class="spinner">
+                        <div class="spinner-container container1">
+                            <div class="circle1"></div>
+                            <div class="circle2"></div>
+                            <div class="circle3"></div>
+                            <div class="circle4"></div>
+                        </div>
+                        <div class="spinner-container container2">
+                            <div class="circle1"></div>
+                            <div class="circle2"></div>
+                            <div class="circle3"></div>
+                            <div class="circle4"></div>
+                        </div>
+                        <div class="spinner-container container3">
+                            <div class="circle1"></div>
+                            <div class="circle2"></div>
+                            <div class="circle3"></div>
+                            <div class="circle4"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="videobox" id="mediaplayer" ms-visible="!overtime && !playLoading"></div>
 				<div class="overtime hide" ms-visible="overtime">
 					<div style="clear: both; height: 100px;"></div>
 					<div class="overtime_detail">
@@ -117,7 +139,6 @@
                         <div class="bottom" ms-if="el.fromUserId == {{$mine['id']}}" ms-click="deleteComment($index)">删除</div>
                         <div class="bottom" ms-class="islike: el.isLike" ms-click="clickLike(el)">点赞( [--el.likeNum || 0--] )</div>
                     @else
-                        {{--<a class="bottom" href="/index/login">回复</a>--}}
                         <a class="bottom" href="/index/login">点赞( [--el.likeNum || 0--] )</a>
                     @endif
 				</div>
@@ -296,10 +317,6 @@
                     comment.replayInfo.lengths = 0;
                     return;
                 }
-//                if (value.length > (100 + comment.replayInfo.lengths)) {
-//                    comment.replayInfo.name = oldVlaue
-//                    return;
-//                }
             });
 
             comment.$watch('feedBack.*', function(value, oldValue) {

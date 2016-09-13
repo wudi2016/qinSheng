@@ -45,8 +45,11 @@ class collectionController extends Controller{
 
     //删除
     public function delcollection($id){
+        $courseId = DB::table('collection')->where('id',$id)->first();
+//        dd($courseId->courseId);
         $res = DB::table('collection')->where('id',$id)->delete();
         if($res){
+            DB::table('course')->where('id',$courseId->courseId)->decrement('courseFav',1);
             $this -> OperationLog("删除了用户收藏ID为{$id}的信息", 1);
             return redirect('admin/message')->with(['status'=>'删除成功','redirect'=>'collection/collectionList']);
         }else{

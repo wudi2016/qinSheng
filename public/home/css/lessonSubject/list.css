@@ -157,6 +157,7 @@
     position: relative;
     /*background: url("./img/2.jpg") no-repeat;*/
     overflow: hidden;
+    background-color: #ffffff;
 }
 .contain_lesson_center_data_info_top_no {
     width: 280px;

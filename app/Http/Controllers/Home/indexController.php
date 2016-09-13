@@ -167,6 +167,7 @@ class indexController extends Controller
             'http://'.$_SERVER['HTTP_HOST'].'/index/register'
         ];
         if(!in_array(URL::previous(),$ignorearr)){
+            if(!preg_match ('/http:\/\/'.$_SERVER['HTTP_HOST'].'\/index\/resetpsd\/\d{11}/', URL::previous()))
             session(['lastUrl' => URL::previous()]);
         }
         return view('home.users.login');
@@ -297,6 +298,9 @@ class indexController extends Controller
         if($result > 1){
             $response = new Response('Hello Wudi');
             $response->withCookie('code', $code, 1.5);
+            return $response;
+        }else{
+            $response = new Response($result);
             return $response;
         }
     }
@@ -712,7 +716,8 @@ class indexController extends Controller
     //头像上传（移动端接口）
     public function editHeadImg(Request $request){
         try {
-            $uid = $request['uid'];
+            $uid = isset($request['uid']) ? $request['uid'] : false;
+
             if ($request->hasFile('img')) { //判断文件是否存在
                 if ($request->file('img')->isValid()) { //判断文件在上传过程中是否出错
                     $name = $request->file('img')->getClientOriginalName();//获取图片名
@@ -720,10 +725,14 @@ class indexController extends Controller
                     $newname = md5(date('ymdhis' . $name)) . '.' . $entension;//拼接新的图片名
                     if ($request->file('img')->move('uploads/heads', $newname)) {
                         $path = '/uploads/heads/' . $newname;
-                        if (DB::table('users')->where('id', $uid)->update(['pic' => $path])) {
+                        if ($uid){
+                            if (DB::table('users')->where('id', $uid)->update(['pic' => $path])) {
+                                return response()->json(['state' => 1, 'message' => '成功', 'filepath' => $path]);
+                            } else {
+                                return response()->json(['state' => 0, 'message' => '数据库保存失败']);
+                            }
+                        }else{
                             return response()->json(['state' => 1, 'message' => '成功', 'filepath' => $path]);
-                        } else {
-                            return response()->json(['state' => 0, 'message' => '数据库保存失败']);
                         }
                     } else {
                         return response()->json(['state' => 0, 'message' => '文件保存失败']);
@@ -748,8 +757,19 @@ class indexController extends Controller
     public function getMessages(Messages $message)
     {
         $telephone = $_POST['phone'];
+        $type = $_POST['type'];
+
         $code    = $message::createCode();
-        $content = '您好，欢迎注册琴晟艺术教育平台：您的手机验证码'.$code.'【琴晟教育】';
+        if ($type == 1) {    //注册
+            if ($username = DB::table('users')->select('phone')->where('phone',$telephone)->first()){
+                return response()->json(['type' => false, 'info' => '改手机号已被注册']);
+            }
+            $content = '您好，欢迎注册琴晟艺术教育平台：您的手机验证码' . $code . '【琴晟教育】';
+        }elseif($type == 2){ //找回密码
+            $content = '您好，琴晟艺术教育平台找回密码：您的手机验证码' . $code . '【琴晟教育】';
+        }else{               //切换手机号
+            $content = '您好，琴晟艺术教育平台修改手机号：您的手机验证码' . $code . '【琴晟教育】';
+        }
         $message::setInfo($telephone,$content);
         $result = $message::sendMsg();
         return $message::response($result,$code);

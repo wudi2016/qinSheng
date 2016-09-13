@@ -18,7 +18,7 @@
 
 		<!-- fonts -->
 
-		<link rel="stylesheet" href="{{asset('admin/assets/font/fonts.css')}}" />
+		{{--<link rel="stylesheet" href="{{asset('admin/assets/font/fonts.css')}}" />--}}
    
 		<!-- ace styles -->
 
@@ -110,9 +110,9 @@
 		</div>
 
 		<div class="main-container" id="main-container">
-			<script type="text/javascript">
-				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
-			</script>
+			{{--<script type="text/javascript">--}}
+				{{--try{ace.settings.check('main-container' , 'fixed')}catch(e){}--}}
+			{{--</script>--}}
 
 			<div class="main-container-inner">
 				<a class="menu-toggler" id="menu-toggler" href="#">
@@ -861,7 +861,7 @@
 		<!--[if !IE]> -->
 
 		<!--<script src="assets/js/jquery-2.0.3.min.js"></script>-->
-		<script src="{{asset('admin/assets/js/jquery-2.0.3.min.js')}}"></script>
+		{{--<script src="{{asset('admin/assets/js/jquery-2.0.3.min.js')}}"></script>--}}
 		
 
 		<!-- <![endif]-->
@@ -873,7 +873,7 @@
 			var first = route.split('/')[(route.split('/').length - 2)]; //取admin/后一个
 
 			var second = route.split('/')[(route.split('/').length - 3)];
-			console.log(route);
+//			console.log(route);
 			if(route.match(/\//g)){
 				if (route.match(/\//g).length == '1') { // 一个‘/’
 					route = route.split('/')[route.split('/').length - 1];
@@ -902,7 +902,7 @@
 				} else if (route.match(/\//g).length == '2') { // 2个‘/’
 					orderroute = route.split('/')[0] + route.split('/')[1] + route.split('/')[2];
 					orderroute = orderroute.split('?')[0];
-					console.log(orderroute);
+//					console.log(orderroute);
 					if(orderroute == 'specialcoursespecialfeedbacklist1'){
 						$('.specialcoursespecialfeedbacklist1').parent().parent().addClass('open');
 						$('.specialcoursespecialfeedbacklist1').parent().css('display', 'block');
@@ -997,7 +997,7 @@
 					$('.' + auth + route.slice(0, -4)).addClass('active');
 				} else if (route.match(/\//g).length == '3') {
 					remarks = route.split('/')[0] + route.split('/')[1] + route.split('/')[3];
-					console.log(remarks);
+//					console.log(remarks);
 					status = route.split('/')[3];
 					//用户管理
 					if(remarks == 'usersresetpassu1' || remarks == 'usersshowu1' || remarks == 'usersfocuslistu1' || remarks == 'usersfriendslistu1'){

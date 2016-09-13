@@ -98,6 +98,7 @@
                                     <th>视频标题</th>
                                     <th>封面图片</th>
                                     <th>排序位置</th>
+                                    <th>点击数</th>
                                     <th>状态</th>
                                     <th>内容介绍</th>
                                     <th>创建时间</th>
@@ -112,6 +113,7 @@
                                         <td>{{$video->title}}</td>
                                         <td> <img src="{{asset($video->cover)}}" alt="" width="80" height="60" > </td>
                                         <td>{{$video->sort}}</td>
+                                        <td>{{$video->courseView}}</td>
                                         <td >
                                             @if($video->status == 0)
                                                 激活

@@ -11,6 +11,7 @@
 		<div style="clear: both; height: 60px;"></div>
 
 		<div class="weixin_scan">
+            <div class="weixin_scan_box"></div>
 			<div style="clear: both; height: 100px;"></div>
 			<div class="scan_price">实付金额：<span>{{ceil($orderInfo -> orderPrice / 100)}}元</span></div>
 			<div class="scan_code">

@@ -10,23 +10,22 @@
     <link rel="stylesheet" type="text/css" href="{{asset('home/css/personCenter/uploadify.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('home/css/personCenter/pagination.css')}}">
     <style>
-        .buy_course_center .bot .bot_select2_plugin .select2-container .select2-selection--single {
-            width: 306px;
-            height: 30px;
-            line-height: 25px;
-        }
-
-        .buy_course_center .bot .bot_select2_plugin .select2-container .select2-selection--single .select2-selection__rendered {
-            display: inline;
-            padding-left: 8px;
-        }
-
-        .buy_course_center .bot .bot_select2_plugin .select2-container--default .select2-selection--single .select2-selection__rendered {
-            color: rgb(102, 102, 102);
-        }
         .select2-results{
             color:rgb(102,102,102);
         }
+        .select2-container .select2-selection--single{
+            width: 124px;
+        }
+
+        /*@media all and (-webkit-min-device-pixel-ratio:0){*/
+            /*!* 單獨針對 Safari 的樣式請寫在這裡 *!*/
+            /*.select2-container .select2-selection--single{*/
+                /*width: 135px;*/
+            /*}*/
+        /*}*/
+
+
+
     </style>
 @endsection
 
@@ -49,7 +48,7 @@
                     <div class="height5"></div>
                     @if(\Auth::user()->type == 1)
                         <div class="top_img"><img src="{{asset('home/image/personCenter/teacherStu.png')}}"
-                                                  alt=""><span>教师学员</span></div>
+                                                  alt=""><span>教师会员</span></div>
                     @elseif(\Auth::user()->type == 0)
                         <div class="top_img"><img src="{{asset('home/image/personCenter/commonStu.png')}}" alt=""><span>普通学员</span>
                         </div>
@@ -345,7 +344,7 @@
                         <!-- 本人被点评消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '2'">
                             {{--<span class="notice"></span>--}}
-                            <span ms-text="el.fromUsername + '&nbsp;&nbsp;'" class="span_light"></span><span>老师点评了您上传的作品，</span><span><a class="span_light" ms-attr-href="'/lessonComment/detail/' + el.actionId">快去看看吧 >></a></span>
+                            <span ms-text="el.fromUsername + '&nbsp;&nbsp;'" class="span_light"></span><span>老师点评了您上传的作品，</span><span><a class="span_light" style="cursor: pointer" ms-click="goToLesson(el.actionId);">快去看看吧 >></a></span>
                         </div>
                         <!-- 本人被关注消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '3' && el.userType != '2'">
@@ -359,7 +358,7 @@
                         <!-- 关注用户被点评消息 -->
                         <div class="repeat_comment_text" ms-if="el.type == '4'">
                             {{--<span class="notice"></span>--}}
-                            <span ms-text="el.fromUsername + '&nbsp;&nbsp;'" class="span_light"></span><span>老师点评了</span><span ms-text="'&nbsp;'+el.toUsername + '&nbsp;'" class="span_light"></span>的作品，<a class="span_light" ms-attr-href="'/lessonComment/detail/' + el.actionId">快去看看吧 >></a>
+                            <span ms-text="el.fromUsername + '&nbsp;&nbsp;'" class="span_light"></span><span>老师点评了</span><span ms-text="'&nbsp;'+el.toUsername + '&nbsp;'" class="span_light"></span>的作品，<a class="span_light" style="cursor: pointer" ms-click="goToLesson(el.actionId);">快去看看吧 >></a>
                         </div>
                         <div class="clear"></div>
                         <div class="repeat_comment_time">
@@ -450,7 +449,7 @@
                 <div class="right_comment_repeat" ms-repeat="commentCourseInfo">
                     <div class="comment_repeat_img">
                         <!-- 视频审核未通过 -->
-                        <a ms-attr-href="'/lessonComment/reUpload/' + el.AId + '/' + el.messageID" ms-if="el.orderType == '1' && el.AState == 0">
+                        <a ms-attr-href="'/lessonComment/reUpload/' + el.AId + '/' + el.messageID" target="_blank" ms-if="el.orderType == '1' && el.AState == 0">
                             <div class="repeat_img_unchecked">
                                 <div class="comment_video_unchecked">视频审核未通过</div>
                                 <div class="comment_video_time" ms-text="'发布时间：' + el.ACreated"></div>
@@ -462,15 +461,15 @@
                             <div class="comment_video_time" ms-text="'发布时间：' + el.ACreated"></div>
                         </div>
                         <!-- 视频审核通过 -->
-                        <a ms-attr-href="'/lessonComment/detail/' + el.OCourseId" ms-if="el.orderType == '1' && el.status == '2' && el.CState == '2'" >
+                        <a ms-attr-href="'/lessonComment/detail/' + el.OCourseId" target="_blank" ms-if="el.orderType == '1' && el.status == '2' && el.CState == '2'" >
                             <img ms-attr-src="el.CPic" alt="" width="280" height="180" class="img_big" ms-imgBig />
                         </a>
                         <!-- 视频审核通过 -->
-                        <a ms-attr-href="'/lessonComment/detail/' + el.OCourseId" ms-if="el.orderType == '2'">
+                        <a ms-attr-href="'/lessonComment/detail/' + el.OCourseId" target="_blank" ms-if="el.orderType == '2'">
                             <img ms-attr-src="el.CPic"  alt="" width="280" height="180" class="img_big" ms-imgBig />
                         </a>
                         <!-- 视频等待点评中 -->
-                        <a ms-attr-href="'/lessonComment/wait/' + el.AId" ms-if="el.orderType == '1' && el.AState == '2' && el.CState != 2">
+                        <a ms-attr-href="'/lessonComment/wait/' + el.AId"  target="_blank"  ms-if="el.orderType == '1' && el.AState == '2' && el.CState != 2">
                             <div class="repeat_img_unchecked">
                                 <div class="comment_video_unchecked">等待点评</div>
                                 <div class="comment_video_time" ms-text="'发布时间：' + el.ACreated"></div>
@@ -515,7 +514,7 @@
                 {{--//专题课程循环开始--}}
                 <div class="right_comment_repeat" ms-repeat="courseInfo">
                     <div class="comment_repeat_img">
-                        <a ms-attr-href="'/lessonSubject/detail/' + el.id"><img ms-attr-src="el.coursePic" alt="" width="280" height="180" class="img_big" ms-imgBig/></a>
+                        <a ms-attr-href="'/lessonSubject/detail/' + el.id" target="_blank"><img ms-attr-src="el.coursePic" alt="" width="280" height="180" class="img_big" ms-imgBig/></a>
                     </div>
                     <div class="comment_repeat_title" ms-text="el.courseTitle"></div>
                     <div class="comment_repeat_period"><span ms-text="el.classHour + '课时'"></span> <span class="period_course_span" ms-text="el.coursePlayView + '人学过'"></span></div>
@@ -556,12 +555,10 @@
                 {{--//收藏课程循环开始--}}
                 <div class="right_comment_repeat" ms-repeat="collectionInfo">
                     <div class="comment_repeat_img">
-                        <a ms-attr-href="el.href">
+                        <a ms-attr-href="el.href" target="_blank">
                             <img ms-attr-src="el.coursePic" alt="" width="280" height="180" class="img_big" ms-imgBig/>
                         </a>
-                        <span><img ms-if="isShow" src="{{asset('home/image/personCenter/delete.png')}}" alt="" ms-click="deleteCollection(el
-                        .collectId,el
-                        .isCourse,el.id,$index);"></span>
+                        <span><img ms-if="isShow" src="{{asset('home/image/personCenter/delete.png')}}" alt="" ms-click="deleteCollection(el.collectId,el.isCourse,el.id,$index);"></span>
                     </div>
                     <div class="comment_repeat_title" ms-text="el.courseTitle"></div>
                     <div class="comment_repeat_period" ms-if="el.isCourse == '0'">
@@ -835,7 +832,7 @@
             <div class="center_right_changePhone">
 
                 <div class="right_changePhone_currentPhone">
-                    <label><span>手机号</span><span class="changePhone_label_span">{{\Auth::user()->phone}}</span></label>
+                    <label><span>手机号</span><span class="changePhone_label_span" title="{{\Auth::user()->phone}}">{{\Auth::user()->phone}}</span></label>
                 </div>
 
                 <div class="height60"></div>
@@ -866,11 +863,11 @@
                 {{--验证身份--}}
                 <div class="checkPhone_old_phone hide" ms-visible="next == 'checkAuth'">
                     <label class="old_phone_label_first">
-                        <input type="text" placeholder="请输入原绑定手机号" ms-duplex="phone">
+                        <input type="text" placeholder="请输入原绑定手机号" style="width: 97.5%" ms-duplex="phone">
                     </label>
                     <div class="shoujiMsg Msgaa"></div>
                     <label class="old_phone_label_second">
-                        <input class="input" type="text" placeholder="请输入验证码" ms-duplex="code">
+                        <input class="input" type="text" style="width:66%;display: block;float: left;" placeholder="请输入验证码" ms-duplex="code">
                         <span class="getyzm" ms-click="getCodo()">获取验证码</span>
                     </label>
                     <div class="shoujiMsg Msgbb"></div>
@@ -957,6 +954,9 @@
             </div>
             <div class="clear"></div>
             <div class="pay_btn" ms-click="popUpSwitch('submitApply')">提交申请</div>
+            <div class="buy_course_agreement">
+                <span>退款规则请参见</span><a href="{{url('aboutUs/firmintro/1').'#4'}}" target="_blank">琴晟用户协议</a>
+            </div>
         </div>
     </div>
 

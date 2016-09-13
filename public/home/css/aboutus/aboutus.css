@@ -3,6 +3,17 @@
     padding:0px;
 }
 
+
+@media screen and (max-width:1200px) {
+    .screen1200 {
+        width: 100%;
+        height: 100px;
+        background: none;
+        clear: both;
+    }
+}
+
+
 .background{
     width:100%;
     min-width:1200px;

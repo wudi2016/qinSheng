@@ -1,3 +1,10 @@
+@media screen and (max-width:1200px) {
+    .upload_screen {
+        clear: both;
+        height: 50px;
+    }
+}
+
 .uploadComment {
 	width: 1200px;
 	height: auto;
@@ -61,7 +68,7 @@
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	background: red;
+	background: none;
 	filter:alpha(opacity=50);
 	-moz-opacity: 0.5;          
 	-khtml-opacity: 0.5;       

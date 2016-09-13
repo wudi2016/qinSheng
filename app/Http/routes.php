@@ -231,7 +231,8 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         Route::get('videodetail/{id}', 'videodetailController@index');
         //社区-热门视频详情数据接口
         Route::get('/getvideodetail/{id}','videodetailController@getvideodetail');
-
+        //点击播放量接口
+        Route::get('/playAmount/{id}','videodetailController@playAmount');
     });
 
 
@@ -248,9 +249,12 @@ Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
         Route::get('/detail/{id}', 'lessonSubjectController@lessonSubjectDetail');
         // 微信扫码支付页
         Route::get('/WeChatPay/{id}', 'lessonSubjectController@lessonSubjectWeChatPay');
-        //  支付成功
+        // 支付成功
         Route::get('/buySuccess/{orderID}', 'lessonSubjectController@buySuccess');
-
+        // 课程锁定页
+        Route::get('/lessonFalse','lessonSubjectController@lessonFalse');
+        // 获取课程状态
+        Route::get('/getLessonStatus/{commentID}','lessonSubjectController@getLessonStatus');
 
         // ============  return result  ===============
         // 点赞
@@ -697,7 +701,7 @@ Route::group(['prefix' => '/admin','middleware'=>'adminauth','namespace' => 'Adm
         //意见反馈状态
         Route::get('specialFeedbackState','SpecialFeedbackController@specialFeedbackState');
         //删除
-        Route::get('delSpecialFeedback/{id}','SpecialFeedbackController@delSpecialFeedback');
+        Route::get('delSpecialFeedback/{id}/{type}','SpecialFeedbackController@delSpecialFeedback');
 
 
         //课程资料列表

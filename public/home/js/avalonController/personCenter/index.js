@@ -47,6 +47,20 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
 
             //console.log(sideBar.refundType + '___');
         },
+        goToLesson:function(commentId){
+            $.ajax({
+                url : '/lessonSubject/getLessonStatus/' + commentId,
+                type : 'GET',
+                dataType : 'json',
+                success: function(response){
+                    if(response.status){
+                        location.href = "/lessonComment/detail/" + commentId;
+                    }else{
+                        location.href = '/lessonSubject/lessonFalse';
+                    }
+                }
+            })
+        },
         //sideBar.applyRefund.refundableAmount = response.data;
 
         popUpSwitch: function(value,needId) {
@@ -371,13 +385,12 @@ define(['/famousTeacher/courseTeacher','/teacherStudent/course','/famousTeacher/
     });
 
 
-
     sideBar.$watch("phone", function(a, b) {//a
         if (a.length == 11){
             if (!a.match(/^1(3|5|8|7){1}[0-9]{9}$/)) {
                 sideBar.checkPhone = false;
                 $('.Msgaa').html('* 手机号格式错误');
-            } else if (a != $('.changePhone_label_span').html()) {
+            } else if (a != $('.changePhone_label_span').attr('title')) {
                 sideBar.checkPhone = false;
                 $('.Msgaa').html('* 请输入原绑定手机号');
             } else {

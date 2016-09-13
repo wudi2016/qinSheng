@@ -1,7 +1,7 @@
 .cont{
     width:100%;
-    min-width: 1200px;
-    height:100%;
+    /*min-width: 1200px;*/
+    /*min-height:1200px;*/
     background:#F5F5F5;
 }
 .dh{
@@ -14,10 +14,18 @@
 }
 .cont_con{
     width:1200px;
-    /*min-height:600px;*/
     height:auto;
     margin:0 auto;
     background:#ffffff;
+}
+@media screen and (max-width: 1200px) {
+    .cont_con{
+        width:1200px;
+        min-height:1400px;
+        /*height:auto;*/
+        margin:0 auto;
+        background:#ffffff;
+    }
 }
 .cont_con_con{
     width:1050px;

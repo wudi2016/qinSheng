@@ -186,7 +186,7 @@
                 {{--//点评课程循环开始--}}
                 <div class="right_comment_repeat" ms-repeat="completeCommentList">
                     <div class="comment_repeat_img">
-                        <a ms-attr-href="'/lessonComment/detail/'+ el.commentId">
+                        <a ms-attr-href="'/lessonComment/detail/'+ el.commentId"  target="_blank" >
                             <div class="repeat_img_unchecked">
                                 <div class="comment_video_unchecked" ms-html="'点评完成'"></div>
                                 <div class="comment_video_time" ms-html=" '发布时间：' + el.time"></div>
@@ -241,7 +241,7 @@
                 {{--//专题课程循环开始--}}
                 <div class="right_comment_repeat" ms-repeat="courseInfo">
                     <div class="comment_repeat_img">
-                        <a ms-attr-href="href + el.id"><img ms-imgBig class="img_big" ms-attr-src="el.coursePic" alt="" width="280" height="180"/></a>
+                        <a ms-attr-href="href + el.id" target="_blank" ><img ms-imgBig class="img_big" ms-attr-src="el.coursePic" alt="" width="280" height="180"/></a>
                     </div>
                     <div class="comment_repeat_title" ms-text="el.courseTitle"></div>
                     <div class="comment_repeat_period"><span ms-text="el.classHour + '课时'"></span>
@@ -362,13 +362,13 @@
                 {{--//收藏课程循环开始--}}
                 <div class="right_comment_repeat" ms-repeat="collectionInfo">
                     <div class="comment_repeat_img">
-                        <a ms-attr-href="el.href">
+                        <a ms-attr-href="el.href" target="_blank" >
                             <img ms-attr-src="el.coursePic" alt="" width="280" height="180" class="img_big" ms-imgBig>
                         </a>
                         <span ms-if="isShow" ms-click="deleteCollection(el.collectId,el.isCourse,el.id,$index)"><img ms-attr-src="pageInfo.deletePic"
                                                                                                        alt=""/></span>
                     </div>
-                    <a ms-attr-href="el.href">
+                    <a ms-attr-href="el.href" target="_blank" >
                         <div class="comment_repeat_title" ms-text="el.courseTitle"></div>
                     </a>
                     <div class="comment_repeat_period" ms-if="el.isCourse == '0'">
@@ -639,7 +639,7 @@
             <div class="center_right_changePhone">
 
                 <div class="right_changePhone_currentPhone">
-                    <label><span>手机号</span><span class="changePhone_label_span">{{\Auth::user()->phone}}</span></label>
+                    <label><span>手机号</span><span class="changePhone_label_span" title="{{\Auth::user()->phone}}">{{\Auth::user()->phone}}</span></label>
                 </div>
 
                 <div class="height60"></div>

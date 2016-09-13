@@ -20,7 +20,29 @@
             <div class="contain_lessonDetail_top_video" ms-if="haveCourse">
                 <div class="contain_lessonDetail_top_video_left">
                     <div class="video_block" style="height: 450px;">
-                        <div class="videobox" id="mediaplayer" ms-visible="!overtime"></div>
+                        <div class="overtime" style="background: black; position: absolute; z-index: 999; float: left;" ms-visible="!overtime && playLoading">
+                            <div class="spinner">
+                                <div class="spinner-container container1">
+                                    <div class="circle1"></div>
+                                    <div class="circle2"></div>
+                                    <div class="circle3"></div>
+                                    <div class="circle4"></div>
+                                </div>
+                                <div class="spinner-container container2">
+                                    <div class="circle1"></div>
+                                    <div class="circle2"></div>
+                                    <div class="circle3"></div>
+                                    <div class="circle4"></div>
+                                </div>
+                                <div class="spinner-container container3">
+                                    <div class="circle1"></div>
+                                    <div class="circle2"></div>
+                                    <div class="circle3"></div>
+                                    <div class="circle4"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="videobox" id="mediaplayer" ms-visible="!overtime && !playLoading"></div>
                         <div class="overtime hide" ms-visible="overtime" style="height: 450px;">
                             <div style="clear: both; height: 140px;"></div>
                             <div class="overtime_detail">
@@ -88,7 +110,7 @@
                             <a href="/index/login"><div class="response">反馈</div></a>
                         @endif
                         <!-- 锚点定位(评论回复) -->
-                        <div id="input_content" style="width: 1px;height: 1px;position: absolute;z-index: 2;top: 580px;"></div>
+                        <div id="input_content" style="width: 1px;height: 1px;position: absolute;z-index: 2;top: 500px;"></div>
                         <!-- 锚点定位(评论回复) -->
                     </div>
                 </div>
@@ -146,7 +168,7 @@
                 <div name="comment" class="hide" ms-visible="changeOption == 'comment'">
                     @if(Auth::check() && Auth::user() -> type != 3)
                         <div ms-if="detailInfo.isBuy || detailInfo.isAuthor || detailInfo.isTeacher || detailInfo.isFree" class="contain_lessonDetail_bot_left_comment">
-                            <textarea ms-duplex="commentContent"></textarea>
+                            <textarea ms-duplex="commentContent" id="commentContent"></textarea>
                             <span ms-on-mouseout="descriptionSwitch('replyWarning', false)" ms-click="publishComment(detailInfo.id,commentContent);">发布</span>
                             <div class="teacherHomepage_detail_content_applyTip" ms-visible="replyWarning">请输入评论内容</div>
                         </div>
@@ -372,6 +394,16 @@
 
 @section('js')
     <script type="text/javascript" src="{{asset('home/jplayer/jwplayer.js')}}"></script>
+    <script>
+        $(function(){
+            $("input[type=text]").click(function(){
+                $(this).focus();
+            });
+            $("#commentContent").click(function(){
+                $(this).focus();
+            });
+        });
+    </script>
     <script>
         require(['/lessonSubject/detail', '/lessonSubject/teacherInfo'], function (detail, teacherInfo) {
             detail.mineUsername = '{{$mineUsername}}' || null;

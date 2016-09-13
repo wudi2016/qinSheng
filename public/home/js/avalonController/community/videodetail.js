@@ -20,9 +20,11 @@ define([], function () {
 
         },
 
-
+        theplayer:{},
+        Yes:true,
         setVideo:function(data){
-            jwplayer("mediaplayer").setup({
+            model.Yes = true;
+            model.theplayer = jwplayer("mediaplayer").setup({
                 flashplayer: 'jwplayer/jwplayer.flash.swf',
                 file:data[0].coursePath,
                 height:515,
@@ -31,7 +33,26 @@ define([], function () {
                 type: "mp4",
                 image:data[0].cover,
             });
-            console.log(data);
+            //console.log(data);
+            //onPause: function () { console.log("暂停!!!"); },
+            //onPlay: function () { console.log("开始播放!!!"); },
+            model.theplayer.onPause(function(){
+                model.Yes = false;
+            })
+
+            model.theplayer.onPlay(function(){
+                if(model.Yes==true){
+                    $.ajax({
+                        url: '/community/playAmount/' + hotId,
+                        type: 'get',
+                        dataType: 'json',
+                        success:function(response){
+                            console.log(response)
+                        }
+                    })
+                }
+            })
+
 
         },
     });

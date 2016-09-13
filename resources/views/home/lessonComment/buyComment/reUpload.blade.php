@@ -19,6 +19,8 @@
 			
 			<div id="fileDiv" class="fileButton"></div>
 			<input type="text" value="" class="fileButton" id="md5container">
+
+            <div class="upload_screen"></div>
 					
 			<div class="add_video">
 				<div class="add_video_top">
@@ -39,6 +41,8 @@
 
 			<div style="clear: both; height: 20px;"></div>
 
+            <div class="upload_screen"></div>
+
 			<div class="works_title">
 				<div class="suit_level_title" style="margin-left: -6px;"><span>*</span>作品名称</div>
 				<input type="text" ms-duplex='uploadInfo.courseTitle' placeholder="请输入作品名称">
@@ -46,12 +50,18 @@
 				<div class='uploadWarning hide' ms-visible='warning.title'>请输入20字以内名称</div>
 			</div>
 
+            <div class="upload_screen"></div>
+
 			<div class="works_des">
 				<div class="suit_level_title" style="width: 78px;">留言说明</div>
 				<textarea ms-duplex='uploadInfo.message' placeholder="说出你的困惑，或是希望老师特别点评的地方"></textarea>
 				<div class="works_des_number"><span ms-html='messageLength'></span>/80</div>
 				<div class='uploadWarning hide' ms-visible='warning.message' style='margin-left: 55px;'>请输入80字以内留言</div>
 			</div>
+
+            <div class="upload_screen"></div>
+
+            <div class="upload_screen"></div>
 
 			<div class="content_bottom" style="margin-top: 40px;">
 				<div class="content_bottom_provision">
@@ -61,6 +71,14 @@
 					完成并发布
 				</div>
 			</div>
+
+            <div class="upload_screen"></div>
+
+            <div class="upload_screen"></div>
+
+            <div class="upload_screen"></div>
+
+            <div class="upload_screen"></div>
 		</div> 
 
 		<div class="bottom_tip">温馨提示：支付并上传作品成功后，老师将于10个工作日内完成点评，请耐心等待，如果有问题请联系客服。</div>

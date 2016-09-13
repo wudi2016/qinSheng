@@ -19,9 +19,16 @@ $.ajaxSetup({
 	// })
 
 // 头像个人信息
-$('.touxiang').click(function(){
-	$(".persapce").stop().slideToggle("fast");
+$('.touxiang').mousemove(function(){
+	// $(".persapce").stop().slideToggle("fast");
+	$(".persapce").slideDown("fast");
 })
+$(".persapce").mousemove(function(){
+	$(this).stop().show();
+}).mouseout(function(){
+	$(this).stop().slideUp("fast");
+})
+
 
 // 咨询
 $('.qq').hover(function(){

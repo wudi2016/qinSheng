@@ -123,7 +123,7 @@
                     </div>
                     <!-- 文字 -->
                     <div class="new_content_font">
-                        <a ms-attr-href=" theteacherlisturl + el.id ">
+                        <a ms-attr-href=" theteacherlisturl + el.id " target="_blank">
                             <div ms-html="el.description" ms-newyincang></div>
                         </a>
                     </div>
@@ -188,31 +188,32 @@
             <div style="height:30px"></div>
 
             <!-- 图片 -->
-            <div class="first_child">
+            {{--<div class="first_child">--}}
                 <!-- 循环 -->
-                    <div class="newstudent_video" ms-repeat="hotvideo">
-                        <div style="overflow: hidden;position: relative;width: 390px;height: 260px;">
-                            <a ms-attr-href="hotvideourl + el.id"><img class="big_img" ms-bigImg ms-attr-src="el.cover" alt="" width="390" height="260"/></a>
-                        </div>
-                        <!-- 遮罩层 -->
-                        <div class="zhezhao">
-                            <span ms-html="el.title"></span>
-                        </div>
+                <div class="newstudent_video" ms-repeat="hotvideo">
+                    <div style="overflow: hidden;position: relative;width: 390px;height: 260px;">
+                        <a ms-attr-href="hotvideourl + el.id" target="_blank"><img class="big_img" ms-bigImg ms-attr-src="el.cover" alt="" width="390"
+                                                                    height="260"/></a>
                     </div>
-            </div>
+                    <!-- 遮罩层 -->
+                    <div class="zhezhao">
+                        <span ms-html="el.title"></span>
+                    </div>
+                </div>
+            {{--</div>--}}
 
         </div>
 
 
-        <div style="height:175px" id="kongbai" >
+
+        <div style="height:75px" id="kongbai" >
 
         </div>
 
 
     </div>
 
-
-
+    <div style="clear: both"></div>
 
 
 
@@ -226,61 +227,15 @@
 
     <script>
         require(['/community/community.js'], function (model) {
-
+            model.getnewData();
+            model.gethotData();
+            model.getteacher();
+            model.getstudent();
 
             avalon.scan();
         });
 
-
-
-
     </script>
-
-
-
-
-    {{--<script>--}}
-        {{--function getdata(){--}}
-
-            {{--$('#demo').pagination({--}}
-                {{--dataSource: function(done) {--}}
-                    {{--$.ajax({--}}
-                        {{--type: 'GET',--}}
-                        {{--url: '/community/getstudent/',--}}
-                        {{--dataType : 'json',--}}
-                        {{--success: function(response) {--}}
-                             {{--// console.log(response);--}}
-                            {{--if(response.statuss){--}}
-                                {{--done(response.data);--}}
-                            {{--}--}}
-                        {{--}--}}
-                    {{--});--}}
-                {{--},--}}
-                {{--pageSize: 6,--}}
-                {{--className:"paginationjs-theme-blue",--}}
-                {{--showPageNumbers: false,--}}
-                {{--showNavigator: false,--}}
-                {{--callback: function(data) {--}}
-{{--//                    console.log(data);--}}
-                    {{--if(data){--}}
-                        {{--var str = '';--}}
-                        {{--$.each(data,function(id,info){--}}
-                            {{--str += "<div class=\"newstudent_img_name\"><div class=\"newstudent_img\"><a href=\""+'/lessonComment/student/'+info.id+"\"><img widht='84px' height='84px' src="+info.pic+"></a></div><div class=\"newstudent_name\"><a href=\""+'/lessonComment/student/'+info.id+"\"><span>"+info.name+"</span></a></div></div>";--}}
-                        {{--})--}}
-                        {{--$('.newstudent_detail_content').html(str);--}}
-                    {{--}--}}
-
-                    {{--// console.log(data);--}}
-                {{--}--}}
-            {{--})--}}
-        {{--}--}}
-
-        {{--getdata();--}}
-        {{----}}
-
-    {{--</script>--}}
-    
-
 
 
 

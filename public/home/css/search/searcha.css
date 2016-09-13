@@ -3,7 +3,17 @@
 }
 .con{
     width:100%;
+    /*min-height: 1500px;*/
     height:auto;
+}
+@media screen and (max-width: 1200px) {
+    /*body {*/
+    /*background-color:lightblue;*/
+    /*}*/
+    .con{
+        width:100%;
+        min-height: 1500px;
+    }
 }
 .con_top{
     width:100%;
@@ -39,6 +49,8 @@
     width:900px;
     height:50px;
     float: left;
+    overflow: hidden;
+    font-family: 微软雅黑;
 }
 .con_top_con_sbar_m .txt{
     width:900px;

@@ -31,9 +31,22 @@ class videodetailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index($id){
+        //浏览数加一
+//        DB::table('hotvideo')->where('id',$id)->increment('courseView',1);
         return view('home.community.videodetail');
+    }
+
+
+    //播放量
+    public function playAmount($id){
+//        dd($id);
+        $data = DB::table('hotvideo')->where('id',$id)->increment('courseView',1);
+        if($data){
+            return response()->json(['statuss'=>true,'data'=>$data]);
+        }else{
+            return response()->json(['statuss'=>false]);
+        }
     }
 
 
@@ -42,6 +55,7 @@ class videodetailController extends Controller
      */
     public function getvideodetail($id){
         $getvideodetail = DB::table('hotvideo')->where('id',$id)->where('status',0)->get();
+//        DB::table('hotvideo')->where('id',$id)->increment('courseView',1);
         if($getvideodetail){
             foreach ($getvideodetail as $k => $v) {
                 $v->coursePath = $this->getPlayUrl($v->coursePath);

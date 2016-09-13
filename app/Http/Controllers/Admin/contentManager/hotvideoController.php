@@ -64,6 +64,7 @@ class hotvideoController extends Controller{
         $input = Input::except('_token');
         $input['created_at'] = Carbon::now();
         $input['status'] = '0';
+        $input['courseView'] = '0';
 
         //判断推荐位是否存在
         $isexit = DB::table('hotvideo')->where('sort',$request['sort'])->first();

@@ -80,7 +80,7 @@ define([], function() {
 					if (model == 'teacherInfo') {
 						comment.getData('/lessonComment/getDetailInfo/'+ response.data.orderSn +'/0', 'studentInfo');
 					}
-					model == 'studentInfo' && comment.setVideo(function () {});
+					model == 'studentInfo' && comment.setVideo();
 				},
 				error: function(error) {
                     comment.buying = false;
@@ -92,9 +92,13 @@ define([], function() {
 		videoType: true,
 		videoTime: {videoOne: 0, videoTow: 0},
 		playFlag: false,
+        playLoading: false,
 		setVideo: function(callback) {
 			var model = comment.videoType ? 'studentInfo' : 'teacherInfo';
 			var list = [];
+            console.log(comment[model].courseHighPath);
+            console.log(comment[model].courseMediumPath);
+            console.log(comment[model].courseLowPath);
 			comment[model].courseHighPath && list.push({
 				label: "超清",
 				file: comment[model].courseHighPath,
@@ -127,7 +131,18 @@ define([], function() {
                 width: '800',
                 height: '450',
                 aspectratio: '16:9',
-                type: "mp4"
+                type: "mp4",
+                smoothing: false,
+                events: {
+                    onPlay: function() {
+                        setTimeout(function() {
+                            comment.playLoading = false;
+                        }, 1000);
+                    }
+                }
+            });
+            comment.thePlayer.onSeek(function() {
+                comment.playLoading = true;
             });
             (!comment.videoType && !comment.bought && comment.teacherInfo.extra != '免费课程') && comment.thePlayer.onTime(function() {
 	            if (comment.thePlayer.getPosition() >= 60) {

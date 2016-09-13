@@ -27,7 +27,10 @@
             <div class="message" style="height:32px;"></div>
             {{--验证码--}}
             <div class="center_con_bar">
-                <div class="center_con_bar_txt"><input class="txtt" type="text" placeholder="验证码"><button type="button" class="getyzm" onclick="getMsg()">获取验证码</button></div>
+                <div class="center_con_bar_txt">
+                    <input class="txtt" type="text" placeholder="验证码">
+                    <button type="button" class="getyzm" onclick="getMsg()">获取验证码</button>
+                </div>
                 <div class="cklogo dui hide"><img src="{{url('home/image/register/rht.png')}}" alt=""></div>
                 <div class="cklogo cuo hide"><img src="{{url('home/image/register/rog.png')}}" alt=""></div>
             </div>

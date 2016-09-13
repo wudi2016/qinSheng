@@ -36,7 +36,7 @@ define([], function () {
                 getData: function (pageNumber, pageSize) {
                     var self = this;
                     $.ajax({
-                        type: 'GET',
+                        type: 'POST',
                         url: '/member/waitComment/' + pageNumber + '/' + pageSize,
                         success: function (response) {
                             self.callback(response.data);

@@ -11,10 +11,10 @@
 		<div class="crumbs">
 			@if(\Auth::user() -> type == 2)
 				<a href="/member/student/{{\Auth::user() -> id}}">个人中心</a> >
-				<a href="/member/student/{{\Auth::user() -> id}}/basicInfo">我的点评</a>
+                <a href="/member/famousTeacher#waitComment">我的点评</a>
 			@else
 				<a href="/member/famousTeacher">个人中心</a> >
-				<a href="/member/famousTeacher/basicInfo">我的点评</a>
+                <a href="/member/student/{{\Auth::user() -> id}}#lessonComment">我的点评</a>
 			@endif
 		</div>
 
@@ -47,7 +47,10 @@
             <div style="clear: both; height: 50px;"></div>
 		</div>
 
-		<div style="clear: both; height: 150px;"></div>
+        <div class="upload_screen"></div>
+
+        <div style="clear: both; height: 100px;"></div>
+
 	</div>
 @endsection
 

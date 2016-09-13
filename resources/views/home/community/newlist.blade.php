@@ -29,8 +29,8 @@
 
 				<div class="list_line" ms-repeat="newlist" >
 					<div class="title_time">
-						<div class="title">
-							<a ms-attr-href="lujing + el.id" ms-html="el.description" >  </a>
+						<div class="title"  >
+							<a ms-attr-href="lujing + el.id" ms-html="el.description"  target="_blank" >  </a>
 						</div>
 						<div class="time" ms-html="el.time">
 
@@ -56,6 +56,8 @@
 		</div>
 
 	</div>
+
+	<div class="screen1200"></div>
 
 @endsection
 

@@ -35,12 +35,18 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 										upload.getData('/lessonComment/transformation', 'transformation', {fileID: upload.uploadInfo.fileID}, 'POST');
 									}, 1000);
 								} else {
-									if (response.data.data.AllowUpload == 1) upload.paas.requestUpload({ url: response.data.data.UUrl, method: "POST", data: {"filedata": upload.file} });
+                                    var deleteSecond;
+									if (response.data.data.AllowUpload == 1) {
+                                        deleteSecond = 5000;
+                                        upload.paas.requestUpload({ url: response.data.data.UUrl, method: "POST", data: {"filedata": upload.file} });
+                                    } else {
+                                        deleteSecond = 1000;
+                                    }
 									console.log('文件上传进度： ' + parseInt(response.data.data.UploadLength / response.data.data.FileLenth * 100) + '%');
 									upload.progressBar = 25 + response.data.data.UploadLength / response.data.data.FileLenth * 100 * 0.75;
 									setTimeout(function() {
 										upload.getData('/lessonComment/uploadResource', 'uploadResource', {md5: upload.fileMD5, filename: upload.fileName, directory: '/'}, 'POST');
-									}, 500);
+									}, deleteSecond);
 								} 
 							} else {
 								upload.endUpload('上传中断');
@@ -76,7 +82,9 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 						model == 'deleteMessage' && callback();
 					}
 				},
-				error: function(error) {}
+				error: function(error) {
+                    model == 'uploadResource' && upload.endUpload('网络异常，请重试');
+                }
 			});
 		},
 		file: null,
@@ -96,7 +104,7 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 					upload.getData('/lessonComment/uploadResource', 'uploadResource', {md5: upload.fileMD5, filename: upload.fileName, directory: '/'}, 'POST');
 					console.log('------------------------------------  扫描完成  ---------------------------------------');
 				} else {
-					upload.endUpload('上传失败请重试');
+					upload.endUpload('上传失败，请重试');
 				}
 			}, function(pos, size){
 				if (Math.ceil(size / 1024 / 1024) > 1000) {
@@ -210,10 +218,10 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 		],
 		selectedLevel: [],
 		levelWarning: false,
-		levelWarningText: '( 最多选择三项 )',
+		levelWarningText: '请选择适用等级',
 		selectLevel: function() {
 			upload.levelWarning = false;
-			upload.levelWarningText = '( 最多选择三项 )';
+			upload.levelWarningText = '请选择适用等级';
 			if (avalon(this).attr('class')) {
 				avalon(this).removeClass('checked');
 				for (var i in upload.selectedLevel) {
@@ -222,12 +230,12 @@ define(['lessonComment/PrimecloudPaas'], function(PrimecloudPaas) {
 					}
 				}
 			} else {
-				if (upload.selectedLevel[2]) {
-					upload.levelWarning = true;
-				} else {
+				//if (upload.selectedLevel[2]) {
+				//	upload.levelWarning = true;
+				//} else {
 					avalon(this).addClass('checked');
 					upload.selectedLevel.push(avalon(this).attr('value'));
-				}
+				//}
 			}
 		},
 		//  blade模板使用的变量

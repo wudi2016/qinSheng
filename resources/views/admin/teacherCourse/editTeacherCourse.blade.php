@@ -174,7 +174,7 @@
                         <div class="space-4"></div>
 
                         <!--审核通过才能编辑价钱-->
-                        @if($data->state == 2)
+                        {{--@if($data->state == 2)--}}
 
 
                             <div class="space-4"></div>
@@ -250,7 +250,7 @@
                                 </div>
                             </div>
 
-                        @endif
+                        {{--@endif--}}
 
 
                         {{--<div class="space-4"></div>--}}

@@ -102,7 +102,7 @@ body{
     height:36px;
 }
 .center_con_bar_txt{
-    width:300px;
+    width:310px;
     height:36px;
     float: left;
     margin-left:50px;
@@ -134,6 +134,7 @@ body{
 .getyzm{
     width:103px;
     height:34px;
+    float: left;
     line-height: 34px;
     background:#209EEA;
     color:#ffffff;

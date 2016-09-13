@@ -195,7 +195,7 @@
 }
 .contain_lessonDetail_bot_left_desc{
     width: 94%;
-    height: 210px;
+    min-height: 210px;
     margin: 40px auto;
 }
 .contain_lessonDetail_bot_left_desc .top{
@@ -213,7 +213,7 @@
     display: block;
     margin: 10px 10px 00px 65px;
     width: 653px;
-    height: 170px;
+    min-height: 170px;
     line-height: 30px;
     font-size:16px;
     color: rgb(102,102,102);

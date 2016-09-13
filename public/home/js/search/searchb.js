@@ -53,7 +53,7 @@ function getdatab(para,ord){
                 }
             });
         },
-        pageSize: 8,
+        pageSize: 12,
         pageNumber :1,
         totalNumber :1,
         className:"paginationjs-theme-blue",

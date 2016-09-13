@@ -238,16 +238,17 @@ define(['PrimecloudPaas'], function(PrimecloudPaas) {
                         upload.uploadTip.low = '<span style="color: red;">请先上传视频</span>';
                         return false;
                     }
-                    if(!upload.uploadInfo.middle.fileID){
-                        upload.uploadStatus.middle = 3;
-                        upload.uploadTip.middle = '<span style="color: red;">请先上传视频</span>';
-                        return false;
-                    }
-                    if(!upload.uploadInfo.high.fileID){
-                        upload.uploadStatus.high = 3;
-                        upload.uploadTip.high = '<span style="color: red;">请先上传视频</span>';
-                        return false;
-                    }
+                    //if(!upload.uploadInfo.middle.fileID){
+                    //    upload.uploadStatus.middle = 3;
+                    //    upload.uploadTip.middle = '<span style="color: red;">请先上传视频</span>';
+                    //    return false;
+                    //}
+                    //if(!upload.uploadInfo.high.fileID){
+                    //    upload.uploadStatus.high = 3;
+                    //    upload.uploadTip.high = '<span style="color: red;">请先上传视频</span>';
+                    //    return false;
+                    //}
+
                     console.log(upload.uploadInfo.low.fileID);
                     console.log(upload.uploadInfo.middle.fileID);
                     console.log(upload.uploadInfo.high.fileID);

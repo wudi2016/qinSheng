@@ -21,6 +21,8 @@
 			<div id="fileDiv" class="fileButton"></div>
 			<input type="text" value="" class="fileButton" id="md5container">
 
+            <div class="upload_screen"></div>
+
 			<div class="add_video">
 				<div class="add_video_top">
 					<div>添加视频</div>
@@ -38,6 +40,8 @@
 				<div class="add_video_success" style="display: none;" ms-visible="uploadStatus == 3" ms-html='uploadTip'></div>
 			</div>
 
+            <div class="upload_screen"></div>
+
 			<div class="suit_level">
 				<div class="suit_level_title">适用等级</div>
 				<div class="suit_level_content">
@@ -45,6 +49,10 @@
 				</div>
 				<div class="suit_level_tip" ms-css-color="levelWarning ? 'red' : 'rgb(134, 134, 134)'" ms-html='levelWarningText'></div>
 			</div>
+
+            <div class="upload_screen"></div>
+
+            <div class="upload_screen"></div>
 
 			<div class="content_bottom">
 				<div class="content_bottom_provision">
@@ -54,6 +62,14 @@
 					完成并发布
 				</div>
 			</div>
+
+            <div class="upload_screen"></div>
+
+            <div class="upload_screen"></div>
+
+            <div class="upload_screen"></div>
+
+            <div class="upload_screen"></div>
 		</div>
 
 		<div style="clear: both; height: 100px;"></div>

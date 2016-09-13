@@ -25,7 +25,7 @@ class communityController extends Controller
      * 社区首页新闻数据接口
      */
     public function getlist(){
-        $getlist = DB::table('news')->select('id','title','description','created_at')->orderBy('sort','asc')->where('status',0)->where('sort','!=',0)->limit(10)->get();
+        $getlist = DB::table('news')->select('id','title','description','created_at')->where('status',0)->where('sort','!=',0)->orderBy('sort','asc')->limit(10)->get();
         if($getlist){
             foreach ($getlist as $k => $v) {
                 //只保留 年月日
@@ -49,7 +49,7 @@ class communityController extends Controller
      */
     public function gethotvideo(){
         $data = DB::table('hotvideo')->select('id','title','coursePath','cover')->where('sort','>',0)->where('status',0)->orderBy('sort','asc')
-            ->limit(6)->get();
+            ->limit(9)->get();
         if($data){
             return response()->json(['statuss'=>true,'data'=>$data]);
         }else{

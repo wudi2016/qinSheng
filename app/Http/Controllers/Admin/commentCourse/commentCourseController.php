@@ -258,7 +258,11 @@ class commentCourseController extends Controller
         $data['client_ip'] = $_SERVER['REMOTE_ADDR'];
         $data['created_at'] = Carbon::now();
         $data = DB::table('usermessage')->insert($data);
-        return back();
+        if($data){
+            echo 1;
+        }else{
+            echo 0;
+        }
     }
 
     /**

@@ -1,17 +1,4 @@
-//avalon.directive('theteacheryincang', {
-//    update: function (value) {
-//        // 超出部分隐藏(名师主页)
-//        $('.content_introduce div').each(function(){
-//             //var bbb = $(this).html().length;
-//             //alert(bbb);
-//            var maxwidth=70;
-//            if($(this).html().length>maxwidth){
-//                $($(this)).html($($(this)).html().substring(0,maxwidth));
-//                $($(this)).html($($(this)).html()+'…');
-//            }
-//        });
-//    }
-//});
+
 
 
 avalon.directive('newyincang', {
@@ -165,16 +152,6 @@ define([],function(){
             })
 
 
-            //$.ajax({
-            //    url : '/community/getstudent/',
-            //    type : 'get',
-            //    dataType : 'json',
-            //    success: function(response){
-            //        if(response.statuss){
-            //            model.studentlist = response.data;
-            //        }
-            //    },
-            //})
         },
 
 
@@ -199,10 +176,5 @@ define([],function(){
 
     });
 
-
-    model.getnewData();
-    model.gethotData();
-    model.getteacher();
-    model.getstudent();
     return model;
 });

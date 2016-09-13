@@ -26,6 +26,7 @@ $('.selOrd').click(function(){
 var geta = false;
 var getb = false;
 var pagea,pageb;
+var ord = 0;
 
 function getdata(para,ord){
     $('#demo').pagination({
@@ -43,11 +44,12 @@ function getdata(para,ord){
                         // done(response.data);
                         pagea = response.count/8;
                         $('.con_con_top_a').removeClass('hide');
+
+                        getdatab(searchVal,ord);
+
                     }else{
                         $('.con_con_top_a').addClass('hide');
-                        if(!getb){
-                            $('.nofindbb').removeClass('hide');
-                        }
+                        getdatab(searchVal,ord);
                     }
                 }
             });
@@ -100,9 +102,7 @@ function getdatab(para,ord){
                         $('.con_con_top_b').removeClass('hide');
                     }else{
                         $('.con_con_top_b').addClass('hide');
-                        if(!geta){
-                            $('.nofindbb').removeClass('hide');
-                        }
+                        if(!geta) $('.nofindbb').removeClass('hide');
                     }
 
                 }
@@ -152,11 +152,10 @@ var morecourse = function(para){
 
 }
 
-var ord = 0;
 
 if(searchVal){
     getdata(searchVal,ord);
-    getdatab(searchVal,ord);
+    // getdatab(searchVal,ord);
 }else{
     // $('.nofindaa').removeClass('hide');
     $('.nofindbb').removeClass('hide');

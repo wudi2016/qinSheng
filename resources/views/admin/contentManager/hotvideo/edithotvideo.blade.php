@@ -163,12 +163,16 @@
 
                             <div class="col-sm-9">
                                 <select name="sort" id="form-field-1" class="col-xs-10 col-sm-5">
+                                    <option value="0" @if($data->sort == 0) selected @endif>0</option>
                                     <option value="1" @if($data->sort == 1) selected @endif>1</option>
                                     <option value="2" @if($data->sort == 2) selected @endif>2</option>
                                     <option value="3" @if($data->sort == 3) selected @endif>3</option>
                                     <option value="4" @if($data->sort == 4) selected @endif>4</option>
                                     <option value="5" @if($data->sort == 5) selected @endif>5</option>
                                     <option value="6" @if($data->sort == 6) selected @endif>6</option>
+                                    <option value="7" @if($data->sort == 7) selected @endif>7</option>
+                                    <option value="8" @if($data->sort == 8) selected @endif>8</option>
+                                    <option value="9" @if($data->sort == 9) selected @endif>9</option>
                                 </select>
 
                             </div>

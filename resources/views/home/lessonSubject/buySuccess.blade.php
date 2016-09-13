@@ -24,7 +24,7 @@
 			<a href='/lessonSubject/detail/{{$courseId}}' class="pay_button" style="margin: 250px 0px 0px 70px;">前往学习</a>
 		</div>
 		
-		<div style="claer: both; height: 60px;"></div>
+		<div style="clear: both; height: 60px;"></div>
 	</div>
 @endsection
 

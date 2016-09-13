@@ -304,6 +304,7 @@ define([], function () {
         thePlayer: {},
         videoType: true,
         playFlag:1,
+        playLoading: false,
         setVideo: function (callback) {
             var model = detail.videoType ? 'detailInfo' : 'videoPath';
             var list = [];
@@ -339,10 +340,19 @@ define([], function () {
                 width: '800',
                 height: '450',
                 aspectratio: '16:9',
-                type: "mp4"
+                type: "mp4",
+                smoothing: false,
+                events: {
+                    onPlay: function() {
+                        setTimeout(function() {
+                            detail.playLoading = false;
+                        }, 1000);
+                    }
+                }
             });
             typeof callback === 'function' && callback();
             if(detail.detailInfo.isTryLearn || detail.detailInfo.isTeacher || detail.detailInfo.isBuy || detail.detailInfo.isFree){ // 是名师或者已购买
+                detail.playLoading = false;
                 if(!detail[model].courseHighPath && !detail[model].courseMediumPath && !detail[model].courseLowPath){ // 视频都不可观看
                     detail.thePlayer.remove();
                     detail.noresourse = true;
@@ -351,6 +361,9 @@ define([], function () {
                 detail.thePlayer.remove();
                 detail.overtime = true;
             }
+            detail.thePlayer.onSeek(function(){
+               detail.playLoading = true;
+            });
             detail.thePlayer.onPlaylistComplete(function(){
 
                 detail.getData('/lessonSubject/addCompleteCount', 'POST', {id: detail.detailId}, 'addCompleteCount');

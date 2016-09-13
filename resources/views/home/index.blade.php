@@ -23,18 +23,6 @@
             </ul>
         </div>
 
-        {{--<div class="banner">--}}
-            {{--<ul>--}}
-                {{--@foreach ($banners as $banner)--}}
-                {{--<li><a href="{{url('http://'.$banner->url)}}" target="_blank"><img style="width: 100%;height: 480px;" src="{{asset($banner->path)}}" /></a></li>--}}
-                {{--@endforeach--}}
-
-                {{--<li><a href=""><img style="width: 100%;" src="{{asset('home/image/index/banner.png')}}" /></a></li>--}}
-                {{--<li><a href=""><img style="width: 100%;" src="{{asset('home/image/index/banner2.png')}}" /></a></li>--}}
-            {{--</ul>--}}
-            {{--<a href="javascript:void(0);" class="unslider-arrow04 prev"></a>--}}
-            {{--<a href="javascript:void(0);" class="unslider-arrow04 next"></a>--}}
-        {{--</div>--}}
     </div>
     <!-- 课程，赛事活动 -->
     <div class="activity">
@@ -137,7 +125,7 @@
             </div>
             <div class="recommend_con_con">
                 <div class="recommend_con_con_li" ms-repeat="datas">
-                    <a ms-attr-href="{{url('lessonSubject/detail/[--el.id--]')}}">
+                    <a ms-attr-href="{{url('lessonSubject/detail/[--el.id--]')}}" target="_blank">
                     <div class="contain_lesson_center_data_info_top">
                         <img ms-attr-src="{{asset('[--el.img--]')}}" ms-lessonfoo width="280" height="180" class="img_big"/>
                     </div>
@@ -189,7 +177,7 @@
             </div>
             <div class="recommend_con_con">
                 <div class="recommend_con_con_li" ms-repeat="datas">
-                    <a ms-attr-href="{{url('lessonComment/detail/[--el.id--]')}}">
+                    <a ms-attr-href="{{url('lessonComment/detail/[--el.id--]')}}" target="_blank">
 
                     <div class="contain_lesson_center_data_info_top">
                         <img ms-attr-src="{{asset('[--el.img--]')}}" ms-lessonfoo width="280" height="180" class="img_big"/>

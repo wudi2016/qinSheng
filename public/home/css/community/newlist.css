@@ -13,6 +13,18 @@ a{
 	height:auto;
 }
 
+
+
+@media screen and (max-width:1200px) {
+	.screen1200 {
+		width: 100%;
+		height: 400px;
+		background: none;
+		clear: both;
+	}
+}
+
+
 /*主体div*/
 .main{
 	width:1200px;

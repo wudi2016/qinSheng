@@ -380,13 +380,13 @@
                         <div class="errortitle" style="height: 30px"></div>
                         <div class="errormsg">
                             <lable>备注:</lable>
-                            <textarea name="content" maxlength="100"  placeholder="请填写备注..." id="errortext" cols="30" rows="13" ms-duplex="content" required></textarea>
+                            <textarea name="content" maxlength="100"  placeholder="请填写备注..." id="errortext" cols="30" rows="10" ms-duplex="content" required></textarea>
                         </div>
 
                     </div>
                     {{--<input type="hidden" name="_token" value="{{ csrf_token() }}">--}}
                     <div class="bottom" id="surebtn">
-                        <button class="suer_btn" ms-click="submit">确认</button>
+                        <button class="suer_btn" ms-click="submit" style="margin-left: 250px;">确认</button>
                     </div>
                     {{--<div class="bottom" id="hiddenbtn">--}}
                     {{--<div class="suer_btn">确认</div>--}}

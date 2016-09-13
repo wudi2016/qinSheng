@@ -1,3 +1,15 @@
+@media screen and (max-width:1200px) {
+    .upload_screen {
+        clear: both;
+        height: 210px;
+    }
+
+    .buySuccess {
+        min-height: 530px !important;
+        height: auto !important;
+    }
+}
+
 .buyController {
 	width: 1200px;
 	height: auto;
@@ -55,7 +67,7 @@
 	width: 200px;
 	height: 30px;
 	line-height: 30px;
-	font-size: 18px;
+	font-size: 16px;
 	color: rgb(102, 102, 102);
 	float: left;
 	margin: 88px 0px 0px -200px;
@@ -216,6 +228,16 @@
 	height: 540px;
 	margin: 0 auto;
 	background: white;
+}
+
+@media screen and (max-width:1200px) {
+    .weixin_scan {
+        height: 1050px;
+    }
+    .weixin_scan_box {
+        clear: both;
+        height: 200px;
+    }
 }
 
 .scan_price {

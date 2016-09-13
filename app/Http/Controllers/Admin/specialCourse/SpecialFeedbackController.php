@@ -72,13 +72,18 @@ class SpecialFeedbackController extends Controller
     /**
      *删除
      */
-    public function delSpecialFeedback($id){
+    public function delSpecialFeedback($id,$type){
         $data = DB::table('coursefeedback')->where('id',$id)->delete();
         if($data){
-            $this -> OperationLog('删除了id为'.$id.'的专题课程意见反馈');
-            return redirect('admin/message')->with(['status'=>'意见反馈删除成功','redirect'=>'specialCourse/specialFeedbackList']);
+            if($type == 0){
+                $this -> OperationLog('删除了id为'.$id.'的专题课程意见反馈');
+            }
+            if($type == 1){
+                $this -> OperationLog('删除了id为'.$id.'的点评课程意见反馈');
+            }
+            return redirect('admin/message')->with(['status'=>'意见反馈删除成功','redirect'=>'specialCourse/specialFeedbackList/'.$type]);
         }else{
-            return redirect('admin/message')->with(['status'=>'意见反馈删除失败','redirect'=>'specialCourse/specialFeedbackList']);
+            return redirect('admin/message')->with(['status'=>'意见反馈删除失败','redirect'=>'specialCourse/specialFeedbackList/'.$type]);
         }
     }
 }

@@ -35,7 +35,7 @@
 
 .container {
     width: 1200px;
-    height: auto;
+    min-height: 1300px;
     margin: 0 auto;
     min-width:1200px;
 }
@@ -410,7 +410,7 @@
 
 .center_right_username .single_center_right {
     width: 79.9454%;
-    height: 36px;
+    height: 38px;
 }
 
 .center_right_username .single_center_right select {
@@ -675,7 +675,9 @@
 }
 
 .checkPhone_old_phone .old_phone_label_second input {
-    width: 68.65%;
+    width: 66%;
+    display: block;
+    float:left;
 }
 
 .checkPhone_old_phone .old_phone_label_second span {
@@ -947,6 +949,13 @@
     color:#fff;
     background: rgb(44,174,252);
 }
+@media all and (-webkit-min-device-pixel-ratio:0){
+/* 單獨針對 Safari 的樣式請寫在這裡 */
+.count_right_store .right_store_store{
+    font-size:14px;
+}
+}
+
 
 
 .center_right .center_right_comment {
@@ -1416,7 +1425,7 @@
 
 .buy_course_center {
     width: 650px;
-    height: 316px;
+    height: 310px;
 }
 
 .buy_course_center .top {
@@ -1627,7 +1636,7 @@ textarea[placeholder], *[placeholder] {
     text-align: center;
     border-radius: 4px;
     margin-left: 245px;
-    margin-top: 20px;
+    /*margin-top: 20px;*/
     cursor: pointer;
     /*font-weight:bold;*/
     font-size: 18px;
@@ -1635,7 +1644,20 @@ textarea[placeholder], *[placeholder] {
 .pay_btn:hover{
     background: rgb(44, 174, 252);
 }
-
+.buy_course .buy_course_agreement{
+    width:100%;
+    height:30px;
+    line-height:30px;
+    color:#333;
+    text-align: center;
+    letter-spacing: 2px;
+    font-size:15px;
+    margin-top:10px;
+}
+.buy_course_agreement a{
+    /*display:block;*/
+    color:#209eea;
+}
     /* ==== 删除评论 === */
 .delete_comment {
     width: 380px;

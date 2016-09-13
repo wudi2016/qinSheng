@@ -18,6 +18,8 @@ body{
     font-family: 微软雅黑;
     font-size: 14px;
     color: black;
+    width: 100%;
+    height:auto;
 }
 
 .ms-controller,
@@ -36,13 +38,14 @@ body{
 /*登陆界面*/
 .center{
     width:1200px;
+    min-width: 1200px;
     height:600px;
-    position: absolute;
-    top:50%;
-    left:50%;
-    margin-top:-300px;
-    margin-left: -600px;
-    /*background:#dddddd;                      !*tmp*!*/
+    margin: 100px auto;
+    /*position: absolute;*/
+    /*top:50%;*/
+    /*left:50%;*/
+    /*margin-top:-300px;*/
+    /*margin-left: -600px;*/
 }
 
 .teacher_con_top{
